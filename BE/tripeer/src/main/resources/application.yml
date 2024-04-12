@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:mysql://rdsssafyd207.cxs0eci2yne0.ap-northeast-2.rds.amazonaws.com/tripeer
+    username: RDSssafyD207
+    password: d207d207
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  application:
+    name: tripeer
