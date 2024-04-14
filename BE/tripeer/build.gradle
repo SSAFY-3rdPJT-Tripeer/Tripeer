@@ -41,6 +41,21 @@ dependencies {
 	//JASYPT
 	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.3'
 
+	//JWT 0.12.3 의존성
+	implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
+
+	//AWS S3
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+	//JAXB API
+	implementation 'javax.xml.bind:jaxb-api:2.3.1'
+
+	//JAXB Runtime
+	implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.3'
+
+
 }
 
 tasks.named('test') {

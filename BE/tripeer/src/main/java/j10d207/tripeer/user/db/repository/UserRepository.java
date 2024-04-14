@@ -8,5 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     UserEntity findByProviderAndProviderId(String provider, String ProviderId);
+    UserEntity findByUserId(long userId);
 }
 

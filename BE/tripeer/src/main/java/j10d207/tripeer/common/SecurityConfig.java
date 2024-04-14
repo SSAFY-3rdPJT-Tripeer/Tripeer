@@ -100,7 +100,7 @@ public class SecurityConfig {
                         .requestMatchers("*").permitAll()
                         .anyRequest().authenticated()                    );
 
-        //JWTFilter 등록
+        // 04.14 - JWTFilter 등록, 일반로그인 전용 주석처리 해제x
 //        http
 //                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
 

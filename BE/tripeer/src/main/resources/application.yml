@@ -5,6 +5,13 @@ spring:
     password: d207d207
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+  jpa:
+    hibernate:
+      naming:
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+      ddl-auto: none
+
+  #Oauth2 login info
   security:
     oauth2:
       client:
@@ -31,6 +38,11 @@ spring:
             authorization-grant-type: authorization_code
             scope: ENC(swr/kCkxUhD2O0tWdTG7r813ln5avtM7)
 
+    #JWT Time 300min, 600min
+    jwt:
+      access: 18000000
+      refresh: 36000000
+      secret: tmp
 
 
   application:
