@@ -18,7 +18,7 @@ public class SpotInfoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     // PK
-    private long spotInfoId;
+    private int spotInfoId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns( {@JoinColumn(name = "CITY_ID" ), @JoinColumn(name = "TOWN_ID")} )
