@@ -18,7 +18,7 @@ spring:
     hibernate:
       naming:
         implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
-      ddl-auto: none
+      ddl-auto: none # 엔티티 변경 시 데이터베이스 업데이트
 
   #Oauth2 login info
   security:

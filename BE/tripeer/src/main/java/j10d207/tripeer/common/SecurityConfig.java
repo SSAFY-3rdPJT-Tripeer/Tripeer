@@ -97,7 +97,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests((auth) -> auth
 //                        .requestMatchers("/admin").hasRole("ADMIN")
                         .requestMatchers("/*", "/**").permitAll()
-                        .anyRequest().authenticated()                    );
+//                        .requestMatchers("/api/**").permitAll() //개발 용 로그인 안했을때 postman 사용을 위해
+                        .anyRequest().authenticated());
 
         // 04.14 - JWTFilter 등록, 일반로그인 전용 주석처리 해제x
 //        http
