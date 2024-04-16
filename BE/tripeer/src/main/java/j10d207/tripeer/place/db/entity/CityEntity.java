@@ -20,5 +20,7 @@ public class CityEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     // PK
     private int cityId;
+    private String description;
+    private String cityImg;
     private String cityName;
 }
