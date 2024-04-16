@@ -6,11 +6,16 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
 import j10d207.tripeer.user.config.JWTUtil;
+import j10d207.tripeer.user.db.dto.CustomOAuth2User;
+import j10d207.tripeer.user.db.dto.SocialInfoDTO;
 import j10d207.tripeer.user.db.entity.UserEntity;
 import j10d207.tripeer.user.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -65,5 +70,23 @@ public class UserServiceImpl implements UserService{
         user.setProfileImage(amazonS3.getUrl(bucketName, changedName).toString());
         userRepository.save(user);
 
+    }
+
+    //소셜정보 불러오기
+    @Override
+    public SocialInfoDTO getSocialInfo() {
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        CustomOAuth2User customUserDetails = (CustomOAuth2User) authentication.getPrincipal();
+
+        SocialInfoDTO socialInfoDTO = SocialInfoDTO.builder()
+                .email(customUserDetails.getEmail())
+                .name(customUserDetails.getName())
+                .birth(customUserDetails.getBrith())
+                .gender(customUserDetails.getGender())
+                .profileImage(customUserDetails.getProfileImage())
+                .build();
+
+        return getSocialInfo();
     }
 }

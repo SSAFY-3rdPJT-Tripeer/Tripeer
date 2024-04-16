@@ -95,8 +95,8 @@ public class SecurityConfig {
         //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/admin").hasRole("ADMIN")
-                        .requestMatchers("*").permitAll()
+//                        .requestMatchers("/admin").hasRole("ADMIN")
+                        .requestMatchers("/*", "/**").permitAll()
                         .anyRequest().authenticated()                    );
 
         // 04.14 - JWTFilter 등록, 일반로그인 전용 주석처리 해제x

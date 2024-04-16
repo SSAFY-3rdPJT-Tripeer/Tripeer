@@ -12,8 +12,9 @@ public interface OAuth2Response {
     String getEmail();
     //사용자 실명 (설정한 이름)
     String getName();
-    String getNickName();
     String getProfileImage();
+    String getGender();
+    String getBirth();
 
     Map<String, Object> getAttribute();
 

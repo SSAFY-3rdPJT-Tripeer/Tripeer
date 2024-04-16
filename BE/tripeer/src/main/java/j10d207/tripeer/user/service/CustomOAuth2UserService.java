@@ -1,9 +1,6 @@
 package j10d207.tripeer.user.service;
 
-import j10d207.tripeer.user.db.dto.CustomOAuth2User;
-import j10d207.tripeer.user.db.dto.GoogleResponse;
-import j10d207.tripeer.user.db.dto.KakaoResponse;
-import j10d207.tripeer.user.db.dto.OAuth2Response;
+import j10d207.tripeer.user.db.dto.*;
 import j10d207.tripeer.user.db.entity.UserEntity;
 import j10d207.tripeer.user.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,8 +32,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         } else if (registrationId.equals("google")) {
             oAuth2Response = new GoogleResponse(oAuth2User.getAttributes());
             user = loginAndJoin(oAuth2Response);
+        } else if (registrationId.equals("naver")) {
+            oAuth2Response = new NaverResponse(oAuth2User.getAttributes());
+            user = loginAndJoin(oAuth2Response);
         } else {
-
+            System.out.println("비상");
             return null;
         }
 
@@ -50,18 +50,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String providerId = oAuth2Response.getProviderId();
         UserEntity user = userRepository.findByProviderAndProviderId(provider, providerId);
         //소셜로그인은 되었지만, 우리 사이트에 회원등록이 안된 상태 전달
-        //자동가입 버전
         if( user == null ) {
-//            UserEntity newUser = UserEntity.builder()
-//                    .provider(oAuth2Response.getProvider())
-//                    .providerId(oAuth2Response.getProviderId())
-//                    .name(oAuth2Response.getName() != null ? oAuth2Response.getName() : oAuth2Response.getProvider() + oAuth2Response.getProviderId())
-//                    .email(oAuth2Response.getEmail())
-//                    .profileImage(oAuth2Response.getProfileImage())
-//                    .role("ROLE_USER")
-//                    .build();
-//            user = userRepository.save(newUser);
+            UserEntity newUser = UserEntity.builder()
+                    .role("ROLE_VALIDATE")
+                    .build();
             System.out.println("미가입 상태");
+            return newUser;
         }
 
         return user;

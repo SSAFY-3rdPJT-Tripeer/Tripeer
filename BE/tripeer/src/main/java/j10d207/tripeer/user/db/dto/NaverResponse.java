@@ -2,25 +2,25 @@ package j10d207.tripeer.user.db.dto;
 
 import java.util.Map;
 
-public class GoogleResponse implements OAuth2Response {
+public class NaverResponse implements OAuth2Response {
 
     private final Map<String, Object> attribute;
 
-    public GoogleResponse(Map<String, Object> attribute) {
+    public NaverResponse(Map<String, Object> attribute) {
 
-        this.attribute = attribute;
+        this.attribute = (Map<String, Object>) attribute.get("response");
     }
 
     @Override
     public String getProvider() {
 
-        return "google";
+        return "naver";
     }
 
     @Override
     public String getProviderId() {
 
-        return attribute.get("sub").toString();
+        return attribute.get("id").toString();
     }
 
     @Override
@@ -32,26 +32,26 @@ public class GoogleResponse implements OAuth2Response {
     @Override
     public String getName() {
 
-        return attribute.get("given_name").toString();
+        return attribute.get("nickname").toString();
     }
 
     @Override
     public String getProfileImage() {
-        return attribute.get("picture").toString();
+        return attribute.get("profile_image").toString();
     }
 
     @Override
     public String getGender() {
-        return attribute.get("gender").toString().equals("male") ? "남자" : "여자";
+        return attribute.get("gender").toString().equals("M") ? "남자" : "여자";
     }
 
     @Override
     public String getBirth() {
-        return attribute.get("birthday").toString();
+        return attribute.get("birthyear").toString() + "-" + attribute.get("birthday").toString();
     }
 
     @Override
     public Map<String, Object> getAttribute() {
-        return attribute;
+        return Map.of();
     }
 }

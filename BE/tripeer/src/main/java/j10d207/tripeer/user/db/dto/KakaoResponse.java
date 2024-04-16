@@ -42,14 +42,20 @@ public class KakaoResponse implements OAuth2Response {
         return properties.get("nickname").toString();
     }
 
-    @Override
-    public String getNickName() {
-        return properties.get("nickname").toString();
-    }
 
     @Override
     public String getProfileImage() {
         return profile.get("profile_image_url") == null ? null : profile.get("profile_image_url").toString();
+    }
+
+    @Override
+    public String getGender() {
+        return null;
+    }
+
+    @Override
+    public String getBirth() {
+        return null;
     }
 
     @Override
