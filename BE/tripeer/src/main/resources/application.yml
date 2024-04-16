@@ -1,7 +1,9 @@
+server:
+  servlet:
+    context-path: /api
+
 spring:
   server:
-    servlet:
-      context-path: /api
       multipart:
         max-file-size: -1
         max-request-size: -1

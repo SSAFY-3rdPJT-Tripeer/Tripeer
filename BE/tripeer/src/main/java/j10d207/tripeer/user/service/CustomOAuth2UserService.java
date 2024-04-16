@@ -52,14 +52,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         //소셜로그인은 되었지만, 우리 사이트에 회원등록이 안된 상태 전달
         //자동가입 버전
         if( user == null ) {
-//            UserEntity newUser = UserEntity.builder()
-//                    .provider(oAuth2Response.getProvider())
-//                    .providerId(oAuth2Response.getProviderId())
-//                    .name(oAuth2Response.getName() != null ? oAuth2Response.getName() : oAuth2Response.getProvider() + oAuth2Response.getProviderId())
-//                    .email(oAuth2Response.getEmail())
-//                    .profileImage(oAuth2Response.getProfileImage())
-//                    .role("ROLE_USER")
-//                    .build();
+            UserEntity newUser = UserEntity.builder()
+                    .provider(oAuth2Response.getProvider())
+                    .providerId(oAuth2Response.getProviderId())
+                    .name(oAuth2Response.getName() != null ? oAuth2Response.getName() : oAuth2Response.getProvider() + oAuth2Response.getProviderId())
+                    .email(oAuth2Response.getEmail())
+                    .profileImage(oAuth2Response.getProfileImage())
+                    .role("ROLE_USER")
+                    .build();
 //            user = userRepository.save(newUser);
             System.out.println("미가입 상태");
         }
