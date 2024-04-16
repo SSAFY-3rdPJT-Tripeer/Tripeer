@@ -76,9 +76,12 @@ public class UserServiceImpl implements UserService{
     @Override
     public SocialInfoDTO getSocialInfo() {
         SecurityContext context = SecurityContextHolder.getContext();
+        System.out.println("context : " + context.toString());
         Authentication authentication = context.getAuthentication();
+        System.out.println("authentication : " + authentication.toString());
         CustomOAuth2User customUserDetails = (CustomOAuth2User) authentication.getPrincipal();
 
+        System.out.println(customUserDetails.toString());
         SocialInfoDTO socialInfoDTO = SocialInfoDTO.builder()
                 .email(customUserDetails.getEmail())
                 .name(customUserDetails.getName())
@@ -87,6 +90,6 @@ public class UserServiceImpl implements UserService{
                 .profileImage(customUserDetails.getProfileImage())
                 .build();
 
-        return getSocialInfo();
+        return socialInfoDTO;
     }
 }

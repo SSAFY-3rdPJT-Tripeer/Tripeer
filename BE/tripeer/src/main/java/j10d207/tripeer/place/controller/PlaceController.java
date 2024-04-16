@@ -15,10 +15,10 @@ public class PlaceController {
 
     private final CityServiceImpl cityServicecImpl;
 
-    @GetMapping("/city/{cityName}")
-    public Response<?> searchCity(@PathVariable("cityName") String cityName) {
-
-        return Response.of("ok", "test", "OJOJOJOJO");
-    }
+//    @GetMapping("/city/{cityName}")
+//    public Response<?> searchCity(@PathVariable("cityName") String cityName) {
+//
+//        return Response.of("ok", "test", "OJOJOJOJO");
+//    }
 
 }
