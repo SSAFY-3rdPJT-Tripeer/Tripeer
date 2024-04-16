@@ -54,25 +54,24 @@ public class SecurityConfig {
 
 
         // 04.14작성 - 시큐리티 cors 를 위해 필요한 부분으로 서버연결했을때 부터 주석 해제하여 사용
-//        http
-//                .cors((corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
-//
-//                    @Override
-//                    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-//
-//                        CorsConfiguration config = new CorsConfiguration();
-//
-//                        config.setAllowedOrigins(List.of("https://j10D104.p.ssafy.io", "http://localhost:5173/"));
-//                        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-//                        config.setAllowCredentials(true);
-//                        config.setAllowedHeaders(List.of("*"));
-//                        config.setMaxAge(3600L);
-//
+        http
+                .cors((corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
+
+                    @Override
+                    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+
+                        CorsConfiguration config = new CorsConfiguration();
+
+                        config.setAllowedOrigins(List.of("http://localhost:5173/"));
+                        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+                        config.setAllowCredentials(true);
+                        config.setAllowedHeaders(List.of("*"));
+                        config.setMaxAge(3600L);
 //                        config.setExposedHeaders(Collections.singletonList("access"));
-//
-//                        return config;
-//                    }
-//                })));
+
+                        return config;
+                    }
+                })));
 
         //csrf disable
         http

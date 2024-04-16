@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 
-@Entity(name = "spot_detail")
+@Entity(name = "spot_description")
 @Getter
 @Builder
 @NoArgsConstructor
