@@ -1,10 +1,16 @@
 package j10d207.tripeer.place.service;
 
-import j10d207.tripeer.place.db.dto.StayListDto;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
+import j10d207.tripeer.place.db.dto.SpotDetailDto;
+import j10d207.tripeer.place.db.dto.SpotListDto;
+
+import java.util.List;
 
 public interface SpotService {
-    public StayListDto getStayList(Integer contentType,Integer cityId, Integer townId);
+    public SpotListDto getStayList(Integer page, Integer ContentTypeId, Integer cityId, Integer townId);
 
+    public SpotListDto getRestaurantList(Integer page, Integer ContentTypeId, Integer cityId, Integer townId);
+
+    public SpotListDto getMeccaList(Integer page, List<Integer> ContentTypeId, Integer cityId, Integer townId);
+
+    public SpotDetailDto getSpotDetail(Integer spotId);
 }

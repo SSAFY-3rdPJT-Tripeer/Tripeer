@@ -9,8 +9,8 @@ import java.util.List;
 @Getter
 @Builder
 @AllArgsConstructor
-public class StayListDto {
+public class SpotListDto {
 
     private boolean last;
-    private List<StayInfoDto> stayInfoDtos;
+    private List<SpotInfoDto> spotInfoDtos;
 }

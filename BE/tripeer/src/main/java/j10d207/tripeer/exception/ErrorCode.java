@@ -18,7 +18,10 @@ public enum ErrorCode {
     CITY_NOT_FOUND(HttpStatus.NOT_FOUND, "CITY-001", "도시를 찾을 수 없습니다."),
 
     //town
-    TOWN_NOT_FOUND(HttpStatus.NOT_FOUND, "TOWN-001", "타운을 찾을 수 없습니다.");
+    TOWN_NOT_FOUND(HttpStatus.NOT_FOUND, "TOWN-001", "타운을 찾을 수 없습니다."),
+
+    //spot
+    SPOT_NOT_FOUND(HttpStatus.NOT_FOUND, "SPOT-001", "스팟을 찾을 수 없습니다.");
 
     private final HttpStatus httpStatus;	// HttpStatus
     private final String code;				// ACCOUNT-001
