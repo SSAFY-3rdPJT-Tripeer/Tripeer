@@ -19,6 +19,8 @@ public class CityListDto {
 
         return CityListDto.builder()
                 .cityId(cityEntity.getCityId())
+                .cityImg(cityEntity.getCityImg())
+                .description(cityEntity.getDescription())
                 .cityName(cityEntity.getCityName())
                 .build();
     }

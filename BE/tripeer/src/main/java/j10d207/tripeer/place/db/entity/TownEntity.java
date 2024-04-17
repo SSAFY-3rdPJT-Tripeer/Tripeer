@@ -15,7 +15,9 @@ import lombok.NoArgsConstructor;
 public class TownEntity {
 
     @EmbeddedId
-    private TownPK townPK;
+    private TownPK townId;
 
     private String townName;
+    private String townImg;
+    private String description;
 }
