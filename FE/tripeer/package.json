@@ -1,0 +1,30 @@
+{
+  "name": "tripeer",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "axios": "^1.6.8",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^9.1.0",
+    "next": "14.2.2",
+    "prettier": "^3.2.5",
+    "react": "^18",
+    "react-beautiful-dnd": "^13.1.1",
+    "react-dom": "^18",
+    "y-websocket": "^2.0.2",
+    "yjs": "^13.6.14"
+  },
+  "devDependencies": {
+    "eslint": "^8",
+    "eslint-config-next": "14.2.2",
+    "eslint-plugin-react-refresh": "^0.4.6",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1"
+  }
+}
