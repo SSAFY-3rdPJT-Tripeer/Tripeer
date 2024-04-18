@@ -1,32 +1,40 @@
 # react-dockerizing/Dockerfile
 
-# base image 설정(as build 로 완료된 파일을 밑에서 사용할 수 있다.)
+# 1. Build stage: Node.js 기반으로 애플리케이션 빌드
 FROM node:20-alpine as build
 
-# 컨테이너 내부 작업 디렉토리 설정
+# 작업 디렉토리 설정
 WORKDIR /app
 
-# app dependencies
-# 컨테이너 내부로 package.json 파일들을 복사
+# package.json 및 package-lock.json 복사
 COPY package*.json ./
 
-# package.json 및 package-lock.json 파일에 명시된 의존성 패키지들을 설치
+# 의존성 패키지 설치
 RUN npm install
 
-# 호스트 머신의 현재 디렉토리 파일들을 컨테이너 내부로 전부 복사
+# 소스 코드 복사
 COPY . .
 
-# npm build
+# 애플리케이션 빌드
 RUN npm run build
 
-# 컨테이너의 3000번 포트를 열어준다.
-EXPOSE 3000
+# 2. Serve stage: serve를 사용하여 애플리케이션 서빙
+FROM node:20-alpine
 
 # 시간대 설정
 ENV TZ=Asia/Seoul
-RUN apk add --no-cache tzdata && \
-    cp /usr/share/zoneinfo/$TZ /etc/localtime && \
-    echo $TZ > /etc/timezone
 
-# 애플리케이션 실행
-CMD ["npm", "serve"]
+# 작업 디렉토리 설정
+WORKDIR /app
+
+# serve 패키지 전역 설치
+RUN npm install -g serve
+
+# build stage에서 빌드된 파일 복사
+COPY --from=build /app/dist /app
+
+# 3000번 포트 열기
+EXPOSE 3000
+
+# serve로 애플리케이션 서빙
+CMD ["serve", "-s", ".", "-l", "3000"]
