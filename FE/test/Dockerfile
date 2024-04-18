@@ -29,4 +29,4 @@ RUN apk add --no-cache tzdata && \
     echo $TZ > /etc/timezone
 
 # 애플리케이션 실행
-CMD ["npm", "start"]
+CMD ["npm", "run dev"]
