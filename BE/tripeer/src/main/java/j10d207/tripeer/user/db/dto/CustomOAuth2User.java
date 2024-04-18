@@ -43,12 +43,7 @@ public class CustomOAuth2User implements OAuth2User {
     @Override
     public String getName() {
 
-        return oAuth2Response.getName();
-    }
-
-
-    public String getEmail() {
-        return  oAuth2Response.getEmail();
+        return oAuth2Response.getNickname();
     }
 
     public String getUsername() {
@@ -57,8 +52,6 @@ public class CustomOAuth2User implements OAuth2User {
     }
 
     public String getBrith() { return oAuth2Response.getBirth(); }
-
-    public String getGender() { return  oAuth2Response.getGender(); }
 
     public String getProfileImage() { return oAuth2Response.getProfileImage(); }
 

@@ -24,13 +24,7 @@ public class GoogleResponse implements OAuth2Response {
     }
 
     @Override
-    public String getEmail() {
-
-        return attribute.get("email").toString();
-    }
-
-    @Override
-    public String getName() {
+    public String getNickname() {
 
         return attribute.get("given_name").toString();
     }
@@ -40,10 +34,6 @@ public class GoogleResponse implements OAuth2Response {
         return attribute.get("picture").toString();
     }
 
-    @Override
-    public String getGender() {
-        return attribute.get("gender").toString().equals("male") ? "남자" : "여자";
-    }
 
     @Override
     public String getBirth() {

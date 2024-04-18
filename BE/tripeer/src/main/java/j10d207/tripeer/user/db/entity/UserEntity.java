@@ -20,12 +20,10 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     // PK
     private long userId;
-    private String email;
     private String provider;
     private String providerId;
-    private String name;
+    private String nickname;
     private LocalDate birth;
-    private String gender;
     @Setter
     private String profileImage;
     private String role;

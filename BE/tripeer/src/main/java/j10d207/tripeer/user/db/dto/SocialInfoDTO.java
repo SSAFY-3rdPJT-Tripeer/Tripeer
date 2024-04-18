@@ -9,10 +9,8 @@ import lombok.*;
 @ToString
 public class SocialInfoDTO {
 
-    private String email;
-    private String name;
+    private String nickname;
     private String birth;
-    private String gender;
     private String profileImage;
 
 }

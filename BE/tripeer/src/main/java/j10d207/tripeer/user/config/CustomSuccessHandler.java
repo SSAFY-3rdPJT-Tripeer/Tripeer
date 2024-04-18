@@ -33,14 +33,18 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
+        System.out.println("성공진입");
         //OAuth2User
         CustomOAuth2User customUserDetails = (CustomOAuth2User) authentication.getPrincipal();
+        System.out.println("데이터 확인 : " + customUserDetails.getUserId());
+        System.out.println("데이터 확인 : " + customUserDetails.getName());
 
         //ROLE 추출
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
         GrantedAuthority auth = iterator.next();
         String role = auth.getAuthority();
+        System.out.println("role : " + role);
 
         // 04.14 - 비회원 상태일경우 가입 페이지로, 커스텀 필요
         if (role.equals("ROLE_VALIDATE")) {
@@ -54,7 +58,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         long userId = customUserDetails.getUserId();
 
         //토큰 생성
-        String access = jwtUtil.createJwt("access", name, role, userId, accessTime);
+        String access = "Bearer " + jwtUtil.createJwt("access", name, role, userId, accessTime);
         String refresh = jwtUtil.createJwt("refresh", name, role, userId, refreshTime);
 
         response.addCookie(createCookie("access", access));

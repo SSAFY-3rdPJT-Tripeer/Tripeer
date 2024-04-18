@@ -7,9 +7,13 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
 import j10d207.tripeer.user.config.JWTUtil;
 import j10d207.tripeer.user.db.dto.CustomOAuth2User;
+import j10d207.tripeer.user.db.dto.JoinDTO;
 import j10d207.tripeer.user.db.dto.SocialInfoDTO;
+import j10d207.tripeer.user.db.dto.UserSearchDTO;
 import j10d207.tripeer.user.db.entity.UserEntity;
 import j10d207.tripeer.user.db.repository.UserRepository;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +24,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,8 +36,46 @@ public class UserServiceImpl implements UserService{
     private final AmazonS3 amazonS3;
     @Value("${cloud.aws.s3.bucketName}")
     private String bucketName; //버킷 이름
+    @Value("${spring.jwt.access}")
+    private long accessTime;
+    @Value("${spring.jwt.refresh}")
+    private long refreshTime;
     private final JWTUtil jwtUtil;
     private final UserRepository userRepository;
+
+    //회원 가입
+    @Override
+    public void memberSignup(JoinDTO joinDTO, HttpServletResponse response) {
+        LocalDate birth = LocalDate.parse(joinDTO.getYear() + "-" + joinDTO.getMonth() + "-" + joinDTO.getDay());
+        UserEntity user = UserEntity.builder()
+                .provider(joinDTO.getProvider())
+                .providerId(joinDTO.getProviderId())
+                .nickname(joinDTO.getNickname())
+                .birth(birth)
+                .profileImage(joinDTO.getProfileImage())
+                .role("ROLE_USER")
+                .style1(joinDTO.getStyle1())
+                .style2(joinDTO.getStyle2())
+                .style3(joinDTO.getStyle3())
+                .isOnline(false)
+                .build();
+        user = userRepository.save(user);
+
+        String access = "Bearer " + jwtUtil.createJwt("Authorization", joinDTO.getNickname(), "ROLE_USER", user.getUserId(), accessTime);
+        String refresh = jwtUtil.createJwt("Authorization-re", joinDTO.getNickname(), "ROLE_USER", user.getUserId(), refreshTime);
+
+        //access 토큰 헤더에 넣기
+        response.setHeader("Authorization", access);
+
+        //refresh 토큰 헤더에 넣기
+        Cookie cookie = new Cookie("Authorization-re", refresh);
+        cookie.setMaxAge((int) refreshTime);
+        //NginX 도입시 사용
+//        cookie.setSecure(true);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+
+    }
 
     //프로필 사진 변경
     @Override
@@ -83,13 +127,40 @@ public class UserServiceImpl implements UserService{
 
         System.out.println(customUserDetails.toString());
         SocialInfoDTO socialInfoDTO = SocialInfoDTO.builder()
-                .email(customUserDetails.getEmail())
-                .name(customUserDetails.getName())
+                .nickname(customUserDetails.getName())
                 .birth(customUserDetails.getBrith())
-                .gender(customUserDetails.getGender())
                 .profileImage(customUserDetails.getProfileImage())
                 .build();
 
         return socialInfoDTO;
+    }
+
+    //닉네임 중복체크
+    @Override
+    public boolean nicknameDuplicateCheck(String nickname) {
+        return userRepository.existsByNickname(nickname);
+    }
+
+    //유저 검색
+    @Override
+    public List<UserSearchDTO> userSearch(String nickname) {
+        List<UserEntity> userEntityList = userRepository.findByNicknameContains(nickname);
+        List<UserSearchDTO> userSearchDTOList = new ArrayList<>();
+        for(UserEntity user : userEntityList) {
+            UserSearchDTO userSearchDTO = UserSearchDTO.builder()
+                    .nickname(user.getNickname())
+                    .userId(user.getUserId())
+                    .profileImage(user.getProfileImage())
+                    .build();
+            userSearchDTOList.add(userSearchDTO);
+        }
+
+        return userSearchDTOList;
+    }
+
+    @Override
+    public void getSuper(HttpServletResponse response) {
+        String result = jwtUtil.createJwt("Authorization", "admin", "ROLE_ADMIN", 1, (long) (60*60*24*60));
+        response.setHeader("Authorization", "Bearer " + result);
     }
 }

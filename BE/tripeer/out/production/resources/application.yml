@@ -9,9 +9,9 @@ spring:
         max-request-size: -1
 
   datasource:
-    url: jdbc:mysql://rdsssafyd207.cxs0eci2yne0.ap-northeast-2.rds.amazonaws.com/tripeer
-    username: RDSssafyD207
-    password: d207d207
+    url: ENC(y8TZsLQPvMIltxnWhgvUL2NWQngsqEv0TmrlUD01CHwFeEaFf5o3oZOKPLxEX1U3sam3Si+UaB1CbtGFPq76+e51pVG/esoRd1rROjmEx00BXTrNu8Wj1w==)
+    username: ENC(O3SfEDhTgcxejIUYhmqM5dAPo7X32qId)
+    password: ENC(VBig/uxtyuYILbSlL6xhyP0rble1JfG+)
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -38,23 +38,23 @@ spring:
         registration:
           kakao:
             client-name: kakao
-            client-id : b07f4cbb3c40292447d0d6cc8df0e11a
-            client-secret: GnOfeDyOz9jqJI7wl4xzGDkL1lyvOg6U
+            client-id : ENC(IaY6SQ0O/qVmqqwYfxphw2mNp3r82EjyJv62hGoqZfuFTM8rR7LUSqFWbxYS6x48)
+            client-secret: ENC(lQlOiocOvFAtDivr/RySShuAQozGv1F6o1J6tf7uYxTeXxpl9BRgPUbvbDq69cix)
             redirect-uri: http://localhost:8080/api/login/oauth2/code/kakao
             authorization-grant-type: authorization_code
             scope: profile_nickname, profile_image, account_email
             client-authentication-method: client_secret_post
           naver:
             client-name: naver
-            client-id: UawreF9GVkPfHzgPD6pR
-            client-secret: W9k8_CQlWz
+            client-id: ENC(6aRNPfKQdE/V+vszoh/xjRRmQiu8BHABuzs/t7DfYhQ=)
+            client-secret: ENC(bjVify3O4qIWMbRrfzIpbj0P7Zm2uMpw)
             redirect-uri: http://localhost:8080/api/login/oauth2/code/naver
             authorization-grant-type: authorization_code
             scope: name
           google:
             client-name: google
-            client-id: 687322550525-8g5rp4fiv14c4ii7ioaosu53hajsbar8.apps.googleusercontent.com
-            client-secret: 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
+            client-id: ENC(sGaMPk1RGfhVbfQ3+F+yBBqOYBeBI9gRbErAXsrSUYxvCqvhy5SMUmKzG8TF1fCZegxlE6BP9WApu/CUioiyXkvG47uNz5DPng0QxZ5yb/QChSWoy84xug==)
+            client-secret: ENC(m0Nbxk/CS1S8A5LoBREZUH7pxOTyKo6Rt8hC+68SF1ow9TyzpJhH7UKSp6iZztno)
             redirect-uri: http://localhost:8080/api/login/oauth2/code/google
             authorization-grant-type: authorization_code
             scope: profile,email
@@ -69,8 +69,8 @@ spring:
 cloud:
   aws:
     credentials:
-      accessKey: AKIA6P5OPQQMRZDU3YQQ
-      secretKey: 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
+      accessKey: ENC(2N0Zox+byzqDrTNnHPjcY9FrDovXFf1Up4RPiSgUK8s=)
+      secretKey: ENC(UhRFGA31vCoZd7DLMy4MFQzsV1gUT9yTUAhjztsIb1F0wCzXhJe4Uc6H/1p7Q9uZDeGRkFJA8Ec=)
     s3:
       bucketName: tripeer
     region:

@@ -24,13 +24,7 @@ public class NaverResponse implements OAuth2Response {
     }
 
     @Override
-    public String getEmail() {
-
-        return attribute.get("email").toString();
-    }
-
-    @Override
-    public String getName() {
+    public String getNickname() {
 
         return attribute.get("nickname").toString();
     }
@@ -38,11 +32,6 @@ public class NaverResponse implements OAuth2Response {
     @Override
     public String getProfileImage() {
         return attribute.get("profile_image").toString();
-    }
-
-    @Override
-    public String getGender() {
-        return attribute.get("gender").toString().equals("M") ? "남자" : "여자";
     }
 
     @Override

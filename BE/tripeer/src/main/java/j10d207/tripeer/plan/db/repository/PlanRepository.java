@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PlanRepository extends JpaRepository<PlanEntity, Long> {
+
+    PlanEntity findByPlanId(long planId);
 }

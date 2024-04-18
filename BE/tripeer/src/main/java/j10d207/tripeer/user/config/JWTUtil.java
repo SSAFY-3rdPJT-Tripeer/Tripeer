@@ -57,5 +57,12 @@ public class JWTUtil {
                 .compact();
     }
 
+    public String splitToken(String token) {
+        String[] result = token.split(" ");
+        System.out.println("스플릿 확인0 : " + result[0]);
+        System.out.println("스플릿 확인1 : " + result[1]);
+        return  result[1];
+    }
+
 
 }

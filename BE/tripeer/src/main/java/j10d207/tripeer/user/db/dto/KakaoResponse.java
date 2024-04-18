@@ -31,13 +31,7 @@ public class KakaoResponse implements OAuth2Response {
     }
 
     @Override
-    public String getEmail() {
-
-        return kakao_account.get("email").toString();
-    }
-
-    @Override
-    public String getName() {
+    public String getNickname() {
 
         return properties.get("nickname").toString();
     }
@@ -46,11 +40,6 @@ public class KakaoResponse implements OAuth2Response {
     @Override
     public String getProfileImage() {
         return profile.get("profile_image_url") == null ? null : profile.get("profile_image_url").toString();
-    }
-
-    @Override
-    public String getGender() {
-        return null;
     }
 
     @Override

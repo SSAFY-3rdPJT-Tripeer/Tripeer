@@ -4,10 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -22,8 +19,10 @@ public class PlanEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     // PK
     private long planId;
+    @Setter
     private String title;
     private String vehicle;
     private LocalDate startDate;
     private LocalDate endDate;
+    private LocalDate createDate;
 }
