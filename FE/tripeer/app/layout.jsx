@@ -1,4 +1,5 @@
 import "./globals.css";
+import NavBar from "@/components/nav/NavBar";
 
 export const metadata = {
   title: "Tripeer | 여행 협업 플랫폼 |",
@@ -8,7 +9,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <NavBar />
+        {children}
+      </body>
     </html>
   );
 }
