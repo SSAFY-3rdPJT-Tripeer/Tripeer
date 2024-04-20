@@ -21,6 +21,8 @@ const NavBar = () => {
   };
   const LOGO_WIDTH = 130;
   const LOGO_HEIGHT = 50;
+  const TOGGLE_WIDTH = 15;
+  const TOGGLE_HEIGHT = 8;
 
   return (
     <>
@@ -51,8 +53,8 @@ const NavBar = () => {
                 <p className={style.userName}>부수환</p>
                 <Image
                   src={toggleIcon}
-                  width={15}
-                  height={8}
+                  width={TOGGLE_WIDTH}
+                  height={TOGGLE_HEIGHT}
                   alt="toggle"
                   className={style.toggleIcon}
                   onClick={() => {
