@@ -5,17 +5,16 @@
     align-items: center;
 }
 
-.main {
-    flex-direction: column;
+.sectionBtn {
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    margin-top: 50px;
 }
 
-.cancel {
-    width: 140px;
-    height: 40px;
-    font-size: 16px;
-    color: #606060;
-    background-color: #F7F7F7;
-    border-radius: 5px;
+.main {
+    flex-direction: column;
 }
 
 .next {
@@ -34,7 +33,12 @@
     color: #212529;
 }
 
+.inputBox {
+    margin-top: 20px;
+}
+
 .input {
+    width: 100px;
     font-size: 20px;
     font-weight: normal;
     color: #858687;
@@ -45,16 +49,17 @@
     margin-bottom: 50px;
 }
 
-.mainContent {
-    animation: fadeIn 1s ease-in forwards;
-    opacity: 0;
+.section{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px 10px;
+    justify-content: center;
+    padding-top: 50px;
+    margin: 0 auto;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+.div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
