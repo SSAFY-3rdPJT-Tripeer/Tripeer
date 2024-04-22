@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Slf4j
@@ -19,7 +20,7 @@ public class PlanController {
 
     private final PlanService planService;
     //플랜 생성
-    @PostMapping
+    @PutMapping
     public Response<PlanResDTO> createPlan(@RequestBody CreatePlanDTO createPlanDTO, HttpServletRequest request) {
         try {
             PlanResDTO result = planService.createPlan(createPlanDTO, request.getHeader("Authorization"));
@@ -54,7 +55,7 @@ public class PlanController {
     }
 
     //동행자 추가
-    @PostMapping("/member")
+    @PutMapping("/member")
     public Response<?> joinPlan(@RequestBody CoworkerDTO coworkerDTO) {
         try {
             planService.joinPlan(coworkerDTO);
@@ -66,7 +67,7 @@ public class PlanController {
 
     //동행자 조회
     @GetMapping("/member/{planId}")
-    public Response<?> getCoworker(@PathVariable("planId") long planId) {
+    public Response<List<CoworkerDTO>> getCoworker(@PathVariable("planId") long planId) {
         try {
             List<CoworkerDTO> coworkerDTOList = planService.getCoworker(planId);
             return Response.of(HttpStatus.OK, "조회 완료", coworkerDTOList);
@@ -75,11 +76,56 @@ public class PlanController {
         }
     }
 
-    @GetMapping("/spot/{planId}/{keyword}")
-    public Response<List<SpotSearchResDTO>> getSpots(@PathVariable("planId") long planId, @PathVariable("keyword") String keyword) {
+    //관광지 검색
+    @GetMapping("/spot")
+    public Response<List<SpotSearchResDTO>> getSpots(@RequestParam("planId") long planId, @RequestParam("keyword") String keyword) {
         try {
             List<SpotSearchResDTO> searchResList = planService.getSpotSearch(planId, keyword);
             return Response.of(HttpStatus.OK, "검색 완료", searchResList);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //플랜버킷 관광지 추가
+    @PutMapping("/bucket")
+    public Response<?> addPlanSpot(@RequestParam("planId") long planId, @RequestParam("spotInfoId") int spotInfoId, HttpServletRequest request) {
+        try {
+            planService.addPlanSpot(planId, spotInfoId, request.getHeader("Authorization"));
+            return Response.of(HttpStatus.OK, "플랜버킷 관광지 추가 완료", null);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //즐겨찾기 추가
+    @PutMapping("/wishlist/{spotInfoId}")
+    public Response<?> addWishList(@PathVariable("spotInfoId") int spotInfoId, HttpServletRequest request) {
+        try {
+            planService.addWishList(spotInfoId, request.getHeader("Authorization"));
+            return Response.of(HttpStatus.OK, "즐겨찾기 추가 완료", null);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //플랜 디테일 저장
+    @PutMapping("/detail")
+    public Response<?> addPlanDetail(@RequestBody PlanDetailReqDTO planDetailReqDTO) {
+        try {
+            planService.addPlanDetail(planDetailReqDTO);
+            return Response.of(HttpStatus.OK, "플랜 디테일 저장 완료", null);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //플랜 디테일 전체 조회
+    @GetMapping("/detail/{planId}")
+    public Response<Map<Integer, List<PlanDetailResDTO>>> getPlan(@PathVariable("planId") long planId) {
+        try {
+            Map<Integer, List<PlanDetailResDTO>> result = planService.getAllPlanDetail(planId);
+            return Response.of(HttpStatus.OK, "플랜 디테일 전체 조회 완료", result);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
