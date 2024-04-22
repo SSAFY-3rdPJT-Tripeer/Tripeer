@@ -32,6 +32,11 @@
     width: auto;
 }
 
+.loginImage {
+    height: auto;
+    width: 100%;
+}
+
 .loginBtn {
     height: auto;
     width: 23%;
