@@ -1,38 +1,34 @@
-# Use a node base image
+# 빌드 스테이지
+# Node.js 이미지를 기반으로 함
 FROM node:20-alpine as builder
 
-# Set the working directory
+# 애플리케이션의 작업 디렉토리 설정
 WORKDIR /app
 
-# Copy package.json and other related files
+# 애플리케이션의 package.json 및 package-lock.json 파일 복사
 COPY package*.json ./
 
-# Install dependencies
+# 의존성 설치
 RUN npm install
 
-# Copy the rest of your app's source code from your host to your image filesystem.
+# 애플리케이션의 소스 코드 복사
 COPY . .
 
-# Build the application
+# 애플리케이션 빌드
 RUN npm run build
 
-# Serve the app using a minimal base image
-FROM node:20-alpine
+# 서비스 스테이지
+# Nginx 이미지를 기반으로 함
+FROM nginx:stable-alpine
 
-# Set the working directory
-WORKDIR /app
+# Nginx 설정 파일을 애플리케이션에 맞게 수정된 버전으로 교체
+COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
-# Install serve to run the application
-RUN npm install -g serve
+# 빌드 스테이지에서 생성된 빌드 아티팩트를 Nginx가 제공할 수 있도록 복사
+COPY --from=builder /app/out /usr/share/nginx/html
 
-# Copy the build output directory from the builder stage
-COPY --from=builder /app/.next .next
-COPY --from=builder /app/public public
-COPY --from=builder /app/node_modules node_modules
-COPY --from=builder /app/package.json .
+# 80번 포트를 노출시킴. Nginx는 기본적으로 80번 포트에서 서비스됨
+EXPOSE 80
 
-# Expose the port next app runs on
-EXPOSE 3000
-
-# Command to run the app
-CMD ["npm", "start"]
+# Nginx 실행
+CMD ["nginx", "-g", "daemon off;"]
