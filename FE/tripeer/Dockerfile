@@ -1,28 +1,38 @@
-
+# Use a node base image
 FROM node:20-alpine as builder
 
+# Set the working directory
 WORKDIR /app
 
+# Copy package.json and other related files
 COPY package*.json ./
 
-RUN npm install --production
+# Install dependencies
+RUN npm install
 
+# Copy the rest of your app's source code from your host to your image filesystem.
 COPY . .
 
+# Build the application
 RUN npm run build
 
-FROM nginx:stable-alpine
+# Serve the app using a minimal base image
+FROM node:20-alpine
 
-WORKDIR /usr/share/nginx/html
+# Set the working directory
+WORKDIR /app
 
+# Install serve to run the application
+RUN npm install -g serve
 
-RUN rm -rf /usr/share/nginx/html/*
+# Copy the build output directory from the builder stage
+COPY --from=builder /app/.next .next
+COPY --from=builder /app/public public
+COPY --from=builder /app/node_modules node_modules
+COPY --from=builder /app/package.json .
 
-COPY --from=builder /app/out /usr/share/nginx/html
+# Expose the port next app runs on
+EXPOSE 3000
 
-COPY --from=builder /app/nginx.conf /etc/nginx/nginx.conf
-
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
-
-EXPOSE 80
-
+# Command to run the app
+CMD ["npm", "start"]
