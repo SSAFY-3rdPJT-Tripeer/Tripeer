@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import RegisterLoading from "@/components/register/registerLogin";
 import NicknamePage from "@/components/register/nickNamePage";
 import BirthdayPage from "@/components/register/birthDayPage";
+import StylePage from "@/components/register/stylePage";
 
 export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -16,7 +17,7 @@ export default function RegisterPage() {
     return () => {
       clearTimeout(timer);
     };
-  }, [pageNum]);
+  }, []);
 
   return (
     <>
@@ -25,7 +26,9 @@ export default function RegisterPage() {
       ) : pageNum === 0 ? (
         <NicknamePage pageNum={pageNum} setPageNum={setPageNum} />
       ) : pageNum === 1 ? (
-        <BirthdayPage />
+        <BirthdayPage pageNum={pageNum} setPageNum={setPageNum} />
+      ) : pageNum === 2 ? (
+        <StylePage pageNum={pageNum} setPageNum={setPageNum} />
       ) : null}
     </>
   );

@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react";
 
-import styles from "./page.module.css";
+import styles from "./stylePage.module.css";
 import useRegisterStore from "@/stores/register";
 import StyleBtn from "@/components/register/styleBtn";
 import CancelBtn from "@/components/register/cancelBtn";
 
-export default function Style() {
+export default function StylePage({ pageNum, setPageNum }) {
   const store = useRegisterStore();
   const [nickName, setNickName] = useState("");
   const [style, setStyle] = useState();
@@ -39,7 +39,7 @@ export default function Style() {
   }, []);
 
   return (
-    <main className={styles.main}>
+    <main className={`${styles.main} ${styles.mainContent}`}>
       <p className={styles.main_p}>{nickName}님의</p>
       <p className={styles.main_p}>여행 스타일을 골라주세요</p>
       <section className={styles.section}>
@@ -56,7 +56,7 @@ export default function Style() {
         })}
       </section>
       <section className={styles.sectionBtn}>
-        <CancelBtn />
+        <CancelBtn pageNum={pageNum} setPageNum={setPageNum} />
         <div
           className={`${styles.center} ${styles.next}`}
           onClick={onClickNext}>

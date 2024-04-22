@@ -5,6 +5,14 @@
     align-items: center;
 }
 
+.sectionBtn {
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    margin-top: 50px;
+}
+
 .main {
     flex-direction: column;
 }
@@ -39,4 +47,33 @@
     outline: none;
     margin-top: 20px;
     margin-bottom: 50px;
+}
+
+.section{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px 10px;
+    justify-content: center;
+    padding-top: 50px;
+    margin: 0 auto;
+}
+
+.div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mainContent {
+    animation: fadeIn 1s ease-in forwards;
+    opacity: 0;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }

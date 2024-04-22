@@ -7,6 +7,8 @@
 
 .main {
     flex-direction: column;
+    animation: fadeOut 1s ease-out forwards;
+    opacity: 1;
 }
 
 .next {
@@ -39,4 +41,25 @@
     outline: none;
     margin-top: 20px;
     margin-bottom: 50px;
+}
+
+.mainContent {
+    animation: fadeIn 1s ease-in forwards;
+    opacity: 0;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    to{
+        opacity: 0;
+        visibility: hidden;
+    }
 }

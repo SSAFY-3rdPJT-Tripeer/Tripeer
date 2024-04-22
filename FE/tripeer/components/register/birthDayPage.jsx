@@ -5,44 +5,53 @@ import styles from "./birthDayPage.module.css";
 import useRegisterStore from "@/stores/register";
 import CancelBtn from "@/components/register/cancelBtn";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import RegisterLoading from "@/components/register/registerLogin";
 
-export default function BirthdayPage() {
+export default function BirthdayPage({ pageNum, setPageNum }) {
   const [nickName, setNickName] = useState();
   const [year, setYear] = useState("");
   const [month, setMonth] = useState("");
   const [day, setDay] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const store = useRegisterStore();
-  const router = useRouter();
 
   useEffect(() => {
     setNickName(store.nickName);
   }, [store.nickName]);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
+
   const onChangeYear = (e) => {
     const year = e.target.value;
     setYear(year);
-    store.setYear(year);
   };
 
   const onChangeMonth = (e) => {
     const month = e.target.value;
     setMonth(month);
-    store.setMonth(month);
   };
 
   const onChangeDay = (e) => {
     const day = e.target.value;
     setDay(day);
-    store.setDay(day);
   };
 
   const onClickNext = () => {
-    router.push("/register/style");
+    store.setYear(year);
+    store.setMonth(month);
+    store.setDay(day);
+    setPageNum(2);
   };
 
   return (
-    <main className={styles.main}>
+    <main className={`${styles.main} ${styles.mainContent}`}>
       <p className={styles.main_p}>{nickName}님의</p>
       <p className={styles.main_p}>생년월일을 알려주세요.</p>
       <div className={`${styles.inputBox} ${styles.center}`}>
@@ -66,7 +75,7 @@ export default function BirthdayPage() {
         />
       </div>
       <section className={styles.center}>
-        <CancelBtn />
+        <CancelBtn pageNum={pageNum} setPageNum={setPageNum} />
         <div
           className={`${styles.center} ${styles.next}`}
           onClick={onClickNext}>

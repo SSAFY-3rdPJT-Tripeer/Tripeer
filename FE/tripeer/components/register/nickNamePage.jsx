@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "./nickNamePage.module.css";
 import CancelBtn from "@/components/register/cancelBtn";
 import useRegisterStore from "@/stores/register";
