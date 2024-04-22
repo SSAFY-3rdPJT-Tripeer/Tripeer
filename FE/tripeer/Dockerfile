@@ -1,40 +1,38 @@
-# react-dockerizing/Dockerfile
+# Use a node base image
+FROM node:20-alpine as builder
 
-# 1. Build stage: Node.js 기반으로 애플리케이션 빌드
-FROM node:20-alpine as build
-
-# 작업 디렉토리 설정
+# Set the working directory
 WORKDIR /app
 
-# package.json 및 package-lock.json 복사
+# Copy package.json and other related files
 COPY package*.json ./
 
-# 의존성 패키지 설치
+# Install dependencies
 RUN npm install
 
-# 소스 코드 복사
+# Copy the rest of your app's source code from your host to your image filesystem.
 COPY . .
 
-# 애플리케이션 빌드
+# Build the application
 RUN npm run build
 
-# 2. Serve stage: serve를 사용하여 애플리케이션 서빙
+# Serve the app using a minimal base image
 FROM node:20-alpine
 
-# 시간대 설정
-ENV TZ=Asia/Seoul
-
-# 작업 디렉토리 설정
+# Set the working directory
 WORKDIR /app
 
-# serve 패키지 전역 설치
+# Install serve to run the application
 RUN npm install -g serve
 
-# build stage에서 빌드된 파일 복사
-COPY --from=build /app/dist /app
+# Copy the build output directory from the builder stage
+COPY --from=builder /app/.next .next
+COPY --from=builder /app/public public
+COPY --from=builder /app/node_modules node_modules
+COPY --from=builder /app/package.json .
 
-# 3000번 포트 열기
+# Expose the port next app runs on
 EXPOSE 3000
 
-# serve로 애플리케이션 서빙
-CMD ["npm", "start"]
+# Command to run the app
+CMD ["serve", "-s", "build", "-l", "3000"]
