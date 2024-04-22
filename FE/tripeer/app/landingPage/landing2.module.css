@@ -1,0 +1,76 @@
+.container {
+  display: flex;
+  width: 100%;
+  height: 500px;
+  margin-top: 200px;
+  margin-bottom: 150px;
+}
+
+.leftSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 100px;
+  width: 45%;
+  height: 100%;
+}
+.bannerBack1 {
+  position: relative;
+  height: 380px;
+  width: 550px;
+  background: #aae9e6;
+  z-index: 1;
+}
+.bannerBack2 {
+  position: absolute;
+  left: 20px;
+  top: -20px;
+  height: 380px;
+  width: 550px;
+  background: #59a4a0;
+  z-index: 2;
+}
+.secondBanner {
+  position: absolute;
+  left: 10px;
+  top: -10px;
+  background: url("./assets/banner2.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 380px;
+  width: 550px;
+  z-index: 3;
+}
+
+.rightSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  width: 65%;
+  height: 100%;
+  padding-right: 100px;
+}
+.titleBox {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 50px;
+  align-items: flex-end;
+}
+.subTitleBox {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #262626;
+}
+.subTitle {
+  color: #262626;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
