@@ -56,3 +56,41 @@
   transform: scale(1.01);
   transition: 0.1s ease-in-out;
 }
+
+.title {
+  opacity: 0;
+  transform: translateY(50px);
+  transition:
+    opacity 0.8s ease-out,
+    transform 0.8s ease-out;
+}
+
+.subTitle {
+  opacity: 0;
+  transform: translateY(50px);
+  transition:
+    opacity 1s ease-out,
+    transform 1s ease-out;
+}
+
+.startBtn {
+  opacity: 0;
+  transform: translateY(50px);
+  transition:
+    opacity 1.5s ease-out,
+    transform 1.5s ease-out;
+}
+
+.firstBanner {
+  opacity: 0;
+  transform: translateX(100px);
+  transition:
+    opacity 1s ease-out,
+    transform 1s ease-out;
+}
+
+.visible {
+  opacity: 1;
+  transform: translateX(0);
+  transform: translateY(0);
+}
