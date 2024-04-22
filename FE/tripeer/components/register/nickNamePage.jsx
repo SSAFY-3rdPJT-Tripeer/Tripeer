@@ -4,6 +4,7 @@ import { useState } from "react";
 import styles from "./nickNamePage.module.css";
 import CancelBtn from "@/components/register/cancelBtn";
 import useRegisterStore from "@/stores/register";
+import NextBtn from "@/components/register/nextBtn";
 
 export default function NicknamePage({ pageNum, setPageNum }) {
   const [text, setText] = useState("");
@@ -13,7 +14,7 @@ export default function NicknamePage({ pageNum, setPageNum }) {
     setText(e.target.value);
   };
 
-  const nextOnClick = () => {
+  const onClickNext = () => {
     setNickName(text);
     setPageNum(1);
   };
@@ -28,11 +29,7 @@ export default function NicknamePage({ pageNum, setPageNum }) {
       />
       <section className={styles.center}>
         <CancelBtn pageNum={pageNum} setPageNum={setPageNum} />
-        <div
-          className={`${styles.center} ${styles.next}`}
-          onClick={nextOnClick}>
-          다음
-        </div>
+        <NextBtn onClickNext={onClickNext} title={"다음"} />
       </section>
     </main>
   );

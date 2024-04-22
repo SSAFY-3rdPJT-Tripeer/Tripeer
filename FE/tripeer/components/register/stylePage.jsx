@@ -6,6 +6,7 @@ import styles from "./stylePage.module.css";
 import useRegisterStore from "@/stores/register";
 import StyleBtn from "@/components/register/styleBtn";
 import CancelBtn from "@/components/register/cancelBtn";
+import NextBtn from "@/components/register/nextBtn";
 
 export default function StylePage({ pageNum, setPageNum }) {
   const store = useRegisterStore();
@@ -23,10 +24,6 @@ export default function StylePage({ pageNum, setPageNum }) {
   ];
 
   const onClickNext = () => {
-    console.log(store.nickName);
-    console.log(store.year, store.month, store.day);
-    console.log(store.style);
-
     store.setStyle(style);
   };
 
@@ -57,11 +54,7 @@ export default function StylePage({ pageNum, setPageNum }) {
       </section>
       <section className={styles.sectionBtn}>
         <CancelBtn pageNum={pageNum} setPageNum={setPageNum} />
-        <div
-          className={`${styles.center} ${styles.next}`}
-          onClick={onClickNext}>
-          다음
-        </div>
+        <NextBtn onClickNext={onClickNext} title={"확인"} />
       </section>
     </main>
   );

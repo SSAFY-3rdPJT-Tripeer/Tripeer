@@ -36,4 +36,10 @@
     height: auto;
     width: 23%;
     margin: 1% 0;
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.loginBtn:hover {
+    transform: scale(1.02);
 }

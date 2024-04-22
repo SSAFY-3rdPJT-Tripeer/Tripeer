@@ -5,6 +5,7 @@ import styles from "./birthDayPage.module.css";
 import useRegisterStore from "@/stores/register";
 import CancelBtn from "@/components/register/cancelBtn";
 import { useEffect, useState } from "react";
+import NextBtn from "@/components/register/nextBtn";
 
 export default function BirthdayPage({ pageNum, setPageNum }) {
   const [nickName, setNickName] = useState();
@@ -16,15 +17,6 @@ export default function BirthdayPage({ pageNum, setPageNum }) {
   useEffect(() => {
     setNickName(store.nickName);
   }, [store.nickName]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 500);
-    return () => {
-      clearTimeout(timer);
-    };
-  }, []);
 
   const onChangeYear = (e) => {
     const year = e.target.value;
@@ -74,11 +66,7 @@ export default function BirthdayPage({ pageNum, setPageNum }) {
       </div>
       <section className={styles.center}>
         <CancelBtn pageNum={pageNum} setPageNum={setPageNum} />
-        <div
-          className={`${styles.center} ${styles.next}`}
-          onClick={onClickNext}>
-          다음
-        </div>
+        <NextBtn onClickNext={onClickNext} title={"다음"} />
       </section>
     </main>
   );
