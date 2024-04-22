@@ -3,6 +3,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 50px;
 }
 
 .main {
@@ -43,8 +44,12 @@
     justify-items: left;
     border: 0;
     outline: none;
-    margin-top: 20px;
-    margin-bottom: 50px;
+    margin-top: 40px;
+}
+
+.err {
+    color: red;
+    margin-top: 10px;
 }
 
 .mainContent {
@@ -67,3 +72,4 @@
         visibility: hidden;
     }
 }
+

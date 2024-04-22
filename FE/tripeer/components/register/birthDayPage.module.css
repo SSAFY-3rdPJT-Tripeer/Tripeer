@@ -40,7 +40,19 @@
     border: 0;
     outline: none;
     margin-top: 20px;
-    margin-bottom: 50px;
+}
+
+.section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.err {
+    color: red;
+    margin-top: 10px;
 }
 
 .mainContent {

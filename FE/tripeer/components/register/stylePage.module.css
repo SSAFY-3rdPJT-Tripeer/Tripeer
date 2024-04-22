@@ -64,6 +64,11 @@
     align-items: center;
 }
 
+.err {
+    color: red;
+    margin-top: 20px;
+}
+
 .mainContent {
     animation: fadeIn 1s ease-in forwards;
     opacity: 0;
