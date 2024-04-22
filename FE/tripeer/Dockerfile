@@ -1,41 +1,28 @@
 # Node 기반 이미지 사용
 FROM node:20-alpine as builder
 
-# 작업 디렉토리 설정
+# 작업 디렉토리를 /app으로 설정한다
 WORKDIR /app
 
-# package.json 및 package-lock.json 복사
+# 컨테이너에 package.json와 package-lock.json 파일을 복사합니다.
 COPY package*.json ./
 
-# 의존성 설치
+# npm 설치
 RUN npm install
 
-# 앱 소스 코드 복사
 COPY . .
 
-# 애플리케이션 빌드
+# Next.js를 빌드한다
 RUN npm run build
 
-# Nginx를 사용하여 앱 서빙
-FROM nginx:stable-alpine
+# 새로운 단독의 nginx 이미지 생성
+FROM nginx
 
-# Nginx 웹 루트로 작업 디렉토리 설정
-WORKDIR /usr/share/nginx/html
+# 오픈할 포트를 적어둔다
+EXPOSE 3000
 
-# 기존 파일들 제거
-RUN rm -rf ./*
+# default.conf을 /etc/nginx/conf.d/ 경로에 있는 default.conf에 복사한다.
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 
-# 빌드 스테이지에서 생성된 .next 디렉토리 복사
-COPY --from=builder /app/.next .next
-
-# 빌드 스테이지에서 생성된 public 디렉토리 복사
-COPY --from=builder /app/public public
-
-# Nginx 구성 파일 복사
-COPY --from=builder /app/nginx.conf /etc/nginx/nginx.conf
-
-# Nginx 실행 (데몬 오프로 설정하여 포그라운드 실행)
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
-
-# 포트 80 열기
-EXPOSE 80
+# nextjs build한 결과물을 /usr/share/nginx/html에 복사한다.
+COPY --from=build app/out  /usr/share/nginx/html
