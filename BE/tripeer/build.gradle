@@ -8,7 +8,8 @@ group = 'j10d207'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	sourceCompatibility = '21'
+	sourceCompatibility = JavaVersion.VERSION_21 // Java 21을 사용하는 경우
+	targetCompatibility = JavaVersion.VERSION_21 // 컴파일된 코드의 대상 Java 버전도 지정
 }
 
 configurations {
