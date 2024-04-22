@@ -11,7 +11,8 @@ import NextBtn from "@/components/register/nextBtn";
 export default function StylePage({ pageNum, setPageNum }) {
   const store = useRegisterStore();
   const [nickName, setNickName] = useState("");
-  const [style, setStyle] = useState();
+  const [isPos, setIsPos] = useState(true);
+  const [styleIdx, setStyleIdx] = useState();
 
   const titleList = [
     "관광지",
@@ -24,7 +25,11 @@ export default function StylePage({ pageNum, setPageNum }) {
   ];
 
   const onClickNext = () => {
-    store.setStyle(style);
+    if (styleIdx === -1) {
+      setIsPos(false);
+    }
+    store.setStyle(styleIdx);
+    console.log(store);
   };
 
   useEffect(() => {
@@ -32,7 +37,7 @@ export default function StylePage({ pageNum, setPageNum }) {
   }, [store.nickName]);
 
   useEffect(() => {
-    setStyle(-1);
+    setStyleIdx(-1);
   }, []);
 
   return (
@@ -46,12 +51,15 @@ export default function StylePage({ pageNum, setPageNum }) {
               key={idx}
               idx={idx}
               title={e}
-              style={style}
-              setStyle={setStyle}
+              style={styleIdx}
+              setStyle={setStyleIdx}
             />
           );
         })}
       </section>
+      {isPos ? null : (
+        <p className={styles.err}>여행 스타일을 선택해주세요 !</p>
+      )}
       <section className={styles.sectionBtn}>
         <CancelBtn pageNum={pageNum} setPageNum={setPageNum} />
         <NextBtn onClickNext={onClickNext} title={"확인"} />

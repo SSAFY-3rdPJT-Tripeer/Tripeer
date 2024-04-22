@@ -12,6 +12,7 @@ export default function BirthdayPage({ pageNum, setPageNum }) {
   const [year, setYear] = useState("");
   const [month, setMonth] = useState("");
   const [day, setDay] = useState("");
+  const [isPos, setIsPos] = useState(true);
   const store = useRegisterStore();
 
   useEffect(() => {
@@ -33,11 +34,26 @@ export default function BirthdayPage({ pageNum, setPageNum }) {
     setDay(day);
   };
 
+  const validate = (v, l, save) => {
+    if (v.length === 0 || v.length < l) {
+      setIsPos(false);
+    } else if (/^\d*$/.test(v)) {
+      save(v);
+      return true;
+    } else {
+      setIsPos(false);
+    }
+    return false;
+  };
+
   const onClickNext = () => {
-    store.setYear(year);
-    store.setMonth(month);
-    store.setDay(day);
-    setPageNum(2);
+    const isY = validate(year, 4, store.setYear);
+    const isM = validate(month, 2, store.setMonth);
+    const isD = validate(day, 2, store.setDay);
+
+    if (isY && isM && isD) {
+      setPageNum(2);
+    }
   };
 
   return (
@@ -64,7 +80,10 @@ export default function BirthdayPage({ pageNum, setPageNum }) {
           onChange={onChangeDay}
         />
       </div>
-      <section className={styles.center}>
+      {isPos ? null : (
+        <p className={styles.err}>생년월일을 정확히 입력해주세요 !</p>
+      )}
+      <section className={styles.section}>
         <CancelBtn pageNum={pageNum} setPageNum={setPageNum} />
         <NextBtn onClickNext={onClickNext} title={"다음"} />
       </section>

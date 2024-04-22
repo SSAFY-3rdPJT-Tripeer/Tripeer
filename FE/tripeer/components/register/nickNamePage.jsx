@@ -8,6 +8,8 @@ import NextBtn from "@/components/register/nextBtn";
 
 export default function NicknamePage({ pageNum, setPageNum }) {
   const [text, setText] = useState("");
+  const [isPos, setIsPos] = useState(true);
+  const [errText, setErrText] = useState("");
   const { setNickName } = useRegisterStore();
 
   const inputOnChange = (e) => {
@@ -15,8 +17,16 @@ export default function NicknamePage({ pageNum, setPageNum }) {
   };
 
   const onClickNext = () => {
-    setNickName(text);
-    setPageNum(1);
+    if (text.length > 10) {
+      setIsPos(false);
+      setErrText("10글자 내로 입력하세요 !");
+    } else if (text.length === 0) {
+      setIsPos(false);
+      setErrText("닉네임을 입력하세요 !");
+    } else {
+      setNickName(text);
+      setPageNum(1);
+    }
   };
 
   return (
@@ -27,6 +37,7 @@ export default function NicknamePage({ pageNum, setPageNum }) {
         placeholder="10글자 내로 입력하세요."
         onChange={inputOnChange}
       />
+      {isPos ? null : <p className={styles.err}>{errText}</p>}
       <section className={styles.center}>
         <CancelBtn pageNum={pageNum} setPageNum={setPageNum} />
         <NextBtn onClickNext={onClickNext} title={"다음"} />
