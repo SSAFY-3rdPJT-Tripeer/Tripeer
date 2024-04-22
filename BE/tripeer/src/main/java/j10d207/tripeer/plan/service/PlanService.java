@@ -3,6 +3,7 @@ package j10d207.tripeer.plan.service;
 import j10d207.tripeer.plan.db.dto.*;
 
 import java.util.List;
+import java.util.Map;
 
 public interface PlanService {
 
@@ -20,5 +21,12 @@ public interface PlanService {
     public List<CoworkerDTO> getCoworker(long planId);
     //관광지 검색
     public List<SpotSearchResDTO> getSpotSearch(long planId, String keyword);
-
+    //플랜버킷 관광지 추가
+    public void addPlanSpot(long planId, int spotInfoId, String token);
+    //즐겨찾기 추가
+    public void addWishList(int spotInfoId, String token);
+    //플린 디테일 저장
+    public void addPlanDetail(PlanDetailReqDTO planDetailReqDTO);
+    //플랜 디테일 전체 조회
+    public Map<Integer, List<PlanDetailResDTO>> getAllPlanDetail(long planId);
 }

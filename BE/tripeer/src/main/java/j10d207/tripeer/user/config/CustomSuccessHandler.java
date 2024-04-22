@@ -50,6 +50,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         if (role.equals("ROLE_VALIDATE")) {
             response.setStatus(205);
             //회원가입 페이지
+            //http://localhost:5173/register
             response.sendRedirect("http://localhost:5173/");
             return;
         }
@@ -58,11 +59,12 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         long userId = customUserDetails.getUserId();
 
         //토큰 생성
-        String access = "Bearer " + jwtUtil.createJwt("access", name, role, userId, accessTime);
+        String access = jwtUtil.createJwt("access", name, role, userId, accessTime);
         String refresh = jwtUtil.createJwt("refresh", name, role, userId, refreshTime);
+        System.out.println("access = " + access);
 
-        response.addCookie(createCookie("access", access));
-        response.addCookie(createCookie("refresh", refresh));
+        response.addCookie(createCookie("Authorization", access));
+        response.addCookie(createCookie("Authorization-re", refresh));
         response.setStatus(HttpStatus.OK.value());
         // 04.14 - 로그인 완료 후 이동페이지
         response.sendRedirect("http://localhost:5173/");

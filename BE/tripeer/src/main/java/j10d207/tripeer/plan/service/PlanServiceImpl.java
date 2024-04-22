@@ -3,35 +3,31 @@ package j10d207.tripeer.plan.service;
 import j10d207.tripeer.exception.CustomException;
 import j10d207.tripeer.exception.ErrorCode;
 import j10d207.tripeer.place.db.ContentType;
-import j10d207.tripeer.place.db.entity.CityEntity;
-import j10d207.tripeer.place.db.entity.SpotInfoEntity;
-import j10d207.tripeer.place.db.entity.TownEntity;
-import j10d207.tripeer.place.db.entity.TownPK;
+import j10d207.tripeer.place.db.entity.*;
 import j10d207.tripeer.place.db.repository.SpotInfoRepository;
 import j10d207.tripeer.plan.db.dto.*;
-import j10d207.tripeer.plan.db.entity.PlanDayEntity;
-import j10d207.tripeer.plan.db.entity.PlanEntity;
-import j10d207.tripeer.plan.db.entity.PlanTownEntity;
-import j10d207.tripeer.plan.db.repository.PlanBucketRepository;
-import j10d207.tripeer.plan.db.repository.PlanDayRepository;
-import j10d207.tripeer.plan.db.repository.PlanRepository;
-import j10d207.tripeer.plan.db.repository.PlanTownRepository;
+import j10d207.tripeer.plan.db.entity.*;
+import j10d207.tripeer.plan.db.repository.*;
 import j10d207.tripeer.user.config.JWTUtil;
 import j10d207.tripeer.user.db.dto.UserSearchDTO;
 import j10d207.tripeer.user.db.entity.CoworkerEntity;
 import j10d207.tripeer.user.db.entity.UserEntity;
+import j10d207.tripeer.user.db.entity.WishListEntity;
 import j10d207.tripeer.user.db.repository.CoworkerRepository;
 import j10d207.tripeer.user.db.repository.UserRepository;
 import j10d207.tripeer.user.db.repository.WishListRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -50,6 +46,7 @@ public class PlanServiceImpl implements PlanService {
     private final PlanBucketRepository planBucketRepository;
 
     private final SpotInfoRepository spotInfoRepository;
+    private final PlanDetailRepository planDetailRepository;
 
     //플랜 생성
     @Override
@@ -237,6 +234,7 @@ public class PlanServiceImpl implements PlanService {
         return coworkerDTOList;
     }
 
+    //관광지 검색
     @Override
     public List<SpotSearchResDTO> getSpotSearch(long planId, String keyword) {
         List<SpotInfoEntity> spotInfoList = spotInfoRepository.findByTitleContains(keyword);
@@ -260,4 +258,107 @@ public class PlanServiceImpl implements PlanService {
 
         return spotSearchResDTOList;
     }
+
+    //플랜 버킷 관광지 추가
+    @Override
+    public void addPlanSpot(long planId, int spotInfoId, String token) {
+        if(planBucketRepository.existsByPlan_PlanIdAndSpotInfo_SpotInfoId(planId, spotInfoId)) {
+            throw new CustomException(ErrorCode.HAS_BUCKET);
+        }
+        String access = jwtUtil.splitToken(token);
+        if(coworkerRepository.existsByPlan_PlanIdAndUser_UserId(planId, jwtUtil.getUserId(access))) {
+            throw new CustomException(ErrorCode.USER_NOT_CORRESPOND);
+        }
+
+        PlanBucketEntity planBucket = PlanBucketEntity.builder()
+                .plan(PlanEntity.builder()
+                        .planId(planId)
+                        .build())
+                .spotInfo(SpotInfoEntity.builder()
+                        .spotInfoId(spotInfoId)
+                        .build())
+                .user(UserEntity.builder()
+                        .userId(jwtUtil.getUserId(access))
+                        .build())
+                .build();
+
+        planBucketRepository.save(planBucket);
+    }
+
+    //즐겨찾기 추가
+    @Override
+    public void addWishList(int spotInfoId, String token) {
+        String access = jwtUtil.splitToken(token);
+        WishListEntity wishList = WishListEntity.builder()
+                .user(UserEntity.builder()
+                        .userId(jwtUtil.getUserId(access))
+                        .build())
+                .spotInfo(SpotInfoEntity.builder()
+                        .spotInfoId(spotInfoId)
+                        .build())
+                .build();
+        wishListRepository.save(wishList);
+    }
+
+    //플랜 디테일 저장
+    @Override
+    public void addPlanDetail(PlanDetailReqDTO planDetailReqDTO) {
+        PlanDetailEntity planDetail = PlanDetailEntity.builder()
+                .planDetailId(planDetailReqDTO.getPlanDetailId())
+                .planDay(PlanDayEntity.builder()
+                        .planDayId(planDetailReqDTO.getPlanDayId())
+                        .build())
+                .spotInfo(SpotInfoEntity.builder()
+                        .spotInfoId(planDetailReqDTO.getSpotInfoId())
+                        .build())
+                .day(planDetailReqDTO.getDay())
+                .spotTime(planDetailReqDTO.getSpotTime())
+                .step(planDetailReqDTO.getStep())
+                .description(planDetailReqDTO.getDescription())
+                .cost(planDetailReqDTO.getCost())
+                .build();
+
+        planDetailRepository.save(planDetail);
+    }
+
+    //플랜 디테일 전체 조회
+    @Override
+    public Map<Integer, List<PlanDetailResDTO>> getAllPlanDetail(long planId) {
+        Map<Integer, List<PlanDetailResDTO>> planDetailResDTOMap = new HashMap<>();
+
+        //조회할 플랜을 가져옴
+        PlanEntity plan = planRepository.findByPlanId(planId);
+        //시작날짜, 끝날짜를 이용해서 몇일 여행인지 계산
+        int day = (int) ChronoUnit.DAYS.between(plan.getStartDate(), plan.getEndDate()) + 1;
+
+        //여행알 일자만큼 반복, 각 일자별 디테일을 뽑아오기 위해
+        for (int i = 0; i < day; i++) {
+            // N일차 플랜의 id를 찾아옴
+            long planDayId = planDayRepository.findByPlan_PlanIdAndDay(planId, plan.getStartDate().plusDays(i)).getPlanDayId();
+
+            // 얻으려는 일차의 플랜을 step 순서로 정렬
+            List<PlanDetailEntity> planDetailEntityList = planDetailRepository.findByPlanDay_PlanDayId(planDayId, Sort.by(Sort.Direction.ASC, "step"));
+
+
+            List<PlanDetailResDTO> planDetailResDTOList = new ArrayList<>();
+            for (PlanDetailEntity planDetailEntity : planDetailEntityList) {
+                //정렬해서 가져온 리스트를 DTO에 저장
+                PlanDetailResDTO planDetailResDTO = PlanDetailResDTO.builder()
+                        .planDetailId(planDetailEntity.getPlanDetailId())
+                        .title(planDetailEntity.getSpotInfo().getTitle())
+                        .contentType(ContentType.getNameByCode(planDetailEntity.getSpotInfo().getContentTypeId()))
+                        .day(planDetailEntity.getDay())
+                        .step(planDetailEntity.getStep())
+                        .spotTime(planDetailEntity.getSpotTime())
+                        .description(planDetailEntity.getDescription())
+                        .cost(planDetailEntity.getCost())
+                        .build();
+                planDetailResDTOList.add(planDetailResDTO);
+            }
+            planDetailResDTOMap.put(i+1, planDetailResDTOList);
+
+        }
+        return planDetailResDTOMap;
+    }
+
 }

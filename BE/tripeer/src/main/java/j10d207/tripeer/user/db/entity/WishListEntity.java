@@ -2,10 +2,7 @@ package j10d207.tripeer.user.db.entity;
 
 import j10d207.tripeer.place.db.entity.SpotInfoEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity(name = "wishlist")
 @Getter
@@ -18,6 +15,10 @@ public class WishListEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     // PK
     private long wishlistId;
+
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    private UserEntity user;
 
     @ManyToOne
     @JoinColumn(name = "SPOT_INFO_ID")

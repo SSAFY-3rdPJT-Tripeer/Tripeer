@@ -1,6 +1,7 @@
 package j10d207.tripeer.plan.db.entity;
 
 import j10d207.tripeer.place.db.entity.SpotInfoEntity;
+import j10d207.tripeer.user.db.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,5 +27,9 @@ public class PlanBucketEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SPOT_INFO_ID")
     private SpotInfoEntity spotInfo;
+
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    private UserEntity user;
 
 }

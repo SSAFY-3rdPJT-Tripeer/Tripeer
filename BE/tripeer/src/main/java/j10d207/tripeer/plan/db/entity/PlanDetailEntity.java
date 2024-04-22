@@ -1,5 +1,6 @@
 package j10d207.tripeer.plan.db.entity;
 
+import j10d207.tripeer.place.db.entity.SpotInfoEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,11 +25,9 @@ public class PlanDetailEntity {
     @JoinColumn(name = "PLAN_DAY_ID")
     private PlanDayEntity planDay;
 
-    /*
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SPOT_INFO_ID")
     private SpotInfoEntity spotInfo;
-     */
 
     //일자 ex. 1일차 2일차 ..
     private int day;
