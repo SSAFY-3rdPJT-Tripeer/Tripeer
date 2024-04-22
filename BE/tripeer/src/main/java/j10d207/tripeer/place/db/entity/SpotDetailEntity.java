@@ -17,7 +17,7 @@ public class SpotDetailEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     // PK
-    private long spotDetailId;
+    private int spotDetailId;
 
     @OneToOne
     @MapsId

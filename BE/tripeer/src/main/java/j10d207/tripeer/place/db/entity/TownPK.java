@@ -1,15 +1,13 @@
 package j10d207.tripeer.place.db.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 
 @Embeddable
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode

@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 @Entity(name = "town")
 @Getter
@@ -15,6 +17,7 @@ import lombok.NoArgsConstructor;
 public class TownEntity {
 
     @EmbeddedId
+    @Cascade(value = CascadeType.PERSIST)
     private TownPK townId;
 
     private String townName;
