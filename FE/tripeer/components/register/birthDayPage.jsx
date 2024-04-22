@@ -5,14 +5,12 @@ import styles from "./birthDayPage.module.css";
 import useRegisterStore from "@/stores/register";
 import CancelBtn from "@/components/register/cancelBtn";
 import { useEffect, useState } from "react";
-import RegisterLoading from "@/components/register/registerLogin";
 
 export default function BirthdayPage({ pageNum, setPageNum }) {
   const [nickName, setNickName] = useState();
   const [year, setYear] = useState("");
   const [month, setMonth] = useState("");
   const [day, setDay] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
   const store = useRegisterStore();
 
   useEffect(() => {
