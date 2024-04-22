@@ -9,7 +9,7 @@ RUN npm install --production
 
 COPY . .
 
-RUN npm run build:prod
+RUN npm run build
 
 FROM nginx:stable-alpine
 
