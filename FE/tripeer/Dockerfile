@@ -1,28 +1,26 @@
-# Node 기반 이미지 사용
+Dockerfile
 FROM node:20-alpine as builder
 
-# 작업 디렉토리를 /app으로 설정한다
 WORKDIR /app
 
-# 컨테이너에 package.json와 package-lock.json 파일을 복사합니다.
 COPY package*.json ./
 
-# npm 설치
-RUN npm install
+RUN npm install --production
 
 COPY . .
 
-# Next.js를 빌드한다
-RUN npm run build
+RUN npm run build:prod
 
-# 새로운 단독의 nginx 이미지 생성
-FROM nginx
+FROM nginx:stable-alpine
 
-# 오픈할 포트를 적어둔다
-EXPOSE 3000
+WORKDIR /usr/share/nginx/html
 
-# default.conf을 /etc/nginx/conf.d/ 경로에 있는 default.conf에 복사한다.
-COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+RUN rm -rf ./*
 
-# nextjs build한 결과물을 /usr/share/nginx/html에 복사한다.
-COPY --from=build app/out  /usr/share/nginx/html
+COPY --from=builder /app/.next .next
+COPY --from=builder /app/public public
+COPY --from=builder /app/nginx.conf /etc/nginx/nginx.conf
+
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
+
+EXPOSE 80
