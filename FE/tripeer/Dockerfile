@@ -15,12 +15,14 @@ FROM nginx:stable-alpine
 
 WORKDIR /usr/share/nginx/html
 
-RUN rm -rf ./*
 
-COPY --from=builder /app/.next .next
-COPY --from=builder /app/public public
+RUN rm -rf /usr/share/nginx/html/*
+
+COPY --from=builder /nextjs-ui/out /usr/share/nginx/html
+
 COPY --from=builder /app/nginx.conf /etc/nginx/nginx.conf
 
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
 
 EXPOSE 80
+
