@@ -1,0 +1,218 @@
+.container {
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.cardBox {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.card {
+  position: relative;
+  margin: auto;
+  width: 29%;
+  height: 500px;
+  padding: 15px;
+}
+.left {
+  width: 25px;
+  height: 50px;
+  margin-bottom: 50px;
+  background-image: url(./asset/leftDirect.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  transform: rotate(180deg);
+  cursor: pointer;
+}
+.right {
+  width: 25px;
+  height: 50px;
+  margin-bottom: 50px;
+  background-image: url(./asset/leftDirect.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+.direction {
+  width: 60px;
+  height: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.cardBody {
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+  cursor: pointer;
+  box-shadow:
+    0px 133.01px 106.41px 0px rgba(0, 0, 0, 0.02),
+    0px 86.21px 62.32px 0px rgba(0, 0, 0, 0.015),
+    0px 51.23px 33.89px 0px rgba(0, 0, 0, 0.012),
+    0px 26.6px 17.29px 0px rgba(0, 0, 0, 0.01),
+    0px 10.84px 8.67px 0px rgba(0, 0, 0, 0.007),
+    0px 2.46px 4.19px 0px rgba(0, 0, 0, 0.005);
+}
+
+.cardAni {
+  animation: fadeIn 3s ease forwards;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0%;
+  }
+  100% {
+    opacity: 100%;
+  }
+}
+
+.cardBody:hover {
+  transform: scale(1.005);
+  transition: 0.1s ease;
+}
+
+.cardContent {
+  position: absolute;
+  bottom: 0px;
+  height: 120px;
+  width: 100%;
+  background-color: white;
+  border-radius: 0px 0px 13px 13px;
+  z-index: 1;
+  padding: 20px 15px 20px 15px;
+}
+
+.title {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #545454;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.person {
+  display: flex;
+  align-items: center;
+}
+
+.personIcon {
+  background-image: url(./asset/people.svg);
+  width: 13px;
+  height: 13px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  margin-right: 5px;
+}
+
+.personFont {
+  font-size: 0.9rem;
+}
+.personToggle {
+  background-image: url(./asset/Chevron.svg);
+  align-self: flex-end;
+  cursor: pointer;
+  width: 15px;
+  height: 15px;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.cardInfo {
+  padding-left: 8px;
+  font-size: 0.85rem;
+}
+
+.destination {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+}
+.destinationIcon {
+  background-image: url(./asset/navigation.svg);
+  width: 20px;
+  height: 20px;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.destinationTitle {
+  color: #545454;
+  margin-left: 8px;
+}
+.calendar {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+}
+.calendarIcon {
+  background-image: url(./asset/calendar.svg);
+  margin-left: 1.5px;
+  width: 17px;
+  height: 17px;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.calendarTitle {
+  color: #545454;
+  margin-left: 10px;
+}
+
+.newIcon {
+  width: 80px;
+  height: 35px;
+  background-color: #e33030;
+  color: white;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  font-size: 1.3rem;
+  top: 20px;
+  left: -10px;
+}
+
+.addCard {
+  width: 100%;
+  height: 100%;
+  border: 1px dashed #4fbdb7;
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.addBtn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 1px dashed #4fbdb7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.plus {
+  width: 35px;
+  height: 35px;
+  background-image: url(./asset/Plus.svg);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.addContent {
+  color: #112211;
+  font-size: 1.3rem;
+}
