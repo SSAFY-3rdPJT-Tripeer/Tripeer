@@ -28,9 +28,11 @@ RUN rm -rf ./*
 # 빌드 스테이지에서 .next 디렉토리 복사
 COPY --from=builder /app/.next .next
 COPY --from=builder /app/public public
+COPY --from=builder /app/nginx.conf /etc/nginx/nginx.conf
+
 
 # Nginx 구성 파일 복사 (예시 경로를 확인해주세요)
-COPY --from=builder nginx.conf /etc/nginx/nginx.conf
+COPY --from=builder /etc/nginx/nginx.conf /etc/nginx/nginx.conf
 
 # Nginx 실행
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
