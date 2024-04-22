@@ -35,4 +35,4 @@ COPY --from=builder /app/package.json .
 EXPOSE 3000
 
 # Command to run the app
-CMD ["serve", "-s", "build", "-l", "3000"]
+CMD ["npm", "start"]
