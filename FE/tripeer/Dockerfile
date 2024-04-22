@@ -25,12 +25,16 @@ WORKDIR /usr/share/nginx/html
 # 기존 파일들 제거
 RUN rm -rf ./*
 
-# 빌드 스테이지에서 .next 디렉토리 복사
+# 빌드 스테이지에서 생성된 .next 디렉토리 복사
 COPY --from=builder /app/.next .next
+
+# 빌드 스테이지에서 생성된 public 디렉토리 복사
 COPY --from=builder /app/public public
+
+# Nginx 구성 파일 복사
 COPY --from=builder /app/nginx.conf /etc/nginx/nginx.conf
 
-# Nginx 실행
+# Nginx 실행 (데몬 오프로 설정하여 포그라운드 실행)
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
 
 # 포트 80 열기
