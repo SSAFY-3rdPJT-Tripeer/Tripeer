@@ -4,7 +4,7 @@ FROM openjdk:21
 WORKDIR /app
 # WORKDIR : 스프링 부트 컨테이너 OS내에 어떤 디렉토리에서 jar을 실행 할 것인지
 
-ARG JAR_FILE=build/libs/codearena-0.0.1-SNAPSHOT.jar
+ARG JAR_FILE=build/libs/tripeer-0.0.1-SNAPSHOT.jar
 # ARG : 변수지정, 변수에 적혀진 의미는 빌드 결과물 위치
 
 COPY ${JAR_FILE} test.jar
