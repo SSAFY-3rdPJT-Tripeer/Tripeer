@@ -22,7 +22,7 @@ RUN npm run build
 FROM nginx:stable-alpine
 
 # Nginx 설정 파일을 애플리케이션에 맞게 수정된 버전으로 교체
-COPY nginx/nginx.conf /etc/nginx/nginx.conf
+COPY nginx.conf /etc/nginx/nginx.conf
 
 # 빌드 스테이지에서 생성된 빌드 아티팩트를 Nginx가 제공할 수 있도록 복사
 COPY --from=builder /app/out /usr/share/nginx/html
