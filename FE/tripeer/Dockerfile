@@ -1,34 +1,39 @@
-# 빌드 스테이지
-# Node.js 이미지를 기반으로 함
+# Node 기반 이미지 사용
 FROM node:20-alpine as builder
 
-# 애플리케이션의 작업 디렉토리 설정
+# 작업 디렉토리 설정
 WORKDIR /app
 
-# 애플리케이션의 package.json 및 package-lock.json 파일 복사
+# package.json 및 관련 파일 복사
 COPY package*.json ./
 
 # 의존성 설치
 RUN npm install
 
-# 애플리케이션의 소스 코드 복사
+# 앱 소스 코드 복사
 COPY . .
 
 # 애플리케이션 빌드
 RUN npm run build
 
-# 서비스 스테이지
-# Nginx 이미지를 기반으로 함
+# 정적 파일을 선택적으로 내보내기 (정적 사이트 생성시 사용)
+# RUN npm run export
+
+# Nginx 사용하여 앱 서빙
 FROM nginx:stable-alpine
 
-# Nginx 설정 파일을 애플리케이션에 맞게 수정된 버전으로 교체
-COPY nginx.conf /etc/nginx/nginx.conf
+# Nginx 자산 디렉토리로 작업 디렉토리 설정
+WORKDIR /usr/share/nginx/html
 
-# 빌드 스테이지에서 생성된 빌드 아티팩트를 Nginx가 제공할 수 있도록 복사
-COPY --from=builder /app/out /usr/share/nginx/html
+# 기본 Nginx 정적 자산 제거
+RUN rm -rf ./*
 
-# 80번 포트를 노출시킴. Nginx는 기본적으로 80번 포트에서 서비스됨
+# 빌더 스테이지에서 정적 자산 복사
+COPY --from=builder /app/out .
+
+# 컨테이너가 실행되면 80 포트를 외부에 노출
 EXPOSE 80
 
-# Nginx 실행
-CMD ["nginx", "-g", "daemon off;"]
+# Nginx를 전역 지시어와 함께 데몬 오프로 실행
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
+
