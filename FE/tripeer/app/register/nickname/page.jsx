@@ -1,58 +1,50 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {useRouter} from "next/navigation";
+import {useState} from "react";
 import styles from "./page.module.css";
-import CancelBtn from "@/components/register/cancelBtn";
 import useRegisterStore from "@/stores/register";
-import { useRouter } from "next/navigation";
-import RegisterLoading from "@/components/register/registerLogin";
 
 export default function NicknamePage() {
-  const router = useRouter();
-  const [text, setText] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
-  const { setNickName } = useRegisterStore();
+    const router = useRouter();
 
-  const inputOnChange = (e) => {
-    setText(e.target.value);
-  };
+    const [text, setText] = useState("");
+    const {nickName, setNickName} = useRegisterStore();
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 500);
-    return () => {
-      clearTimeout(timer);
+    const cancelOnClick = () => {
+        router.back();
     };
-  }, []);
+    const inputOnChange = (e) => {
+        setText(e.target.value);
+    };
 
-  const nextOnClick = () => {
-    setNickName(text);
-    router.push("/register/birthday");
-  };
+    const nextOnClick = () => {
+        console.log('닉네임', nickName)
+        setNickName(text);
+    };
 
-  return (
-    <>
-      {isLoading ? (
-        <RegisterLoading />
-      ) : (
-        <main className={`${styles.main} ${styles.mainContent}`}>
-          <p className={styles.main_p}>닉네임을 입력해주세요.</p>
-          <input
-            className={styles.input}
-            placeholder="10글자 내로 입력하세요."
-            onChange={inputOnChange}
-          />
-          <section className={styles.center}>
-            <CancelBtn />
-            <div
-              className={`${styles.center} ${styles.next}`}
-              onClick={nextOnClick}>
-              다음
-            </div>
-          </section>
+    return (
+        <main className={styles.main}>
+            <p className={styles.main_p}>닉네임을 입력해주세요.</p>
+            <input
+                className={styles.input}
+                placeholder="10글자 내로 입력하세요."
+                onChange={inputOnChange}
+            />
+            <section className={styles.center}>
+                <div
+                    className={`${styles.center} ${styles.cancel}`}
+                    onClick={cancelOnClick}
+                >
+                    취소
+                </div>
+                <div
+                    className={`${styles.center} ${styles.next}`}
+                    onClick={nextOnClick}
+                >
+                    다음
+                </div>
+            </section>
         </main>
-      )}
-    </>
-  );
+    );
 }
