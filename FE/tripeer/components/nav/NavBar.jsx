@@ -17,6 +17,7 @@ const NavBar = () => {
   const [isLogin, setIsLogin] = useState(false);
   const navRenderPath = {
     "/": true,
+    "/plan": true,
     "/test": true,
   };
   const LOGO_WIDTH = 130;
@@ -38,7 +39,7 @@ const NavBar = () => {
             />
           </Link>
           <nav className={style.linkBox}>
-            <Link href="/" className={style.link}>
+            <Link href="/plan" className={style.link}>
               일정 계획
             </Link>
             <Link href="/test" className={style.link}>

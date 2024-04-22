@@ -1,0 +1,43 @@
+.container {
+  width: 100vw;
+  height: calc(100vh - 84.8px);
+  padding-top: 80px;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.container::-webkit-scrollbar {
+  width: 2.5px; /* 스크롤바의 너비 */
+}
+
+.container::-webkit-scrollbar-thumb {
+  height: 10%; /* 스크롤바의 길이 */
+  background: #04acb56c; /* 스크롤바의 색상 */
+  border-radius: 10px;
+}
+
+.container::-webkit-scrollbar-track {
+  background: #fff; /*스크롤바 뒷 배경 색상*/
+}
+.header {
+  padding-left: 100px;
+  animation: fade-in 1s ease;
+}
+.title {
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+.description {
+  margin: 1.8rem 0 1.8rem 0;
+  font-size: 1.2rem;
+  color: #858585;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0%;
+  }
+  100% {
+    opacity: 100%;
+  }
+}
