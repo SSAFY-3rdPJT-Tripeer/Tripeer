@@ -30,10 +30,6 @@ COPY --from=builder /app/.next .next
 COPY --from=builder /app/public public
 COPY --from=builder /app/nginx.conf /etc/nginx/nginx.conf
 
-
-# Nginx 구성 파일 복사 (예시 경로를 확인해주세요)
-COPY --from=builder /etc/nginx/nginx.conf /etc/nginx/nginx.conf
-
 # Nginx 실행
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
 
