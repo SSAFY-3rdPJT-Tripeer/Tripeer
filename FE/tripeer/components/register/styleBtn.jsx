@@ -1,12 +1,7 @@
 import styles from "./styleBtn.module.css";
 import Image from "next/image";
 
-import useRegisterStore from "@/stores/register";
-import { useEffect, useState } from "react";
-
 export default function StyleBtn({ idx, title, style, setStyle }) {
-  const store = useRegisterStore();
-
   const onClick = () => {
     setStyle(idx + 1);
   };
