@@ -1,4 +1,4 @@
-FROM openjdk:21-jdk-alpine
+FROM openjdk:21
 # FROM : 이미지 레이어의 최상단, alpine리눅스에 jdk 17을 사용한단 의미
 
 WORKDIR /app
