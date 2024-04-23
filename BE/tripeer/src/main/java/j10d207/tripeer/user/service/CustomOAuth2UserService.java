@@ -62,7 +62,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 //                    .profileImage(oAuth2Response.getProfileImage())
 //                    .role("ROLE_USER")
 //                    .build();
-            return userRepository.save(newUser);
+            return newUser;
         }
 
         return user;
