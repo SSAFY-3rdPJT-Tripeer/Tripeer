@@ -2,7 +2,7 @@ package j10d207.tripeer.plan.service;
 
 import j10d207.tripeer.exception.CustomException;
 import j10d207.tripeer.exception.ErrorCode;
-import j10d207.tripeer.place.db.ContentType;
+import j10d207.tripeer.place.db.ContentTypeEnum;
 import j10d207.tripeer.place.db.entity.*;
 import j10d207.tripeer.place.db.repository.SpotInfoRepository;
 import j10d207.tripeer.plan.db.dto.*;
@@ -245,7 +245,7 @@ public class PlanServiceImpl implements PlanService {
 
             spotSearchResDTO.setSpotInfoId(spotInfoEntity.getSpotInfoId());
             spotSearchResDTO.setTitle(spotInfoEntity.getTitle());
-            spotSearchResDTO.setContentType(ContentType.getNameByCode(spotInfoEntity.getContentTypeId()));
+            spotSearchResDTO.setContentType(ContentTypeEnum.getNameByCode(spotInfoEntity.getContentTypeId()));
             spotSearchResDTO.setAddr(spotInfoEntity.getAddr1());
             spotSearchResDTO.setLatitude(spotInfoEntity.getLatitude());
             spotSearchResDTO.setLongitude(spotInfoEntity.getLongitude());
@@ -346,7 +346,7 @@ public class PlanServiceImpl implements PlanService {
                 PlanDetailResDTO planDetailResDTO = PlanDetailResDTO.builder()
                         .planDetailId(planDetailEntity.getPlanDetailId())
                         .title(planDetailEntity.getSpotInfo().getTitle())
-                        .contentType(ContentType.getNameByCode(planDetailEntity.getSpotInfo().getContentTypeId()))
+                        .contentType(ContentTypeEnum.getNameByCode(planDetailEntity.getSpotInfo().getContentTypeId()))
                         .day(planDetailEntity.getDay())
                         .step(planDetailEntity.getStep())
                         .spotTime(planDetailEntity.getSpotTime())

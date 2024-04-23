@@ -53,8 +53,8 @@ spring:
             scope: name
           google:
             client-name: google
-            client-id: ENC(sGaMPk1RGfhVbfQ3+F+yBBqOYBeBI9gRbErAXsrSUYxvCqvhy5SMUmKzG8TF1fCZegxlE6BP9WApu/CUioiyXkvG47uNz5DPng0QxZ5yb/QChSWoy84xug==)
-            client-secret: ENC(m0Nbxk/CS1S8A5LoBREZUH7pxOTyKo6Rt8hC+68SF1ow9TyzpJhH7UKSp6iZztno)
+            client-id: ENC(sSX1umy4qajs8dX/VNp+Bvujw2PRjPcloD+s9GqSyUn8zRPfAh47doTxN2XPMO0Il+Nr48H280Ysd5Q/9hYpoSH+0ZzLJxXKeBWWNk+WiNlINJyc5SHHmQ==)
+            client-secret: ENC(DTVN2JEtEbU8nBY0TJqMhfgkJG1cF+Gs/GNSIZ8Yd9j0q8PLkJnpEBP7FOGsS4cw)
             redirect-uri: https://k10d207.p.ssafy.io/api/login/oauth2/code/google
             authorization-grant-type: authorization_code
             scope: profile,email
