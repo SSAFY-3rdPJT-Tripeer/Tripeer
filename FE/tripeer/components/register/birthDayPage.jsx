@@ -48,8 +48,8 @@ export default function BirthdayPage({ pageNum, setPageNum }) {
 
   const onClickNext = () => {
     const isY = validate(year, 4, store.setYear);
-    const isM = validate(month, 2, store.setMonth);
-    const isD = validate(day, 2, store.setDay);
+    const isM = validate(month, 1, store.setMonth);
+    const isD = validate(day, 1, store.setDay);
 
     if (isY && isM && isD) {
       setPageNum(2);
