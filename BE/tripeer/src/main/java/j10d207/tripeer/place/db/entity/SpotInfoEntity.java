@@ -1,10 +1,7 @@
 package j10d207.tripeer.place.db.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -13,6 +10,7 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class SpotInfoEntity {
 
     @Id
@@ -23,7 +21,6 @@ public class SpotInfoEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns( {@JoinColumn(name = "CITY_ID" ), @JoinColumn(name = "TOWN_ID")} )
     private TownEntity town;
-
     private int contentTypeId;
     private String title;
     private String addr1;
