@@ -41,6 +41,17 @@ public class PlanController {
         }
     }
 
+    //플랜 탈퇴
+    @DeleteMapping("/{planId}")
+    public Response<?> planOut(@PathVariable("planId") long planId, HttpServletRequest request) {
+        try {
+            planService.planOut(planId, request.getHeader("Authorization"));
+            return Response.of(HttpStatus.OK, "플랜 탈퇴 완료", null);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     //내 플랜 리스트 조회
     @GetMapping
     public Response<List<PlanListResDTO>> getPlanList(HttpServletRequest request) {
