@@ -5,6 +5,7 @@ import styles from "./nickNamePage.module.css";
 import CancelBtn from "@/components/register/cancelBtn";
 import useRegisterStore from "@/stores/register";
 import NextBtn from "@/components/register/nextBtn";
+import axios from "axios";
 
 export default function NicknamePage({ pageNum, setPageNum }) {
   const [text, setText] = useState("");
@@ -24,8 +25,28 @@ export default function NicknamePage({ pageNum, setPageNum }) {
       setIsPos(false);
       setErrText("닉네임을 입력하세요 !");
     } else {
-      setNickName(text);
-      setPageNum(1);
+      checkData();
+    }
+  };
+
+  const checkData = async () => {
+    try {
+      await axios
+        .get(
+          `${process.env.NEXT_PUBLIC_API_URL}/user/name/duplicatecheck/${text}`,
+        )
+        .then((res) => {
+          const check = res.data.data;
+          if (!check) {
+            setNickName(text);
+            setPageNum(1);
+          } else {
+            setIsPos(false);
+            setErrText("중복된 닉네임입니다.");
+          }
+        });
+    } catch (e) {
+      console.log("닉네임 중복 체크 에러: ", e);
     }
   };
 

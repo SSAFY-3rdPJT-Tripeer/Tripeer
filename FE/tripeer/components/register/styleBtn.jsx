@@ -1,9 +1,13 @@
-import styles from "./styleBtn.module.css";
 import Image from "next/image";
 
+import styles from "./styleBtn.module.css";
+import useRegisterStore from "@/stores/register";
+
 export default function StyleBtn({ idx, title, style, setStyle }) {
+  const store = useRegisterStore();
   const onClick = () => {
     setStyle(idx + 1);
+    store.setStyle(idx + 1);
   };
 
   return (
