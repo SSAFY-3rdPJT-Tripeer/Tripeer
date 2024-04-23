@@ -24,7 +24,7 @@ export default function LoginPage() {
       </div>
       {/* 소셜 로그인 버튼 */}
       <Link
-        href={"https://192.168.100.188/api/oauth2/authorization/google"}
+        href={"https://k10d207.p.ssafy.io/api/oauth2/authorization/google"}
         className={styles.loginBtn}>
         <Image
           src={google}
@@ -35,7 +35,7 @@ export default function LoginPage() {
         />
       </Link>
       <Link
-        href={"https://192.168.100.188/api/oauth2/authorization/kakao"}
+        href={"https://k10d207.p.ssafy.io/api/oauth2/authorization/kakao"}
         className={styles.loginBtn}>
         <Image
           src={kakao}
@@ -46,7 +46,7 @@ export default function LoginPage() {
         />
       </Link>
       <Link
-        href={"https://192.168.100.188/api/oauth2/authorization/naver"}
+        href={"https://k10d207.p.ssafy.io/api/oauth2/authorization/naver"}
         className={styles.loginBtn}>
         <Image
           src={naver}
