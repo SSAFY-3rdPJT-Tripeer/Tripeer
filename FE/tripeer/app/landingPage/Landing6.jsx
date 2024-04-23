@@ -49,7 +49,8 @@ const Landing6 = () => {
       <p className={styles.title} ref={refTitle}>
         여행의 모든 순간을 함께하세요
       </p>
-      <div className={styles.startBtn} ref={refBtn}>
+
+      <div className={styles.btn} ref={refBtn}>
         시작하기
       </div>
     </main>
