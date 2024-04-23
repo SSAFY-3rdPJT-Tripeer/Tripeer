@@ -70,9 +70,9 @@ public class UserController {
         return "ok";
     }
 
-    @GetMapping("/test/getsuper")
-    public Response<?> getSuper(HttpServletResponse response) {
-        userService.getSuper(response);
+    @GetMapping("/test/getsuper/{userId}")
+    public Response<?> getSuper(HttpServletResponse response, @PathVariable("userId") long userId) {
+        userService.getSuper(response, userId);
         return Response.of(HttpStatus.OK, "getSuper", null);
     }
 

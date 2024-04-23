@@ -311,7 +311,7 @@ public class PlanServiceImpl implements PlanService {
 
     //즐겨찾기 조회
     @Override
-    public void getWishList(String token) {
+    public List<SpotSearchResDTO> getWishList(String token, long planId) {
         String access = jwtUtil.splitToken(token);
         List<WishListEntity> wishList = wishListRepository.findByUser_UserId(jwtUtil.getUserId(access));
 
@@ -326,15 +326,13 @@ public class PlanServiceImpl implements PlanService {
             spotSearchResDTO.setLatitude(wishListEntity.getSpotInfo().getLatitude());
             spotSearchResDTO.setLongitude(wishListEntity.getSpotInfo().getLongitude());
             spotSearchResDTO.setImg(wishListEntity.getSpotInfo().getFirstImage());
-            spotSearchResDTO.setWishlist(wishListRepository.existsBySpotInfo_SpotInfoId(wishListEntity.getSpotInfo().getSpotInfoId()));
-//            spotSearchResDTO.setSpot(planBucketRepository.existsByPlan_PlanIdAndSpotInfo_SpotInfoId(planId, spotInfoEntity.getSpotInfoId()));
+            spotSearchResDTO.setWishlist(true);
+            spotSearchResDTO.setSpot(planBucketRepository.existsByPlan_PlanIdAndSpotInfo_SpotInfoId(planId, wishListEntity.getSpotInfo().getSpotInfoId()));
 
             spotSearchResDTOList.add(spotSearchResDTO);
         }
-        /*
 
-        }
-         */
+        return  spotSearchResDTOList;
     }
 
     //플랜 디테일 저장

@@ -206,7 +206,7 @@ public class UserServiceImpl implements UserService{
     //
 
     @Override
-    public void getSuper(HttpServletResponse response) {
+    public void getSuper(HttpServletResponse response, long userId) {
         String result = jwtUtil.createJwt("Authorization", "admin", "ROLE_ADMIN", 1, (long) 60*60*24*1000);
         String refresh = jwtUtil.createJwt("Authorization", "admin", "ROLE_ADMIN", 1, refreshTime*100*1000);
 
@@ -220,7 +220,7 @@ public class UserServiceImpl implements UserService{
         cookie.setMaxAge(24*60*60);
 //        cookie.setSecure(true);
         cookie.setPath("/");
-        if(key.equals("refresh")) {
+        if(key.equals("Authorization-re")) {
             cookie.setHttpOnly(true);
         }
 

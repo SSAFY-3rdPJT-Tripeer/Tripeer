@@ -28,7 +28,7 @@ public interface PlanService {
     //즐겨찾기 추가
     public void addWishList(int spotInfoId, String token);
     //즐겨찾기 조회
-    public void getWishList(String token);
+    public List<SpotSearchResDTO> getWishList(String token, long planId);
     //플린 디테일 저장
     public void addPlanDetail(PlanDetailReqDTO planDetailReqDTO);
     //플랜 디테일 전체 조회
