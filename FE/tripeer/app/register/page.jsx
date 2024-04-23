@@ -6,7 +6,7 @@ import NicknamePage from "@/components/register/nickNamePage";
 import BirthdayPage from "@/components/register/birthDayPage";
 import StylePage from "@/components/register/stylePage";
 import { useRouter } from "next/navigation";
-import { cookies } from "next/headers";
+import cookies from "js-cookie";
 
 export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -14,8 +14,7 @@ export default function RegisterPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const cookieStore = cookies();
-    const accessToken = cookieStore.get("Authorization");
+    const accessToken = cookies.get("Authorization");
     localStorage.setItem("accessToken", accessToken);
 
     const timer = setTimeout(() => {
