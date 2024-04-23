@@ -106,7 +106,7 @@ public class PlaceController {
     @PostMapping("/spot/create")
     public Response<?> createNewSpot(@RequestBody SpotAddReqDto spotAddReqDto) {
 
-        return Response.of(HttpStatus.OK, "스팟 디테일 조회", spotServiceImpl.createNewSpot(spotAddReqDto));
+        return Response.of(HttpStatus.OK, "새로운 스팟 생성", spotServiceImpl.createNewSpot(spotAddReqDto));
     }
 
 

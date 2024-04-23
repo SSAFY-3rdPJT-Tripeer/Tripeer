@@ -8,6 +8,10 @@ import j10d207.tripeer.place.db.dto.SpotInfoDto;
 import j10d207.tripeer.place.db.dto.SpotListDto;
 import j10d207.tripeer.place.db.entity.*;
 import j10d207.tripeer.place.db.repository.*;
+import j10d207.tripeer.user.db.entity.UserEntity;
+import j10d207.tripeer.user.db.entity.WishListEntity;
+import j10d207.tripeer.user.db.repository.UserRepository;
+import j10d207.tripeer.user.db.repository.WishRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +32,8 @@ public class SpotServiceImpl implements SpotService{
     private final SpotDetailRepository spotDetailRepository;
     private final CityRepository cityRepository;
     private final TownRepository townRepository;
+    private final UserRepository userRepository;
+    private final WishRepository wishRepository;
 
 
     @Override
@@ -127,7 +133,6 @@ public class SpotServiceImpl implements SpotService{
                 .city(cityEntity)
                 .build();
 
-
         TownEntity townEntity = TownEntity.builder()
                 .townId(townPK)
                 .build();
@@ -152,16 +157,17 @@ public class SpotServiceImpl implements SpotService{
         createNewDescrip(newSpotInfo, spotAddReqDTO);
 
         if(spotAddReqDTO.isAddPlanCheck()) {
+            UserEntity byUserId = userRepository.findByUserId(4); //임의값
+            WishListEntity wish = WishListEntity.builder()
+                    .user(byUserId)
+                    .spotInfo(newSpotInfo)
+                    .build();
+            wishRepository.save(wish);
 
+            return true;
         }
 
-        /*
-    private String cat1;
-    private String cat2;
-    private String cat3;
-    private boolean addPlanCheck;
-         */
-        return null;
+        return false;
     }
 
 }
