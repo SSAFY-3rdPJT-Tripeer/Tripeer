@@ -3,11 +3,11 @@ package j10d207.tripeer.place.db;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-public class ContentType {
+public class ContentTypeEnum {
 
     @RequiredArgsConstructor
     @Getter
-    public enum ContentTypeEnum {
+    public enum ContentTypeListEnum {
         TOURIST_ATTRACTION(12, "관광지"),
         CULTURAL_FACILITY(14, "문화시설"),
         FESTIVAL_EVENT(15, "축제 공연 행사"),
@@ -23,7 +23,7 @@ public class ContentType {
 
     // 상수 값을 이름으로 변환하는 메서드
     public static String getNameByCode(int code) {
-        for (ContentTypeEnum contentType : ContentTypeEnum.values()) {
+        for (ContentTypeListEnum contentType : ContentTypeListEnum.values()) {
             if (contentType.getCode() == code) {
                 return contentType.getName();
             }
