@@ -57,7 +57,7 @@ const NavBar = () => {
                   width={TOGGLE_WIDTH}
                   height={TOGGLE_HEIGHT}
                   alt="toggle"
-                  className={style.toggleIcon}
+                  className={`${style.toggleIcon} ${toggle ? style.onToggle : style.offToggle}`}
                   onClick={() => {
                     setToggle(!toggle);
                   }}
@@ -84,13 +84,9 @@ const NavBar = () => {
                 ) : null}
               </div>
             ) : (
-              <div
-                className={style.loginBox}
-                onClick={() => {
-                  setIsLogin(true);
-                }}>
-                로그인
-              </div>
+              <Link href="/login" style={{ textDecoration: "none" }}>
+                <div className={style.loginBox}>로그인</div>
+              </Link>
             )}
           </nav>
         </header>
