@@ -5,6 +5,9 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
+import io.jsonwebtoken.ExpiredJwtException;
+import j10d207.tripeer.exception.CustomException;
+import j10d207.tripeer.exception.ErrorCode;
 import j10d207.tripeer.user.config.JWTUtil;
 import j10d207.tripeer.user.db.dto.CustomOAuth2User;
 import j10d207.tripeer.user.db.dto.JoinDTO;
@@ -17,6 +20,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -158,9 +163,60 @@ public class UserServiceImpl implements UserService{
         return userSearchDTOList;
     }
 
+
+    // access 토큰 재발급
+    @Override
+    public void tokenRefresh(String token, Cookie[] cookies, HttpServletResponse response) {
+        // refresh 토큰 가져오기
+        String refresh = null;
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("Authorization-re")) {
+                refresh = cookie.getValue();
+            }
+        }
+
+        // refresh 만료 확인
+        try {
+            jwtUtil.isExpired(refresh);
+        } catch (ExpiredJwtException e) {
+            throw new CustomException(ErrorCode.TOKEN_EXPIRED_ERROR);
+        }
+
+        String access = jwtUtil.splitToken(token);
+        // access 만료 확인
+        try {
+            jwtUtil.isExpired(access);
+            throw new CustomException(ErrorCode.TOKEN_EXPIRED_ERROR);
+        } catch (ExpiredJwtException e) {
+            // access 토큰 재발급 후 헤더에 저장
+            String newAccess = jwtUtil.createJwt("Authorization", jwtUtil.getName(refresh), jwtUtil.getRole(refresh), jwtUtil.getUserId(refresh), accessTime);
+            response.setHeader("Authorization", "Bearer " + newAccess);
+        }
+
+
+    }
+
+    //
+
     @Override
     public void getSuper(HttpServletResponse response) {
-        String result = jwtUtil.createJwt("Authorization", "admin", "ROLE_ADMIN", 1, (long) (60*60*24*60));
+        String result = jwtUtil.createJwt("Authorization", "admin", "ROLE_ADMIN", 1, (long) 60*60*24);
+        String refresh = jwtUtil.createJwt("Authorization", "admin", "ROLE_ADMIN", 1, refreshTime*100);
+
+        response.addCookie(createCookie("Authorization-re", refresh));
         response.setHeader("Authorization", "Bearer " + result);
+    }
+
+    private Cookie createCookie(String key, String value) {
+
+        Cookie cookie = new Cookie(key, value);
+        cookie.setMaxAge(24*60*60);
+//        cookie.setSecure(true);
+        cookie.setPath("/");
+        if(key.equals("refresh")) {
+            cookie.setHttpOnly(true);
+        }
+
+        return cookie;
     }
 }

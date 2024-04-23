@@ -49,19 +49,19 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String provider = oAuth2Response.getProvider();
         String providerId = oAuth2Response.getProviderId();
         UserEntity user = userRepository.findByProviderAndProviderId(provider, providerId);
-        //소셜로그인은 되었지만, 우리 사이트에 회원등록이 안된 상태 전달
+//        소셜로그인은 되었지만, 우리 사이트에 회원등록이 안된 상태 전달
         if( user == null ) {
-//            UserEntity newUser = UserEntity.builder()
-//                    .role("ROLE_VALIDATE")
-//                    .build();
-//            System.out.println("미가입 상태");
             UserEntity newUser = UserEntity.builder()
-                    .provider(oAuth2Response.getProvider())
-                    .providerId(oAuth2Response.getProviderId())
-                    .nickname(oAuth2Response.getNickname())
-                    .profileImage(oAuth2Response.getProfileImage())
-                    .role("ROLE_USER")
+                    .role("ROLE_VALIDATE")
                     .build();
+            System.out.println("미가입 상태");
+//            UserEntity newUser = UserEntity.builder()
+//                    .provider(oAuth2Response.getProvider())
+//                    .providerId(oAuth2Response.getProviderId())
+//                    .nickname(oAuth2Response.getNickname())
+//                    .profileImage(oAuth2Response.getProfileImage())
+//                    .role("ROLE_USER")
+//                    .build();
             return userRepository.save(newUser);
         }
 

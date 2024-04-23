@@ -7,6 +7,7 @@ import j10d207.tripeer.user.db.dto.JoinDTO;
 import j10d207.tripeer.user.db.dto.SocialInfoDTO;
 import j10d207.tripeer.user.db.dto.UserSearchDTO;
 import j10d207.tripeer.user.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -57,6 +58,12 @@ public class UserController {
         return Response.of(HttpStatus.OK, "유저 검색", userService.userSearch(nickname));
     }
 
+    // access 토큰 재발급
+    @PostMapping("/reissue")
+    public Response<?> reissue(HttpServletRequest request, HttpServletResponse response) {
+        userService.tokenRefresh(request.getHeader("Authorization"), request.getCookies(), response);
+        return Response.of(HttpStatus.OK, "토큰 재발급 완료", null);
+    }
 
     @GetMapping("/test")
     public String test() {
