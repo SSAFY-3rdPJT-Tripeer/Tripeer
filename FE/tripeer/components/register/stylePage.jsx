@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 import styles from "./stylePage.module.css";
 import useRegisterStore from "@/stores/register";
@@ -27,9 +28,31 @@ export default function StylePage({ pageNum, setPageNum }) {
   const onClickNext = () => {
     if (styleIdx === -1) {
       setIsPos(false);
+    } else {
+      postData();
     }
-    store.setStyle(styleIdx);
-    console.log(store);
+  };
+
+  const postData = async () => {
+    try {
+      await axios
+        .post(
+          `${process.enf.NEXT_PUBLIC_API_URL}/user/signup`,
+          {
+            nickName: store.nickName,
+            year: store.year,
+            month: store.month,
+            day: store.day,
+            style1: store.style,
+          },
+          { withCredentials: true },
+        )
+        .then((res) => {
+          console.log(res);
+        });
+    } catch (e) {
+      console.log("회원가입 api 실패", e);
+    }
   };
 
   useEffect(() => {
