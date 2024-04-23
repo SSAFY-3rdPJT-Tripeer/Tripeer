@@ -68,9 +68,9 @@ public class UserServiceImpl implements UserService{
                 .birth(birth)
                 .profileImage(customUserDetails.getProfileImage())
                 .role("ROLE_USER")
-                .style1(TripStyleEnum.getNameByCode(joinDTO.getStyle1()))
-                .style2(TripStyleEnum.getNameByCode(joinDTO.getStyle2()))
-                .style3(TripStyleEnum.getNameByCode(joinDTO.getStyle3()))
+                .style1(joinDTO.getStyle1() == null ? null : TripStyleEnum.getNameByCode(joinDTO.getStyle1()))
+                .style2(joinDTO.getStyle2() == null ? null : TripStyleEnum.getNameByCode(joinDTO.getStyle2()))
+                .style3(joinDTO.getStyle3() == null ? null : TripStyleEnum.getNameByCode(joinDTO.getStyle3()))
                 .isOnline(false)
                 .build();
         user = userRepository.save(user);
@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService{
         Cookie cookie = new Cookie("Authorization-re", refresh);
         cookie.setMaxAge((int) refreshTime);
         //NginX 도입시 사용
-//        cookie.setSecure(true);
+        cookie.setSecure(true);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
 
@@ -218,7 +218,7 @@ public class UserServiceImpl implements UserService{
 
         Cookie cookie = new Cookie(key, value);
         cookie.setMaxAge(24*60*60);
-//        cookie.setSecure(true);
+        cookie.setSecure(true);
         cookie.setPath("/");
         if(key.equals("Authorization-re")) {
             cookie.setHttpOnly(true);
