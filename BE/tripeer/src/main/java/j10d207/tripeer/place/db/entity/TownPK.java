@@ -7,10 +7,10 @@ import java.io.Serializable;
 
 @Embeddable
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-@Builder
 @ToString
 public class TownPK implements Serializable {
 
