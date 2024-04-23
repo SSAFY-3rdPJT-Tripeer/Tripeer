@@ -37,7 +37,7 @@ export default function StylePage({ pageNum, setPageNum }) {
     try {
       await axios
         .post(
-          `${process.enf.NEXT_PUBLIC_API_URL}/user/signup`,
+          `${process.env.NEXT_PUBLIC_API_URL}/user/signup`,
           {
             nickName: store.nickName,
             year: store.year,
