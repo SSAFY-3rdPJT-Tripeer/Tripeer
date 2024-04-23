@@ -38,6 +38,10 @@ export default function BirthdayPage({ pageNum, setPageNum }) {
     if (v.length === 0 || v.length < l) {
       setIsPos(false);
     } else if (/^\d*$/.test(v)) {
+      if (v.length === 1) {
+        save("0" + v);
+        return true;
+      }
       save(v);
       return true;
     } else {
