@@ -13,7 +13,12 @@ const PlanModal = (props) => {
       onClick={(e) => {
         offModal(e);
       }}>
-      <section className={styles.container}></section>
+      <section className={styles.container}>
+        <header className={styles.header}>
+          <p>여행지를 선택해주세요.</p>
+          <p>다음</p>
+        </header>
+      </section>
     </article>
   );
 };
