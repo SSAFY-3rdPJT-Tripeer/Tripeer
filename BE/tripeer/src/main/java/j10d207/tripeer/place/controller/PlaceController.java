@@ -5,6 +5,7 @@ import j10d207.tripeer.place.service.CityServiceImpl;
 import j10d207.tripeer.place.service.SpotServiceImpl;
 import j10d207.tripeer.place.service.TownServiceImpl;
 import j10d207.tripeer.response.Response;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -104,9 +105,9 @@ public class PlaceController {
      * 스팟 생성
      * */
     @PostMapping("/spot/create")
-    public Response<?> createNewSpot(@RequestBody SpotAddReqDto spotAddReqDto) {
+    public Response<?> createNewSpot(@RequestBody SpotAddReqDto spotAddReqDto, HttpServletRequest request) {
 
-        return Response.of(HttpStatus.OK, "새로운 스팟 생성", spotServiceImpl.createNewSpot(spotAddReqDto));
+        return Response.of(HttpStatus.OK, "새로운 스팟 생성", spotServiceImpl.createNewSpot(spotAddReqDto, request));
     }
 
 
