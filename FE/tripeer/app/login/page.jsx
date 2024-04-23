@@ -24,7 +24,7 @@ export default function LoginPage() {
       </div>
       {/* 소셜 로그인 버튼 */}
       <Link
-        href={"http://192.168.100.188:8080/api/oauth2/authorization/google"}
+        href={"https://192.168.100.188/api/oauth2/authorization/google"}
         className={styles.loginBtn}>
         <Image
           src={google}
