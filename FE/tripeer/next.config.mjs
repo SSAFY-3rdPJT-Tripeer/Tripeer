@@ -3,7 +3,9 @@ const nextConfig = {
   images: {
     domains: [],
   },
-  output: 'export',
+  distDir : "build"
+  // output: 'export',
 };
+
 
 export default nextConfig;
