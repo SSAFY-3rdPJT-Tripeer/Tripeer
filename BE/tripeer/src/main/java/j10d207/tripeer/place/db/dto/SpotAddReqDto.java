@@ -10,6 +10,7 @@ public class SpotAddReqDto {
 
     private int cityId;
     private int townId;
+    private int planId;
     private int contentTypeId;
     private String title;
     private String addr1;

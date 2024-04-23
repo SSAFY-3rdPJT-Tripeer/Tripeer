@@ -8,10 +8,13 @@ import j10d207.tripeer.place.db.dto.SpotInfoDto;
 import j10d207.tripeer.place.db.dto.SpotListDto;
 import j10d207.tripeer.place.db.entity.*;
 import j10d207.tripeer.place.db.repository.*;
+import j10d207.tripeer.plan.service.PlanService;
+import j10d207.tripeer.plan.service.PlanServiceImpl;
 import j10d207.tripeer.user.db.entity.UserEntity;
 import j10d207.tripeer.user.db.entity.WishListEntity;
 import j10d207.tripeer.user.db.repository.UserRepository;
 import j10d207.tripeer.user.db.repository.WishRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +37,7 @@ public class SpotServiceImpl implements SpotService{
     private final TownRepository townRepository;
     private final UserRepository userRepository;
     private final WishRepository wishRepository;
+    private final PlanService planService;
 
 
     @Override
@@ -123,7 +127,7 @@ public class SpotServiceImpl implements SpotService{
 
     @Override
     @Transactional
-    public Boolean createNewSpot(SpotAddReqDto spotAddReqDTO) {
+    public Boolean createNewSpot(SpotAddReqDto spotAddReqDTO, HttpServletRequest request) {
 
         CityEntity cityEntity = CityEntity.builder()
                 .cityId(spotAddReqDTO.getCityId()).build();
@@ -158,12 +162,7 @@ public class SpotServiceImpl implements SpotService{
         createNewDescrip(newSpotInfo, spotAddReqDTO);
 
         if(spotAddReqDTO.isAddPlanCheck()) {
-            UserEntity byUserId = userRepository.findByUserId(4); //임의값
-            WishListEntity wish = WishListEntity.builder()
-                    .user(byUserId)
-                    .spotInfo(newSpotInfo)
-                    .build();
-            wishRepository.save(wish);
+            planService.addPlanSpot(spotAddReqDTO.getPlanId(), newSpotInfo.getSpotInfoId(), request.getHeader("Authorization"));
 
             return true;
         }
