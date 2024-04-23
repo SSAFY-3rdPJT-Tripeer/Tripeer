@@ -35,7 +35,7 @@ export default function LoginPage() {
         />
       </Link>
       <Link
-        href={"http://192.168.100.188:8080/api/oauth2/authorization/kakao"}
+        href={"https://192.168.100.188/api/oauth2/authorization/kakao"}
         className={styles.loginBtn}>
         <Image
           src={kakao}
@@ -46,7 +46,7 @@ export default function LoginPage() {
         />
       </Link>
       <Link
-        href={"http://192.168.100.188:8080/api/oauth2/authorization/naver"}
+        href={"https://192.168.100.188/api/oauth2/authorization/naver"}
         className={styles.loginBtn}>
         <Image
           src={naver}
