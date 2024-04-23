@@ -8,12 +8,14 @@ import useRegisterStore from "@/stores/register";
 import StyleBtn from "@/components/register/styleBtn";
 import CancelBtn from "@/components/register/cancelBtn";
 import NextBtn from "@/components/register/nextBtn";
+import { useRouter } from "next/navigation";
 
 export default function StylePage({ pageNum, setPageNum }) {
   const store = useRegisterStore();
   const [nickName, setNickName] = useState("");
   const [isPos, setIsPos] = useState(true);
   const [styleIdx, setStyleIdx] = useState();
+  const router = useRouter();
 
   const titleList = [
     "관광지",
@@ -39,7 +41,7 @@ export default function StylePage({ pageNum, setPageNum }) {
         .post(
           `${process.env.NEXT_PUBLIC_API_URL}/user/signup`,
           {
-            nickName: store.nickName,
+            nickname: store.nickName,
             year: store.year,
             month: store.month,
             day: store.day,
@@ -47,8 +49,8 @@ export default function StylePage({ pageNum, setPageNum }) {
           },
           { withCredentials: true },
         )
-        .then((res) => {
-          console.log(res);
+        .then(() => {
+          router.push("/redirect");
         });
     } catch (e) {
       console.log("회원가입 api 실패", e);
