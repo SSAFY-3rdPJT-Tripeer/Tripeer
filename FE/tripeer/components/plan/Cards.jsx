@@ -3,18 +3,20 @@
 /* eslint-disable */
 
 // 외부 모듈
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 // 내부 모듈
 import styles from "./cards.module.css";
 import daegu from "./asset/daegu.jpg";
+import PlanModal from "./PlanModal.jsx";
 
 const Cards = () => {
   const [plans, setPlans] = useState([{}, {}, {}, {}, {}]);
   const [showPlans, setShowPlans] = useState([]);
   const [flag, setFlag] = useState(0);
   const [noPlans, setNoPlans] = useState(2); // 레이아웃 비율 유지를 위한 빈 플랜
+  const [onModal, setOnModal] = useState(false);
   const MAX_PLANS_CNT = 6; // 만들 수 있는 최대 계획
   const Per_PAGE_CNT = 3; // 한 페이지에 랜더할 계획의 갯수
 
@@ -67,7 +69,7 @@ const Cards = () => {
           />
         ) : null}
       </aside>
-      <article className={`${styles.cardBox}  ${styles.cardAni}`}>
+      <article className={`${styles.cardBox}  ${styles.cardAni} `}>
         {showPlans.map((plan, idx) => (
           <div className={styles.card} key={idx}>
             <section
@@ -112,7 +114,11 @@ const Cards = () => {
 
         {showPlans.length < Per_PAGE_CNT ? (
           <div className={styles.card}>
-            <section className={styles.cardBody}>
+            <section
+              className={styles.cardBody}
+              onClick={() => {
+                setOnModal(true);
+              }}>
               <div className={styles.addCard}>
                 <div className={styles.addBtn}>
                   <div className={styles.btn}>
@@ -138,6 +144,7 @@ const Cards = () => {
           />
         ) : null}
       </aside>
+      {onModal ? <PlanModal setOnModal={setOnModal} /> : null}
     </main>
   );
 };

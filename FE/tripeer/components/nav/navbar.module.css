@@ -42,6 +42,7 @@
   align-items: center;
   color: #fff;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .userImg {
@@ -110,4 +111,14 @@
   top: 0;
   left: 0;
   z-index: 998;
+}
+
+.onToggle {
+  transition: 1s ease;
+  transform: rotate(180deg);
+}
+
+.offToggle {
+  transition: 1s ease;
+  transform: rotate(0deg);
 }
