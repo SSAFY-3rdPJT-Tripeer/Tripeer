@@ -200,8 +200,8 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void getSuper(HttpServletResponse response) {
-        String result = jwtUtil.createJwt("Authorization", "admin", "ROLE_ADMIN", 1, (long) 60*60*24);
-        String refresh = jwtUtil.createJwt("Authorization", "admin", "ROLE_ADMIN", 1, refreshTime*100);
+        String result = jwtUtil.createJwt("Authorization", "admin", "ROLE_ADMIN", 1, (long) 60*60*24*1000);
+        String refresh = jwtUtil.createJwt("Authorization", "admin", "ROLE_ADMIN", 1, refreshTime*100*1000);
 
         response.addCookie(createCookie("Authorization-re", refresh));
         response.setHeader("Authorization", "Bearer " + result);
