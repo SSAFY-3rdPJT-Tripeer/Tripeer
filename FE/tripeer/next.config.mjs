@@ -3,7 +3,7 @@ const nextConfig = {
   images: {
     domains: [],
   },
-  distDir : "build"
+  // distDir : "build"
   // output: 'export',
 };
 
