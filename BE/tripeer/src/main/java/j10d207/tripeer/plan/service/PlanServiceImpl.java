@@ -266,7 +266,7 @@ public class PlanServiceImpl implements PlanService {
             throw new CustomException(ErrorCode.HAS_BUCKET);
         }
         String access = jwtUtil.splitToken(token);
-        if(coworkerRepository.existsByPlan_PlanIdAndUser_UserId(planId, jwtUtil.getUserId(access))) {
+        if(!(coworkerRepository.existsByPlan_PlanIdAndUser_UserId(planId, jwtUtil.getUserId(access)))) {
             throw new CustomException(ErrorCode.USER_NOT_CORRESPOND);
         }
 
