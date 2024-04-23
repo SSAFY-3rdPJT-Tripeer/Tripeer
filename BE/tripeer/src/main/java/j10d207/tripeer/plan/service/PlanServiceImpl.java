@@ -24,10 +24,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -134,6 +131,18 @@ public class PlanServiceImpl implements PlanService {
         } else {
             // 토큰과 소유자가 일치하지 않음
             throw new CustomException(ErrorCode.USER_NOT_CORRESPOND);
+        }
+
+    }
+
+    //플랜 탈퇴
+    @Override
+    public void planOut(long planId, String token) {
+        Optional<CoworkerEntity> coworkerOptional = coworkerRepository.findByPlan_PlanIdAndUser_UserId(planId, jwtUtil.getUserId(jwtUtil.splitToken(token)));
+        if(coworkerOptional.isPresent()) {
+            coworkerRepository.delete(coworkerOptional.get());
+        } else {
+            throw new CustomException(ErrorCode.NOT_HAS_COWORKER);
         }
 
     }
@@ -298,6 +307,32 @@ public class PlanServiceImpl implements PlanService {
                         .build())
                 .build();
         wishListRepository.save(wishList);
+    }
+
+    //즐겨찾기 조회
+    @Override
+    public List<SpotSearchResDTO> getWishList(String token, long planId) {
+        String access = jwtUtil.splitToken(token);
+        List<WishListEntity> wishList = wishListRepository.findByUser_UserId(jwtUtil.getUserId(access));
+
+        List<SpotSearchResDTO> spotSearchResDTOList = new ArrayList<>();
+
+        for (WishListEntity wishListEntity : wishList) {
+            SpotSearchResDTO spotSearchResDTO = new SpotSearchResDTO();
+            spotSearchResDTO.setSpotInfoId(wishListEntity.getSpotInfo().getSpotInfoId());
+            spotSearchResDTO.setTitle(wishListEntity.getSpotInfo().getTitle());
+            spotSearchResDTO.setContentType(ContentTypeEnum.getNameByCode(wishListEntity.getSpotInfo().getContentTypeId()));
+            spotSearchResDTO.setAddr(wishListEntity.getSpotInfo().getAddr1());
+            spotSearchResDTO.setLatitude(wishListEntity.getSpotInfo().getLatitude());
+            spotSearchResDTO.setLongitude(wishListEntity.getSpotInfo().getLongitude());
+            spotSearchResDTO.setImg(wishListEntity.getSpotInfo().getFirstImage());
+            spotSearchResDTO.setWishlist(true);
+            spotSearchResDTO.setSpot(planBucketRepository.existsByPlan_PlanIdAndSpotInfo_SpotInfoId(planId, wishListEntity.getSpotInfo().getSpotInfoId()));
+
+            spotSearchResDTOList.add(spotSearchResDTO);
+        }
+
+        return  spotSearchResDTOList;
     }
 
     //플랜 디테일 저장

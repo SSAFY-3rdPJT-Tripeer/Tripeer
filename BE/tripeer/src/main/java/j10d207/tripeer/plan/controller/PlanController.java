@@ -41,6 +41,17 @@ public class PlanController {
         }
     }
 
+    //플랜 탈퇴
+    @DeleteMapping("/{planId}")
+    public Response<?> planOut(@PathVariable("planId") long planId, HttpServletRequest request) {
+        try {
+            planService.planOut(planId, request.getHeader("Authorization"));
+            return Response.of(HttpStatus.OK, "플랜 탈퇴 완료", null);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     //내 플랜 리스트 조회
     @GetMapping
     public Response<List<PlanListResDTO>> getPlanList(HttpServletRequest request) {
@@ -107,6 +118,13 @@ public class PlanController {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    //즐겨찾기 조회
+    @GetMapping("wishlist/{planId}")
+    public Response<List<SpotSearchResDTO>> getWishList(HttpServletRequest request, @PathVariable("planId") long planId) {
+        List<SpotSearchResDTO> searchResDTOList = planService.getWishList(request.getHeader("Authorization"), planId);
+        return Response.of(HttpStatus.OK, "즐겨찾기 리스트 조회 완료", searchResDTOList);
     }
 
     //플랜 디테일 저장

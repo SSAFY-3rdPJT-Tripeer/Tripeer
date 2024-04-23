@@ -8,8 +8,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -49,6 +51,9 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         // 04.14 - 비회원 상태일경우 가입 페이지로, 커스텀 필요
         if (role.equals("ROLE_VALIDATE")) {
             response.setStatus(205);
+            Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, authorities);
+            //세션에 사용자 등록
+            SecurityContextHolder.getContext().setAuthentication(authToken);
             //회원가입 페이지
             response.sendRedirect("https://k10d207.p.ssafy.io/register");
             return;
@@ -75,7 +80,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         cookie.setMaxAge(24*60*60);
         //cookie.setSecure(true);
         cookie.setPath("/");
-        if(key.equals("refresh")) {
+        if(key.equals("Authorization-re")) {
             cookie.setHttpOnly(true);
         }
 
