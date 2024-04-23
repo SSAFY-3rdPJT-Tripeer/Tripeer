@@ -11,24 +11,44 @@
   flex-direction: column;
   justify-content: center;
   padding-left: 100px;
-  width: 45%;
+  width: 40%;
   height: 100%;
 }
-.bannerBack1 {
+.bannerBack {
+  width: 98%;
+  height: 350px;
   position: relative;
-  height: 380px;
-  width: 550px;
+}
+.bannerItem1 {
+  position: absolute;
+  height: 100%;
+  width: 100%;
   background: #aae9e6;
   z-index: 1;
 }
-.bannerBack2 {
+
+.bannerItem1 {
+  opacity: 0;
+  transform: translateX(50px);
+  transition:
+    opacity 0.4s ease-out,
+    transform 0.4s ease-out;
+}
+.bannerItem2 {
   position: absolute;
   left: 20px;
   top: -20px;
-  height: 380px;
-  width: 550px;
+  height: 100%;
+  width: 100%;
   background: #59a4a0;
   z-index: 2;
+}
+.bannerItem2 {
+  opacity: 0;
+  transform: translateX(50px);
+  transition:
+    opacity 1.2s ease-out,
+    transform 1.2s ease-out;
 }
 .secondBanner {
   position: absolute;
@@ -37,36 +57,17 @@
   background: url("./assets/banner2.png");
   background-position: center;
   background-repeat: no-repeat;
-  background-size: cover;
-  height: 380px;
-  width: 550px;
+  background-size: contain;
+  height: 100%;
+  width: 100%;
   z-index: 3;
 }
-
-.bannerBack2 {
-  opacity: 0;
-  transform: translateX(30px);
-  transform: translateY(30px);
-
-  transition:
-    opacity 0.4s ease-out,
-    transform 0.4s ease-out;
-}
-
-.bannerBack1 {
-  opacity: 0;
-  transform: translateX(-30px);
-  transform: translateY(-30px);
-  transition:
-    opacity 0.6s ease-out,
-    transform 0.6s ease-out;
-}
-
 .secondBanner {
   opacity: 0;
+  transform: translateX(50px);
   transition:
-    opacity 1.2s ease-out,
-    transform 1.2s ease-out;
+    opacity 0.8s ease-out,
+    transform 0.8s ease-out;
 }
 
 .rightSection {
@@ -74,7 +75,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-end;
-  width: 65%;
+  width: 60%;
   height: 100%;
   padding-right: 100px;
 }
@@ -90,14 +91,16 @@
   align-items: flex-end;
 }
 .title {
-  font-size: 2rem;
+  text-align: end;
+  font-size: 2em;
   font-weight: 700;
   margin-bottom: 20px;
   color: #262626;
 }
 .subTitle {
+  text-align: end;
   color: #262626;
-  font-size: 2rem;
+  font-size: 2em;
   margin-bottom: 20px;
 }
 .title,

@@ -10,8 +10,8 @@ const Landing1 = () => {
   const refOne = useRef(null);
   const refTwo = useRef(null);
   const refThree = useRef(null);
-  const refTitle1 = useRef(null); // 첫 번째 제목을 위한 ref
-  const refTitle2 = useRef(null); // 두 번째 제목을 위한 ref
+  const refTitle1 = useRef(null);
+  const refTitle2 = useRef(null);
   const refSubTitle1 = useRef(null);
   const refSubTitle2 = useRef(null);
 
@@ -27,11 +27,10 @@ const Landing1 = () => {
         });
       },
       {
-        threshold: 0.7, // 50% 이상 보여야 실행
+        threshold: 0.7,
       },
     );
 
-    // Refs array
     const refs = [
       refOne,
       refTwo,
@@ -55,13 +54,14 @@ const Landing1 = () => {
         }
       });
     };
-  }, []); // Dependency array is now empty
+  }, []);
 
   return (
     <main className={styles.container}>
       <article className={styles.leftSection}>
-        <section className={styles.bannerBack1} ref={refOne}>
-          <div className={styles.bannerBack2} ref={refTwo}></div>
+        <section className={styles.bannerBack}>
+          <div className={styles.bannerItem1} ref={refOne}></div>
+          <div className={styles.bannerItem2} ref={refTwo}></div>
           <div className={styles.secondBanner} ref={refThree}></div>
         </section>
       </article>
