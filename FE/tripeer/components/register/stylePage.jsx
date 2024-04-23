@@ -14,7 +14,7 @@ export default function StylePage({ pageNum, setPageNum }) {
   const store = useRegisterStore();
   const [nickName, setNickName] = useState("");
   const [isPos, setIsPos] = useState(true);
-  const [styleIdx, setStyleIdx] = useState();
+  const [styleIdx, setStyleIdx] = useState([]);
   const router = useRouter();
 
   const titleList = [
@@ -28,7 +28,7 @@ export default function StylePage({ pageNum, setPageNum }) {
   ];
 
   const onClickNext = () => {
-    if (styleIdx === -1) {
+    if (styleIdx.length === 0) {
       setIsPos(false);
     } else {
       postData();
@@ -36,6 +36,16 @@ export default function StylePage({ pageNum, setPageNum }) {
   };
 
   const postData = async () => {
+    if (styleIdx.length === 1) {
+      store.style1 = styleIdx[0];
+    } else if (styleIdx.length === 2) {
+      store.style1 = styleIdx[0];
+      store.style2 = styleIdx[1];
+    } else {
+      store.style1 = styleIdx[0];
+      store.style2 = styleIdx[1];
+      store.style3 = styleIdx[2];
+    }
     try {
       await axios
         .post(
@@ -45,7 +55,9 @@ export default function StylePage({ pageNum, setPageNum }) {
             year: store.year,
             month: store.month,
             day: store.day,
-            style1: store.style,
+            style1: store.style1,
+            style2: store.style2,
+            style3: store.style3,
           },
           { withCredentials: true },
         )
@@ -62,7 +74,10 @@ export default function StylePage({ pageNum, setPageNum }) {
   }, [store.nickName]);
 
   useEffect(() => {
-    setStyleIdx(-1);
+    setStyleIdx([]);
+    store.setStyle1(null);
+    store.setStyle2(null);
+    store.setStyle3(null);
   }, []);
 
   return (
@@ -83,7 +98,7 @@ export default function StylePage({ pageNum, setPageNum }) {
         })}
       </section>
       {isPos ? null : (
-        <p className={styles.err}>여행 스타일을 선택해주세요 !</p>
+        <p className={styles.err}>여행 스타일을 최대 3개까지 선택해주세요 !</p>
       )}
       <section className={styles.sectionBtn}>
         <CancelBtn pageNum={pageNum} setPageNum={setPageNum} />

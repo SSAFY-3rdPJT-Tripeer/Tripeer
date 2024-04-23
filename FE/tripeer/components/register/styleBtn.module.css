@@ -6,6 +6,7 @@
     border-radius: 20px;
     padding: 5px 10px;
     width: fit-content;
+    cursor: pointer;
 }
 
 .mainCheck {
@@ -22,4 +23,10 @@
 .p{
     display: inline;
     white-space: nowrap;
+}
+
+.main:hover {
+    background-color: #4FBDB7;
+    border-color: #4FBDB7;
+    color: white;
 }
