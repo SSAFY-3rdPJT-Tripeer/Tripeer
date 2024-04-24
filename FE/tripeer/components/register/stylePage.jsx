@@ -27,21 +27,25 @@ export default function StylePage({ pageNum, setPageNum }) {
     "음식점",
   ];
 
-  const onClickNext = () => {
+  const onClickNext = async () => {
     if (styleIdx.length === 0) {
       setIsPos(false);
     } else {
-      if (styleIdx.length === 1) {
-        store.setStyle("style1", styleIdx[0]);
-      } else if (styleIdx.length === 2) {
-        store.setStyle("style1", styleIdx[0]);
-        store.setStyle("style2", styleIdx[1]);
-      } else {
-        store.setStyle("style1", styleIdx[0]);
-        store.setStyle("style2", styleIdx[1]);
-        store.setStyle("style3", styleIdx[2]);
-      }
+      await inputStore();
       postData();
+    }
+  };
+
+  const inputStore = () => {
+    if (styleIdx.length === 1) {
+      store.setStyle("style1", styleIdx[0]);
+    } else if (styleIdx.length === 2) {
+      store.setStyle("style1", styleIdx[0]);
+      store.setStyle("style2", styleIdx[1]);
+    } else {
+      store.setStyle("style1", styleIdx[0]);
+      store.setStyle("style2", styleIdx[1]);
+      store.setStyle("style3", styleIdx[2]);
     }
   };
 
