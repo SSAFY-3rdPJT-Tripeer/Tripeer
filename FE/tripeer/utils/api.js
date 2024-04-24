@@ -3,7 +3,7 @@ import { jwtDecode } from "jwt-decode";
 
 const api = axios.create({
   // 기본 주소
-  baseURL: `${process.env.NEXT_PUBLIC_API_URL}`,
+  baseURL: `${process.env.NEXT_PUBLIC_API_URL}/api`,
   withCredentials: true,
 });
 api.interceptors.request.use(async (config) => {
