@@ -202,7 +202,7 @@ public class UserServiceImpl implements UserService{
     public String getSuper(HttpServletResponse response, long userId) {
         UserEntity user = userRepository.findByUserId(userId);
         String result = jwtUtil.createJwt("Authorization", user.getNickname(), user.getRole(), userId, (long) 60*60*24*1000);
-        String refresh = jwtUtil.createJwt("Authorization", user.getNickname(), user.getRole(), userId, refreshTime*100*1000);
+        String refresh = jwtUtil.createJwt("Authorization-re", user.getNickname(), user.getRole(), userId, refreshTime*100*1000);
 
         response.addCookie(createCookie("Authorization-re", refresh));
         response.setHeader("Authorization", "Bearer " + result);
