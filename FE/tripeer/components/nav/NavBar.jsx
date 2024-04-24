@@ -10,6 +10,7 @@ import Link from "next/link";
 import style from "./navbar.module.css";
 import Logo from "@/public/logo.png";
 import toggleIcon from "./assets/toggle.svg";
+import SuperUserBtn from "@/components/nav/superUserBtn";
 
 const NavBar = () => {
   const path = usePathname();
@@ -19,6 +20,7 @@ const NavBar = () => {
     "/": true,
     "/plan": true,
     "/test": true,
+    "/place": true,
   };
   const LOGO_WIDTH = 130;
   const LOGO_HEIGHT = 50;
@@ -39,6 +41,7 @@ const NavBar = () => {
             />
           </Link>
           <nav className={style.linkBox}>
+            <SuperUserBtn />
             <Link href="/plan" className={style.link}>
               일정 계획
             </Link>
