@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 
 import styles from "./stylePage.module.css";
@@ -14,6 +15,7 @@ export default function StylePage({ pageNum, setPageNum }) {
   const [nickName, setNickName] = useState("");
   const [isPos, setIsPos] = useState(true);
   const [styleIdx, setStyleIdx] = useState([]);
+  const router = useRouter();
 
   const titleList = [
     "관광지",
@@ -66,6 +68,7 @@ export default function StylePage({ pageNum, setPageNum }) {
         .then((res) => {
           const accessToken = res.headers.get("Authorization");
           localStorage.setItem("accessToken", accessToken);
+          router.push("/");
         });
     } catch (e) {
       console.log("회원가입 api 실패", e);
