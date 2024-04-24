@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import styles from "./titleModal.module.css";
 import Image from "next/image";
 import busIcon from "./asset/bus.gif";
+import api from "@/utils/api";
 
 const TitleModal = (props) => {
   const { setStep, setNewPlan, newPlan } = props;
@@ -24,6 +25,9 @@ const TitleModal = (props) => {
       setCheckModal(true);
     }
   };
+
+  const createPlan = () => {};
+
   useEffect(() => {
     console.log(newPlan);
   }, [newPlan]);
@@ -68,13 +72,28 @@ const TitleModal = (props) => {
       {checkModal ? (
         <section className={styles.back}>
           <main className={styles.checkContainer}>
-            <p className={styles.checkTitle}>여행 정보 확인</p>
-            <div className={styles.checkContent}>
-              <p className={styles.checkQuesetion}>여행 계획 이름</p>
-              <p className={styles.checkQuesetion}>여행 일정</p>
-              <p className={styles.checkQuesetion}>여행지</p>
-            </div>
+            <div>
+              <p className={styles.checkTitle}>여행 정보 확인</p>
+              <div className={styles.checkContent}>
+                <p className={styles.checkQuesetion}>여행 계획 이름</p>
+                <p className={styles.checkAnswer}>{newPlan.title}</p>
+                <p className={styles.checkQuesetion}>여행 일정</p>
+                <p className={styles.checkAnswer}>
+                  {newPlan.startDay} - {newPlan.endDay}
+                </p>
 
+                <p className={styles.checkQuesetion}>여행지</p>
+                <div className={styles.destinyResult}>
+                  {newPlan.townList.map((town, idx) => {
+                    return (
+                      <p className={styles.checkAnswer} key={idx}>
+                        {town.name}
+                      </p>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
             <footer className={styles.footer}>
               <button
                 className={`${styles.cancelBtn} ${styles.footBtn}`}
@@ -83,7 +102,11 @@ const TitleModal = (props) => {
                 }}>
                 취소
               </button>
-              <button className={`${styles.confirmBtn} ${styles.footBtn}`}>
+              <button
+                className={`${styles.confirmBtn} ${styles.footBtn}`}
+                onClick={() => {
+                  createPlan();
+                }}>
                 생성
               </button>
             </footer>

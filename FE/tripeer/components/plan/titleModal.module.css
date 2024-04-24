@@ -81,6 +81,9 @@
   height: 400px;
   background-color: white;
   border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .checkTitle {
@@ -103,6 +106,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 15px;
 }
 .checkQuesetion {
   font-size: 1.1rem;
@@ -110,8 +114,7 @@
   margin-top: 12px;
 }
 .checkAnswer {
-  font-size: 1.2rem;
-  font-weight: bold;
+  font-size: 1rem;
   margin-top: 8px;
 }
 
@@ -120,9 +123,34 @@
   height: 30px;
   border-radius: 5px;
   border: none;
+  cursor: pointer;
 }
 
 .confirmBtn {
   background-color: #4fbdb7;
   color: white;
+}
+
+.destinyResult {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 80px;
+  min-width: 80px;
+  overflow-y: scroll;
+  padding-right: 10px;
+}
+
+.destinyResult::-webkit-scrollbar {
+  width: 2.5px; /* 스크롤바의 너비 */
+}
+
+.destinyResult::-webkit-scrollbar-thumb {
+  height: 5%; /* 스크롤바의 길이 */
+  background: #4fbdb7; /* 스크롤바의 색상 */
+  border-radius: 10px;
+}
+
+.destinyResult::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0); /*스크롤바 뒷 배경 색상*/
 }
