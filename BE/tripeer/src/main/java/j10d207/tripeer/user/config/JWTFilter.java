@@ -27,7 +27,7 @@ public class JWTFilter extends OncePerRequestFilter {
 
         //request에서 access 헤더를 찾음
         String access = request.getHeader("Authorization");
-
+        System.out.println("필터 검증 : " + access);
         //access 헤더 검증
         if ( access == null ) {
 //            setContext(null, null);
