@@ -27,5 +27,5 @@ public interface UserService {
     public void tokenRefresh(String token, Cookie[] cookies, HttpServletResponse response);
 
     //테스트용 JWT 발급
-    public void getSuper(HttpServletResponse response);
+    public void getSuper(HttpServletResponse response, long userId);
 }
