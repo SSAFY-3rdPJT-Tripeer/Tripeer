@@ -1,0 +1,96 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  margin-top: 300px;
+  margin-bottom: 300px;
+}
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 50px;
+}
+.startBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 240px;
+  /* background: #04acb5; */
+  border: #04acb5 3px solid;
+  color: #04acb5;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border-radius: 5px;
+  font-size: 1.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.startBtn:hover {
+  transform: scale(1.01);
+  transition: 0.1s ease-in-out;
+}
+
+.title {
+  opacity: 0;
+  transform: translateY(50px);
+  transition:
+    opacity 0.7s ease-out,
+    transform 0.7s ease-out;
+}
+
+.startBtn {
+  opacity: 0;
+  transform: translateY(50px);
+  transition:
+    opacity 1s ease-out,
+    transform 1s ease-out;
+}
+
+.visible {
+  opacity: 1;
+  transform: translateX(0);
+  transform: translateY(0);
+}
+
+.btn {
+  font-size: 1.8rem;
+  padding: 15px 60px;
+  border: 3px solid #04acb5;
+  border-radius: 5px;
+  background-color: transparent;
+  color: #04acb5;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-weight: 600;
+  position: relative;
+  transition: all 0.4s;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.btn::before {
+  content: "";
+  position: absolute;
+  height: 105%;
+  width: 100%;
+  background-color: #04acb5;
+  top: 100%;
+  left: 0;
+  transition: all 0.4s;
+  z-index: -1;
+}
+
+.btn:hover::before {
+  transform: translateY(-99%);
+}
+
+.btn:hover {
+  color: #fff;
+}

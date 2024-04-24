@@ -14,11 +14,12 @@ import toggleIcon from "./assets/toggle.svg";
 const NavBar = () => {
   const path = usePathname();
   const [toggle, setToggle] = useState(false);
-  const [isLogin, setIsLogin] = useState(false);
+  const [isLogin] = useState(false);
   const navRenderPath = {
     "/": true,
     "/plan": true,
-    "/test": true,
+    "/diary": true,
+    "/place": true,
   };
   const LOGO_WIDTH = 130;
   const LOGO_HEIGHT = 50;
@@ -42,10 +43,10 @@ const NavBar = () => {
             <Link href="/plan" className={style.link}>
               일정 계획
             </Link>
-            <Link href="/test" className={style.link}>
+            <Link href="/diary" className={style.link}>
               지난 여행
             </Link>
-            <Link href="/test" className={style.link}>
+            <Link href="/place" className={style.link}>
               여행지
             </Link>
             {isLogin ? (

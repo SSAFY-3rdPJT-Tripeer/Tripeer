@@ -34,22 +34,49 @@ export default function BirthdayPage({ pageNum, setPageNum }) {
     setDay(day);
   };
 
-  const validate = (v, l, save) => {
-    if (v.length === 0 || v.length < l) {
-      setIsPos(false);
-    } else if (/^\d*$/.test(v)) {
-      save(v);
-      return true;
-    } else {
-      setIsPos(false);
-    }
+  const setError = () => {
+    setIsPos(false);
     return false;
   };
 
+  const validate = (value, minLength, save, type) => {
+    const currentYear = new Date().getFullYear();
+    const parsedValue = parseInt(value);
+
+    // 공백 검사 및 최소 길이 검사
+    if (!value || value.length < minLength) {
+      return setError();
+    }
+
+    // 숫자만 포함하는지 검사
+    if (!/^\d*$/.test(value)) {
+      return setError();
+    }
+
+    // 타입별 범위 검사
+    if (type === "year" && (parsedValue < 1920 || parsedValue > currentYear)) {
+      return setError();
+    }
+    if (type === "month" && (parsedValue < 1 || parsedValue > 12)) {
+      return setError();
+    }
+    if (type === "day" && (parsedValue < 1 || parsedValue > 31)) {
+      return setError();
+    }
+
+    // 모든 검사를 통과하면 저장
+    if (value.length === 1) {
+      save("0" + value);
+    } else {
+      save(value);
+    }
+    return true;
+  };
+
   const onClickNext = () => {
-    const isY = validate(year, 4, store.setYear);
-    const isM = validate(month, 2, store.setMonth);
-    const isD = validate(day, 2, store.setDay);
+    const isY = validate(year, 4, store.setYear, "year");
+    const isM = validate(month, 1, store.setMonth, "month");
+    const isD = validate(day, 1, store.setDay, "day");
 
     if (isY && isM && isD) {
       setPageNum(2);
