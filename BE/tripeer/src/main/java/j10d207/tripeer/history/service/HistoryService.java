@@ -9,4 +9,5 @@ import java.util.List;
 public interface HistoryService {
 
     public List<PlanListResDTO> historyList(String token);
+
 }

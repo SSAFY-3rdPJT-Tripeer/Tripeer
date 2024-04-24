@@ -58,11 +58,19 @@ public class HistoryController {
     public Response<List<GalleryDTO>> getGalleryList(@PathVariable("planDayId") long planDayId) {
         try {
             List<GalleryDTO> galleryList = galleryService.getGalleryList(planDayId);
-            return Response.of(HttpStatus.OK, "업로드 성공", galleryList);
+            return Response.of(HttpStatus.OK, "갤러리 조회 성공", galleryList);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-
+//    @PostMapping("/bill")
+//    public Response<String> postBill(HttpServletRequest request) {
+//        try {
+//            List<GalleryDTO> galleryList = historyService.postBill(request);
+//            return Response.of(HttpStatus.OK, "비용 등록 성공", '성공');
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 }
