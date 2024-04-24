@@ -1,0 +1,144 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.title {
+  font-size: 2.3rem;
+  font-weight: bold;
+  color: #262626;
+}
+
+.btn {
+  font-weight: bold;
+  font-size: 1.3rem;
+  align-self: flex-start;
+  pointer-events: fill;
+}
+
+.disable {
+  animation: turnOff 0.5s ease forwards;
+  cursor: not-allowed;
+}
+.dateNow {
+  margin-left: 12px;
+}
+
+@keyframes turnOff {
+  0% {
+    color: #4fbdb7;
+  }
+  100% {
+    color: #858585;
+  }
+}
+
+.able {
+  cursor: pointer;
+  animation: turnOn 0.5s ease forwards;
+}
+
+@keyframes turnOn {
+  0% {
+    color: #858585;
+  }
+  100% {
+    color: #4fbdb7;
+  }
+}
+
+.dateContainer {
+  display: flex;
+  width: 100%;
+  height: calc(100% - 2.3rem);
+  padding: 80px 0px;
+}
+
+.textDate {
+  width: 38%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.calendar {
+  width: 62%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.dayTitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #8e8e8e;
+  margin-bottom: 12px;
+}
+
+.dayContent {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.dateController {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #202020;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 12px;
+}
+
+.leftBtn {
+  margin: 6px;
+  cursor: pointer;
+}
+.rightBtn {
+  margin: 6px;
+  transform: rotate(180deg);
+  cursor: pointer;
+}
+
+.calendarTable {
+  margin-top: 8px;
+  width: 100%;
+}
+
+.dayTable {
+  text-align: center;
+}
+.calendarDay {
+  color: #4fbdb7;
+  padding: 8px;
+  font-weight: 500;
+}
+
+.prevDay {
+  padding: 4px;
+  color: #999999;
+  font-weight: bold;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.currentDay {
+  padding: 4px;
+  color: #202020;
+  font-weight: bold;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.currentDay:hover {
+  border: 2px solid rgb(210, 209, 209);
+  border-radius: 5px;
+}
+
+.clicked {
+  border: 2px solid #4fbdb7;
+  border-radius: 5px;
+}
