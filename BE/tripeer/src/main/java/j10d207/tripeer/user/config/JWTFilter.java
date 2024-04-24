@@ -27,17 +27,11 @@ public class JWTFilter extends OncePerRequestFilter {
 
         //request에서 access 헤더를 찾음
         String access = request.getHeader("Authorization");
-        System.out.println("필터 검증 : " + access);
         //access 헤더 검증
         if ( access == null ) {
-//            setContext(null, null);
-//            filterChain.doFilter(request, response);
+            setContext(null, null);
+            filterChain.doFilter(request, response);
             //조건이 해당되면 메소드 종료 (필수)
-            PrintWriter writer = response.getWriter();
-            writer.print("access token expired");
-            System.out.println("1");
-            //response status code
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 
@@ -50,7 +44,6 @@ public class JWTFilter extends OncePerRequestFilter {
             //response body
             PrintWriter writer = response.getWriter();
             writer.print("access token expired");
-            System.out.println("2");
             //response status code
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
@@ -63,7 +56,6 @@ public class JWTFilter extends OncePerRequestFilter {
             //response body
             PrintWriter writer = response.getWriter();
             writer.print("invalid access token");
-            System.out.println("3");
             //response status code
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
