@@ -20,7 +20,7 @@ public class PlanController {
 
     private final PlanService planService;
     //플랜 생성
-    @PutMapping
+    @PostMapping
     public Response<PlanResDTO> createPlan(@RequestBody CreatePlanDTO createPlanDTO, HttpServletRequest request) {
         try {
             PlanResDTO result = planService.createPlan(createPlanDTO, request.getHeader("Authorization"));
@@ -66,7 +66,7 @@ public class PlanController {
     }
 
     //동행자 추가
-    @PutMapping("/member")
+    @PostMapping("/member")
     public Response<?> joinPlan(@RequestBody CoworkerDTO coworkerDTO) {
         try {
             planService.joinPlan(coworkerDTO);
@@ -99,7 +99,7 @@ public class PlanController {
     }
 
     //플랜버킷 관광지 추가
-    @PutMapping("/bucket")
+    @PostMapping("/bucket")
     public Response<?> addPlanSpot(@RequestParam("planId") long planId, @RequestParam("spotInfoId") int spotInfoId, HttpServletRequest request) {
         try {
             planService.addPlanSpot(planId, spotInfoId, request.getHeader("Authorization"));
@@ -110,7 +110,7 @@ public class PlanController {
     }
 
     //즐겨찾기 추가
-    @PutMapping("/wishlist/{spotInfoId}")
+    @PostMapping("/wishlist/{spotInfoId}")
     public Response<?> addWishList(@PathVariable("spotInfoId") int spotInfoId, HttpServletRequest request) {
         try {
             planService.addWishList(spotInfoId, request.getHeader("Authorization"));
@@ -128,7 +128,7 @@ public class PlanController {
     }
 
     //플랜 디테일 저장
-    @PutMapping("/detail")
+    @PostMapping("/detail")
     public Response<?> addPlanDetail(@RequestBody PlanDetailReqDTO planDetailReqDTO) {
         try {
             planService.addPlanDetail(planDetailReqDTO);

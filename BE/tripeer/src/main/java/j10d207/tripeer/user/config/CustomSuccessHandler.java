@@ -60,11 +60,10 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         long userId = customUserDetails.getUserId();
 
         //토큰 생성
-        String access = jwtUtil.createJwt("access", name, role, userId, accessTime);
-        String refresh = jwtUtil.createJwt("refresh", name, role, userId, refreshTime);
+        String access = jwtUtil.createJwt("Authorization", name, role, userId, accessTime);
+        String refresh = jwtUtil.createJwt("Authorization-re", name, role, userId, refreshTime);
         System.out.println("access = " + access);
 
-        response.setHeader("Authorization", access);
         response.addCookie(createCookie("Authorization", access));
         response.addCookie(createCookie("Authorization-re", refresh));
         response.setStatus(HttpStatus.OK.value());
