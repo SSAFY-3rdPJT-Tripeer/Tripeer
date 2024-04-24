@@ -60,8 +60,8 @@ export default function StylePage({ pageNum, setPageNum }) {
             month: store.month,
             day: store.day,
             style1: styleIdx[0],
-            style2: styleIdx[1],
-            style3: styleIdx[2],
+            style2: styleIdx[1] ? styleIdx[1] : null,
+            style3: styleIdx[2] ? styleIdx[2] : null,
           },
           { withCredentials: true },
         )
@@ -78,7 +78,7 @@ export default function StylePage({ pageNum, setPageNum }) {
   }, [store.nickName]);
 
   useEffect(() => {
-    setStyleIdx([null, null, null]);
+    setStyleIdx([]);
     store.setStyle("style1", null);
     store.setStyle("style2", null);
     store.setStyle("style3", null);
