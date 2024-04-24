@@ -65,8 +65,10 @@ export default function StylePage({ pageNum, setPageNum }) {
           },
           { withCredentials: true },
         )
-        .then(() => {
-          router.push("/redirect");
+        .then((res) => {
+          const accessToken = res.headers.get("Authorization");
+          localStorage.setItem("accessToken", accessToken);
+          router.push("/");
         });
     } catch (e) {
       console.log("회원가입 api 실패", e);
