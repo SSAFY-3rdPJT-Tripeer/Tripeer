@@ -32,7 +32,7 @@ export default function StylePage({ pageNum, setPageNum }) {
       setIsPos(false);
     } else {
       await inputStore();
-      postData();
+      await postData();
     }
   };
 
@@ -59,9 +59,9 @@ export default function StylePage({ pageNum, setPageNum }) {
             year: store.year,
             month: store.month,
             day: store.day,
-            style1: store.style["style1"],
-            style2: store.style["style2"],
-            style3: store.style["style3"],
+            style1: styleIdx[0],
+            style2: styleIdx[1],
+            style3: styleIdx[2],
           },
           { withCredentials: true },
         )
@@ -78,7 +78,7 @@ export default function StylePage({ pageNum, setPageNum }) {
   }, [store.nickName]);
 
   useEffect(() => {
-    setStyleIdx([]);
+    setStyleIdx([null, null, null]);
     store.setStyle("style1", null);
     store.setStyle("style2", null);
     store.setStyle("style3", null);
