@@ -1,6 +1,8 @@
 package j10d207.tripeer.history.controller;
 
+import j10d207.tripeer.history.db.dto.GalleryDTO;
 import j10d207.tripeer.history.db.dto.HistoryListResDTO;
+import j10d207.tripeer.history.db.entity.GalleryEntity;
 import j10d207.tripeer.history.service.GalleryService;
 import j10d207.tripeer.history.service.HistoryService;
 import j10d207.tripeer.plan.db.dto.PlanListResDTO;
@@ -12,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -19,8 +22,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/history")
 public class HistoryController {
+
     final HistoryService historyService;
     final GalleryService galleryService;
+
+
     @GetMapping
     public Response<List<PlanListResDTO>> getPlanList(HttpServletRequest request) {
         try {
@@ -32,25 +38,31 @@ public class HistoryController {
     }
 
     @PostMapping("/gallery/upload/{planDayId}")
-    public Response<String> uploadsImageAndMovie(
+    public Response<List<GalleryEntity>> uploadsImageAndMovie(
             HttpServletRequest request,
             @PathVariable("planDayId") long planDayId,
             @RequestPart(value = "images") List<MultipartFile> multipartFiles) {
         try {
-        galleryService.uploadsImageAndMovie(multipartFiles, request.getHeader("Authorization"), planDayId);
-            return Response.of(HttpStatus.OK, "업로드 성공", "업로드 성공");
+            List<GalleryEntity> galleryList = galleryService.uploadsImageAndMovie(multipartFiles, request.getHeader("Authorization"), planDayId);
+            return Response.of(HttpStatus.OK, "업로드 성공", galleryList);
         } catch (IllegalArgumentException e) {
-            return Response.of(HttpStatus.BAD_REQUEST, "지원하지 않는 파일타입", "업로드 실패");
+            List<GalleryEntity> galleryList = new ArrayList<>();
+            return Response.of(HttpStatus.BAD_REQUEST, "지원하지 않는 파일타입", galleryList);
         }
         catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-//    @GetMapping("/gallery/{planDayId}")
-//    public Response<List<PlanListResDTO>> getPlanListByDay(@PathVariable("planDayId") long planDayId) {
-//
-//    }
+    @GetMapping("/gallery/{planDayId}")
+    public Response<List<GalleryDTO>> getGalleryList(@PathVariable("planDayId") long planDayId) {
+        try {
+            List<GalleryDTO> galleryList = galleryService.getGalleryList(planDayId);
+            return Response.of(HttpStatus.OK, "업로드 성공", galleryList);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
 }
