@@ -3,7 +3,7 @@ import { jwtDecode } from "jwt-decode";
 
 const api = axios.create({
   // 기본 주소
-  baseURL: `${process.env.NEXT_PUBLIC_API_URL}/api`,
+  baseURL: `${process.env.NEXT_PUBLIC_API_URL}`,
   withCredentials: true,
 });
 api.interceptors.request.use(async (config) => {
@@ -18,7 +18,7 @@ api.interceptors.request.use(async (config) => {
     try {
       // 재발급 요청
       const res = await axios.post(
-        "/user/reissue",
+        `${process.env.NEXT_PUBLIC_API_URL}/api/user/reissue`,
         {},
         { withCredentials: true },
       );
