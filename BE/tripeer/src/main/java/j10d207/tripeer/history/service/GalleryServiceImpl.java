@@ -1,4 +1,4 @@
-package j10d207.tripeer.history.db.service;
+package j10d207.tripeer.history.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
@@ -47,10 +47,12 @@ public class GalleryServiceImpl implements GalleryService{
         List<String> allowedMimeTypes = List.of("image/jpeg", "image/png", "image/gif", "video/mp4", "video/webm", "video/ogg", "video/3gpp", "video/x-msvideo", "video/quicktime");
 
         PlanDayEntity planDay = planDayRepository.findByPlanDayId(planDayId);
-        long userId = jwtUtil.getUserId(token);
+        long userId = 1;
+//        long userId = jwtUtil.getUserId(token);
         //날짜를 String 으로 변환
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        String dateString = planDay.getDay().format(formatter);
+//        String dateString = planDay.getDay().format(formatter);
+        String dateString = "20240423";
 
         // 업로드한 파일의 업로드 경로를 담을 리스트
         List<GalleryEntity> createInfo = new ArrayList<>();

@@ -62,11 +62,12 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String refresh = jwtUtil.createJwt("refresh", name, role, userId, refreshTime);
         System.out.println("access = " + access);
 
+        response.setHeader("Authorization", access);
         response.addCookie(createCookie("Authorization", access));
         response.addCookie(createCookie("Authorization-re", refresh));
         response.setStatus(HttpStatus.OK.value());
         // 04.14 - 로그인 완료 후 이동페이지
-        response.sendRedirect("http://localhost:3000/");
+        response.sendRedirect("https://k10d207.p.ssafy.io/redirect");
     }
 
     private Cookie createCookie(String key, String value) {
