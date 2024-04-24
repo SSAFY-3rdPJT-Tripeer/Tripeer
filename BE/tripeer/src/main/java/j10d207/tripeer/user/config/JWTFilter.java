@@ -26,31 +26,22 @@ public class JWTFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         //request에서 access 헤더를 찾음
-        String accessToken = request.getHeader("Authorization");
-        String refreshToken = request.getHeader("Authorization-re");
-
-        if(refreshToken != null) {
-            try {
-                jwtUtil.isExpired(refreshToken);
-            } catch (ExpiredJwtException e) {
-                //response body
-                PrintWriter writer = response.getWriter();
-                writer.print("refresh token expired");
-
-                //response status code
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                return;
-            }
-        }
+        String access = request.getHeader("Authorization");
 
         //access 헤더 검증
-        if ( accessToken == null ) {
-            setContext(null, null);
-            filterChain.doFilter(request, response);
+        if ( access == null ) {
+//            setContext(null, null);
+//            filterChain.doFilter(request, response);
             //조건이 해당되면 메소드 종료 (필수)
+            PrintWriter writer = response.getWriter();
+            writer.print("access token expired");
+
+            //response status code
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 
+        String accessToken = jwtUtil.splitToken(access);
         // 토큰 만료 여부 확인, 만료시 다음 필터로 넘기지 않음
         try {
             jwtUtil.isExpired(accessToken);
@@ -78,7 +69,7 @@ public class JWTFilter extends OncePerRequestFilter {
             return;
         }
         //토큰에서 email과 role 획득
-        setContext(jwtUtil.getName(accessToken), jwtUtil.getRole(accessToken));
+//        setContext(jwtUtil.getName(accessToken), jwtUtil.getRole(accessToken));
         filterChain.doFilter(request, response);
     }
 
