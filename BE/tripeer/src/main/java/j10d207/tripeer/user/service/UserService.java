@@ -14,7 +14,7 @@ import java.util.List;
 public interface UserService {
 
     //회원가입
-    public void memberSignup(JoinDTO joinDTO, HttpServletResponse response);
+    public String memberSignup(JoinDTO joinDTO, HttpServletResponse response);
     //프로필 사진 변경
     public void uploadprofileImage(MultipartFile file, String token) throws IOException;
     //소셜 정보 획득
@@ -27,5 +27,5 @@ public interface UserService {
     public void tokenRefresh(String token, Cookie[] cookies, HttpServletResponse response);
 
     //테스트용 JWT 발급
-    public void getSuper(HttpServletResponse response, long userId);
+    public String getSuper(HttpServletResponse response, long userId);
 }
