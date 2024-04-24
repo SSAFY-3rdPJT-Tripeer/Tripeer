@@ -66,7 +66,8 @@ export default function StylePage({ pageNum, setPageNum }) {
           { withCredentials: true },
         )
         .then((res) => {
-          const accessToken = res.headers.get("Authorization");
+          let accessToken = res.headers.get("Authorization");
+          accessToken = accessToken.replace("Bearer ", "");
           localStorage.setItem("accessToken", accessToken);
           router.push("/");
         });
