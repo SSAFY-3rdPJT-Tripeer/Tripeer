@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 
 import styles from "./stylePage.module.css";
@@ -8,7 +9,6 @@ import useRegisterStore from "@/stores/register";
 import StyleBtn from "@/components/register/styleBtn";
 import CancelBtn from "@/components/register/cancelBtn";
 import NextBtn from "@/components/register/nextBtn";
-import { useRouter } from "next/navigation";
 
 export default function StylePage({ pageNum, setPageNum }) {
   const store = useRegisterStore();
@@ -31,21 +31,21 @@ export default function StylePage({ pageNum, setPageNum }) {
     if (styleIdx.length === 0) {
       setIsPos(false);
     } else {
+      if (styleIdx.length === 1) {
+        store.setStyle("style1", styleIdx[0]);
+      } else if (styleIdx.length === 2) {
+        store.setStyle("style1", styleIdx[0]);
+        store.setStyle("style2", styleIdx[1]);
+      } else {
+        store.setStyle("style1", styleIdx[0]);
+        store.setStyle("style2", styleIdx[1]);
+        store.setStyle("style3", styleIdx[2]);
+      }
       postData();
     }
   };
 
   const postData = async () => {
-    if (styleIdx.length === 1) {
-      store.style1 = styleIdx[0];
-    } else if (styleIdx.length === 2) {
-      store.style1 = styleIdx[0];
-      store.style2 = styleIdx[1];
-    } else {
-      store.style1 = styleIdx[0];
-      store.style2 = styleIdx[1];
-      store.style3 = styleIdx[2];
-    }
     try {
       await axios
         .post(
@@ -55,9 +55,9 @@ export default function StylePage({ pageNum, setPageNum }) {
             year: store.year,
             month: store.month,
             day: store.day,
-            style1: store.style1,
-            style2: store.style2,
-            style3: store.style3,
+            style1: store.style["style1"],
+            style2: store.style["style2"],
+            style3: store.style["style3"],
           },
           { withCredentials: true },
         )
@@ -75,9 +75,9 @@ export default function StylePage({ pageNum, setPageNum }) {
 
   useEffect(() => {
     setStyleIdx([]);
-    store.setStyle1(null);
-    store.setStyle2(null);
-    store.setStyle3(null);
+    store.setStyle("style1", null);
+    store.setStyle("style2", null);
+    store.setStyle("style3", null);
   }, []);
 
   return (

@@ -1,5 +1,4 @@
 .main {
-    background: rgb(249, 250, 255);
     border: none;
     border-radius: 50px;
     box-shadow: rgb(224, 224, 224) 0 2px 4px 0;
@@ -16,7 +15,6 @@
     width: 480px;
     font-size: 25px;
     border: none;
-    background: rgb(249, 250, 255);
     margin: 0 20px 0 10px;
 }
 

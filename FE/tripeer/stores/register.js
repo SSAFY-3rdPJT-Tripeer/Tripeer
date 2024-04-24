@@ -12,12 +12,9 @@ const useRegisterStore = create(
       setMonth: (month) => set({ month }),
       day: "",
       setDay: (day) => set({ day }),
-      style1: null,
-      setStyle1: (style1) => set({ style1 }),
-      style2: null,
-      setStyle2: (style2) => set({ style2 }),
-      style3: null,
-      setStyle3: (style3) => set({ style3 }),
+      style: { style1: null, style2: null, style3: null },
+      setStyle: (key, value) =>
+        set((state) => ({ style: { ...state.style, [key]: value } })),
     }),
     {
       name: "registerStore",
