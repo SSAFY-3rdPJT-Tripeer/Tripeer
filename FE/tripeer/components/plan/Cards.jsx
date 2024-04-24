@@ -3,13 +3,15 @@
 /* eslint-disable */
 
 // 외부 모듈
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 
 // 내부 모듈
 import styles from "./cards.module.css";
 import daegu from "./asset/daegu.jpg";
 import PlanModal from "./PlanModal.jsx";
+import TitleModal from "./TitleModal";
+import DateModal from "./DateModal";
 
 const Cards = () => {
   const [plans, setPlans] = useState([{}, {}, {}, {}, {}]);
@@ -17,11 +19,20 @@ const Cards = () => {
   const [flag, setFlag] = useState(0);
   const [noPlans, setNoPlans] = useState(2); // 레이아웃 비율 유지를 위한 빈 플랜
   const [onModal, setOnModal] = useState(false);
+  const [step, setStep] = useState(0);
+  const [newPlan, setNewPlan] = useState({});
   const MAX_PLANS_CNT = 6; // 만들 수 있는 최대 계획
   const Per_PAGE_CNT = 3; // 한 페이지에 랜더할 계획의 갯수
 
   const changeFlag = () => {
     flag === 0 ? setFlag(1) : setFlag(0);
+  };
+
+  const offModal = (e) => {
+    if (e.currentTarget === e.target) {
+      setOnModal(false);
+      setStep(0);
+    }
   };
 
   useEffect(() => {
@@ -56,6 +67,29 @@ const Cards = () => {
         break;
     }
   }, [showPlans]);
+
+  const modalContent = useMemo(() => {
+    return [
+      <PlanModal
+        setNewPlan={setNewPlan}
+        setStep={setStep}
+        newPlan={newPlan}
+        key={0}
+      />,
+      <DateModal
+        setNewPlan={setNewPlan}
+        setStep={setStep}
+        newPlan={newPlan}
+        key={1}
+      />,
+      <TitleModal
+        setNewPlan={setNewPlan}
+        setStep={setStep}
+        newPlan={newPlan}
+        key={2}
+      />,
+    ];
+  }, []);
 
   return (
     <main className={styles.container}>
@@ -144,7 +178,17 @@ const Cards = () => {
           />
         ) : null}
       </aside>
-      {onModal ? <PlanModal setOnModal={setOnModal} /> : null}
+      {onModal ? (
+        <article
+          className={styles.back}
+          onMouseDown={(e) => {
+            offModal(e);
+          }}>
+          <section className={styles.modalContainer}>
+            {modalContent[step]}
+          </section>
+        </article>
+      ) : null}
     </main>
   );
 };
