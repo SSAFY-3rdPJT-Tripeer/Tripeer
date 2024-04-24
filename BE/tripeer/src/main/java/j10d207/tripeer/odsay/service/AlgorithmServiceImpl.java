@@ -1,30 +1,47 @@
 package j10d207.tripeer.odsay.service;
 
 
+import j10d207.tripeer.place.db.entity.SpotInfoEntity;
+import j10d207.tripeer.place.db.repository.SpotInfoRepository;
+import j10d207.tripeer.plan.db.entity.PlanDayEntity;
+import j10d207.tripeer.plan.db.entity.PlanDetailEntity;
+import j10d207.tripeer.plan.db.repository.PlanDayRepository;
+import j10d207.tripeer.plan.db.repository.PlanDetailRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class AlgorithmServiceImpl implements AlgorithmService{
 
-    static String[] location = {"서울", "부산", "대구", "인천", "울산", "대전"};
-    static int N = location.length;
-    static int[] v = new int[N];
-    static int[] visit_city = new int[N];
+    private final PlanDetailRepository planDetailRepository;
+    private final SpotInfoRepository spotInfoRepository;
+
+
+//    static String[] location = {"서울", "부산", "대구", "인천", "울산", "대전"};
+
+    static String[] location;
+
+    static int N;
+    static int[] v;
     static double minv = Integer.MAX_VALUE;
     static double[][] graphs;
+    static double [][] latitudeAndLongitude;
     static String[] loca;
     static double[] ret;
 
 
     // 조합 + 백트레킹으로 가장 최단으로 모든 경로를 탐색하는 경우의 수를 구함
-    static void solve(int index, int now, double sum, ArrayList<Double> result, ArrayList<String> local) {
+    public void solve(int index, int now, double sum, ArrayList<Double> result, ArrayList<String> local) {
         if (sum > minv) {
             return;
         }
@@ -48,7 +65,7 @@ public class AlgorithmServiceImpl implements AlgorithmService{
                 ArrayList<Double> newResult = new ArrayList<>(result);
                 newResult.add(graphs[now][i]);
                 ArrayList<String> newLocal = new ArrayList<>(local);
-                newLocal.add(location[now]);
+                newLocal.add(location[i]);
                 solve(index + 1, i, sum + graphs[now][i], newResult, newLocal);
                 v[i] = 0;
             }
@@ -59,7 +76,7 @@ public class AlgorithmServiceImpl implements AlgorithmService{
 
 
     // 위도와 경도를 사용하여 두 지점 간의 거리를 계산하는 함수
-    public static double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+    public double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
         // Haversine 공식을 사용하여 거리 계산
         double earthRadius = 6371; // 지구 반지름 (단위: 킬로미터)
 
@@ -76,7 +93,7 @@ public class AlgorithmServiceImpl implements AlgorithmService{
     }
 
     // 최단 거리 배열 생성
-    public static void createGraph(double[][] locations) {
+    public void createGraph(double[][] locations) {
         int n = locations.length;
         graphs = new double[n][n];
 
@@ -96,7 +113,7 @@ public class AlgorithmServiceImpl implements AlgorithmService{
     }
 
     // 플로이드-와샬 알고리즘을 사용하여 최단 거리 계산
-    public static void floydWarshall() {
+    public void floydWarshall() {
         int n = graphs.length;
 
         for (int k = 0; k < n; k++) {
@@ -108,51 +125,71 @@ public class AlgorithmServiceImpl implements AlgorithmService{
                 }
             }
         }
+
+//        System.out.println("graphs = " + graphs.length);
+//        System.out.println("graphs = " + graphs[0].length);
+//
+//        for (int i = 0; i < n; i++) {
+//            for (int j = 0; j < n; j++) {
+//                System.out.print(graphs[i][j] + " ");
+//            }
+//            System.out.println();
+//        }
+//        System.out.println(Arrays.deepToString(graphs));
+
     }
 
 
-    public static void getAlgo() {
-        // 예제로 사용할 지점들의 위도와 경도
-        double[][] locations = {
-                {37.5665, 126.9780}, // 서울
-                {35.1796, 129.0756}, // 부산
-                {35.9078, 127.7669}, // 대구
-                {37.4562, 126.7052}, // 인천
-                {35.1794, 129.0758}, // 울산
-                {36.3504, 127.3845}  // 대전
-        };
+    public void getLocationInfo(Long planDayId) {
+        List<PlanDetailEntity> planDetails = planDetailRepository.findByPlanDay_PlanDayId(planDayId, Sort.by(Sort.Direction.ASC, "step"));
+
+        List<SpotInfoEntity> spotInfoEntities = new ArrayList<>();
+        for (PlanDetailEntity planDetail : planDetails) {
+            spotInfoEntities.add(planDetail.getSpotInfo());
+        }
+
+        latitudeAndLongitude = new double[spotInfoEntities.size()][2];
+        location = new String[spotInfoEntities.size()];
+        N = spotInfoEntities.size();
+        v = new int[N];
+
+        for (int i = 0; i < spotInfoEntities.size(); i++) {
+            SpotInfoEntity spotInfoEntity = spotInfoEntities.get(i);
+            latitudeAndLongitude[i][0] = spotInfoEntity.getLatitude(); // 위도
+            latitudeAndLongitude[i][1] = spotInfoEntity.getLongitude(); // 경도
+            location[i] = spotInfoEntity.getTitle();
+        }
+
+        System.out.println("location 21312= " + Arrays.toString(location));
+    }
+
+
+
+    public void shortestPathAlgorithm(Long planDayId) {
+
+        /*
+        * planDay -> planDetail -> spot_info_id를 통해 찾아서
+        * 위치 정보 및 위치 Id or 이름 가져오기.
+         */
+        getLocationInfo(planDayId);
 
         // 최단 거리 배열 생성
-        createGraph(locations);
+        createGraph(latitudeAndLongitude);
         // 플로이드-와샬 알고리즘을 사용하여 최단 거리 계산
         floydWarshall();
-//        0.0 325.11125884976224 197.3797535480971 27.00739876151044
-//        325.11125884976224 0.0 143.44283157941493 330.4064115377085
-//        197.3797535480971 143.44283157941493 0.0 196.4841510834353
-//        27.00739876151044 330.4064115377085 196.4841510834353 0.0
-//        0.0 325.11125884976224 197.3797535480971 27.00739876151044
-//        325.11125884976224 0.0 143.44283157941493 330.4064115377085
-//        197.3797535480971 143.44283157941493 0.0 196.4841510834353
-//        27.00739876151044 330.4064115377085 196.4841510834353 0.0
 
 
 
+        // 출발지는 미리 방문표시
         v[0] = 1;
-        visit_city[0] = 1;
+
         solve(0, 0, 0, new ArrayList<>(), new ArrayList<>());
 
 
-        for (int i = 0; i < visit_city.length; i++) {
-            if (visit_city[i] == 0) {
-                loca[loca.length-1] = location[i];
-            }
-        }
         for (int i = 0; i < loca.length; i++) {
-            System.out.print(loca[i]);
+            System.out.print(loca[i] + " -> ");
         }
-        for (int i = 0; i < v.length; i++) {
-            System.out.println(visit_city[i]);
-        }
+        System.out.println();
 
         for (int i = 0; i < ret.length; i++) {
             System.out.print(ret[i] + " -> ");

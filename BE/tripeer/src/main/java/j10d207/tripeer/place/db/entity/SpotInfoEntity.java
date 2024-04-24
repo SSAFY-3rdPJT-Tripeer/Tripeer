@@ -30,8 +30,8 @@ public class SpotInfoEntity {
     private String firstImage;
     private String firstImage2;
     private int readcount;
-    private BigDecimal latitude;
-    private BigDecimal longitude;
+    private double latitude;
+    private double longitude;
     //받은 DB에 있었는데 뭔지 모르겠습니다.
     private String mlevel;
 

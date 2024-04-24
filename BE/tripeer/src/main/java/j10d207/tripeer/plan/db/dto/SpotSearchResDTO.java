@@ -13,8 +13,8 @@ public class SpotSearchResDTO {
     private String title;
     private String contentType;
     private String addr;
-    private BigDecimal latitude;
-    private BigDecimal longitude;
+    private Double latitude;
+    private Double longitude;
     private String img;
     private boolean isWishlist;
     private boolean isSpot;
