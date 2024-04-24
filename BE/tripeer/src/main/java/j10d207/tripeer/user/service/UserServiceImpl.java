@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService{
 
     //회원 가입
     @Override
-    public void memberSignup(JoinDTO joinDTO, HttpServletResponse response) {
+    public String memberSignup(JoinDTO joinDTO, HttpServletResponse response) {
         //생일 값 형식변환
         LocalDate birth = LocalDate.parse(joinDTO.getYear() + "-" + joinDTO.getMonth() + "-" + joinDTO.getDay());
 
@@ -80,15 +80,8 @@ public class UserServiceImpl implements UserService{
 
         //access 토큰 헤더에 넣기
         response.setHeader("Authorization", access);
-
-        //refresh 토큰 헤더에 넣기
-        Cookie cookie = new Cookie("Authorization-re", refresh);
-        cookie.setMaxAge((int) refreshTime);
-        //NginX 도입시 사용
-        cookie.setSecure(true);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-
+        response.addCookie(createCookie("Authorization-re", refresh));
+        return access;
     }
 
     //프로필 사진 변경
@@ -206,12 +199,15 @@ public class UserServiceImpl implements UserService{
     //
 
     @Override
-    public void getSuper(HttpServletResponse response, long userId) {
-        String result = jwtUtil.createJwt("Authorization", "admin", "ROLE_ADMIN", 1, (long) 60*60*24*1000);
-        String refresh = jwtUtil.createJwt("Authorization", "admin", "ROLE_ADMIN", 1, refreshTime*100*1000);
+    public String getSuper(HttpServletResponse response, long userId) {
+        UserEntity user = userRepository.findByUserId(userId);
+        String result = jwtUtil.createJwt("Authorization", user.getNickname(), user.getRole(), userId, (long) 60*60*24*1000);
+        String refresh = jwtUtil.createJwt("Authorization", user.getNickname(), user.getRole(), userId, refreshTime*100*1000);
 
         response.addCookie(createCookie("Authorization-re", refresh));
         response.setHeader("Authorization", "Bearer " + result);
+
+        return "Bearer " + result;
     }
 
     private Cookie createCookie(String key, String value) {

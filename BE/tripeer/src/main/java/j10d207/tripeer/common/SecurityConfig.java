@@ -1,6 +1,8 @@
 package j10d207.tripeer.common;
 
 import j10d207.tripeer.user.config.CustomSuccessHandler;
+import j10d207.tripeer.user.config.JWTFilter;
+import j10d207.tripeer.user.config.JWTUtil;
 import j10d207.tripeer.user.service.CustomOAuth2UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -27,8 +30,8 @@ public class SecurityConfig {
     //AuthenticationManager가 인자로 받을 AuthenticationConfiguraion 객체 생성자 주입
 //    private final AuthenticationConfiguration authenticationConfiguration;
     //JWTUtil 주입
-//    private final JWTUtil jwtUtil;
-//
+    private final JWTUtil jwtUtil;
+
     //OAuth 로그인
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomSuccessHandler customSuccessHandler;
@@ -101,8 +104,9 @@ public class SecurityConfig {
                         .anyRequest().authenticated());
 
 
-//        http
+        http
 //                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
+                .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         //필터 추가 LoginFilter()는 인자를 받음 (AuthenticationManager() 메소드에 authenticationConfiguration 객체를 넣어야 함) 따라서 등록 필요
 //        http
