@@ -27,21 +27,25 @@ export default function StylePage({ pageNum, setPageNum }) {
     "음식점",
   ];
 
-  const onClickNext = () => {
+  const onClickNext = async () => {
     if (styleIdx.length === 0) {
       setIsPos(false);
     } else {
-      if (styleIdx.length === 1) {
-        store.setStyle("style1", styleIdx[0]);
-      } else if (styleIdx.length === 2) {
-        store.setStyle("style1", styleIdx[0]);
-        store.setStyle("style2", styleIdx[1]);
-      } else {
-        store.setStyle("style1", styleIdx[0]);
-        store.setStyle("style2", styleIdx[1]);
-        store.setStyle("style3", styleIdx[2]);
-      }
-      postData();
+      await inputStore();
+      await postData();
+    }
+  };
+
+  const inputStore = () => {
+    if (styleIdx.length === 1) {
+      store.setStyle("style1", styleIdx[0]);
+    } else if (styleIdx.length === 2) {
+      store.setStyle("style1", styleIdx[0]);
+      store.setStyle("style2", styleIdx[1]);
+    } else {
+      store.setStyle("style1", styleIdx[0]);
+      store.setStyle("style2", styleIdx[1]);
+      store.setStyle("style3", styleIdx[2]);
     }
   };
 
@@ -55,14 +59,17 @@ export default function StylePage({ pageNum, setPageNum }) {
             year: store.year,
             month: store.month,
             day: store.day,
-            style1: store.style["style1"],
-            style2: store.style["style2"],
-            style3: store.style["style3"],
+            style1: styleIdx[0],
+            style2: styleIdx[1] ? styleIdx[1] : null,
+            style3: styleIdx[2] ? styleIdx[2] : null,
           },
           { withCredentials: true },
         )
-        .then(() => {
-          router.push("/redirect");
+        .then((res) => {
+          let accessToken = res.headers.get("Authorization");
+          accessToken = accessToken.replace("Bearer ", "");
+          localStorage.setItem("accessToken", accessToken);
+          router.push("/");
         });
     } catch (e) {
       console.log("회원가입 api 실패", e);

@@ -3,25 +3,67 @@
 /* eslint-disable */
 
 // 외부 모듈
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 
 // 내부 모듈
 import styles from "./cards.module.css";
-import daegu from "./asset/daegu.jpg";
 import PlanModal from "./PlanModal.jsx";
+import TitleModal from "./TitleModal";
+import DateModal from "./DateModal";
+import api from "@/utils/api";
+import { useRouter } from "next/navigation";
 
 const Cards = () => {
-  const [plans, setPlans] = useState([{}, {}, {}, {}, {}]);
+  const [plans, setPlans] = useState([]);
   const [showPlans, setShowPlans] = useState([]);
   const [flag, setFlag] = useState(0);
   const [noPlans, setNoPlans] = useState(2); // 레이아웃 비율 유지를 위한 빈 플랜
   const [onModal, setOnModal] = useState(false);
+  const [step, setStep] = useState(0);
+  const [newPlan, setNewPlan] = useState({});
+  const [removePlan, setRemovePlan] = useState(null);
+  const router = useRouter();
   const MAX_PLANS_CNT = 6; // 만들 수 있는 최대 계획
   const Per_PAGE_CNT = 3; // 한 페이지에 랜더할 계획의 갯수
 
   const changeFlag = () => {
     flag === 0 ? setFlag(1) : setFlag(0);
+  };
+
+  const offModal = (e) => {
+    if (e.currentTarget === e.target) {
+      setOnModal(false);
+      setStep(0);
+    }
+  };
+
+  const removeModal = (e, plan) => {
+    if (e.currentTarget !== e.target) return;
+    setRemovePlan(plan);
+  };
+
+  const getPlans = async () => {
+    try {
+      const res = await api.get("/plan");
+      setPlans(res.data.data);
+    } catch (err) {
+      alert("에러발생! 버러지 컷");
+    }
+  };
+
+  const goPlan = (id) => {
+    router.push(`/plan/detail/${id}`);
+  };
+
+  const remove = async () => {
+    try {
+      const res = await api.delete(`/plan/${removePlan.planId}`);
+      await getPlans();
+      setRemovePlan(null);
+    } catch {
+      alert("에러발생");
+    }
   };
 
   useEffect(() => {
@@ -57,6 +99,36 @@ const Cards = () => {
     }
   }, [showPlans]);
 
+  useEffect(() => {
+    if (step === 0) {
+      getPlans();
+    }
+  }, [step]);
+
+  const modalContent = useMemo(() => {
+    return [
+      <PlanModal
+        setNewPlan={setNewPlan}
+        setStep={setStep}
+        newPlan={newPlan}
+        key={"PlanModal"}
+      />,
+      <DateModal
+        setNewPlan={setNewPlan}
+        setStep={setStep}
+        newPlan={newPlan}
+        key={"DateModal"}
+      />,
+      <TitleModal
+        setNewPlan={setNewPlan}
+        setStep={setStep}
+        newPlan={newPlan}
+        setOnModal={setOnModal}
+        key={"TitleModal"}
+      />,
+    ];
+  }, []);
+
   return (
     <main className={styles.container}>
       <aside className={styles.direction}>
@@ -76,31 +148,50 @@ const Cards = () => {
               className={styles.cardBody}
               style={{ position: "relative" }}>
               <Image
-                src={daegu}
+                src={plan.img}
                 placeholder="blur"
                 blurDataURL="/altImg.png"
                 alt="picture"
+                quality={100}
                 fill
                 style={{ borderRadius: "15px" }}
+                onClick={() => {
+                  goPlan(plan.planId);
+                }}
               />
-              <div className={styles.cardContent}>
+
+              <div
+                className={styles.cardContent}
+                onClick={() => {
+                  goPlan(plan.planId);
+                }}>
                 <div className={styles.title}>
-                  <span>싸피탐험대</span>
+                  <span>{plan.title}</span>
                   <div className={styles.person}>
                     <div className={styles.personIcon} />
-                    <span className={styles.personFont}>5명</span>
-                    <div className={styles.personToggle} />
+                    <span className={styles.personFont}>
+                      {plan.member.length}명
+                    </span>
+                    {/* <div className={styles.personToggle} /> */}
                   </div>
                 </div>
                 <div className={styles.cardInfo}>
                   <div className={styles.destination}>
                     <div className={styles.destinationIcon} />
-                    <span className={styles.destinationTitle}>대구 광역시</span>
+                    {plan.townList.map((town, id) => (
+                      <span key={id} className={styles.destinationTitle}>
+                        {id === plan.townList.length - 1 ? (
+                          <span>{town}</span>
+                        ) : (
+                          <span>{`${town} ,`}</span>
+                        )}
+                      </span>
+                    ))}
                   </div>
                   <div className={styles.calendar}>
                     <div className={styles.calendarIcon} />
                     <span className={styles.calendarTitle}>
-                      4월 18일(목) ~ 4월 21일(일)
+                      {plan.startDay} ~ {plan.endDay}
                     </span>
                   </div>
                 </div>
@@ -108,6 +199,12 @@ const Cards = () => {
               <div className={styles.newIcon}>
                 <span>New</span>
               </div>
+              <div
+                className={styles.removeList}
+                style={{ pointerEvents: "fill" }}
+                onClick={(e) => {
+                  removeModal(e, plan);
+                }}></div>
             </section>
           </div>
         ))}
@@ -144,7 +241,42 @@ const Cards = () => {
           />
         ) : null}
       </aside>
-      {onModal ? <PlanModal setOnModal={setOnModal} /> : null}
+      {onModal ? (
+        <article
+          className={styles.back}
+          onMouseDown={(e) => {
+            offModal(e);
+          }}>
+          <section className={styles.modalContainer}>
+            {modalContent[step]}
+          </section>
+        </article>
+      ) : null}
+      {removePlan ? (
+        <div className={styles.removeBack}>
+          <div className={styles.removeContainer}>
+            <p className={styles.removeTitle}>
+              정말 해당 플랜에서 나가시겠습니까?
+            </p>
+            <div className={styles.removeBtns}>
+              <button
+                className={styles.removeBtn}
+                onClick={() => {
+                  setRemovePlan(null);
+                }}>
+                취소
+              </button>
+              <button
+                className={`${styles.removeBtn} ${styles.removeConfirm}`}
+                onClick={() => {
+                  remove();
+                }}>
+                확인
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </main>
   );
 };
