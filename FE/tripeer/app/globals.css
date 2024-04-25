@@ -20,3 +20,20 @@
   padding: 0px;
   box-sizing: border-box;
 }
+
+body {
+  overflow-x: hidden;
+}
+
+body::-webkit-scrollbar {
+  width: 2.5px;
+}
+body::-webkit-scrollbar-thumb {
+  height: 10%;
+  background: #04acb56c;
+  border-radius: 10px;
+}
+
+body::-webkit-scrollbar-track {
+  background: #fff;
+}
