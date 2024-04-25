@@ -26,6 +26,7 @@
   box-shadow: 4px 4px 20px rgba(0, 0, 0, 25%);
   border-radius: 10px;
   cursor: pointer;
+  animation: fade-in 1s ease;
 }
 .cardImgBox {
   background-position: center;
@@ -84,4 +85,13 @@
 
 .card:hover {
   transform: scale(1.01);
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0%;
+  }
+  100% {
+    opacity: 100%;
+  }
 }

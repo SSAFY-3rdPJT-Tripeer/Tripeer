@@ -2,6 +2,7 @@
 
 // 외부 모듈
 import { useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 
 // 내부 모듈
 import styles from "./landing6.module.css";
@@ -9,6 +10,7 @@ import styles from "./landing6.module.css";
 const Landing6 = () => {
   const refTitle = useRef(null);
   const refBtn = useRef(null);
+  const router = useRouter();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -50,7 +52,12 @@ const Landing6 = () => {
         여행의 모든 순간을 함께하세요
       </p>
 
-      <div className={styles.btn} ref={refBtn}>
+      <div
+        className={styles.btn}
+        ref={refBtn}
+        onClick={() => {
+          router.push("/plan");
+        }}>
         시작하기
       </div>
     </main>

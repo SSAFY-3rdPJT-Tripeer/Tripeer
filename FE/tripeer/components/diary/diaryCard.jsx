@@ -4,6 +4,7 @@
 
 // 외부 모듈
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 
 // 내부 모듈
 import { card } from "./diaryDummy";
@@ -12,10 +13,16 @@ import Image from "next/image";
 
 const DiaryCard = () => {
   const [dummy, setDummy] = useState([]);
+  const router = useRouter();
+
   useEffect(() => {
     setDummy(card);
   }, []);
-  console.log(dummy);
+
+  const goDiary = (id) => {
+    router.push(`/diary/detail/${id}`);
+  };
+
   return (
     <main className={styles.container}>
       <div className={styles.cardBox}>
@@ -30,6 +37,9 @@ const DiaryCard = () => {
                   fill
                   alt="im"
                   className={styles.cardImg}
+                  onClick={() => {
+                    goDiary(item.planId);
+                  }}
                 />
               </div>
               <div className={styles.contentBox}>
