@@ -7,10 +7,11 @@ import busIcon from "./asset/bus.gif";
 import api from "@/utils/api";
 
 const TitleModal = (props) => {
-  const { setStep, setNewPlan, newPlan } = props;
+  const { setStep, setNewPlan, newPlan, setOnModal } = props;
   const [canNext, setCanNext] = useState(false);
   const [inputText, setInputText] = useState("");
   const [checkModal, setCheckModal] = useState(false);
+  const VEHICLE = "private";
 
   const changeInput = (e) => {
     if (e.currentTarget.value.length > 10) return;
@@ -26,11 +27,20 @@ const TitleModal = (props) => {
     }
   };
 
-  const createPlan = () => {};
-
-  useEffect(() => {
-    console.log(newPlan);
-  }, [newPlan]);
+  const createPlan = async () => {
+    setCheckModal(false);
+    const data = Object.assign(newPlan);
+    data.vehicle = VEHICLE;
+    try {
+      await api.post("/plan", data, {
+        "Content-Type": "application/json",
+      });
+      setOnModal(false);
+      setStep(0);
+    } catch (err) {
+      alert("에러발생");
+    }
+  };
 
   useEffect(() => {
     if (inputText.length > 0 && inputText.length <= 10) {
