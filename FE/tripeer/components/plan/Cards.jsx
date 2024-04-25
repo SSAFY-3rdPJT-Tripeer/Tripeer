@@ -147,14 +147,14 @@ const Cards = () => {
             <section
               className={styles.cardBody}
               style={{ position: "relative" }}>
-              <Image
+              <img
                 src={plan.img}
                 placeholder="blur"
-                blurDataURL="/altImg.png"
+                // blurDataURL="/altImg.png"
                 alt="picture"
-                quality={100}
-                fill
-                style={{ borderRadius: "15px" }}
+                // quality={100}
+                // fill
+                style={{ borderRadius: "15px", width: "100%", height: "100%" }}
                 onClick={() => {
                   goPlan(plan.planId);
                 }}
