@@ -1,9 +1,11 @@
+import styles from "./planHome.module.css";
+import { useEffect } from "react";
+
 const PlanHome = () => {
-  return (
-    <div>
-      <h1>Home</h1>
-    </div>
-  );
+  useEffect(() => {
+    console.log("hi");
+  }, []);
+  return <div className={styles.hihi}></div>;
 };
 
 export default PlanHome;
