@@ -1,50 +1,51 @@
 .main {
-    width: 100vw;
-    height: 100vh;
-    background-color: white;
-    flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
+  flex-direction: column;
 }
 
 .center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .textBox {
-    margin-top: 88px;
-    margin-bottom: 53px;
-    color: #AAAAAA;
+  margin-top: 88px;
+  margin-bottom: 53px;
+  color: #aaaaaa;
 }
 
 .text {
-    margin: 0 14px;
+  margin: 0 14px;
 }
 
 .line {
-    width: 100px;
-    height: 1px;
-    background-color: #AAAAAA;
+  width: 100px;
+  height: 1px;
+  background-color: #aaaaaa;
 }
 
 .image {
-    height: 9%;
-    width: auto;
+  height: 9%;
+  width: auto;
+  cursor: pointer;
 }
 
 .loginImage {
-    height: auto;
-    width: 100%;
+  height: auto;
+  width: 100%;
 }
 
 .loginBtn {
-    height: auto;
-    width: 23%;
-    margin: 1% 0;
-    transition: transform 0.3s ease-in-out;
-    cursor: pointer;
+  height: auto;
+  width: 23%;
+  margin: 1% 0;
+  transition: transform 0.3s ease-in-out;
+  cursor: pointer;
 }
 
 .loginBtn:hover {
-    transform: scale(1.02);
+  transform: scale(1.02);
 }
