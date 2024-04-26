@@ -1,0 +1,73 @@
+.container {
+  width: 250px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #d9d9d9;
+}
+
+.bannerBox {
+  padding: 10px 0px 10px 20px;
+}
+.contentBox {
+  border-top: 1px solid #d9d9d9;
+  width: 100%;
+  height: calc(100vh - 70px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 30px 0px 20px 0px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  cursor: pointer;
+  height: 40px;
+  border: 1px solid transparent;
+  padding-left: 30px;
+  border-radius: 5px;
+}
+
+.item:hover {
+  background: #f6f6f6;
+}
+
+.icon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  margin-right: 12px;
+}
+
+.home {
+  background-image: url(./assets/onHome.svg);
+}
+
+.map {
+  background-image: url(./assets/offMap.svg);
+}
+
+.exit {
+  background-image: url(./assets/Exit.svg);
+}
+
+.text {
+  font-weight: 550;
+}
+
+.offText {
+  color: #979797;
+  font-weight: 550;
+}
+
+.schedule {
+  background-image: url(./assets/offSchedule.svg);
+}
+
+.offExit {
+  color: #7b9d9f;
+}
