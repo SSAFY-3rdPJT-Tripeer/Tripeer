@@ -1,9 +1,13 @@
 package j10d207.tripeer.history.service;
 
-import j10d207.tripeer.history.db.dto.HistoryListResDTO;
+import j10d207.tripeer.history.db.dto.CostReqDTO;
+import j10d207.tripeer.history.db.dto.CostResDTO;
+import j10d207.tripeer.plan.db.dto.PlanDetailResDTO;
 import j10d207.tripeer.plan.db.dto.PlanListResDTO;
+import j10d207.tripeer.plan.db.entity.PlanDetailEntity;
 import j10d207.tripeer.plan.db.entity.PlanEntity;
 import j10d207.tripeer.plan.db.entity.PlanTownEntity;
+import j10d207.tripeer.plan.db.repository.PlanDetailRepository;
 import j10d207.tripeer.plan.db.repository.PlanRepository;
 import j10d207.tripeer.plan.db.repository.PlanTownRepository;
 import j10d207.tripeer.user.config.JWTUtil;
@@ -13,6 +17,7 @@ import j10d207.tripeer.user.db.repository.CoworkerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -27,6 +32,7 @@ public class HistoryServiceImpl implements HistoryService{
     private final CoworkerRepository coworkerRepository;
     private final PlanRepository planRepository;
     private final PlanTownRepository planTownRepository;
+    private final PlanDetailRepository planDetailRepository;
 
     public List<PlanListResDTO> historyList (String token) {
 //        String access = jwtUtil.splitToken(token);
@@ -85,6 +91,15 @@ public class HistoryServiceImpl implements HistoryService{
         return planListResDTOList;
     }
 
-
+    public CostResDTO postCost (@RequestBody CostReqDTO costReqDTO) {
+        PlanDetailEntity planDetail = planDetailRepository.findByPlanDetailId(costReqDTO.getPlanDetailId());
+        planDetail.setCost(costReqDTO.getCost());
+        planDetailRepository.save(planDetail);
+        CostResDTO costResDTO = CostResDTO.builder()
+                .planDetailId(planDetail.getPlanDetailId())
+                .cost(costReqDTO.getCost())
+                .build();
+        return costResDTO;
+    }
 
 }

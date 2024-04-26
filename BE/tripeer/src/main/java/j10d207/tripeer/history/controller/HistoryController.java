@@ -1,11 +1,14 @@
 package j10d207.tripeer.history.controller;
 
+import j10d207.tripeer.history.db.dto.CostReqDTO;
+import j10d207.tripeer.history.db.dto.CostResDTO;
 import j10d207.tripeer.history.db.dto.GalleryDTO;
-import j10d207.tripeer.history.db.dto.HistoryListResDTO;
 import j10d207.tripeer.history.db.entity.GalleryEntity;
 import j10d207.tripeer.history.service.GalleryService;
 import j10d207.tripeer.history.service.HistoryService;
+import j10d207.tripeer.plan.db.dto.PlanDetailResDTO;
 import j10d207.tripeer.plan.db.dto.PlanListResDTO;
+import j10d207.tripeer.plan.db.entity.PlanDetailEntity;
 import j10d207.tripeer.response.Response;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -64,13 +67,13 @@ public class HistoryController {
         }
     }
 
-//    @PostMapping("/bill")
-//    public Response<String> postBill(HttpServletRequest request) {
-//        try {
-//            List<GalleryDTO> galleryList = historyService.postBill(request);
-//            return Response.of(HttpStatus.OK, "비용 등록 성공", '성공');
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
+    @PostMapping("/cost")
+    public Response<CostResDTO> postCost(@RequestBody CostReqDTO costReqDTO) {
+        try {
+            CostResDTO costResDTO = historyService.postCost(costReqDTO);
+            return Response.of(HttpStatus.OK, "비용 등록 성공", costResDTO);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
