@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 
 const Guard = (WrappedComponent) => {
   return (props) => {
-    if (typeof window !== undefined) {
+    if (typeof window !== "undefined") {
       const router = useRouter();
       console.log(localStorage.getItem("accessToken"));
       const token = localStorage.getItem("accessToken");
