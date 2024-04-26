@@ -1,5 +1,6 @@
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import cookies from "js-cookie";
 
 const api = axios.create({
   // 기본 주소
@@ -9,7 +10,9 @@ const api = axios.create({
 });
 api.interceptors.request.use(async (config) => {
   // 액세스 토큰 로컬에서 가져오기
-  const token = localStorage.getItem("accessToken");
+  // const token = localStorage.getItem("accessToken");
+  // 쿠키에서 액세스 토큰 가져오기
+  const token = cookies.get("Authorization");
   // 만료 됐는지 확인
   const decodedToken = jwtDecode(token);
   const isTokenExpired = decodedToken.exp * 1000 < Date.now();
@@ -23,9 +26,10 @@ api.interceptors.request.use(async (config) => {
         {},
         { withCredentials: true },
       );
-      // 재발급 받은 액세스 토큰을 로컬에 저장
+      // 재발급 받은 액세스 토큰을 쿠키에 저장
       const { accessToken } = res.data;
-      localStorage.setItem("accessToken", accessToken);
+      // localStorage.setItem("accessToken", accessToken);
+      cookies.set("Authorization", accessToken);
       // 기본 헤더 고정값
       config.headers["Authorization"] = `Bearer ${accessToken}`;
     } catch (err) {
