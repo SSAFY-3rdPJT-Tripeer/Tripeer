@@ -9,6 +9,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import j10d207.tripeer.exception.CustomException;
 import j10d207.tripeer.exception.ErrorCode;
 import j10d207.tripeer.user.config.JWTUtil;
+import j10d207.tripeer.user.db.TripStyleEnum;
 import j10d207.tripeer.user.db.dto.CustomOAuth2User;
 import j10d207.tripeer.user.db.dto.JoinDTO;
 import j10d207.tripeer.user.db.dto.SocialInfoDTO;
@@ -50,18 +51,26 @@ public class UserServiceImpl implements UserService{
 
     //회원 가입
     @Override
-    public void memberSignup(JoinDTO joinDTO, HttpServletResponse response) {
+    public String memberSignup(JoinDTO joinDTO, HttpServletResponse response) {
+        //생일 값 형식변환
         LocalDate birth = LocalDate.parse(joinDTO.getYear() + "-" + joinDTO.getMonth() + "-" + joinDTO.getDay());
+
+        //소셜정보 가져오기
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        CustomOAuth2User customUserDetails = (CustomOAuth2User) authentication.getPrincipal();
+
+
         UserEntity user = UserEntity.builder()
-                .provider(joinDTO.getProvider())
-                .providerId(joinDTO.getProviderId())
+                .provider(customUserDetails.getProvider())
+                .providerId(customUserDetails.getProviderId())
                 .nickname(joinDTO.getNickname())
                 .birth(birth)
-                .profileImage(joinDTO.getProfileImage())
+                .profileImage(customUserDetails.getProfileImage())
                 .role("ROLE_USER")
-                .style1(joinDTO.getStyle1())
-                .style2(joinDTO.getStyle2())
-                .style3(joinDTO.getStyle3())
+                .style1(joinDTO.getStyle1() == null ? null : TripStyleEnum.getNameByCode(joinDTO.getStyle1()))
+                .style2(joinDTO.getStyle2() == null ? null : TripStyleEnum.getNameByCode(joinDTO.getStyle2()))
+                .style3(joinDTO.getStyle3() == null ? null : TripStyleEnum.getNameByCode(joinDTO.getStyle3()))
                 .isOnline(false)
                 .build();
         user = userRepository.save(user);
@@ -71,15 +80,8 @@ public class UserServiceImpl implements UserService{
 
         //access 토큰 헤더에 넣기
         response.setHeader("Authorization", access);
-
-        //refresh 토큰 헤더에 넣기
-        Cookie cookie = new Cookie("Authorization-re", refresh);
-        cookie.setMaxAge((int) refreshTime);
-        //NginX 도입시 사용
-//        cookie.setSecure(true);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-
+        response.addCookie(createCookie("Authorization-re", refresh));
+        return access;
     }
 
     //프로필 사진 변경
@@ -125,9 +127,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public SocialInfoDTO getSocialInfo() {
         SecurityContext context = SecurityContextHolder.getContext();
-        System.out.println("context : " + context.toString());
         Authentication authentication = context.getAuthentication();
-        System.out.println("authentication : " + authentication.toString());
         CustomOAuth2User customUserDetails = (CustomOAuth2User) authentication.getPrincipal();
 
         System.out.println(customUserDetails.toString());
@@ -199,21 +199,24 @@ public class UserServiceImpl implements UserService{
     //
 
     @Override
-    public void getSuper(HttpServletResponse response) {
-        String result = jwtUtil.createJwt("Authorization", "admin", "ROLE_ADMIN", 1, (long) 60*60*24*1000);
-        String refresh = jwtUtil.createJwt("Authorization", "admin", "ROLE_ADMIN", 1, refreshTime*100*1000);
+    public String getSuper(HttpServletResponse response, long userId) {
+        UserEntity user = userRepository.findByUserId(userId);
+        String result = jwtUtil.createJwt("Authorization", user.getNickname(), user.getRole(), userId, (long) 60*60*24*1000);
+        String refresh = jwtUtil.createJwt("Authorization-re", user.getNickname(), user.getRole(), userId, refreshTime*100*1000);
 
         response.addCookie(createCookie("Authorization-re", refresh));
         response.setHeader("Authorization", "Bearer " + result);
+
+        return "Bearer " + result;
     }
 
     private Cookie createCookie(String key, String value) {
 
         Cookie cookie = new Cookie(key, value);
         cookie.setMaxAge(24*60*60);
-//        cookie.setSecure(true);
+        cookie.setSecure(true);
         cookie.setPath("/");
-        if(key.equals("refresh")) {
+        if(key.equals("Authorization-re")) {
             cookie.setHttpOnly(true);
         }
 

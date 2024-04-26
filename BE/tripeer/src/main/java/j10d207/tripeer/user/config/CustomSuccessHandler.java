@@ -8,8 +8,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -58,15 +60,15 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         long userId = customUserDetails.getUserId();
 
         //토큰 생성
-        String access = jwtUtil.createJwt("access", name, role, userId, accessTime);
-        String refresh = jwtUtil.createJwt("refresh", name, role, userId, refreshTime);
+        String access = jwtUtil.createJwt("Authorization", name, role, userId, accessTime);
+        String refresh = jwtUtil.createJwt("Authorization-re", name, role, userId, refreshTime);
         System.out.println("access = " + access);
 
         response.addCookie(createCookie("Authorization", access));
         response.addCookie(createCookie("Authorization-re", refresh));
         response.setStatus(HttpStatus.OK.value());
         // 04.14 - 로그인 완료 후 이동페이지
-        response.sendRedirect("https://k10d207.p.ssafy.io/");
+        response.sendRedirect("https://k10d207.p.ssafy.io/redirect");
     }
 
     private Cookie createCookie(String key, String value) {
@@ -75,7 +77,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         cookie.setMaxAge(24*60*60);
         //cookie.setSecure(true);
         cookie.setPath("/");
-        if(key.equals("refresh")) {
+        if(key.equals("Authorization-re")) {
             cookie.setHttpOnly(true);
         }
 

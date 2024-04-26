@@ -108,5 +108,13 @@ public class PlaceController {
         return Response.of(HttpStatus.OK, "새로운 스팟 생성", spotService.createNewSpot(spotAddReqDto, request));
     }
 
+    /*
+    * 모든 도시, 타운 조회
+    * */
+    @GetMapping("/all")
+    public Response<CityAndTownDto> getAllCityAndTown() {
+        return Response.of(HttpStatus.OK, "새로운 스팟 생성", townService.getAllCityAndTown());
+    }
+
 
 }

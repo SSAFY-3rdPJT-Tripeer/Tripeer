@@ -9,11 +9,6 @@ import j10d207.tripeer.place.db.dto.SpotListDto;
 import j10d207.tripeer.place.db.entity.*;
 import j10d207.tripeer.place.db.repository.*;
 import j10d207.tripeer.plan.service.PlanService;
-import j10d207.tripeer.plan.service.PlanServiceImpl;
-import j10d207.tripeer.user.db.entity.UserEntity;
-import j10d207.tripeer.user.db.entity.WishListEntity;
-import j10d207.tripeer.user.db.repository.UserRepository;
-import j10d207.tripeer.user.db.repository.WishRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -35,14 +29,24 @@ public class SpotServiceImpl implements SpotService{
     private final SpotDetailRepository spotDetailRepository;
     private final CityRepository cityRepository;
     private final TownRepository townRepository;
-    private final UserRepository userRepository;
-    private final WishRepository wishRepository;
     private final PlanService planService;
 
 
     @Override
     public SpotListDto getStayList(Integer page, Integer ContentTypeId, Integer cityId, Integer townId) {
         Pageable pageable = PageRequest.of(page,15);
+
+        if (townId == -1) {
+            List<SpotInfoEntity> spotInfoEntities = spotInfoRepository.findByContentTypeIdAndTown_TownPK_City_CityId(ContentTypeId, cityId, pageable);
+            List<SpotInfoDto> spotInfoDtos = spotInfoEntities.stream().map(SpotInfoDto::convertToDto).toList();
+            boolean isLastPage = spotInfoDtos.size() < 15;
+
+            return SpotListDto.builder()
+                    .spotInfoDtos(spotInfoDtos)
+                    .last(isLastPage)
+                    .build();
+        }
+
         List<SpotInfoEntity> spotInfoEntities = spotInfoRepository
                 .findByContentTypeIdAndTown_TownPK_City_CityIdAndTown_TownPK_TownId(ContentTypeId,cityId, townId, pageable);
 

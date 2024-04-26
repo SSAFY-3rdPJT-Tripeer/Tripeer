@@ -20,6 +20,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -27,34 +28,39 @@ public class OdsayServiceImpl implements OdsayService{
 
 
     @Override
-    public StringBuilder getOdsay() throws IOException {
+    public String getOdsay(Double SX, Double SY, Double EX, Double EY) throws IOException {
 
         String apiKey = "d4jZWKxfNcai50mtCPm92LU9YHtZVyAfSxr/w5TfNeU";
 
-        String urlInfo = "https://api.odsay.com/v1/api/searchPubTransPathT?SX=126.9027279&SY=37.5349277&EX=126.9145430&EY=37.5499421&apiKey=" + URLEncoder.encode(apiKey, "UTF-8");
+        RestTemplate restTemplate = new RestTemplate();
+//        String result = restTemplate.getForObject("https://api.odsay.com/v1/api/searchPubTransPathT?apiKey=5MqWw1bKHuALfsdSCDSDZN4woc5F0h9KZ8g30QlVtuw&SX=126.97200078135924&SY=37.555794612717655&EX=129.04191183128495&EY=35.1139753187215&SearchType=0", String.class);
+        String result = restTemplate.getForObject("https://api.odsay.com/v1/api/searchPubTransPathT?SX=" + SX
+                + "&SY=" + SY + "&EX=" + EX + "&EY=" + EY + "&apiKey=" + apiKey, String.class);
 
-        // http 연결
-        URL url = new URL(urlInfo);
-        HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-        conn.setRequestMethod("GET");
-        conn.setRequestProperty("Content-type", "application/json");
+        JsonObject jsonObject = JsonParser.parseString(Objects.requireNonNull(result)).getAsJsonObject();
+        JsonArray root = jsonObject.getAsJsonObject("result").getAsJsonArray("path");
 
-        BufferedReader bufferedReader =
-                new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        JsonArray searchType = jsonObject.getAsJsonObject("result").getAsJsonArray("searchType");
 
-        StringBuilder sb = new StringBuilder();
-        String line;
-        while ((line = bufferedReader.readLine()) != null) {
-            sb.append(line);
-        }
-        bufferedReader.close();
-        conn.disconnect();
+        System.out.println("jsonObject.getAsJsonObject(\"result\") = " + jsonObject.getAsJsonObject("result"));
 
-        // 결과 출력
-        System.out.println(sb.toString());
-        return sb;
+        System.out.println("searchType = " + searchType);
+//        JsonElement searchType = jsonObject.getAsJsonObject("result").get("searchType");
+
+//        for(int i = 0; i < root.size(); i++) {
+//
+//        }
+//
+//        System.out.println("searchType = " + searchType);
+//        for(JsonElement re : root) {
+//            System.out.println("re = " + re.getAsJsonObject().getAsJsonObject("info").get("totalPayment"));
+//            System.out.println("re = " + re.getAsJsonObject().getAsJsonObject("info"));
+//        }
+//        System.out.println(jsonObject.getAsJsonObject("result").getAsJsonArray("path").get(0).getAsJsonObject().getAsJsonObject("info"));
+//        System.out.println(jsonObject.getAsJsonObject("result").getAsJsonObject("path").getAsJsonObject("info"));
+        return result;
+
     }
-
 
     //경로 시간 받아오기
     @Override

@@ -26,10 +26,10 @@ public class UserController {
 
     //회원가입
     @PostMapping("/signup")
-    public Response<?> memberSignup(@RequestBody JoinDTO joinDTO, HttpServletResponse response) {
+    public Response<String> memberSignup(@RequestBody JoinDTO joinDTO, HttpServletResponse response) {
         try {
-            userService.memberSignup(joinDTO, response);
-            return Response.of(HttpStatus.OK, "회원가입, 토큰발급 완료", null);
+            String jwt = userService.memberSignup(joinDTO, response);
+            return Response.of(HttpStatus.OK, "회원가입, 토큰발급 완료", jwt);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -70,10 +70,10 @@ public class UserController {
         return "ok";
     }
 
-    @GetMapping("/test/getsuper")
-    public Response<?> getSuper(HttpServletResponse response) {
-        userService.getSuper(response);
-        return Response.of(HttpStatus.OK, "getSuper", null);
+    @GetMapping("/test/getsuper/{userId}")
+    public Response<String> getSuper(HttpServletResponse response, @PathVariable("userId") long userId) {
+        String result = userService.getSuper(response, userId);
+        return Response.of(HttpStatus.OK, "getSuper", result);
     }
 
 }
