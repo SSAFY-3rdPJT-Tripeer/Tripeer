@@ -9,9 +9,9 @@ spring:
         max-request-size: -1
 
   datasource:
-    url: ENC(y8TZsLQPvMIltxnWhgvUL2NWQngsqEv0TmrlUD01CHwFeEaFf5o3oZOKPLxEX1U3sam3Si+UaB1CbtGFPq76+e51pVG/esoRd1rROjmEx00BXTrNu8Wj1w==)
-    username: ENC(O3SfEDhTgcxejIUYhmqM5dAPo7X32qId)
-    password: ENC(VBig/uxtyuYILbSlL6xhyP0rble1JfG+)
+    url: ENC(O+6cd1DEPib/iu/hkn5SAWTMEKzAmV6xq+cqOjhR4rRka0UVt6VGVSL0uLG2i2c61l/2FP5EApg=)
+    username: ENC(9m9o70ex2187SXtUNb1JQA==)
+    password: ENC(Wstc5/so3a0smxXFvZP5pvCfQhdj10v007R2AGIcNY8=)
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -53,8 +53,8 @@ spring:
             scope: name
           google:
             client-name: google
-            client-id: ENC(sGaMPk1RGfhVbfQ3+F+yBBqOYBeBI9gRbErAXsrSUYxvCqvhy5SMUmKzG8TF1fCZegxlE6BP9WApu/CUioiyXkvG47uNz5DPng0QxZ5yb/QChSWoy84xug==)
-            client-secret: ENC(m0Nbxk/CS1S8A5LoBREZUH7pxOTyKo6Rt8hC+68SF1ow9TyzpJhH7UKSp6iZztno)
+            client-id: ENC(sSX1umy4qajs8dX/VNp+Bvujw2PRjPcloD+s9GqSyUn8zRPfAh47doTxN2XPMO0Il+Nr48H280Ysd5Q/9hYpoSH+0ZzLJxXKeBWWNk+WiNlINJyc5SHHmQ==)
+            client-secret: ENC(DTVN2JEtEbU8nBY0TJqMhfgkJG1cF+Gs/GNSIZ8Yd9j0q8PLkJnpEBP7FOGsS4cw)
             redirect-uri: https://k10d207.p.ssafy.io/api/login/oauth2/code/google
             authorization-grant-type: authorization_code
             scope: profile,email
@@ -69,12 +69,12 @@ spring:
 cloud:
   aws:
     credentials:
-      accessKey: ENC(2N0Zox+byzqDrTNnHPjcY9FrDovXFf1Up4RPiSgUK8s=)
-      secretKey: ENC(UhRFGA31vCoZd7DLMy4MFQzsV1gUT9yTUAhjztsIb1F0wCzXhJe4Uc6H/1p7Q9uZDeGRkFJA8Ec=)
+      accessKey: ENC(MDEIv0Elsed+UziTOhX2wkJGzw5jldwD0qxnjRVePpA=)
+      secretKey: ENC(UZXZhURI7oZXplXNSYhkH0hUN0+rMIG4DkqDXvp2kufY5tY3UCv+hj3IRrvEnHrOxACeK2+jIRI=)
     s3:
-      bucketName: tripeer
+      bucketName: tripeerbucket
     region:
-      static: ap-northeast-2
+      static: ap-southeast-2
   cloudformation:
     auto: false
 
