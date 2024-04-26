@@ -6,6 +6,7 @@ import styles from "./topSection.module.css";
 import PlaceDetailBtn from "@/components/place/detail/placeDetailBtn";
 import weatherSrc from "@/public/place/weather.png";
 import mapSrc from "@/public/place/map.png";
+import cityName from "@/utils/cityName";
 
 export default function TopSection({ params }) {
   const [data, setData] = useState([]);
@@ -25,8 +26,18 @@ export default function TopSection({ params }) {
           <p className={styles.description}>{data.description}</p>
         </div>
         <article className={styles.article}>
-          <PlaceDetailBtn title={"지도"} imgSrc={mapSrc} />
-          <PlaceDetailBtn title={"날씨"} imgSrc={weatherSrc} />
+          <PlaceDetailBtn
+            title={"지도"}
+            imgSrc={mapSrc}
+            cityName={cityName[cityId]}
+            townName={data.townName}
+          />
+          <PlaceDetailBtn
+            title={"날씨"}
+            imgSrc={weatherSrc}
+            cityName={cityName[cityId]}
+            townName={data.townName}
+          />
         </article>
       </section>
       <img src={data.townImg} alt={""} className={styles.image} />

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import cookies from "js-cookie";
 
 import styles from "./stylePage.module.css";
 import useRegisterStore from "@/stores/register";
@@ -68,7 +69,9 @@ export default function StylePage({ pageNum, setPageNum }) {
         .then((res) => {
           let accessToken = res.headers.get("Authorization");
           accessToken = accessToken.replace("Bearer ", "");
-          localStorage.setItem("accessToken", accessToken);
+          // localStorage.setItem("accessToken", accessToken);
+          console.log("토큰: ", accessToken);
+          cookies.set("Authorization", accessToken);
           router.push("/");
         });
     } catch (e) {
