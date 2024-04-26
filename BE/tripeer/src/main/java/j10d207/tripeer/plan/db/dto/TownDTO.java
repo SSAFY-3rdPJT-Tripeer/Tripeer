@@ -9,5 +9,7 @@ public class TownDTO {
 
     private int cityId;
     private int townId;
-
+    private String title;
+    private String description;
+    private String img;
 }

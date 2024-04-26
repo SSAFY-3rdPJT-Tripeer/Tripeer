@@ -210,6 +210,59 @@ public class PlanServiceImpl implements PlanService {
         return planListResDTOList;
     }
 
+    @Override
+    public PlanDetailMainResDTO getPlanDetailMain(long planId, String token) {
+        PlanEntity plan = planRepository.findByPlanId(planId);
+        //로그인 사용자가 소유하지 않은 플랜 접근시
+        if(!coworkerRepository.existsByPlan_PlanIdAndUser_UserId(planId, jwtUtil.getUserId(jwtUtil.splitToken(token)))) {
+            throw new CustomException(ErrorCode.NOT_HAS_COWORKER);
+        }
+        List<PlanTownEntity> planTown = planTownRepository.findByPlan_PlanId(plan.getPlanId());
+        List<CoworkerEntity> coworkerEntityList = coworkerRepository.findByPlan_PlanId(plan.getPlanId());
+
+        //선택한 도시 목록 구성
+        List<TownDTO> townDTOList = new ArrayList<>();
+        for (PlanTownEntity planTownEntity : planTown) {
+            if(planTownEntity.getTown() == null) {
+                TownDTO townDTO = TownDTO.builder()
+                        .cityId(planTownEntity.getCityOnly().getCityId())
+                        .title(planTownEntity.getCityOnly().getCityName())
+                        .description(planTownEntity.getCityOnly().getDescription())
+                        .img(planTownEntity.getCityOnly().getCityImg())
+                        .build();
+                townDTOList.add(townDTO);
+            } else {
+                TownDTO townDTO = TownDTO.builder()
+                        .cityId(planTownEntity.getTown().getTownPK().getCity().getCityId())
+                        .townId(planTownEntity.getTown().getTownPK().getTownId())
+                        .title(planTownEntity.getTown().getTownName())
+                        .description(planTownEntity.getTown().getDescription())
+                        .img(planTownEntity.getTown().getTownImg())
+                        .build();
+                townDTOList.add(townDTO);
+            }
+
+        }
+
+        //멤버 목록 구성
+        List<UserSearchDTO> memberList = new ArrayList<>();
+        for (CoworkerEntity coworkerEntity : coworkerEntityList) {
+            UserSearchDTO userSearchDTO = UserSearchDTO.builder()
+                    .userId(coworkerEntity.getUser().getUserId())
+                    .nickname(coworkerEntity.getUser().getNickname())
+                    .profileImage(coworkerEntity.getUser().getProfileImage())
+                    .build();
+            memberList.add(userSearchDTO);
+        }
+
+        return PlanDetailMainResDTO.builder()
+                .planId(planId)
+                .title(plan.getTitle())
+                .townList(townDTOList)
+                .coworkerList(memberList)
+                .build();
+    }
+
     //플랜 날짜 수정
     @Override
     public void changeDay(CreatePlanDTO createPlanDTO, String token) {
