@@ -2,6 +2,7 @@ package j10d207.tripeer.place.service;
 
 import j10d207.tripeer.exception.CustomException;
 import j10d207.tripeer.exception.ErrorCode;
+import j10d207.tripeer.place.db.dto.CityAndTownDto;
 import j10d207.tripeer.place.db.dto.TownListDto;
 import j10d207.tripeer.place.db.entity.CityEntity;
 import j10d207.tripeer.place.db.entity.TownEntity;
@@ -60,5 +61,21 @@ public class TownServiceImpl implements TownService{
         TownEntity townEntity = townRepository.findByTownName(townName)
                 .orElseThrow(() -> new CustomException(ErrorCode.TOWN_NOT_FOUND));
         return TownListDto.convertToDto(townEntity);
+    }
+
+    @Override
+    public CityAndTownDto getAllCityAndTown() {
+        List<TownEntity> towns = townRepository.findAll();
+        List<CityEntity> citys = cityRepository.findAll();
+
+        List<TownListDto> townListDtos = towns.stream().map(TownListDto::convertToDto).collect(Collectors.toList());
+        List<TownListDto> cityListDtos = citys.stream().map(TownListDto::convertToDto).collect(Collectors.toList());
+
+        townListDtos.addAll(cityListDtos);
+
+
+        return CityAndTownDto.builder()
+                .townListDtos(townListDtos)
+                .build();
     }
 }
