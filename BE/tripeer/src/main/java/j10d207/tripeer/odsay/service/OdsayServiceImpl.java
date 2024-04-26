@@ -70,13 +70,6 @@ public class OdsayServiceImpl implements OdsayService{
         } else if ( root.getAsJsonObject("result").get("searchType").getAsInt() == 2 ) {
             System.out.println("도시간 환승이라는데 이건 어떤경우에 나오는지 모르겠음");
         }
-        getTime(SX, SY, EX, EY);
-    }
-
-    private void getTime(double SX, double SY, double EX, double EY) {
-        JsonArray root = getResult(SX, SY, EX, EY).getAsJsonObject("result").getAsJsonArray("path");
-
-
     }
 
     private int getTimeGoTerminal(double SX, double SY, double EX, double EY) {
