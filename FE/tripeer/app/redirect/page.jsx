@@ -18,8 +18,8 @@ export default function RedirectPage() {
   };
 
   useEffect(() => {
-    const accessToken = cookies.get("Authorization");
-    localStorage.setItem("accessToken", accessToken);
+    // const accessToken = cookies.get("Authorization");
+    // localStorage.setItem("accessToken", accessToken);
 
     const timer = setTimeout(() => {
       router.push("/");

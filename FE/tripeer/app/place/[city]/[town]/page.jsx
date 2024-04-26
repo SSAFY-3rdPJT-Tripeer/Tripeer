@@ -16,13 +16,12 @@ export default function PlacePage({ params }) {
   const inputLocal = async () => {
     try {
       // GET 요청
-      const cityRes = await api.get("/place/city/-1");
+      // const cityRes = await api.get("/place/city/-1");
       // const townRes = await api.get("/place", {
       //   params: { cityId: -1, townId: -1 },
       // });
-
       // 로컬 저장
-      localStorage.setItem("City", JSON.stringify(cityRes.data.data));
+      // localStorage.setItem("City", JSON.stringify(cityRes.data.data));
       // localStorage.setItem("Town", JSON.stringify(townRes.data.data));
     } catch (e) {
       console.log("씨티, 타운 정보 로컬 저장 요청 오류 : ", e);
@@ -40,16 +39,22 @@ export default function PlacePage({ params }) {
   const getData = async () => {
     try {
       const cityId = params.city;
+      const townName = params.town;
 
       // 전체 씨티 정보 GET
-      if (cityId === "-1") {
+      if (cityId === "all") {
         const res = await api.get("/place/city/-1");
         setList(res.data.data);
       }
-      // 타운이라면
-      else {
+      // 타운 전체 정보라면?
+      else if (townName === "all") {
         const res = await api.get("/place/town", {
           params: { cityId: cityId, townName: -1 },
+        });
+        setList(res.data.data);
+      } else {
+        const res = await api.get("/place/town", {
+          params: { cityId: cityId, townName: townName },
         });
         setList(res.data.data);
       }
@@ -71,6 +76,7 @@ export default function PlacePage({ params }) {
     } else {
       setIsCity(false);
     }
+    console.log("플레이스 정보 : ", list);
   }, [list]);
 
   return (
@@ -83,7 +89,14 @@ export default function PlacePage({ params }) {
       {/* 플레이스 출력 */}
       <section className={styles.sectionBottom}>
         {list.map((item, idx) => {
-          return <PlaceItem key={idx} data={item} isCity={isCity} />;
+          return (
+            <PlaceItem
+              key={idx}
+              data={item}
+              isCity={isCity}
+              cityId={params.city}
+            />
+          );
         })}
       </section>
     </main>
