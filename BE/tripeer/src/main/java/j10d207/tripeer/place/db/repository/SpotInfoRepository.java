@@ -14,4 +14,6 @@ public interface SpotInfoRepository extends JpaRepository <SpotInfoEntity, Integ
     List<SpotInfoEntity> findByContentTypeIdAndTown_TownPK_City_CityIdAndTown_TownPK_TownId(int contentTypeId, int cityId, int townId, Pageable pageable);
 
     List<SpotInfoEntity> findByContentTypeIdNotInAndTown_TownPK_City_CityIdAndTown_TownPK_TownId(List<Integer> contentTypeIds, int cityId, int townId, Pageable pageable);
+
+    List<SpotInfoEntity> findByContentTypeIdAndTown_TownPK_City_CityId(Integer contentTypeId, Integer cityId, Pageable pageable);
 }

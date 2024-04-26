@@ -35,6 +35,18 @@ public class SpotServiceImpl implements SpotService{
     @Override
     public SpotListDto getStayList(Integer page, Integer ContentTypeId, Integer cityId, Integer townId) {
         Pageable pageable = PageRequest.of(page,15);
+
+        if (townId == -1) {
+            List<SpotInfoEntity> spotInfoEntities = spotInfoRepository.findByContentTypeIdAndTown_TownPK_City_CityId(ContentTypeId, cityId, pageable);
+            List<SpotInfoDto> spotInfoDtos = spotInfoEntities.stream().map(SpotInfoDto::convertToDto).toList();
+            boolean isLastPage = spotInfoDtos.size() < 15;
+
+            return SpotListDto.builder()
+                    .spotInfoDtos(spotInfoDtos)
+                    .last(isLastPage)
+                    .build();
+        }
+
         List<SpotInfoEntity> spotInfoEntities = spotInfoRepository
                 .findByContentTypeIdAndTown_TownPK_City_CityIdAndTown_TownPK_TownId(ContentTypeId,cityId, townId, pageable);
 
