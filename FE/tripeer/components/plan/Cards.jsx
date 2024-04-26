@@ -12,6 +12,8 @@ import PlanModal from "./PlanModal.jsx";
 import TitleModal from "./TitleModal";
 import DateModal from "./DateModal";
 import api from "@/utils/api";
+import Guard from "@/components/guard/Guard";
+
 import { useRouter } from "next/navigation";
 
 const Cards = () => {
@@ -48,7 +50,7 @@ const Cards = () => {
       const res = await api.get("/plan");
       setPlans(res.data.data);
     } catch (err) {
-      alert("에러발생! 버러지 컷");
+      alert("데이터를 불러오는데 오류가 발생했습니다.");
     }
   };
 
@@ -281,4 +283,4 @@ const Cards = () => {
   );
 };
 
-export default Cards;
+export default Guard(Cards);
