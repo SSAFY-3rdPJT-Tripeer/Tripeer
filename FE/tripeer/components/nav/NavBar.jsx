@@ -40,7 +40,7 @@ const NavBar = () => {
             />
           </Link>
           <nav className={style.linkBox}>
-            <Link href="/plan" className={style.link}>
+            <Link href="/plan" className={style.link} prefetch={false}>
               일정 계획
             </Link>
             <Link href="/diary" className={style.link}>
