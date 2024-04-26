@@ -15,6 +15,8 @@ public interface PlanService {
     public void planOut(long planId, String token);
     //내 플랜 리스트 조회
     public List<PlanListResDTO> planList(String token);
+    //플랜 디테일 메인 조회
+    public PlanDetailMainResDTO getPlanDetailMain(long planId, String token);
     //플랜 날짜 수정
     public void changeDay(CreatePlanDTO createPlanDTO, String token);
     //동행자 추가

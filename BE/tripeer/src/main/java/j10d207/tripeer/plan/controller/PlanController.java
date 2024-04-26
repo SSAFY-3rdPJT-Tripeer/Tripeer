@@ -65,6 +65,17 @@ public class PlanController {
         }
     }
 
+    //플랜 디테일 메인 조회
+    @GetMapping("/main/{planId}")
+    public Response<PlanDetailMainResDTO> getPlanDetailMain(@PathVariable("planId") long planId, HttpServletRequest request) {
+        try {
+            PlanDetailMainResDTO result = planService.getPlanDetailMain(planId, request.getHeader("Authorization"));
+            return Response.of(HttpStatus.OK, "플랜 메인 조회", result);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     //동행자 추가
     @PostMapping("/member")
     public Response<?> joinPlan(@RequestBody CoworkerDTO coworkerDTO) {
