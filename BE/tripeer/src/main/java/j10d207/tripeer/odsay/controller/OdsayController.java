@@ -1,14 +1,18 @@
 package j10d207.tripeer.odsay.controller;
 
+import j10d207.tripeer.odsay.db.dto.CoordinateDTO;
 import j10d207.tripeer.odsay.db.dto.OptimizeDto;
 import j10d207.tripeer.odsay.db.dto.OptimizeListDTO;
 import j10d207.tripeer.odsay.service.AlgorithmService;
 import j10d207.tripeer.odsay.service.AlgorithmServiceImpl;
 import j10d207.tripeer.odsay.service.OdsayService;
+import j10d207.tripeer.response.Response;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -28,13 +32,24 @@ public class OdsayController {
     }
 
     @GetMapping("/test2")
-    public void getOdsay2(@RequestParam("SX") double SX, @RequestParam("SY") double SY, @RequestParam("EX") double EX, @RequestParam("EY") double EY) {
-        odsayService.getPublicTime(SX, SY, EX, EY);
+    public Response<Integer> getOdsay2(@RequestParam("SX") double SX, @RequestParam("SY") double SY, @RequestParam("EX") double EX, @RequestParam("EY") double EY) {
+        int result = odsayService.getPublicTime(SX, SY, EX, EY);
 //        return odsayService.getOdsay();
+        return Response.of(HttpStatus.OK, "조회완료", result);
     }
 
-    @GetMapping("/optimization/{planDayId}")
-    public void getAlgo(@PathVariable("planDayId") Long planDayId) {
-        algorithmService.shortestPathAlgorithm(planDayId);
+    @PostMapping("/test3")
+    public void getOdsay3(@RequestBody List<CoordinateDTO> coordinateDTO) {
+        try {
+            algorithmService.getShortTime(coordinateDTO);
+        } catch (Exception e) {
+            System.out.println("e.getMessage() = " + e.getMessage());
+            throw new RuntimeException();
+        }
     }
+
+//    @GetMapping("/optimization/{planDayId}")
+//    public void getAlgo(@PathVariable("planDayId") Long planDayId) {
+//        algorithmService.shortestPathAlgorithm(planDayId);
+//    }
 }

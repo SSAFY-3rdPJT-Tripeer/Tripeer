@@ -259,6 +259,7 @@ package j10d207.tripeer.odsay.service;
 
 import j10d207.tripeer.exception.CustomException;
 import j10d207.tripeer.exception.ErrorCode;
+import j10d207.tripeer.odsay.db.dto.CoordinateDTO;
 import j10d207.tripeer.odsay.db.dto.OptimizeDto;
 import j10d207.tripeer.odsay.db.dto.OptimizeListDTO;
 import j10d207.tripeer.place.db.entity.SpotInfoEntity;
@@ -272,6 +273,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -295,10 +297,12 @@ public class AlgorithmServiceImpl implements AlgorithmService{
     static int N;
     static int[] v;
     static double minv = Integer.MAX_VALUE;
+    static double mintime = Integer.MAX_VALUE;
     static double[][] graphs;
     static double [][] latitudeAndLongitude;
     static String[] loca;
     static double[] ret;
+    static int[] rootTime;
 
 
     // 조합 + 백트레킹으로 가장 최단으로 모든 경로를 탐색하는 경우의 수를 구함
@@ -332,6 +336,41 @@ public class AlgorithmServiceImpl implements AlgorithmService{
                 ArrayList<String> newLocal = new ArrayList<>(local);
                 newLocal.add(location[i]);
                 solve(index + 1, i, sum + graphs[now][i], newResult, newLocal);
+                v[i] = 0;
+            }
+        }
+    }
+
+    public void solve2(int index, int now, int sum, ArrayList<Integer> result, ArrayList<String> local, int[][] timeTable) {
+        if (sum > mintime) {
+            return;
+        }
+        if (index == N - 2) {
+            result.add(timeTable[now][N-1]);
+            local.add(location[N-1]);
+            if( sum + timeTable[now][N-1]  > mintime ) return;
+            mintime = sum + timeTable[now][N-1];
+            rootTime = new int[result.size()];
+            loca = new String[local.size()];
+            for (int i = 0; i < result.size(); i++) {
+                rootTime[i] = result.get(i);
+            }
+            for (int j = 0; j < local.size(); j++) {
+                loca[j] = local.get(j);
+            }
+            rootTime[result.size()] = timeTable[now][N-1];
+            loca[local.size()] = location[N-1];
+            return;
+        }
+        for (int i = 0; i < N-2; i++) {
+
+            if (v[i] == 0) {
+                v[i] = 1;
+                ArrayList<Integer> newResult = new ArrayList<>(result);
+                newResult.add(timeTable[now][i]);
+                ArrayList<String> newLocal = new ArrayList<>(local);
+                newLocal.add(location[i]);
+                solve2(index + 1, i, sum + timeTable[now][i], newResult, newLocal, timeTable);
                 v[i] = 0;
             }
         }
@@ -453,7 +492,39 @@ public class AlgorithmServiceImpl implements AlgorithmService{
         System.out.println("location 21312= " + Arrays.toString(location));
     }
 
+    @Override
+    public void getShortTime(List<CoordinateDTO> coordinateDTOList) throws IOException {
+        int[][] timeTable = odsayService.getTimeTable(coordinateDTOList);
 
+        for (int i = 0; i < coordinateDTOList.size(); i++) {
+            for (int j = 0; j < coordinateDTOList.size(); j++) {
+                System.out.print(timeTable[i][j] + " ");
+            }
+            System.out.println();
+        }
+        System.out.println("체크 1");
+
+        location = new String[coordinateDTOList.size()];
+        for (int i = 0; i < coordinateDTOList.size(); i++) {
+            location[i] = coordinateDTOList.get(i).getTitle();
+        }
+        System.out.println("체크 2");
+        ArrayList<String> startLocation  = new ArrayList<>();
+        startLocation.add(location[N-2]);
+        solve2(0, N-2, 0, new ArrayList<>(), startLocation, timeTable);
+        System.out.println("체크 3");
+        for (String s : loca) {
+            System.out.print(s + " -> ");
+        }
+        System.out.println();
+
+        for (double value : ret) {
+            System.out.print(value + " -> ");
+        }
+
+        System.out.println();
+        System.out.println("최종 : " + minv );
+    }
 
     public void shortestPathAlgorithm(OptimizeListDTO optimizeListDTO) {
 

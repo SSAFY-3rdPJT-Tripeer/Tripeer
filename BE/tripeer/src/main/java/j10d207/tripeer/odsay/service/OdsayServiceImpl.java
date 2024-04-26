@@ -6,6 +6,7 @@ import com.nimbusds.jose.shaded.gson.JsonArray;
 import com.nimbusds.jose.shaded.gson.JsonElement;
 import com.nimbusds.jose.shaded.gson.JsonObject;
 import com.nimbusds.jose.shaded.gson.JsonParser;
+import j10d207.tripeer.odsay.db.dto.CoordinateDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
@@ -19,6 +20,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 
 @Service
@@ -62,20 +65,37 @@ public class OdsayServiceImpl implements OdsayService{
 
     }
 
+    @Override
+    public int[][] getTimeTable(List<CoordinateDTO> coordinates) throws IOException {
+        int[][] timeTable = new int[coordinates.size()][coordinates.size()];
+        for (int i = 0; i < coordinates.size(); i++) {
+            for (int j = i; j < coordinates.size(); j++) {
+                if(i == j) continue;
+                timeTable[i][j] = getPublicTime(coordinates.get(i).getLongitude(), coordinates.get(i).getLatitude(), coordinates.get(j).getLongitude(), coordinates.get(j).getLatitude());
+                timeTable[j][i] = timeTable[i][j];
+            }
+        }
+
+        return timeTable;
+    }
+
     //경로 시간 받아오기
     @Override
-    public void getPublicTime(double SX, double SY, double EX, double EY) {
+    public int getPublicTime(double SX, double SY, double EX, double EY) {
         JsonObject root = getResult(SX, SY, EX, EY);
         if (root.getAsJsonObject("result").get("searchType").getAsInt() == 0) {
             //도시내 이동
+            return getTimeCtiyIn(root.getAsJsonObject("result").getAsJsonArray("path"));
         }
         else if (root.getAsJsonObject("result").get("searchType").getAsInt() == 1) {
             //도시간 직통, 도시간 이동이 포함된 이동
-            getTimeCityOut(root.getAsJsonObject("result").getAsJsonArray("path"), SX, SY, EX, EY);
+            return getTimeCityOut(root.getAsJsonObject("result").getAsJsonArray("path"), SX, SY, EX, EY);
 
         } else if ( root.getAsJsonObject("result").get("searchType").getAsInt() == 2 ) {
             System.out.println("도시간 환승이라는데 이건 어떤경우에 나오는지 모르겠음");
+            return -1;
         }
+        return -2;
     }
 
     private int getTimeGoTerminal(double SX, double SY, double EX, double EY) {
@@ -92,6 +112,10 @@ public class OdsayServiceImpl implements OdsayService{
                 }
             }
         }
+//        else {
+////            System.out.println("jsonObject = " + jsonObject);
+//            //에러코드 : {"error":{"code":"429","message":"Too Many Requests"}}
+//        }
         return time;
     }
 
@@ -102,11 +126,21 @@ public class OdsayServiceImpl implements OdsayService{
         return JsonParser.parseString(result).getAsJsonObject();
     }
 
-    private void getTimeCtiyIn(JsonArray path) {
-        System.out.println("path = " + path);
+    private int getTimeCtiyIn(JsonArray path) {
+        JsonElement shortRoot = null;
+        int time = Integer.MAX_VALUE;
+        for(JsonElement root : path) {
+            int tmpTime = root.getAsJsonObject().getAsJsonObject("info").get("totalTime").getAsInt();
+            if (time > tmpTime) {
+                shortRoot = root;
+                time = tmpTime;
+            }
+        }
+        System.out.println("shortRoot = " + shortRoot);
+        return time;
     }
 
-    private void getTimeCityOut(JsonArray path, double SX, double SY, double EX, double EY) {
+    private int getTimeCityOut(JsonArray path, double SX, double SY, double EX, double EY) {
         JsonElement shortRoot = null;
         int time = Integer.MAX_VALUE;
         searchRootList : for(JsonElement re : path) {
@@ -154,5 +188,6 @@ public class OdsayServiceImpl implements OdsayService{
         }
 
         System.out.println("shortRoot = " + shortRoot);
+        return time;
     }
 }
