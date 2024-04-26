@@ -55,7 +55,13 @@ const PlanFullNav = (props) => {
         </section>
         <footer className={`${styles.outPage} ${styles.item}`}>
           <div className={`${styles.exit} ${styles.icon}`} />
-          <span className={styles.offExit}>방 나가기</span>
+          <span
+            className={styles.offExit}
+            onClick={() => {
+              goTo(3);
+            }}>
+            방 나가기
+          </span>
         </footer>
       </article>
     </div>

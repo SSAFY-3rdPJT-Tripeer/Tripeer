@@ -11,7 +11,6 @@ const PageDetail = (props) => {
   const [current, setCurrent] = useState(0);
   useEffect(() => {
     // 여기서 구독 처리( 해당 props에 planId 존재함)
-    console.log(props);
   }, [props]);
   const RENDER = useMemo(() => {
     return [
