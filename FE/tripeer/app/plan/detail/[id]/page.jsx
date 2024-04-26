@@ -20,10 +20,10 @@ const PageDetail = (props) => {
     ];
   }, []);
   return (
-    <main className={styles.container}>
+    <div className={styles.container}>
       <PlanNav current={current} setCurrent={setCurrent}></PlanNav>
       {RENDER[current]}
-    </main>
+    </div>
   );
 };
 
