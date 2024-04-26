@@ -12,7 +12,6 @@ import PlanModal from "./PlanModal.jsx";
 import TitleModal from "./TitleModal";
 import DateModal from "./DateModal";
 import api from "@/utils/api";
-import Guard from "@/components/guard/Guard";
 
 import { useRouter } from "next/navigation";
 
@@ -283,4 +282,4 @@ const Cards = () => {
   );
 };
 
-export default Guard(Cards);
+export default Cards;
