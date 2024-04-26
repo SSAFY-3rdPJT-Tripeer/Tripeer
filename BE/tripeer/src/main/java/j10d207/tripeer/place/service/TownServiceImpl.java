@@ -46,8 +46,7 @@ public class TownServiceImpl implements TownService{
         }
 
         // townName이 유효하게 들어왔을때는 singletonList를 생성하여 반환
-        TownEntity townEntity = townRepository.findByTownName(townName)
-                .orElseThrow(() -> new CustomException(ErrorCode.TOWN_NOT_FOUND));
+        TownEntity townEntity = townRepository.findByTownNameAndTownPK_City_CityId(townName, Integer.parseInt(cityId));
 
         return Collections.singletonList(TownListDto.convertToDto(townEntity));
     }
