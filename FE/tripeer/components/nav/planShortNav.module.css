@@ -1,0 +1,82 @@
+.container {
+  width: 72px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #d9d9d9;
+  animation: startPage 0.3s ease forwards;
+}
+
+@keyframes startPage {
+  0% {
+    width: 250px;
+  }
+  100% {
+    width: 72px;
+  }
+}
+
+.bannerBox {
+  height: 60px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contentBox {
+  border-top: 1px solid #d9d9d9;
+  width: 100%;
+  height: calc(100vh - 60px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px 0px 20px 0px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  cursor: pointer;
+  height: 40px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+}
+
+.item:hover {
+  background: #f6f6f6;
+}
+
+.icon {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.home {
+  background-image: url(./assets/offHome.svg);
+}
+
+.onMap {
+  background-image: url(./assets/onMap.svg);
+}
+
+.offMap {
+  background-image: url(./assets/offMap.svg);
+}
+.onSchedule {
+  background-image: url(./assets/onSchedule.svg);
+}
+.offSchedule {
+  background-image: url(./assets/offSchedule.svg);
+}
+
+.exit {
+  margin-left: 4px;
+  background-image: url(./assets/Exit.svg);
+}
