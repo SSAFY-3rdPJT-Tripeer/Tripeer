@@ -5,11 +5,15 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
+import j10d207.tripeer.history.db.dto.GalleryDTO;
 import j10d207.tripeer.history.db.entity.GalleryEntity;
 import j10d207.tripeer.history.db.repository.GalleryRepository;
 import j10d207.tripeer.plan.db.entity.PlanDayEntity;
 import j10d207.tripeer.plan.db.repository.PlanDayRepository;
+import j10d207.tripeer.plan.db.repository.PlanRepository;
 import j10d207.tripeer.user.config.JWTUtil;
+import j10d207.tripeer.user.db.entity.UserEntity;
+import j10d207.tripeer.user.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,6 +37,7 @@ public class GalleryServiceImpl implements GalleryService{
     private final JWTUtil jwtUtil;
     private final GalleryRepository galleryRepository;
     private final PlanDayRepository planDayRepository;
+    private final UserRepository userRepository;
 
     //이름 중복 방지를 위해 랜덤으로 생성
     private String changedImageName(String originName) {
@@ -51,8 +56,7 @@ public class GalleryServiceImpl implements GalleryService{
 //        long userId = jwtUtil.getUserId(token);
         //날짜를 String 으로 변환
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-//        String dateString = planDay.getDay().format(formatter);
-        String dateString = "20240423";
+        String dateString = planDay.getDay().format(formatter);
 
         // 업로드한 파일의 업로드 경로를 담을 리스트
         List<GalleryEntity> createInfo = new ArrayList<>();
@@ -96,4 +100,23 @@ public class GalleryServiceImpl implements GalleryService{
         }
         return createInfo;
     }
+    public List<GalleryDTO> getGalleryList(long planDayId) {
+        List<GalleryDTO> galleryList = new ArrayList<>();
+        PlanDayEntity planDay = planDayRepository.findByPlanDayId(planDayId);
+        List<GalleryEntity> galleryEntityList = galleryRepository.findAllByPlanDay(planDay);
+        for(GalleryEntity galleryEntity : galleryEntityList) {
+
+            String url = galleryEntity.getUrl();
+            String[] splitUrl = url.split("/");
+            long userId = Long.parseLong(splitUrl[4]);
+            UserEntity user = userRepository.findByUserId(userId);
+            GalleryDTO galleryDTO = GalleryDTO.builder()
+                                            .img(url)
+                                            .userImg(user.getProfileImage())
+                                            .build();
+            galleryList.add(galleryDTO);
+        }
+        return galleryList;
+    };
+
 }

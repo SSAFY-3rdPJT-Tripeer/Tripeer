@@ -40,7 +40,8 @@ spring:
             client-name: kakao
             client-id : ENC(IaY6SQ0O/qVmqqwYfxphw2mNp3r82EjyJv62hGoqZfuFTM8rR7LUSqFWbxYS6x48)
             client-secret: ENC(lQlOiocOvFAtDivr/RySShuAQozGv1F6o1J6tf7uYxTeXxpl9BRgPUbvbDq69cix)
-            redirect-uri: https://k10d207.p.ssafy.io/api/login/oauth2/code/kakao
+#            redirect-uri: https://k10d207.p.ssafy.io/api/login/oauth2/code/kakao
+            redirect-uri: http://localhost:3000/api/login/oauth2/code/kakao
             authorization-grant-type: authorization_code
             scope: profile_nickname, profile_image
             client-authentication-method: client_secret_post
