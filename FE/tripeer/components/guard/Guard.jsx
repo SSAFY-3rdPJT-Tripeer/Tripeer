@@ -8,7 +8,6 @@ const Guard = (WrappedComponent) => {
   return (props) => {
     if (typeof window !== "undefined") {
       const router = useRouter();
-      console.log(localStorage.getItem("accessToken"));
       const token = localStorage.getItem("accessToken");
       if (!token) {
         router.replace("/login");
