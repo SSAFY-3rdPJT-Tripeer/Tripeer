@@ -4,10 +4,7 @@ import j10d207.tripeer.odsay.service.AlgorithmService;
 import j10d207.tripeer.odsay.service.AlgorithmServiceImpl;
 import j10d207.tripeer.odsay.service.OdsayService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -25,6 +22,12 @@ public class OdsayController {
 
 //        odsayService.getOdsay();
         return odsayService.getOdsay();
+    }
+
+    @GetMapping("/test2")
+    public void getOdsay2(@RequestParam("SX") double SX, @RequestParam("SY") double SY, @RequestParam("EX") double EX, @RequestParam("EY") double EY) {
+        odsayService.getPublicTime(SX, SY, EX, EY);
+//        return odsayService.getOdsay();
     }
 
     @GetMapping("/optimization/{planDayId}")

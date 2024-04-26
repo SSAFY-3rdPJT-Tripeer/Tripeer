@@ -45,10 +45,11 @@ public class AlgorithmServiceImpl implements AlgorithmService{
         if (sum > minv) {
             return;
         }
-        if (index == N - 1) {
-            result.add(graphs[now][0]);
-            local.add(location[0]);
-            minv = sum;
+        if (index == N - 2) {
+            result.add(graphs[now][N-1]);
+            local.add(location[N-1]);
+            if( sum + graphs[now][N-1]  > minv ) return;
+            minv = sum + graphs[now][N-1];
             ret = new double[result.size()];
             loca = new String[local.size()];
             for (int i = 0; i < result.size(); i++) {
@@ -59,7 +60,7 @@ public class AlgorithmServiceImpl implements AlgorithmService{
             }
             return;
         }
-        for (int i = 0; i < N; i++) {
+        for (int i = 0; i < N-2; i++) {
             if (v[i] == 0) {
                 v[i] = 1;
                 ArrayList<Double> newResult = new ArrayList<>(result);
@@ -176,14 +177,18 @@ public class AlgorithmServiceImpl implements AlgorithmService{
         // 최단 거리 배열 생성
         createGraph(latitudeAndLongitude);
         // 플로이드-와샬 알고리즘을 사용하여 최단 거리 계산
-        floydWarshall();
+//        floydWarshall();
 
 
 
         // 출발지는 미리 방문표시
-        v[0] = 1;
-
-        solve(0, 0, 0, new ArrayList<>(), new ArrayList<>());
+//        v[0] = 1;
+//        v[1] = 1;
+//        v[N-1] = 1;
+//        ArrayList<Double> startresult = new ArrayList<>();
+        ArrayList<String> startLocation  = new ArrayList<>();
+        startLocation.add(location[N-2]);
+        solve(0, N-2, 0, new ArrayList<>(), startLocation);
 
 
         for (int i = 0; i < loca.length; i++) {
@@ -194,5 +199,8 @@ public class AlgorithmServiceImpl implements AlgorithmService{
         for (int i = 0; i < ret.length; i++) {
             System.out.print(ret[i] + " -> ");
         }
+
+        System.out.println();
+        System.out.println("최종 : " + minv );
     }
 }
