@@ -1,9 +1,7 @@
 package j10d207.tripeer.place.controller;
 
 import j10d207.tripeer.place.db.dto.*;
-import j10d207.tripeer.place.service.CityServiceImpl;
-import j10d207.tripeer.place.service.SpotServiceImpl;
-import j10d207.tripeer.place.service.TownServiceImpl;
+import j10d207.tripeer.place.service.*;
 import j10d207.tripeer.response.Response;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
@@ -18,9 +16,9 @@ import java.util.List;
 @AllArgsConstructor
 public class PlaceController {
 
-    private final CityServiceImpl cityServiceImpl;
-    private final TownServiceImpl townServiceImpl;
-    private final SpotServiceImpl spotServiceImpl;
+    private final CityService cityService;
+    private final TownService townService;
+    private final SpotService spotService;
 
     /*
     * city 검색
@@ -29,7 +27,7 @@ public class PlaceController {
     * */
     @GetMapping("/city/{cityName}")
     public Response<List<CityListDto>> searchCity(@PathVariable("cityName") String cityName) {
-        return Response.of(HttpStatus.OK, "도시 검색 결과", cityServiceImpl.searchCity(cityName));
+        return Response.of(HttpStatus.OK, "도시 검색 결과", cityService.searchCity(cityName));
     }
 
 
@@ -41,7 +39,7 @@ public class PlaceController {
     @GetMapping("/town")
     public Response<List<TownListDto>> searchTown(@RequestParam("cityId") String cityId,
                                                   @RequestParam("townName") String townName) {
-        return Response.of(HttpStatus.OK, "타운 검색 결과", townServiceImpl.searchTown(cityId, townName));
+        return Response.of(HttpStatus.OK, "타운 검색 결과", townService.searchTown(cityId, townName));
     }
 
 
@@ -50,7 +48,7 @@ public class PlaceController {
      * */
     @GetMapping("/detail/{townName}")
     public Response<TownListDto> townDetail(@PathVariable("townName") String townName) {
-        return Response.of(HttpStatus.OK, "타운 디테일 조회", townServiceImpl.townDetail(townName));
+        return Response.of(HttpStatus.OK, "타운 디테일 조회", townService.townDetail(townName));
     }
 
 
@@ -62,7 +60,7 @@ public class PlaceController {
     public Response<SpotListDto> getStayList(@RequestParam("cityId") Integer cityId,
                                              @RequestParam("townId") Integer townId,
                                              @RequestParam("page") Integer page) {
-        return Response.of(HttpStatus.OK, "숙소 조회", spotServiceImpl.getStayList(page,32, cityId, townId));
+        return Response.of(HttpStatus.OK, "숙소 조회", spotService.getStayList(page,32, cityId, townId));
     }
 
 
@@ -74,7 +72,7 @@ public class PlaceController {
     public Response<SpotListDto> getRestaurantList(@RequestParam("cityId") Integer cityId,
                                                    @RequestParam("townId") Integer townId,
                                                    @RequestParam("page") Integer page) {
-        return Response.of(HttpStatus.OK, "식당 조회", spotServiceImpl.getRestaurantList(page,39, cityId, townId));
+        return Response.of(HttpStatus.OK, "식당 조회", spotService.getRestaurantList(page,39, cityId, townId));
     }
 
 
@@ -87,7 +85,7 @@ public class PlaceController {
                                               @RequestParam("townId") Integer townId,
                                               @RequestParam("page") Integer page) {
         List<Integer> contentTypeIds = Arrays.asList(32, 39);
-        return Response.of(HttpStatus.OK, "명소 조회", spotServiceImpl.getMeccaList(page, contentTypeIds, cityId, townId));
+        return Response.of(HttpStatus.OK, "명소 조회", spotService.getMeccaList(page, contentTypeIds, cityId, townId));
     }
 
 
@@ -97,7 +95,7 @@ public class PlaceController {
     @GetMapping("/spot/detail/{spotId}")
     public Response<SpotDetailDto> getSpotDetail(@PathVariable("spotId") Integer spotId) {
 
-        return Response.of(HttpStatus.OK, "스팟 디테일 조회", spotServiceImpl.getSpotDetail(spotId));
+        return Response.of(HttpStatus.OK, "스팟 디테일 조회", spotService.getSpotDetail(spotId));
     }
 
 
@@ -107,7 +105,15 @@ public class PlaceController {
     @PostMapping("/spot/create")
     public Response<?> createNewSpot(@RequestBody SpotAddReqDto spotAddReqDto, HttpServletRequest request) {
 
-        return Response.of(HttpStatus.OK, "새로운 스팟 생성", spotServiceImpl.createNewSpot(spotAddReqDto, request));
+        return Response.of(HttpStatus.OK, "새로운 스팟 생성", spotService.createNewSpot(spotAddReqDto, request));
+    }
+
+    /*
+    * 모든 도시, 타운 조회
+    * */
+    @GetMapping("/all")
+    public Response<CityAndTownDto> getAllCityAndTown() {
+        return Response.of(HttpStatus.OK, "새로운 스팟 생성", townService.getAllCityAndTown());
     }
 
 

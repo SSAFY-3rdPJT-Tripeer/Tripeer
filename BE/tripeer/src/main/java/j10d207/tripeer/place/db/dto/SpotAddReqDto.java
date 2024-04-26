@@ -19,8 +19,8 @@ public class SpotAddReqDto {
     private String tel;
     private String firstImage;
     private String secondImage;
-    private BigDecimal latitude;
-    private BigDecimal longitude;
+    private Double latitude;
+    private Double longitude;
     private String overview;
     private String cat1;
     private String cat2;

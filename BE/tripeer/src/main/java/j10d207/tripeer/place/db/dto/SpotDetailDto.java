@@ -12,8 +12,8 @@ import java.math.BigDecimal;
 @Builder
 @AllArgsConstructor
 public class SpotDetailDto {
-    private BigDecimal latitude;
-    private BigDecimal longitude;
+    private Double latitude;
+    private Double longitude;
     private String spotImg;
     private String spotName;
     private String description;
