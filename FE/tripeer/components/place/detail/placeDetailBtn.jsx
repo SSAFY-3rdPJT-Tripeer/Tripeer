@@ -2,12 +2,19 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import styles from "./placeDetailBtn.module.css";
-import cityName from "@/utils/cityName";
 
-export default function PlaceDetailBtn({ title, imgSrc }) {
+export default function PlaceDetailBtn({ title, imgSrc, cityName, townName }) {
   const router = useRouter();
   const onClick = () => {
-    // router.push(`https://search.naver.com/search.naver?query=${}+${}`);
+    if (title === "날씨") {
+      router.push(
+        `https://search.naver.com/search.naver?query=${cityName}${cityName === townName ? "" : `+${townName}`}+날씨`,
+      );
+    } else {
+      router.push(
+        `https://map.naver.com/p/search/${cityName}%20${cityName === townName ? "" : `+${townName}`}`,
+      );
+    }
   };
 
   return (

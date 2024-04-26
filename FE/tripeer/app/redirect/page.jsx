@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import cookies from "js-cookie";
 import logo from "@/public/login/logo.png";
 import Image from "next/image";
 import styles from "./page.module.css";
