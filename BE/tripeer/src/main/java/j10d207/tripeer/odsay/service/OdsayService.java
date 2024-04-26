@@ -6,5 +6,5 @@ import java.io.IOException;
 
 public interface OdsayService {
 
-    public StringBuilder getOdsay() throws IOException;
+    public String getOdsay(Double SX, Double SY, Double EX, Double EY) throws IOException;
 }
