@@ -1,7 +1,9 @@
 "use client";
 
 // 외부 모듈
-import Lottie from "react-lottie-player";
+
+import dynamic from "next/dynamic";
+const Lottie = dynamic(() => import("react-lottie-player"), { ssr: false });
 
 // 내부 모듈
 import lottieJson from "./assets/loading1.json";
