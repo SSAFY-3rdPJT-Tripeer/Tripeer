@@ -4,6 +4,16 @@
   display: flex;
   flex-direction: column;
   border-right: 1px solid #d9d9d9;
+  animation: startPage 0.3s ease forwards;
+}
+
+@keyframes startPage {
+  0% {
+    width: 72px;
+  }
+  100% {
+    width: 250px;
+  }
 }
 
 .bannerBox {
