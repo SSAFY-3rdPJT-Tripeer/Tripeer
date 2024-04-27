@@ -13,6 +13,7 @@ export default function PlacePage({ params }) {
   // 씨티인지 타운인지 체크
   const [isCity, setIsCity] = useState(true);
 
+  // 검색을 위해 로컬에 저장
   const inputLocal = async () => {
     try {
       // GET 요청
