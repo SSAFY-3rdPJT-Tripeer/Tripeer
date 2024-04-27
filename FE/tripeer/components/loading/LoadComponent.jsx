@@ -14,7 +14,7 @@ import styles from "./loading.module.css";
 
 */
 
-const Loading = (props) => {
+const LoadComponent = (props) => {
   const { step } = props;
   let isShow = false;
   let fade = "";
@@ -48,4 +48,4 @@ const Loading = (props) => {
   );
 };
 
-export default Loading;
+export default LoadComponent;

@@ -1,7 +1,7 @@
 "use client";
 
-import Loading from "@/components/loading/Loading";
 import { useEffect, useState } from "react";
+import LoadComponent from "@/components/loading/LoadComponent.jsx";
 
 const Test = () => {
   const [step, setStep] = useState(2);
@@ -9,6 +9,7 @@ const Test = () => {
   useEffect(() => {
     const timeout = setTimeout(() => {
       setStep(1);
+      clearTimeout(timeout);
     }, 1500);
     return () => {
       clearTimeout(timeout);
@@ -17,7 +18,7 @@ const Test = () => {
 
   return (
     <div>
-      <Loading step={step}></Loading>
+      <LoadComponent step={step} />
     </div>
   );
 };
