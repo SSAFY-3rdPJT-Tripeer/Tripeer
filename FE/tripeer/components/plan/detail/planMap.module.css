@@ -1,0 +1,11 @@
+.container {
+  width: calc(100vw - 72px);
+  height: 100vh;
+  position: relative;
+  display: flex;
+}
+
+.searchBox {
+  height: 100vh;
+  width: 300px;
+}
