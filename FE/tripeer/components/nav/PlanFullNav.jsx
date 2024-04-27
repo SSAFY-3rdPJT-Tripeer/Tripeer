@@ -19,6 +19,7 @@ const PlanFullNav = (props) => {
     <div className={styles.container}>
       <header className={styles.bannerBox}>
         <Image
+          priority
           src={banner}
           width={130}
           height={50}
@@ -53,15 +54,13 @@ const PlanFullNav = (props) => {
             <span className={styles.offText}>일정</span>
           </div>
         </section>
-        <footer className={`${styles.outPage} ${styles.item}`}>
+        <footer
+          className={`${styles.outPage} ${styles.item}`}
+          onClick={() => {
+            goTo(3);
+          }}>
           <div className={`${styles.exit} ${styles.icon}`} />
-          <span
-            className={styles.offExit}
-            onClick={() => {
-              goTo(3);
-            }}>
-            방 나가기
-          </span>
+          <span className={styles.offExit}>방 나가기</span>
         </footer>
       </article>
     </div>
