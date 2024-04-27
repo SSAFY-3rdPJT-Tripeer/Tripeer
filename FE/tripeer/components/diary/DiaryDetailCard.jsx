@@ -15,7 +15,7 @@ const DiaryDetailCard = () => {
               <div key={idx} className={styles.photoBox}>
                 {idx === 3 ? (
                   <div className={styles.moreBox}>
-                    <div className={styles.moreText}>사진 더 보기</div>
+                    <div className={styles.moreText}>사진 더보기</div>
                     <div className={styles.moreIcon}></div>
                   </div>
                 ) : (
