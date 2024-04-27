@@ -11,6 +11,7 @@ import api from "@/utils/api";
 const PageDetail = (props) => {
   const [current, setCurrent] = useState(0);
   const [plan, setPlan] = useState(null);
+
   useEffect(() => {
     const getPlan = async () => {
       if (props.params?.id) {
@@ -21,10 +22,11 @@ const PageDetail = (props) => {
     };
     getPlan();
   }, [props]);
+
   const RENDER = useMemo(() => {
     return [
       <PlanHome key={"PlanHome"} {...props} plan={plan} setPlan={setPlan} />,
-      <PlanMap key={"PlanMap"} />,
+      <PlanMap key={"PlanMap"} {...props} plan={plan} setPlan={setPlan} />,
       <PlanSchedule key={"PlanSchedule"} />,
     ];
   }, [props, plan]);
