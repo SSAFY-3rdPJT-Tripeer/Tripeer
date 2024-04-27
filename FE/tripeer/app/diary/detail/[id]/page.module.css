@@ -1,0 +1,153 @@
+.container {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 70px 100px;
+}
+.header {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 400px;
+  margin-bottom: 50px;
+}
+.imageBox {
+  height: 100%;
+  width: 50%;
+}
+.headerImg {
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 20%);
+}
+
+.headerContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  width: 45%;
+  margin-left: 5%;
+}
+.headerTitle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 30px;
+}
+.placeBox {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 30px;
+}
+.scheduleBox {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 30px;
+}
+.memberBox {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 30px;
+}
+.iconBox {
+  height: auto;
+  width: 20px;
+}
+.mapIcon {
+  background: url("../../../../components/diary/assets/map_pointColor.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 20px;
+  height: 20px;
+}
+.scheduleIcon {
+  background: url("../../../../components/diary/assets/schedule_pointColor.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 20px;
+  height: 20px;
+}
+.membereIcon {
+  background: url("../../../../components/diary/assets/member_pointColor.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 20px;
+  height: 20px;
+}
+.contentBox {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #4fbdb7;
+}
+
+.subTitle {
+  margin-top: 8px;
+  color: #545454;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+.memberList {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+}
+.nameBox {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #4fbdb7;
+  border-radius: 50px;
+  height: 60px;
+  width: 60px;
+  padding: 5px;
+  margin-right: 10px;
+  overflow: hidden;
+  transition: width 0.5s ease; /* 애니메이션 효과 적용 */
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 20%);
+}
+.nameBox:hover {
+  justify-content: flex-start;
+  width: 150px;
+}
+
+.memberImg {
+  border-radius: 50px;
+  height: 50px;
+  width: 50px;
+}
+.nicknameBox {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 55px;
+  margin-right: 10px;
+  text-overflow: ellipsis;
+  visibility: hidden;
+  white-space: nowrap;
+  height: 50px;
+  width: auto;
+}
+.nameBox:hover .nicknameBox {
+  opacity: 1;
+  visibility: visible;
+}
+
+.articleBox {
+  width: 100%;
+  height: 500px;
+}

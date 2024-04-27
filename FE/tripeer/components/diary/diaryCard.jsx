@@ -35,6 +35,7 @@ const DiaryCard = () => {
                 <Image
                   src={item.Img}
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   alt="im"
                   className={styles.cardImg}
                   onClick={() => {
@@ -44,7 +45,7 @@ const DiaryCard = () => {
               </div>
               <div className={styles.contentBox}>
                 <p className={styles.title}>{item.title}</p>
-                <p className={styles.placeList}>
+                <div className={styles.placeList}>
                   {item.townList.map((place, id) => {
                     return (
                       <p key={id} className={styles.placeText}>
@@ -56,7 +57,7 @@ const DiaryCard = () => {
                       </p>
                     );
                   })}
-                </p>
+                </div>
                 <div className={styles.bottomBox}>
                   <p className={styles.dateText}>
                     {item.startDay} - {item.endDay}

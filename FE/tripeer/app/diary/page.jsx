@@ -1,5 +1,5 @@
 import styles from "./page.module.css";
-import DiaryCard from "@/components/diary/diaryCard";
+import DiaryCard from "@/components/diary/DiaryCard";
 
 const Diary = () => {
   return (
