@@ -1,6 +1,6 @@
 "use client";
 
-import Loading from "@/components/loading/loading";
+import Loading from "@/components/loading/Loading";
 import { useEffect, useState } from "react";
 
 const Test = () => {
