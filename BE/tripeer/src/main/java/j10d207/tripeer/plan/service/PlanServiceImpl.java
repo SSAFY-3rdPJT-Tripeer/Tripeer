@@ -330,7 +330,9 @@ public class PlanServiceImpl implements PlanService {
         spotInfoSpec = spotInfoSpec.and(contentTypeSpec);
         spotInfoSpec = spotInfoSpec.and(addr1Spec);
         List<SpotInfoEntity> spotInfoList = spotInfoRepository.findAll(spotInfoSpec, pageable);
-        if(spotInfoList.isEmpty()) {
+        if(spotInfoList.isEmpty() && page == 0) {
+            throw new CustomException(ErrorCode.SEARCH_NULL);
+        } else if (spotInfoList.isEmpty() && page == 1) {
             throw new CustomException(ErrorCode.SCROLL_END);
         }
 
@@ -383,16 +385,21 @@ public class PlanServiceImpl implements PlanService {
     //즐겨찾기 추가
     @Override
     public void addWishList(int spotInfoId, String token) {
-        String access = jwtUtil.splitToken(token);
-        WishListEntity wishList = WishListEntity.builder()
-                .user(UserEntity.builder()
-                        .userId(jwtUtil.getUserId(access))
-                        .build())
-                .spotInfo(SpotInfoEntity.builder()
-                        .spotInfoId(spotInfoId)
-                        .build())
-                .build();
-        wishListRepository.save(wishList);
+        long userId = jwtUtil.getUserId(jwtUtil.splitToken(token));
+        Optional<WishListEntity> optionalWishList = wishListRepository.findBySpotInfo_SpotInfoIdAndUser_UserId(spotInfoId, userId);
+        if (optionalWishList.isPresent()) {
+            wishListRepository.delete(optionalWishList.get());
+        } else {
+            WishListEntity wishList = WishListEntity.builder()
+                    .user(UserEntity.builder()
+                            .userId(userId)
+                            .build())
+                    .spotInfo(SpotInfoEntity.builder()
+                            .spotInfoId(spotInfoId)
+                            .build())
+                    .build();
+            wishListRepository.save(wishList);
+        }
     }
 
     //즐겨찾기 조회
