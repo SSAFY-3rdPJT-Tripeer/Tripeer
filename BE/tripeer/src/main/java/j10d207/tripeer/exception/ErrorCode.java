@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
 
     TEST_EXCEPTION(HttpStatus.BAD_REQUEST, "TEST-001", "익셉션 테스트"),
+    // common
+    SCROLL_END(HttpStatus.BAD_REQUEST, "COMMON-001", "무한 스크롤의 끝"),
     // user
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "ACCOUNT-001", "사용자를 찾을 수 없습니다."),
     HAS_EMAIL(HttpStatus.BAD_REQUEST, "ACCOUNT-002", "존재하는 닉네임 이메일입니다."),

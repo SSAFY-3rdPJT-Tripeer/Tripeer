@@ -330,6 +330,9 @@ public class PlanServiceImpl implements PlanService {
         spotInfoSpec = spotInfoSpec.and(contentTypeSpec);
         spotInfoSpec = spotInfoSpec.and(addr1Spec);
         List<SpotInfoEntity> spotInfoList = spotInfoRepository.findAll(spotInfoSpec, pageable);
+        if(spotInfoList.isEmpty()) {
+            throw new CustomException(ErrorCode.SCROLL_END);
+        }
 
         List<SpotSearchResDTO> spotSearchResDTOList = new ArrayList<>();
         for (SpotInfoEntity spotInfoEntity : spotInfoList) {
