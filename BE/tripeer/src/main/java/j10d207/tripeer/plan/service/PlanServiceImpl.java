@@ -18,7 +18,10 @@ import j10d207.tripeer.user.db.repository.UserRepository;
 import j10d207.tripeer.user.db.repository.WishListRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -298,8 +301,20 @@ public class PlanServiceImpl implements PlanService {
 
     //관광지 검색
     @Override
-    public List<SpotSearchResDTO> getSpotSearch(long planId, String keyword) {
-        List<SpotInfoEntity> spotInfoList = spotInfoRepository.findByTitleContains(keyword);
+    public List<SpotSearchResDTO> getSpotSearch(long planId, String keyword, int page) {
+        Specification<SpotInfoEntity> spotInfoSpec = Specification.where(null);
+        List<PlanTownEntity> planTownList = planTownRepository.findByPlan_PlanId(planId);
+        Pageable pageable = PageRequest.of(page, 10);
+
+        spotInfoSpec = spotInfoSpec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("title"), "%" + keyword + "%"));
+
+        Specification<SpotInfoEntity> addr1Spec = Specification.where(null);
+        for (PlanTownEntity planTownEntity : planTownList) {
+            String name = planTownEntity.getCityOnly() == null ? planTownEntity.getTown().getTownName() : planTownEntity.getCityOnly().getCityName();
+            addr1Spec = addr1Spec.or((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("addr1"), "%" + name + "%"));
+        }
+        spotInfoSpec = spotInfoSpec.and(addr1Spec);
+        List<SpotInfoEntity> spotInfoList = spotInfoRepository.findAll(spotInfoSpec, pageable);
 
         List<SpotSearchResDTO> spotSearchResDTOList = new ArrayList<>();
         for (SpotInfoEntity spotInfoEntity : spotInfoList) {
