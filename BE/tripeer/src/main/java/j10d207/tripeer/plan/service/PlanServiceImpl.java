@@ -301,7 +301,7 @@ public class PlanServiceImpl implements PlanService {
 
     //관광지 검색
     @Override
-    public List<SpotSearchResDTO> getSpotSearch(long planId, String keyword, int page) {
+    public List<SpotSearchResDTO> getSpotSearch(long planId, String keyword, int page, int sortType) {
         Specification<SpotInfoEntity> spotInfoSpec = Specification.where(null);
         List<PlanTownEntity> planTownList = planTownRepository.findByPlan_PlanId(planId);
         Pageable pageable = PageRequest.of(page, 10);
@@ -313,6 +313,21 @@ public class PlanServiceImpl implements PlanService {
             String name = planTownEntity.getCityOnly() == null ? planTownEntity.getTown().getTownName() : planTownEntity.getCityOnly().getCityName();
             addr1Spec = addr1Spec.or((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("addr1"), "%" + name + "%"));
         }
+
+        Specification<SpotInfoEntity> contentTypeSpec = Specification.where(null);
+        if( sortType == 2 ) {
+            contentTypeSpec = contentTypeSpec.or((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("contentTypeId"), 12));
+            contentTypeSpec = contentTypeSpec.or((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("contentTypeId"), 14));
+            contentTypeSpec = contentTypeSpec.or((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("contentTypeId"), 15));
+            contentTypeSpec = contentTypeSpec.or((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("contentTypeId"), 25));
+            contentTypeSpec = contentTypeSpec.or((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("contentTypeId"), 28));
+            contentTypeSpec = contentTypeSpec.or((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("contentTypeId"), 38));
+        } else if ( sortType == 3 ) {
+            contentTypeSpec = contentTypeSpec.or((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("contentTypeId"), 32));
+        } else if ( sortType == 4 ) {
+            contentTypeSpec = contentTypeSpec.or((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("contentTypeId"), 39));
+        }
+        spotInfoSpec = spotInfoSpec.and(contentTypeSpec);
         spotInfoSpec = spotInfoSpec.and(addr1Spec);
         List<SpotInfoEntity> spotInfoList = spotInfoRepository.findAll(spotInfoSpec, pageable);
 
