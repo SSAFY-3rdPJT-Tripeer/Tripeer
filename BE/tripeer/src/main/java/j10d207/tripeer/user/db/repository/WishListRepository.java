@@ -10,7 +10,9 @@ import java.util.Optional;
 @Repository
 public interface WishListRepository extends JpaRepository<WishListEntity, Long> {
 
-    Boolean existsBySpotInfo_SpotInfoId(int spotInfoId);
+//    Boolean existsBySpotInfo_SpotInfoId(int spotInfoId);
+    Boolean existsByUser_UserIdAndSpotInfo_SpotInfoId(long userId, int spotInfoId);
+
     Optional<WishListEntity> findBySpotInfo_SpotInfoIdAndUser_UserId(int spotInfoId, long userId);
     List<WishListEntity> findByUser_UserId(long userId);
 }
