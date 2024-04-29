@@ -1,8 +1,8 @@
 "use client";
 
 // 외부 모듈
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -10,11 +10,13 @@ import Link from "next/link";
 import style from "./navbar.module.css";
 import Logo from "@/public/logo.png";
 import toggleIcon from "./assets/toggle.svg";
+import cookies from "js-cookie";
 
 const NavBar = () => {
   const path = usePathname();
   const [toggle, setToggle] = useState(false);
-  const [isLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
+  const router = useRouter();
   const navRenderPath = {
     "/": true,
     "/plan": true,
@@ -25,6 +27,21 @@ const NavBar = () => {
   const LOGO_HEIGHT = 50;
   const TOGGLE_WIDTH = 15;
   const TOGGLE_HEIGHT = 8;
+
+  const logoutOnClick = () => {
+    cookies.remove("Authorization");
+    router.push("/");
+    window.location.reload();
+  };
+
+  useEffect(() => {
+    const token = cookies.get("Authorization");
+
+    if (token) {
+      setIsLogin(true);
+      // getUserData();
+    }
+  }, []);
 
   return (
     <>
@@ -70,7 +87,7 @@ const NavBar = () => {
                         <div className={`${style.mypage} ${style.icon}`} />
                         <span>마이 페이지</span>
                       </li>
-                      <li className={style.option}>
+                      <li className={style.option} onClick={logoutOnClick}>
                         <div className={`${style.logout} ${style.icon}`} />
                         <span>로그아웃</span>
                       </li>
