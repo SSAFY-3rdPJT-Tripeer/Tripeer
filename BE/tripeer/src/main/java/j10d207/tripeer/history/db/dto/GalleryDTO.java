@@ -7,5 +7,6 @@ import lombok.Getter;
 @Builder
 public class GalleryDTO {
     private String userImg;
+    private String userNickname;
     private String img;
 }
