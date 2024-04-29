@@ -12,4 +12,6 @@ public class TownDTO {
     private String title;
     private String description;
     private String img;
+    private double latitude;
+    private double longitude;
 }
