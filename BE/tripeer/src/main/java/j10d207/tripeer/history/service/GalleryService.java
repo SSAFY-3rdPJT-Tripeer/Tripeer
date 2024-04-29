@@ -10,6 +10,7 @@ import java.util.List;
 public interface GalleryService {
 
     // 이미지/동영상 업로드
-    public List<GalleryEntity> uploadsImageAndMovie(List<MultipartFile> files, String token, long planDayId) throws IOException;
+    public List<GalleryDTO> uploadsImageAndMovie(List<MultipartFile> files, String token, long planDayId) throws IOException;
     public List<GalleryDTO> getGalleryList(long planDayId);
+    public String deleteGalleryList(List<Long> galleryIdList);
 }

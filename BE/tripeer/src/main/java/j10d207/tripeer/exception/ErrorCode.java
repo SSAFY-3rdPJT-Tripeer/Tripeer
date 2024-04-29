@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
 
     TEST_EXCEPTION(HttpStatus.BAD_REQUEST, "TEST-001", "익셉션 테스트"),
+    // common
+    SCROLL_END(HttpStatus.BAD_REQUEST, "COMMON-001", "무한 스크롤의 끝"),
+    SEARCH_NULL(HttpStatus.NO_CONTENT, "COMMON-002", "검색 결과가 NULL"),
     // user
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "ACCOUNT-001", "사용자를 찾을 수 없습니다."),
     HAS_EMAIL(HttpStatus.BAD_REQUEST, "ACCOUNT-002", "존재하는 닉네임 이메일입니다."),
@@ -17,6 +20,10 @@ public enum ErrorCode {
     TOKEN_EXPIRED_ERROR(HttpStatus.FORBIDDEN, "ACCOUNT-005", "만료되지 않은 access 또는 만료된 refresh 입니다"),
     HAS_BUCKET(HttpStatus.BAD_REQUEST, "PLAN-001", "이미 등록된 장소입니다."),
     NOT_HAS_COWORKER(HttpStatus.BAD_REQUEST, "PLAN-002", "사용자가 소속되지 않은 플랜입니다."),
+
+
+    //history
+    GALLERY_NOT_FOUND(HttpStatus.NOT_FOUND, "history-001", "이미지를 찾을 수 없습니다."),
 
     //city
     CITY_NOT_FOUND(HttpStatus.NOT_FOUND, "CITY-001", "도시를 찾을 수 없습니다."),

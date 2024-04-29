@@ -5,6 +5,8 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
+import j10d207.tripeer.exception.CustomException;
+import j10d207.tripeer.exception.ErrorCode;
 import j10d207.tripeer.history.db.dto.GalleryDTO;
 import j10d207.tripeer.history.db.entity.GalleryEntity;
 import j10d207.tripeer.history.db.repository.GalleryRepository;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,20 +49,24 @@ public class GalleryServiceImpl implements GalleryService{
     }
 
     @Override
-    public List<GalleryEntity> uploadsImageAndMovie(List<MultipartFile> files, String token, long planDayId) throws IOException {
+    public List<GalleryDTO> uploadsImageAndMovie(List<MultipartFile> files, String token, long planDayId) throws IOException {
 
         // 허용할 MIME 타입들 설정 (이미지, 동영상 파일만 허용하는 경우)
         List<String> allowedMimeTypes = List.of("image/jpeg", "image/png", "image/gif", "video/mp4", "video/webm", "video/ogg", "video/3gpp", "video/x-msvideo", "video/quicktime");
 
         PlanDayEntity planDay = planDayRepository.findByPlanDayId(planDayId);
-        long userId = 1;
-//        long userId = jwtUtil.getUserId(token);
+
+        String access = jwtUtil.splitToken(token);
+        long userId = jwtUtil.getUserId(access);
+
+        UserEntity user = userRepository.findByUserId(userId);
+
         //날짜를 String 으로 변환
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         String dateString = planDay.getDay().format(formatter);
 
         // 업로드한 파일의 업로드 경로를 담을 리스트
-        List<GalleryEntity> createInfo = new ArrayList<>();
+        List<GalleryDTO> createInfo = new ArrayList<>();
 
         for(MultipartFile file : files) {
 
@@ -89,14 +96,22 @@ public class GalleryServiceImpl implements GalleryService{
                 throw new IOException(); //커스텀 예외 던짐.
             }
             //저장된 Url
-
+            String url = "https://tripeerbucket.s3.ap-southeast-2.amazonaws.com/" + changedName;
+            System.out.println(changedName);
             //DB에 업로드 정보 저장
             GalleryEntity gallery = GalleryEntity.builder()
-                    .url(amazonS3.getUrl(bucketName, changedName).toString())
+                    .url(url)
                     .planDay(planDay)
                     .build();
             galleryRepository.save(gallery);
-            createInfo.add(gallery);
+
+            GalleryDTO galleryDTO = GalleryDTO.builder()
+                    .galleryId(gallery.getGalleryId())
+                    .userNickname(user.getNickname())
+                    .userImg(user.getProfileImage())
+                    .img(url)
+                    .build();
+            createInfo.add(galleryDTO);
         }
         return createInfo;
     }
@@ -111,12 +126,24 @@ public class GalleryServiceImpl implements GalleryService{
             long userId = Long.parseLong(splitUrl[4]);
             UserEntity user = userRepository.findByUserId(userId);
             GalleryDTO galleryDTO = GalleryDTO.builder()
+                                            .galleryId(galleryEntity.getGalleryId())
                                             .img(url)
                                             .userImg(user.getProfileImage())
+                                            .userNickname(user.getNickname())
                                             .build();
             galleryList.add(galleryDTO);
         }
         return galleryList;
     };
 
+    public String deleteGalleryList(List<Long> galleryIdList) {
+        for(Long galleryId : galleryIdList){
+            GalleryEntity galleryEntity = galleryRepository.findById(galleryId)
+                    .orElseThrow(() -> new CustomException(ErrorCode.GALLERY_NOT_FOUND));
+            amazonS3.deleteObject(bucketName, galleryEntity.getUrl().substring(54));
+            System.out.println(galleryEntity.getUrl().substring(54));
+            galleryRepository.delete(galleryEntity);
+        }
+        return "갤러리 삭제 성공";
+    }
 }

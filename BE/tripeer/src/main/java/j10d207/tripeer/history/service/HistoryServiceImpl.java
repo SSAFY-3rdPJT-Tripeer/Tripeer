@@ -35,9 +35,8 @@ public class HistoryServiceImpl implements HistoryService{
     private final PlanDetailRepository planDetailRepository;
 
     public List<PlanListResDTO> historyList (String token) {
-//        String access = jwtUtil.splitToken(token);
-//        long userId = jwtUtil.getUserId(access);
-        long userId = 1;
+        String access = jwtUtil.splitToken(token);
+        long userId = jwtUtil.getUserId(access);
         List<PlanListResDTO> planListResDTOList = new ArrayList<>();
         List<CoworkerEntity> coworkerList = coworkerRepository.findByUser_UserId(userId);
         for (CoworkerEntity coworker : coworkerList) {

@@ -100,9 +100,9 @@ public class PlanController {
 
     //관광지 검색
     @GetMapping("/spot")
-    public Response<List<SpotSearchResDTO>> getSpots(@RequestParam("planId") long planId, @RequestParam("keyword") String keyword) {
+    public Response<List<SpotSearchResDTO>> getSpots(@RequestParam("planId") long planId, @RequestParam("keyword") String keyword, @RequestParam("page") int page, @RequestParam("sortType") int sortType, HttpServletRequest request) {
         try {
-            List<SpotSearchResDTO> searchResList = planService.getSpotSearch(planId, keyword);
+            List<SpotSearchResDTO> searchResList = planService.getSpotSearch(planId, keyword, page, sortType, request.getHeader("Authorization"));
             return Response.of(HttpStatus.OK, "검색 완료", searchResList);
         } catch (Exception e) {
             throw new RuntimeException(e);

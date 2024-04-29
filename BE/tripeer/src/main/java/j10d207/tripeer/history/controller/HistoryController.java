@@ -41,15 +41,15 @@ public class HistoryController {
     }
 
     @PostMapping("/gallery/upload/{planDayId}")
-    public Response<List<GalleryEntity>> uploadsImageAndMovie(
+    public Response<List<GalleryDTO>> uploadsImageAndMovie(
             HttpServletRequest request,
             @PathVariable("planDayId") long planDayId,
             @RequestPart(value = "images") List<MultipartFile> multipartFiles) {
         try {
-            List<GalleryEntity> galleryList = galleryService.uploadsImageAndMovie(multipartFiles, request.getHeader("Authorization"), planDayId);
+            List<GalleryDTO> galleryList = galleryService.uploadsImageAndMovie(multipartFiles, request.getHeader("Authorization"), planDayId);
             return Response.of(HttpStatus.OK, "업로드 성공", galleryList);
         } catch (IllegalArgumentException e) {
-            List<GalleryEntity> galleryList = new ArrayList<>();
+            List<GalleryDTO> galleryList = new ArrayList<>();
             return Response.of(HttpStatus.BAD_REQUEST, "지원하지 않는 파일타입", galleryList);
         }
         catch (Exception e) {
@@ -76,4 +76,17 @@ public class HistoryController {
             throw new RuntimeException(e);
         }
     }
+
+
+    @PostMapping("/gallery/delete")
+    public Response<String> deleteResources(@RequestBody List<Long> galleryIdList) {
+        try {
+            String res = galleryService.deleteGalleryList(galleryIdList);
+            return Response.of(HttpStatus.OK, "사진 삭제 성공", res);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 }
