@@ -21,6 +21,10 @@ public enum ErrorCode {
     HAS_BUCKET(HttpStatus.BAD_REQUEST, "PLAN-001", "이미 등록된 장소입니다."),
     NOT_HAS_COWORKER(HttpStatus.BAD_REQUEST, "PLAN-002", "사용자가 소속되지 않은 플랜입니다."),
 
+
+    //history
+    GALLERY_NOT_FOUND(HttpStatus.NOT_FOUND, "history-001", "이미지를 찾을 수 없습니다."),
+
     //city
     CITY_NOT_FOUND(HttpStatus.NOT_FOUND, "CITY-001", "도시를 찾을 수 없습니다."),
 
