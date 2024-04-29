@@ -18,7 +18,10 @@ import j10d207.tripeer.user.db.repository.UserRepository;
 import j10d207.tripeer.user.db.repository.WishListRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -210,6 +213,59 @@ public class PlanServiceImpl implements PlanService {
         return planListResDTOList;
     }
 
+    @Override
+    public PlanDetailMainResDTO getPlanDetailMain(long planId, String token) {
+        PlanEntity plan = planRepository.findByPlanId(planId);
+        //로그인 사용자가 소유하지 않은 플랜 접근시
+        if(!coworkerRepository.existsByPlan_PlanIdAndUser_UserId(planId, jwtUtil.getUserId(jwtUtil.splitToken(token)))) {
+            throw new CustomException(ErrorCode.NOT_HAS_COWORKER);
+        }
+        List<PlanTownEntity> planTown = planTownRepository.findByPlan_PlanId(plan.getPlanId());
+        List<CoworkerEntity> coworkerEntityList = coworkerRepository.findByPlan_PlanId(plan.getPlanId());
+
+        //선택한 도시 목록 구성
+        List<TownDTO> townDTOList = new ArrayList<>();
+        for (PlanTownEntity planTownEntity : planTown) {
+            if(planTownEntity.getTown() == null) {
+                TownDTO townDTO = TownDTO.builder()
+                        .cityId(planTownEntity.getCityOnly().getCityId())
+                        .title(planTownEntity.getCityOnly().getCityName())
+                        .description(planTownEntity.getCityOnly().getDescription())
+                        .img(planTownEntity.getCityOnly().getCityImg())
+                        .build();
+                townDTOList.add(townDTO);
+            } else {
+                TownDTO townDTO = TownDTO.builder()
+                        .cityId(planTownEntity.getTown().getTownPK().getCity().getCityId())
+                        .townId(planTownEntity.getTown().getTownPK().getTownId())
+                        .title(planTownEntity.getTown().getTownName())
+                        .description(planTownEntity.getTown().getDescription())
+                        .img(planTownEntity.getTown().getTownImg())
+                        .build();
+                townDTOList.add(townDTO);
+            }
+
+        }
+
+        //멤버 목록 구성
+        List<UserSearchDTO> memberList = new ArrayList<>();
+        for (CoworkerEntity coworkerEntity : coworkerEntityList) {
+            UserSearchDTO userSearchDTO = UserSearchDTO.builder()
+                    .userId(coworkerEntity.getUser().getUserId())
+                    .nickname(coworkerEntity.getUser().getNickname())
+                    .profileImage(coworkerEntity.getUser().getProfileImage())
+                    .build();
+            memberList.add(userSearchDTO);
+        }
+
+        return PlanDetailMainResDTO.builder()
+                .planId(planId)
+                .title(plan.getTitle())
+                .townList(townDTOList)
+                .coworkerList(memberList)
+                .build();
+    }
+
     //플랜 날짜 수정
     @Override
     public void changeDay(CreatePlanDTO createPlanDTO, String token) {
@@ -245,8 +301,40 @@ public class PlanServiceImpl implements PlanService {
 
     //관광지 검색
     @Override
-    public List<SpotSearchResDTO> getSpotSearch(long planId, String keyword) {
-        List<SpotInfoEntity> spotInfoList = spotInfoRepository.findByTitleContains(keyword);
+    public List<SpotSearchResDTO> getSpotSearch(long planId, String keyword, int page, int sortType) {
+        Specification<SpotInfoEntity> spotInfoSpec = Specification.where(null);
+        List<PlanTownEntity> planTownList = planTownRepository.findByPlan_PlanId(planId);
+        Pageable pageable = PageRequest.of(page, 10);
+
+        spotInfoSpec = spotInfoSpec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("title"), "%" + keyword + "%"));
+
+        Specification<SpotInfoEntity> addr1Spec = Specification.where(null);
+        for (PlanTownEntity planTownEntity : planTownList) {
+            String name = planTownEntity.getCityOnly() == null ? planTownEntity.getTown().getTownName() : planTownEntity.getCityOnly().getCityName();
+            addr1Spec = addr1Spec.or((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("addr1"), "%" + name + "%"));
+        }
+
+        Specification<SpotInfoEntity> contentTypeSpec = Specification.where(null);
+        if( sortType == 2 ) {
+            contentTypeSpec = contentTypeSpec.or((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("contentTypeId"), 12));
+            contentTypeSpec = contentTypeSpec.or((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("contentTypeId"), 14));
+            contentTypeSpec = contentTypeSpec.or((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("contentTypeId"), 15));
+            contentTypeSpec = contentTypeSpec.or((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("contentTypeId"), 25));
+            contentTypeSpec = contentTypeSpec.or((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("contentTypeId"), 28));
+            contentTypeSpec = contentTypeSpec.or((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("contentTypeId"), 38));
+        } else if ( sortType == 3 ) {
+            contentTypeSpec = contentTypeSpec.or((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("contentTypeId"), 32));
+        } else if ( sortType == 4 ) {
+            contentTypeSpec = contentTypeSpec.or((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("contentTypeId"), 39));
+        }
+        spotInfoSpec = spotInfoSpec.and(contentTypeSpec);
+        spotInfoSpec = spotInfoSpec.and(addr1Spec);
+        List<SpotInfoEntity> spotInfoList = spotInfoRepository.findAll(spotInfoSpec, pageable);
+        if(spotInfoList.isEmpty() && page == 0) {
+            throw new CustomException(ErrorCode.SEARCH_NULL);
+        } else if (spotInfoList.isEmpty() && page > 1) {
+            throw new CustomException(ErrorCode.SCROLL_END);
+        }
 
         List<SpotSearchResDTO> spotSearchResDTOList = new ArrayList<>();
         for (SpotInfoEntity spotInfoEntity : spotInfoList) {
@@ -297,16 +385,21 @@ public class PlanServiceImpl implements PlanService {
     //즐겨찾기 추가
     @Override
     public void addWishList(int spotInfoId, String token) {
-        String access = jwtUtil.splitToken(token);
-        WishListEntity wishList = WishListEntity.builder()
-                .user(UserEntity.builder()
-                        .userId(jwtUtil.getUserId(access))
-                        .build())
-                .spotInfo(SpotInfoEntity.builder()
-                        .spotInfoId(spotInfoId)
-                        .build())
-                .build();
-        wishListRepository.save(wishList);
+        long userId = jwtUtil.getUserId(jwtUtil.splitToken(token));
+        Optional<WishListEntity> optionalWishList = wishListRepository.findBySpotInfo_SpotInfoIdAndUser_UserId(spotInfoId, userId);
+        if (optionalWishList.isPresent()) {
+            wishListRepository.delete(optionalWishList.get());
+        } else {
+            WishListEntity wishList = WishListEntity.builder()
+                    .user(UserEntity.builder()
+                            .userId(userId)
+                            .build())
+                    .spotInfo(SpotInfoEntity.builder()
+                            .spotInfoId(spotInfoId)
+                            .build())
+                    .build();
+            wishListRepository.save(wishList);
+        }
     }
 
     //즐겨찾기 조회

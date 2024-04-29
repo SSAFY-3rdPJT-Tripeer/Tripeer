@@ -15,6 +15,8 @@ public interface PlanService {
     public void planOut(long planId, String token);
     //내 플랜 리스트 조회
     public List<PlanListResDTO> planList(String token);
+    //플랜 디테일 메인 조회
+    public PlanDetailMainResDTO getPlanDetailMain(long planId, String token);
     //플랜 날짜 수정
     public void changeDay(CreatePlanDTO createPlanDTO, String token);
     //동행자 추가
@@ -22,7 +24,7 @@ public interface PlanService {
     //동행자 조회
     public List<CoworkerDTO> getCoworker(long planId);
     //관광지 검색
-    public List<SpotSearchResDTO> getSpotSearch(long planId, String keyword);
+    public List<SpotSearchResDTO> getSpotSearch(long planId, String keyword, int page, int sortType);
     //플랜버킷 관광지 추가
     public void addPlanSpot(long planId, int spotInfoId, String token);
     //즐겨찾기 추가

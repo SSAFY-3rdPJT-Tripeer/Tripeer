@@ -46,20 +46,24 @@ public class GalleryServiceImpl implements GalleryService{
     }
 
     @Override
-    public List<GalleryEntity> uploadsImageAndMovie(List<MultipartFile> files, String token, long planDayId) throws IOException {
+    public List<GalleryDTO> uploadsImageAndMovie(List<MultipartFile> files, String token, long planDayId) throws IOException {
 
         // 허용할 MIME 타입들 설정 (이미지, 동영상 파일만 허용하는 경우)
         List<String> allowedMimeTypes = List.of("image/jpeg", "image/png", "image/gif", "video/mp4", "video/webm", "video/ogg", "video/3gpp", "video/x-msvideo", "video/quicktime");
 
         PlanDayEntity planDay = planDayRepository.findByPlanDayId(planDayId);
-        long userId = 1;
-//        long userId = jwtUtil.getUserId(token);
+
+        String access = jwtUtil.splitToken(token);
+        long userId = jwtUtil.getUserId(access);
+
+        UserEntity user = userRepository.findByUserId(userId);
+
         //날짜를 String 으로 변환
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         String dateString = planDay.getDay().format(formatter);
 
         // 업로드한 파일의 업로드 경로를 담을 리스트
-        List<GalleryEntity> createInfo = new ArrayList<>();
+        List<GalleryDTO> createInfo = new ArrayList<>();
 
         for(MultipartFile file : files) {
 
@@ -96,7 +100,12 @@ public class GalleryServiceImpl implements GalleryService{
                     .planDay(planDay)
                     .build();
             galleryRepository.save(gallery);
-            createInfo.add(gallery);
+
+            GalleryDTO galleryDTO = GalleryDTO.builder()
+                    .userImg(user.getProfileImage())
+                    .img(amazonS3.getUrl(bucketName, changedName).toString())
+                    .build();
+            createInfo.add(galleryDTO);
         }
         return createInfo;
     }

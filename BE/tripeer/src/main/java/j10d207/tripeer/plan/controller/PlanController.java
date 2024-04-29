@@ -65,6 +65,17 @@ public class PlanController {
         }
     }
 
+    //플랜 디테일 메인 조회
+    @GetMapping("/main/{planId}")
+    public Response<PlanDetailMainResDTO> getPlanDetailMain(@PathVariable("planId") long planId, HttpServletRequest request) {
+        try {
+            PlanDetailMainResDTO result = planService.getPlanDetailMain(planId, request.getHeader("Authorization"));
+            return Response.of(HttpStatus.OK, "플랜 메인 조회", result);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     //동행자 추가
     @PostMapping("/member")
     public Response<?> joinPlan(@RequestBody CoworkerDTO coworkerDTO) {
@@ -89,9 +100,9 @@ public class PlanController {
 
     //관광지 검색
     @GetMapping("/spot")
-    public Response<List<SpotSearchResDTO>> getSpots(@RequestParam("planId") long planId, @RequestParam("keyword") String keyword) {
+    public Response<List<SpotSearchResDTO>> getSpots(@RequestParam("planId") long planId, @RequestParam("keyword") String keyword, @RequestParam("page") int page, @RequestParam("sortType") int sortType) {
         try {
-            List<SpotSearchResDTO> searchResList = planService.getSpotSearch(planId, keyword);
+            List<SpotSearchResDTO> searchResList = planService.getSpotSearch(planId, keyword, page, sortType);
             return Response.of(HttpStatus.OK, "검색 완료", searchResList);
         } catch (Exception e) {
             throw new RuntimeException(e);
