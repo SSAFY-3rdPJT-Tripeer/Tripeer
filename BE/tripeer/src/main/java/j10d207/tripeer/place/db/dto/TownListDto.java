@@ -33,7 +33,7 @@ public class TownListDto {
 
         return TownListDto.builder()
                 .cityId(cityEntity.getCityId())
-                .townId(cityEntity.getCityId())
+                .townId(-1)
                 .townImg(cityEntity.getCityImg())
                 .description(cityEntity.getDescription())
                 .townName(cityEntity.getCityName())

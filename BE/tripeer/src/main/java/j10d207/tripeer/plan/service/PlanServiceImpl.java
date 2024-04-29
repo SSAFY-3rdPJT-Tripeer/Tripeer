@@ -301,10 +301,11 @@ public class PlanServiceImpl implements PlanService {
 
     //관광지 검색
     @Override
-    public List<SpotSearchResDTO> getSpotSearch(long planId, String keyword, int page, int sortType) {
+    public List<SpotSearchResDTO> getSpotSearch(long planId, String keyword, int page, int sortType, String token) {
         Specification<SpotInfoEntity> spotInfoSpec = Specification.where(null);
         List<PlanTownEntity> planTownList = planTownRepository.findByPlan_PlanId(planId);
         Pageable pageable = PageRequest.of(page, 10);
+        String access = jwtUtil.splitToken(token);
 
         spotInfoSpec = spotInfoSpec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("title"), "%" + keyword + "%"));
 
@@ -336,6 +337,7 @@ public class PlanServiceImpl implements PlanService {
             throw new CustomException(ErrorCode.SCROLL_END);
         }
 
+
         List<SpotSearchResDTO> spotSearchResDTOList = new ArrayList<>();
         for (SpotInfoEntity spotInfoEntity : spotInfoList) {
             SpotSearchResDTO spotSearchResDTO = new SpotSearchResDTO();
@@ -347,7 +349,7 @@ public class PlanServiceImpl implements PlanService {
             spotSearchResDTO.setLatitude(spotInfoEntity.getLatitude());
             spotSearchResDTO.setLongitude(spotInfoEntity.getLongitude());
             spotSearchResDTO.setImg(spotInfoEntity.getFirstImage());
-            spotSearchResDTO.setWishlist(wishListRepository.existsBySpotInfo_SpotInfoId(spotInfoEntity.getSpotInfoId()));
+            spotSearchResDTO.setWishlist(wishListRepository.existsByUser_UserIdAndSpotInfo_SpotInfoId(jwtUtil.getUserId(access), spotInfoEntity.getSpotInfoId()));
             spotSearchResDTO.setSpot(planBucketRepository.existsByPlan_PlanIdAndSpotInfo_SpotInfoId(planId, spotInfoEntity.getSpotInfoId()));
 
             spotSearchResDTOList.add(spotSearchResDTO);

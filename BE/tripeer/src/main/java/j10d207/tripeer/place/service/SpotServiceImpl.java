@@ -9,6 +9,8 @@ import j10d207.tripeer.place.db.dto.SpotListDto;
 import j10d207.tripeer.place.db.entity.*;
 import j10d207.tripeer.place.db.repository.*;
 import j10d207.tripeer.plan.service.PlanService;
+import j10d207.tripeer.user.config.JWTUtil;
+import j10d207.tripeer.user.db.repository.WishListRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,33 +27,39 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SpotServiceImpl implements SpotService{
 
+    private final JWTUtil jwtUtil;
     private final SpotInfoRepository spotInfoRepository;
     private final SpotDescriptionRepository spotDescriptionRepository;
     private final SpotDetailRepository spotDetailRepository;
     private final CityRepository cityRepository;
     private final TownRepository townRepository;
     private final PlanService planService;
+    private final WishListRepository wishListRepository;
 
+    private List<SpotInfoDto> convertToDtoList(List<SpotInfoEntity> spotInfoEntities, long userId) {
+        List<SpotInfoDto> spotInfoDtos = new ArrayList<>();
+        for (SpotInfoEntity spotInfoEntity : spotInfoEntities) {
+            boolean isWishlist = wishListRepository.existsByUser_UserIdAndSpotInfo_SpotInfoId(userId, spotInfoEntity.getSpotInfoId());
+            spotInfoDtos.add(SpotInfoDto.convertToDto(spotInfoEntity, isWishlist));
+        }
+        return spotInfoDtos;
+    }
 
     @Override
-    public SpotListDto getStayList(Integer page, Integer ContentTypeId, Integer cityId, Integer townId) {
+    public SpotListDto getSpotByContentType(Integer page, Integer ContentTypeId, Integer cityId, Integer townId, String token) {
         Pageable pageable = PageRequest.of(page,15);
+        String access = jwtUtil.splitToken(token);
+        long userId = jwtUtil.getUserId(access);
 
+        List<SpotInfoEntity> spotInfoEntities;
         if (townId == -1) {
-            List<SpotInfoEntity> spotInfoEntities = spotInfoRepository.findByContentTypeIdAndTown_TownPK_City_CityId(ContentTypeId, cityId, pageable);
-            List<SpotInfoDto> spotInfoDtos = spotInfoEntities.stream().map(SpotInfoDto::convertToDto).toList();
-            boolean isLastPage = spotInfoDtos.size() < 15;
-
-            return SpotListDto.builder()
-                    .spotInfoDtos(spotInfoDtos)
-                    .last(isLastPage)
-                    .build();
+            spotInfoEntities = spotInfoRepository.findByContentTypeIdAndTown_TownPK_City_CityId(ContentTypeId, cityId, pageable);
+        } else {
+            spotInfoEntities = spotInfoRepository.findByContentTypeIdAndTown_TownPK_City_CityIdAndTown_TownPK_TownId(ContentTypeId, cityId, townId, pageable);
         }
 
-        List<SpotInfoEntity> spotInfoEntities = spotInfoRepository
-                .findByContentTypeIdAndTown_TownPK_City_CityIdAndTown_TownPK_TownId(ContentTypeId,cityId, townId, pageable);
+        List<SpotInfoDto> spotInfoDtos = convertToDtoList(spotInfoEntities, userId);
 
-        List<SpotInfoDto> spotInfoDtos = spotInfoEntities.stream().map(SpotInfoDto::convertToDto).toList();
         boolean isLastPage = spotInfoDtos.size() < 15;
 
         return SpotListDto.builder()
@@ -60,27 +69,20 @@ public class SpotServiceImpl implements SpotService{
     }
 
     @Override
-    public SpotListDto getRestaurantList(Integer page, Integer ContentTypeId, Integer cityId, Integer townId) {
+    public SpotListDto getSpotByContentType(Integer page, List<Integer> ContentTypeId, Integer cityId, Integer townId, String token) {
         Pageable pageable = PageRequest.of(page,15);
-        List<SpotInfoEntity> spotInfoEntities = spotInfoRepository
-                .findByContentTypeIdAndTown_TownPK_City_CityIdAndTown_TownPK_TownId(ContentTypeId, cityId, townId, pageable);
+        String access = jwtUtil.splitToken(token);
+        long userId = jwtUtil.getUserId(access);
 
-        List<SpotInfoDto> spotInfoDtos = spotInfoEntities.stream().map(SpotInfoDto::convertToDto).toList();
-        boolean isLastPage = spotInfoDtos.size() < 15;
+        List<SpotInfoEntity> spotInfoEntities;
+        if (townId == -1) {
+            spotInfoEntities = spotInfoRepository.findByContentTypeIdNotInAndTown_TownPK_City_CityId(ContentTypeId, cityId, pageable);
+        } else {
+            spotInfoEntities = spotInfoRepository.findByContentTypeIdNotInAndTown_TownPK_City_CityIdAndTown_TownPK_TownId(ContentTypeId, cityId, townId, pageable);
+        }
 
-        return SpotListDto.builder()
-                .spotInfoDtos(spotInfoDtos)
-                .last(isLastPage)
-                .build();
-    }
+        List<SpotInfoDto> spotInfoDtos = convertToDtoList(spotInfoEntities, userId);
 
-    @Override
-    public SpotListDto getMeccaList(Integer page, List<Integer> ContentTypeId, Integer cityId, Integer townId) {
-        Pageable pageable = PageRequest.of(page,15);
-        List<SpotInfoEntity> spotInfoEntities = spotInfoRepository
-                .findByContentTypeIdNotInAndTown_TownPK_City_CityIdAndTown_TownPK_TownId(ContentTypeId, cityId, townId, pageable);
-
-        List<SpotInfoDto> spotInfoDtos = spotInfoEntities.stream().map(SpotInfoDto::convertToDto).toList();
         boolean isLastPage = spotInfoDtos.size() < 15;
 
         return SpotListDto.builder()
