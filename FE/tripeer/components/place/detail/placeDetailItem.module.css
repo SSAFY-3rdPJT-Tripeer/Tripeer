@@ -1,0 +1,13 @@
+.main {
+    width: 380px;
+    height: 380px;
+    margin: 20px;
+    border-radius: 10px;
+    box-shadow: 1px 2px 8px 0 rgb(0, 0, 0, 0.1);
+}
+
+.image {
+    width: 380px;
+    height: 300px;
+    border-radius: 10px 10px 0 0;
+}

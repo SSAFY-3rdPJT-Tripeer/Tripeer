@@ -1,0 +1,20 @@
+.main {
+    cursor: pointer;
+}
+
+.main:hover {
+    color: #04ACB5;
+}
+
+.image {
+    width: 25px;
+    height: 25px;
+}
+
+.p {
+
+}
+
+.pCheck {
+    color: #04ACB5;
+}

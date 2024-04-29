@@ -1,0 +1,35 @@
+.main {
+    margin-top: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+}
+
+.section {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.center {
+    margin-top: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: calc(80% + 40px);
+}
+
+.loading {
+    animation: fade-in 1s ease;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 100%;
+    }
+}

@@ -1,0 +1,262 @@
+.container {
+  width: calc(100vw - 72px);
+  height: 100vh;
+  position: relative;
+  display: flex;
+}
+
+.searchBox {
+  height: 100vh;
+  width: 470px;
+  padding: 32px 26px 0px 26px;
+  animation: show 0.2s ease forwards;
+}
+
+.searchHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@keyframes show {
+  0% {
+    width: 0%;
+    visibility: hidden;
+  }
+  99% {
+    visibility: hidden;
+  }
+  100% {
+    width: 470px;
+    visibility: visible;
+  }
+}
+
+.townList {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.townTitle {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.toggle {
+  width: 16px;
+  height: 16px;
+  background-image: url(../asset/listToggle.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  align-self: flex-end;
+  cursor: pointer;
+}
+
+.townCateogry {
+  width: 150px;
+  flex: none;
+  position: absolute;
+  background-color: white;
+  top: 30px;
+  left: 2px;
+  border-radius: 5px;
+  padding: 8px 4px 8px 4px;
+  box-shadow: 0px 0px 30px 0px rgba(48, 54, 77, 0.1);
+}
+
+.townExample {
+  flex: none;
+  padding: 4px 4px 4px 4px;
+  margin-left: 4px;
+  margin-right: 4px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.townExample:hover {
+  background-color: aliceblue;
+}
+
+.newPlaceBtn {
+  border: 1px solid rgba(229, 231, 235, 1);
+  padding: 6px 12px 6px 12px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  border-radius: 15px;
+  box-shadow: 0px 1px 2px 0px rgba(31, 41, 55, 0.08);
+}
+
+.newPlaceBtn:hover {
+  border: 1px solid #04acb5;
+}
+
+.sectionLine {
+  margin: 16px 0px;
+  border: #f3f3f3 1px solid;
+}
+
+.searchInput {
+  width: 100%;
+  border-radius: 50px;
+  border: 1px solid #4fbdb7;
+  height: 36px;
+  font-size: 0.8rem;
+  background-image: url(../asset/IconButton.svg);
+  background-repeat: no-repeat;
+  background-size: 8%;
+  background-position: 99% 70%;
+  padding-left: 20px;
+  padding-right: 15px;
+  outline: none;
+  margin-bottom: 16px;
+}
+
+.category {
+  margin-right: 8px;
+  font-size: 0.8rem;
+  text-align: center;
+  padding: 4px 10px;
+  border-radius: 15px;
+  border: 1px solid #e5e7eb;
+  cursor: pointer;
+  box-shadow: 0px 1px 2px 0px rgba(31, 41, 55, 0.08);
+}
+
+.onCategory {
+  margin-right: 8px;
+  font-size: 0.8rem;
+  color: white;
+  text-align: center;
+  padding: 4px 10px;
+  border-radius: 15px;
+  background-color: #4fbdb7;
+}
+
+.category:hover {
+  box-shadow: 2px 2px 2px 1px rgba(31, 41, 55, 0.08);
+}
+
+.searchResult {
+  margin-top: 20px;
+}
+
+.searchCard {
+  display: flex;
+  width: 100%;
+  height: 140px;
+  margin-bottom: 16px;
+  border-radius: 10px;
+  padding: 8px 12px 8px 8px;
+  box-shadow: 5px 5px 16px 0px rgba(0, 0, 0, 0.1);
+}
+
+.cardImg {
+  height: 124px;
+  width: 124px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: calc(100% - 140px);
+  margin-left: 16px;
+  height: 124px;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cardTitle {
+  font-weight: 480;
+  font-size: 1.1rem;
+}
+.cardCategoryBox {
+  display: flex;
+  align-items: center;
+}
+.cardCategoryIcon {
+  width: 18px;
+  height: 18px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  margin-right: 4px;
+}
+
+.cardCategory {
+  font-size: 0.7rem;
+}
+
+.cardPosition {
+  display: flex;
+  margin-top: 10px;
+  color: #545454;
+  font-size: 0.75rem;
+  align-items: center;
+}
+
+.positionIcon {
+  width: 10px;
+  height: 10px;
+  background-image: url(../asset/grayPointer.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-left: 2px;
+  margin-right: 4px;
+}
+
+.positionContent {
+  width: 14rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.cardLine {
+  margin-top: 16px;
+  margin-bottom: 8px;
+  background-color: #d9d9d9;
+  height: 1px;
+  border: none;
+}
+
+.cardBtns {
+  display: flex;
+}
+
+.heartBtn {
+  width: 28px;
+  height: 28px;
+  border: 1px solid #4fbdb7;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.addBtn {
+  width: 220px;
+  font-size: 0.7rem;
+  background-color: #4fbdb7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  font-weight: 500;
+  color: white;
+  cursor: pointer;
+}
+
+.addBtn:hover {
+  transform: scale(0.985);
+  transition: 0.3s ease;
+}

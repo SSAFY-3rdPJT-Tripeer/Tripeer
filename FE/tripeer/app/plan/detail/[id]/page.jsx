@@ -6,19 +6,30 @@ import styles from "./page.module.css";
 import PlanHome from "@/components/plan/detail/PlanHome";
 import PlanMap from "@/components/plan/detail/PlanMap";
 import PlanSchedule from "@/components/plan/detail/PlanSchedule";
+import api from "@/utils/api";
 
 const PageDetail = (props) => {
   const [current, setCurrent] = useState(0);
+  const [plan, setPlan] = useState(null);
+
   useEffect(() => {
-    // 여기서 구독 처리( 해당 props에 planId 존재함)
+    const getPlan = async () => {
+      if (props.params?.id) {
+        const res = await api.get(`/plan/main/${props.params.id}`);
+        setPlan(res.data.data);
+        console.log(res);
+      }
+    };
+    getPlan();
   }, [props]);
+
   const RENDER = useMemo(() => {
     return [
-      <PlanHome key={"PlanHome"} />,
-      <PlanMap key={"PlanMap"} />,
+      <PlanHome key={"PlanHome"} {...props} plan={plan} setPlan={setPlan} />,
+      <PlanMap key={"PlanMap"} {...props} plan={plan} setPlan={setPlan} />,
       <PlanSchedule key={"PlanSchedule"} />,
     ];
-  }, []);
+  }, [props, plan]);
   return (
     <div className={styles.container}>
       <PlanNav current={current} setCurrent={setCurrent}></PlanNav>
