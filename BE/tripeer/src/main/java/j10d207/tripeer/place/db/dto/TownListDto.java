@@ -15,11 +15,13 @@ public class TownListDto {
     String townImg;
     String description;
     int townId;
+    int cityId;
 
 
     public static TownListDto convertToDto(TownEntity townEntity) {
 
         return TownListDto.builder()
+                .cityId(townEntity.getTownPK().getCity().getCityId())
                 .townId(townEntity.getTownPK().getTownId())
                 .townImg(townEntity.getTownImg())
                 .description(townEntity.getDescription())
@@ -30,6 +32,7 @@ public class TownListDto {
     public static TownListDto convertToDto(CityEntity cityEntity) {
 
         return TownListDto.builder()
+                .cityId(cityEntity.getCityId())
                 .townId(cityEntity.getCityId())
                 .townImg(cityEntity.getCityImg())
                 .description(cityEntity.getDescription())
