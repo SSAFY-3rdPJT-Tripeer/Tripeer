@@ -76,4 +76,17 @@ public class HistoryController {
             throw new RuntimeException(e);
         }
     }
+
+
+    @PostMapping("/gallery/delete")
+    public Response<String> deleteResources(@RequestBody List<Long> galleryIdList) {
+        try {
+            String res = galleryService.deleteGalleryList(galleryIdList);
+            return Response.of(HttpStatus.OK, "사진 삭제 성공", res);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 }

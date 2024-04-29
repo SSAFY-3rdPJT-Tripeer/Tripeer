@@ -2,6 +2,7 @@ package j10d207.tripeer.place.controller;
 
 import j10d207.tripeer.place.db.dto.*;
 import j10d207.tripeer.place.service.*;
+import j10d207.tripeer.plan.service.PlanService;
 import j10d207.tripeer.response.Response;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,7 @@ public class PlaceController {
     private final CityService cityService;
     private final TownService townService;
     private final SpotService spotService;
+    private final PlanService planService;
 
     /*
     * city 검색
@@ -59,8 +61,9 @@ public class PlaceController {
     @GetMapping("/stay")
     public Response<SpotListDto> getStayList(@RequestParam("cityId") Integer cityId,
                                              @RequestParam("townId") Integer townId,
-                                             @RequestParam("page") Integer page) {
-        return Response.of(HttpStatus.OK, "숙소 조회", spotService.getStayList(page,32, cityId, townId));
+                                             @RequestParam("page") Integer page,
+                                             HttpServletRequest request) {
+        return Response.of(HttpStatus.OK, "숙소 조회", spotService.getSpotByContentType(page,32, cityId, townId, request.getHeader("Authorization")));
     }
 
 
@@ -71,8 +74,9 @@ public class PlaceController {
     @GetMapping("/restaurant")
     public Response<SpotListDto> getRestaurantList(@RequestParam("cityId") Integer cityId,
                                                    @RequestParam("townId") Integer townId,
-                                                   @RequestParam("page") Integer page) {
-        return Response.of(HttpStatus.OK, "식당 조회", spotService.getRestaurantList(page,39, cityId, townId));
+                                                   @RequestParam("page") Integer page,
+                                                   HttpServletRequest request) {
+        return Response.of(HttpStatus.OK, "식당 조회", spotService.getSpotByContentType(page,39, cityId, townId, request.getHeader("Authorization")));
     }
 
 
@@ -83,9 +87,10 @@ public class PlaceController {
     @GetMapping("/mecca")
     public Response<SpotListDto> getmeccaList(@RequestParam("cityId") Integer cityId,
                                               @RequestParam("townId") Integer townId,
-                                              @RequestParam("page") Integer page) {
+                                              @RequestParam("page") Integer page,
+                                              HttpServletRequest request) {
         List<Integer> contentTypeIds = Arrays.asList(32, 39);
-        return Response.of(HttpStatus.OK, "명소 조회", spotService.getMeccaList(page, contentTypeIds, cityId, townId));
+        return Response.of(HttpStatus.OK, "명소 조회", spotService.getSpotByContentType(page, contentTypeIds, cityId, townId, request.getHeader("Authorization")));
     }
 
 
@@ -116,5 +121,16 @@ public class PlaceController {
         return Response.of(HttpStatus.OK, "새로운 스팟 생성", townService.getAllCityAndTown());
     }
 
+    //즐겨찾기 추가
+    @PostMapping("/wishList/{spotInfoId}")
+    public Response<?> addWishList(@PathVariable("spotInfoId") int spotInfoId, HttpServletRequest request) {
+        try {
+            System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+ spotInfoId);
+            planService.addWishList(spotInfoId, request.getHeader("Authorization"));
+            return Response.of(HttpStatus.OK, "즐겨찾기 추가 완료", null);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }
