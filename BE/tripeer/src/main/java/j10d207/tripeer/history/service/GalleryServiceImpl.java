@@ -5,6 +5,8 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
+import j10d207.tripeer.exception.CustomException;
+import j10d207.tripeer.exception.ErrorCode;
 import j10d207.tripeer.history.db.dto.GalleryDTO;
 import j10d207.tripeer.history.db.entity.GalleryEntity;
 import j10d207.tripeer.history.db.repository.GalleryRepository;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,17 +96,20 @@ public class GalleryServiceImpl implements GalleryService{
                 throw new IOException(); //커스텀 예외 던짐.
             }
             //저장된 Url
-
+            String url = "https://tripeerbucket.s3.ap-southeast-2.amazonaws.com/" + changedName;
+            System.out.println(changedName);
             //DB에 업로드 정보 저장
             GalleryEntity gallery = GalleryEntity.builder()
-                    .url(amazonS3.getUrl(bucketName, changedName).toString())
+                    .url(url)
                     .planDay(planDay)
                     .build();
             galleryRepository.save(gallery);
 
             GalleryDTO galleryDTO = GalleryDTO.builder()
+                    .galleryId(gallery.getGalleryId())
+                    .userNickname(user.getNickname())
                     .userImg(user.getProfileImage())
-                    .img(amazonS3.getUrl(bucketName, changedName).toString())
+                    .img(url)
                     .build();
             createInfo.add(galleryDTO);
         }
@@ -120,6 +126,7 @@ public class GalleryServiceImpl implements GalleryService{
             long userId = Long.parseLong(splitUrl[4]);
             UserEntity user = userRepository.findByUserId(userId);
             GalleryDTO galleryDTO = GalleryDTO.builder()
+                                            .galleryId(galleryEntity.getGalleryId())
                                             .img(url)
                                             .userImg(user.getProfileImage())
                                             .userNickname(user.getNickname())
@@ -129,5 +136,14 @@ public class GalleryServiceImpl implements GalleryService{
         return galleryList;
     };
 
-
+    public String deleteGalleryList(List<Long> galleryIdList) {
+        for(Long galleryId : galleryIdList){
+            GalleryEntity galleryEntity = galleryRepository.findById(galleryId)
+                    .orElseThrow(() -> new CustomException(ErrorCode.GALLERY_NOT_FOUND));
+            amazonS3.deleteObject(bucketName, galleryEntity.getUrl().substring(54));
+            System.out.println(galleryEntity.getUrl().substring(54));
+            galleryRepository.delete(galleryEntity);
+        }
+        return "갤러리 삭제 성공";
+    }
 }
