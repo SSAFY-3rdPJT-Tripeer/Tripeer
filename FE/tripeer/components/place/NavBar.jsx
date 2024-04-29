@@ -1,22 +1,49 @@
 "use client";
 
 // 외부 모듈
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import cookies from "js-cookie";
 
 // 내부 모듈
 import style from "@/components/nav/navbar.module.css";
 import Logo from "@/public/logo.png";
 import toggleIcon from "@/components/nav/assets/toggle.svg";
+import api from "@/utils/api";
 
 const NavBar = () => {
   const [toggle, setToggle] = useState(false);
-  const [isLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
+  const router = useRouter();
   const LOGO_WIDTH = 130;
   const LOGO_HEIGHT = 50;
   const TOGGLE_WIDTH = 15;
   const TOGGLE_HEIGHT = 8;
+
+  const logoutOnClick = () => {
+    cookies.remove("Authorization");
+    router.push("/");
+  };
+
+  const getUserData = async () => {
+    try {
+      const res = await api.get("user/social/info");
+      console.log(res.data);
+    } catch (e) {
+      console.log("유저 정보 GET 에러 : ", e);
+    }
+  };
+
+  useEffect(() => {
+    const token = cookies.get("Authorization");
+
+    if (token) {
+      setIsLogin(true);
+      // getUserData();
+    }
+  }, []);
 
   return (
     <>
@@ -61,7 +88,7 @@ const NavBar = () => {
                       <div className={`${style.mypage} ${style.icon}`} />
                       <span>마이 페이지</span>
                     </li>
-                    <li className={style.option}>
+                    <li className={style.option} onClick={logoutOnClick}>
                       <div className={`${style.logout} ${style.icon}`} />
                       <span>로그아웃</span>
                     </li>
