@@ -122,10 +122,12 @@ public class GalleryServiceImpl implements GalleryService{
             GalleryDTO galleryDTO = GalleryDTO.builder()
                                             .img(url)
                                             .userImg(user.getProfileImage())
+                                            .userNickname(user.getNickname())
                                             .build();
             galleryList.add(galleryDTO);
         }
         return galleryList;
     };
+
 
 }
