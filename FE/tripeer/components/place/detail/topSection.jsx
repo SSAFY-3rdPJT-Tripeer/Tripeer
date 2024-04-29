@@ -9,13 +9,17 @@ import usePlaceStore from "@/stores/place";
 
 export default function TopSection() {
   const store = usePlaceStore();
-  const cityId = store.cityData.cityId;
+  const cityId = store.townData.cityId;
+  const cName = cityName[store.townData.cityId];
+  const tName = store.townData.townName;
 
   return (
     <main className={styles.main}>
       <section className={styles.section}>
         <div>
-          <p className={styles.title}>{store.townData.townName}</p>
+          <p className={styles.title}>
+            {`${cName === tName ? tName : `${cName} ${tName}`}`}
+          </p>
           <p className={styles.description}>{store.townData.description}</p>
         </div>
         <article className={styles.article}>

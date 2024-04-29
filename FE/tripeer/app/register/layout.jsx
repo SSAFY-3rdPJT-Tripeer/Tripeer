@@ -6,7 +6,7 @@ import bg from "/public/register/registerBg.png";
 export default function RegisterLayout({ children }) {
   return (
     <main className={styles.main}>
-      <Image src={bg} alt={"bg"} priority className={styles.bg} />
+      <Image src={bg} alt={"bg"} priority className={styles.bg} quality={20} />
       <div className={`${styles.center} ${styles.box}`}>{children}</div>
     </main>
   );

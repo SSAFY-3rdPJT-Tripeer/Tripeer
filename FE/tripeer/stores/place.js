@@ -4,6 +4,8 @@ import { persist } from "zustand/middleware";
 const usePlaceStore = create(
   persist(
     (set) => ({
+      allData: null,
+      setAllData: (allData) => set({ allData }),
       category: "숙박",
       setCategory: (category) => set({ category }),
       cityData: null,
