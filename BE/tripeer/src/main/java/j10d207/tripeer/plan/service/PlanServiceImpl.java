@@ -333,7 +333,7 @@ public class PlanServiceImpl implements PlanService {
         List<SpotInfoEntity> spotInfoList = spotInfoRepository.findAll(spotInfoSpec, pageable);
         if(spotInfoList.isEmpty() && page == 0) {
             throw new CustomException(ErrorCode.SEARCH_NULL);
-        } else if (spotInfoList.isEmpty() && page == 1) {
+        } else if (spotInfoList.isEmpty() && page > 1) {
             throw new CustomException(ErrorCode.SCROLL_END);
         }
 
