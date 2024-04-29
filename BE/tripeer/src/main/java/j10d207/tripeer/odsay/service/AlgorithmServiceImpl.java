@@ -2,6 +2,9 @@ package j10d207.tripeer.odsay.service;
 
 import j10d207.tripeer.odsay.db.dto.CoordinateDTO;
 
+import j10d207.tripeer.place.db.entity.SpotInfoEntity;
+import j10d207.tripeer.place.db.repository.SpotInfoRepository;
+import j10d207.tripeer.plan.db.dto.PlanDetailResDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,9 +21,20 @@ import java.util.List;
 public class AlgorithmServiceImpl implements AlgorithmService{
 
     private final OdsayService odsayService;
+    private final SpotInfoRepository spotInfoRepository;
 
     @Override
-    public void getShortTime(List<CoordinateDTO> coordinateDTOList) throws IOException {
+    public List<PlanDetailResDTO> getShortTime(List<Integer> spotList) throws IOException {
+        List<CoordinateDTO> coordinateDTOList = new ArrayList<>();
+        for (int i = 0; i < spotList.size(); i++) {
+            SpotInfoEntity info = spotInfoRepository.findBySpotInfoId(spotList.get(i));
+            CoordinateDTO coordinateDTO = CoordinateDTO.builder()
+                    .latitude(info.getLatitude())
+                    .longitude(info.getLongitude())
+                    .title(info.getTitle())
+                    .build();
+            coordinateDTOList.add(coordinateDTO);
+        }
         int[][] timeTable = odsayService.getTimeTable(coordinateDTOList);
         for (int i = 0; i < timeTable.length; i++) {
             for (int j = 0; j < timeTable.length; j++) {
@@ -50,5 +64,6 @@ public class AlgorithmServiceImpl implements AlgorithmService{
         System.out.println();
         System.out.println("최종 : " + root.getMinTime());
 
+        return null;
     }
 }

@@ -39,9 +39,9 @@ public class OdsayController {
     }
 
     @PostMapping("/test3")
-    public void getOdsay3(@RequestBody List<CoordinateDTO> coordinateDTO) {
+    public void getOdsay3(@RequestBody List<Integer> spotList) {
         try {
-            algorithmService.getShortTime(coordinateDTO);
+            algorithmService.getShortTime(spotList);
         } catch (Exception e) {
             System.out.println("e.getMessage() = " + e.getMessage());
             throw new RuntimeException();
