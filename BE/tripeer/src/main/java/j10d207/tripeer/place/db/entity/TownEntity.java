@@ -25,4 +25,6 @@ public class TownEntity {
     private String townName;
     private String description;
     private String townImg;
+    private double latitude;
+    private double longitude;
 }

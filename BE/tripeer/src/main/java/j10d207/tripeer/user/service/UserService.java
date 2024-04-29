@@ -23,6 +23,8 @@ public interface UserService {
     public boolean nicknameDuplicateCheck(String nickname);
     //유저 검색
     public List<UserSearchDTO> userSearch(String nickname);
+    //내 정보 불러오기
+    public UserSearchDTO getMyInfo(String token);
     //access 토큰 재발급
     public void tokenRefresh(String token, Cookie[] cookies, HttpServletResponse response);
 
