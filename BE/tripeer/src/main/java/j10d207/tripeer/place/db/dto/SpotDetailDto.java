@@ -17,6 +17,8 @@ public class SpotDetailDto {
     private String spotImg;
     private String spotName;
     private String description;
+    private boolean isWishList;
+
 
     public static SpotDetailDto convertToDto(SpotDescriptionEntity spotDescriptionEntity) {
 
@@ -27,6 +29,7 @@ public class SpotDetailDto {
                 .longitude(spotInfo.getLongitude())
                 .spotImg(spotInfo.getFirstImage())
                 .spotName(spotInfo.getTitle())
+                .isWishList(false)
                 .description(spotDescriptionEntity.getOverview())
                 .build();
     }
