@@ -101,6 +101,7 @@ public class OdsayServiceImpl implements OdsayService{
     private int getTimeGoTerminal(double SX, double SY, double EX, double EY) {
         JsonObject jsonObject = getResult(SX, SY, EX, EY);
         int time = 0;
+
         if(jsonObject.has("result")) {
             time = Integer.MAX_VALUE;
             JsonArray root = jsonObject.getAsJsonObject("result").getAsJsonArray("path");
@@ -112,10 +113,10 @@ public class OdsayServiceImpl implements OdsayService{
                 }
             }
         }
-//        else {
-////            System.out.println("jsonObject = " + jsonObject);
-//            //에러코드 : {"error":{"code":"429","message":"Too Many Requests"}}
-//        }
+        else {
+            System.out.println("jsonObject = " + jsonObject);
+            //에러코드 : {"error":{"code":"429","message":"Too Many Requests"}}
+        }
         return time;
     }
 
@@ -123,6 +124,12 @@ public class OdsayServiceImpl implements OdsayService{
         RestTemplate restTemplate = new RestTemplate();
         String url = "https://api.odsay.com/v1/api/searchPubTransPathT?apiKey=5MqWw1bKHuALfsdSCDSDZN4woc5F0h9KZ8g30QlVtuw&SX=" + SX + "&SY=" + SY + "&EX=" + EX + "&EY=" + EY;
         String result = restTemplate.getForObject(url, String.class);
+        System.out.println("최초 jsonObject = " + result);
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         return JsonParser.parseString(result).getAsJsonObject();
     }
 
@@ -182,7 +189,8 @@ public class OdsayServiceImpl implements OdsayService{
             }
 
             if( time > sumTime ) {
-                time = re.getAsJsonObject().getAsJsonObject("info").get("totalTime").getAsInt();
+//                time = re.getAsJsonObject().getAsJsonObject("info").get("totalTime").getAsInt();
+                time = sumTime;
                 shortRoot = re.getAsJsonObject().getAsJsonObject("info");
             }
         }

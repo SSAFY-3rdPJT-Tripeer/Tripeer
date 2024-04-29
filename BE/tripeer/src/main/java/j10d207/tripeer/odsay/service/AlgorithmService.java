@@ -9,6 +9,5 @@ import java.util.List;
 
 public interface AlgorithmService {
 
-    public void shortestPathAlgorithm(OptimizeListDTO optimizeListDTO);
     public void getShortTime(List<CoordinateDTO> coordinateDTOList) throws IOException;
 }
