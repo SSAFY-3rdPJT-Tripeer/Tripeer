@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: false,
   images: {
     domains: [
       "cdn.visitkorea.or.kr",
@@ -15,6 +14,7 @@ const nextConfig = {
       "tripeerbucket.s3.ap-southeast-2.amazonaws.com",
     ],
   },
+  reactStrictMode: false,
 
   eslint: {
     ignoreDuringBuilds: true,
