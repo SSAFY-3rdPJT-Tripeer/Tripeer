@@ -1,31 +1,29 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import styles from "./planMap.module.css";
-import Script from "next/script";
 import SleepIcon from "@/components/plan/asset/Sleep.svg";
 import EatIcon from "@/components/plan/asset/Eat.svg";
 import GoodPlaceIcon from "@/components/plan/asset/GoodPlace.svg";
 import FullHeart from "@/components/plan/asset/fullheart.svg";
 import Heart from "@/components/plan/asset/heart.svg";
-
+import AddSpot from "./AddSpot";
 import Image from "next/image";
 import api from "@/utils/api";
+import Map from "./Map";
 
 const PlanMap = (props) => {
   const { plan } = props;
   const [towns, setTowns] = useState([]);
-  const mapRef = useRef(null);
   const targetRef = useRef(null);
   const [isTarget, setIsTarget] = useState(false);
   const [page, setPage] = useState(0);
-  const [isLoaded, setIsLoaded] = useState(false);
   const [targetStep, setTargetStep] = useState(0);
-  const [map, setMap] = useState(null); // 이후 마커 추가시 사용할 객체
   const [onToggle, setOnToggle] = useState(false);
   const [onCategory, setOnCategory] = useState(0);
   const [sortType, setSortType] = useState(0);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [spotList, setSpotList] = useState([]);
   const [spotWishList, setSpotWishList] = useState([]);
+  const [onModal, setOnModal] = useState(false);
 
   const CATEGORY = ["전체", "숙박", "맛집", "명소", "즐겨찾기"];
   const HeartIcon = [FullHeart, Heart];
@@ -184,31 +182,6 @@ const PlanMap = (props) => {
     }
   }, [plan, sortType, searchApi]);
 
-  useEffect(() => {
-    const INTERVAL = setInterval(() => {
-      if (window.naver && window.naver.maps) {
-        setIsLoaded(true);
-        clearInterval(INTERVAL);
-      }
-    }, 100);
-    return () => {
-      clearInterval(INTERVAL);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (isLoaded && mapRef.current) {
-      const { naver } = window;
-      var mapOptions = {
-        center: new naver.maps.LatLng(36.5595704, 128.105399),
-        zoom: 9,
-        minZoom: 9,
-      };
-      const mapObj = new naver.maps.Map(mapRef.current, mapOptions);
-      setMap(mapObj);
-    }
-  }, [isLoaded]);
-
   return (
     <div className={styles.container}>
       <aside className={styles.searchBox}>
@@ -241,7 +214,13 @@ const PlanMap = (props) => {
               </div>
             ) : null}
           </div>
-          <div className={styles.newPlaceBtn}>신규 장소 등록</div>
+          <div
+            className={styles.newPlaceBtn}
+            onClick={() => {
+              setOnModal(true);
+            }}>
+            신규 장소 등록
+          </div>
         </header>
         <hr className={styles.sectionLine} />
         <input
@@ -395,22 +374,8 @@ const PlanMap = (props) => {
           ) : null}
         </section>
       </aside>
-      <Script
-        type="text/javascript"
-        src={
-          "https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=us08e13nh8"
-        }
-      />
-      <div
-        ref={mapRef}
-        id="map"
-        style={{
-          width: "calc(100vw - 542px)",
-          height: "100vh",
-          boxSizing: "border-box",
-          margin: "0px",
-        }}
-      />
+      <Map />
+      {onModal ? <AddSpot towns={towns} setOnModal={setOnModal} /> : null}
     </div>
   );
 };
