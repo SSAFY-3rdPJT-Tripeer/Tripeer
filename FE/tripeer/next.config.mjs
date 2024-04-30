@@ -12,6 +12,7 @@ const nextConfig = {
       "search.pstatic.net",
       "encrypted-tbn0.gstatic.com",
       "encrypted-tbn1.gstatic.com",
+      "tripeerbucket.s3.ap-southeast-2.amazonaws.com",
     ],
   },
 

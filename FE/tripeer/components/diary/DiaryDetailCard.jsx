@@ -1,11 +1,21 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import styles from "./diaryDetailCard.module.css";
 
-const DiaryDetailCard = () => {
+const DiaryDetailCard = (props) => {
+  const { detailData } = props;
   const planList = [1, 2, 3, 4, 5];
+  const clickDay = 1;
+  const router = useRouter();
+
+  const goAlbum = (day) => {
+    router.push(`/diary/detail/${detailData.planId}/${day}`);
+  };
   return (
     <main className={styles.container}>
       <div className={styles.dateBox}>
-        <div className={styles.dateLeft}>1일차</div>
+        <div className={styles.dateLeft}>{clickDay}일차</div>
         <div className={styles.dateRight}>2024.05.05(월)</div>
       </div>
       <div className={styles.contentBox}>
@@ -15,7 +25,13 @@ const DiaryDetailCard = () => {
               <div key={idx} className={styles.photoBox}>
                 {idx === 3 ? (
                   <div className={styles.moreBox}>
-                    <div className={styles.moreText}>사진 더보기</div>
+                    <div
+                      className={styles.moreText}
+                      onClick={() => {
+                        goAlbum(clickDay);
+                      }}>
+                      사진 더보기
+                    </div>
                     <div className={styles.moreIcon}></div>
                   </div>
                 ) : (

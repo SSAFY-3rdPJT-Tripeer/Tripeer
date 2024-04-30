@@ -99,7 +99,7 @@ const DiaryDetail = () => {
         <></>
       )}
       <article className={styles.articleBox}>
-        <DiaryDetailCard />
+        <DiaryDetailCard detailData={detailData} />
       </article>
     </main>
   );
