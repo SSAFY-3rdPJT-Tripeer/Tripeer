@@ -8,39 +8,34 @@ import java.util.List;
 @Getter
 public class RootSolve {
 
-    private final List<String> location;
     private final int N;
     private final boolean[] isSelected;
     private int minTime;
-    private String[] rootLocation;
     private int[] rootTime;
+    private List<Integer> resultNumbers;
 
     int[][] timeTable;
 
-    public RootSolve(List<String> location, int[][] timeTable) {
-        this.location = location;
+    public RootSolve(int[][] timeTable) {
         N = timeTable.length;
         isSelected = new boolean[N];
         this.minTime = Integer.MAX_VALUE;
         this.timeTable = timeTable;
     }
 
-    public void solve(int index, int now, int sum, ArrayList<Integer> result, ArrayList<String> local) {
+    public void solve(int index, int now, int sum, ArrayList<Integer> result, ArrayList<Integer> local) {
         if (sum + timeTable[now][N - 1] > minTime) {
             return;
         }
         if (index == N - 2) {
             result.add(timeTable[now][N - 1]);
-            local.add(location.get(N - 1));
+            local.add(N - 1);
             minTime = sum + timeTable[now][N - 1];
-            rootTime = new int[result.size()];
-            rootLocation = new String[local.size()];
+            rootTime = new int[result.size()+1];
             for (int i = 0; i < result.size(); i++) {
                 rootTime[i] = result.get(i);
             }
-            for (int j = 0; j < local.size(); j++) {
-                rootLocation[j] = local.get(j);
-            }
+            resultNumbers = local;
             return;
         }
         for (int i = 0; i < N - 2; i++) {
@@ -49,8 +44,8 @@ public class RootSolve {
                 isSelected[i] = true;
                 ArrayList<Integer> newResult = new ArrayList<>(result);
                 newResult.add(timeTable[now][i]);
-                ArrayList<String> newLocal = new ArrayList<>(local);
-                newLocal.add(location.get(i));
+                ArrayList<Integer> newLocal = new ArrayList<>(local);
+                newLocal.add(i);
                 solve(index +1, i, sum + timeTable[now][i], newResult, newLocal);
                 isSelected[i] = false;
             }

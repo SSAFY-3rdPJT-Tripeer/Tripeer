@@ -6,6 +6,7 @@ import j10d207.tripeer.odsay.db.dto.OptimizeListDTO;
 import j10d207.tripeer.odsay.service.AlgorithmService;
 import j10d207.tripeer.odsay.service.AlgorithmServiceImpl;
 import j10d207.tripeer.odsay.service.OdsayService;
+import j10d207.tripeer.plan.db.dto.PlanDetailResDTO;
 import j10d207.tripeer.response.Response;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -39,9 +40,10 @@ public class OdsayController {
     }
 
     @PostMapping("/test3")
-    public void getOdsay3(@RequestBody List<Integer> spotList) {
+    public Response<List<PlanDetailResDTO>> getOdsay3(@RequestParam("planDayId") long planDayId) {
         try {
-            algorithmService.getShortTime(spotList);
+            List<PlanDetailResDTO> result = algorithmService.getShortTime(planDayId);
+            return Response.of(HttpStatus.OK, "경로 최적화 완료", result);
         } catch (Exception e) {
             System.out.println("e.getMessage() = " + e.getMessage());
             throw new RuntimeException();

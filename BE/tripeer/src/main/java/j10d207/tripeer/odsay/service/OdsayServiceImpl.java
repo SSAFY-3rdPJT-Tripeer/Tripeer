@@ -1,25 +1,19 @@
 package j10d207.tripeer.odsay.service;
 
-import com.amazonaws.util.json.Jackson;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.shaded.gson.JsonArray;
 import com.nimbusds.jose.shaded.gson.JsonElement;
 import com.nimbusds.jose.shaded.gson.JsonObject;
 import com.nimbusds.jose.shaded.gson.JsonParser;
+import j10d207.tripeer.exception.CustomException;
+import j10d207.tripeer.exception.ErrorCode;
 import j10d207.tripeer.odsay.db.dto.CoordinateDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.minidev.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.BufferedReader;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -34,33 +28,14 @@ public class OdsayServiceImpl implements OdsayService{
     public String getOdsay(Double SX, Double SY, Double EX, Double EY) throws IOException {
 
         String apiKey = "d4jZWKxfNcai50mtCPm92LU9YHtZVyAfSxr/w5TfNeU";
-
         RestTemplate restTemplate = new RestTemplate();
-//        String result = restTemplate.getForObject("https://api.odsay.com/v1/api/searchPubTransPathT?apiKey=5MqWw1bKHuALfsdSCDSDZN4woc5F0h9KZ8g30QlVtuw&SX=126.97200078135924&SY=37.555794612717655&EX=129.04191183128495&EY=35.1139753187215&SearchType=0", String.class);
         String result = restTemplate.getForObject("https://api.odsay.com/v1/api/searchPubTransPathT?SX=" + SX
                 + "&SY=" + SY + "&EX=" + EX + "&EY=" + EY + "&apiKey=" + apiKey, String.class);
-
         JsonObject jsonObject = JsonParser.parseString(Objects.requireNonNull(result)).getAsJsonObject();
         JsonArray root = jsonObject.getAsJsonObject("result").getAsJsonArray("path");
-
         JsonArray searchType = jsonObject.getAsJsonObject("result").getAsJsonArray("searchType");
-
         System.out.println("jsonObject.getAsJsonObject(\"result\") = " + jsonObject.getAsJsonObject("result"));
-
         System.out.println("searchType = " + searchType);
-//        JsonElement searchType = jsonObject.getAsJsonObject("result").get("searchType");
-
-//        for(int i = 0; i < root.size(); i++) {
-//
-//        }
-//
-//        System.out.println("searchType = " + searchType);
-//        for(JsonElement re : root) {
-//            System.out.println("re = " + re.getAsJsonObject().getAsJsonObject("info").get("totalPayment"));
-//            System.out.println("re = " + re.getAsJsonObject().getAsJsonObject("info"));
-//        }
-//        System.out.println(jsonObject.getAsJsonObject("result").getAsJsonArray("path").get(0).getAsJsonObject().getAsJsonObject("info"));
-//        System.out.println(jsonObject.getAsJsonObject("result").getAsJsonObject("path").getAsJsonObject("info"));
         return result;
 
     }
@@ -70,7 +45,7 @@ public class OdsayServiceImpl implements OdsayService{
         int[][] timeTable = new int[coordinates.size()][coordinates.size()];
         for (int i = 0; i < coordinates.size(); i++) {
             for (int j = i; j < coordinates.size(); j++) {
-                if(i == j) continue;
+                if(i == j || (i == coordinates.size() - 2 && j== coordinates.size() - 1) ) continue;
                 timeTable[i][j] = getPublicTime(coordinates.get(i).getLongitude(), coordinates.get(i).getLatitude(), coordinates.get(j).getLongitude(), coordinates.get(j).getLatitude());
                 timeTable[j][i] = timeTable[i][j];
             }
@@ -83,9 +58,15 @@ public class OdsayServiceImpl implements OdsayService{
     @Override
     public int getPublicTime(double SX, double SY, double EX, double EY) {
         JsonObject root = getResult(SX, SY, EX, EY);
-        if (root.getAsJsonObject("result").get("searchType").getAsInt() == 0) {
+        System.out.println("root = " + root);
+        if(root.has("error")) {
+            // 방법이 없을 경우 자차 방법 (택시) 시간을 불러오는 로직 처리 필요
+            System.out.println("root = " + root + " :: " + "SX : " + SX + " SY : " + SY + " EX : " + EX + " EY : " + EY);
+            throw new CustomException(ErrorCode.NOT_FOUND_ROOT);
+        }
+        else if (root.getAsJsonObject("result").get("searchType").getAsInt() == 0) {
             //도시내 이동
-            return getTimeCtiyIn(root.getAsJsonObject("result").getAsJsonArray("path"));
+            return getTimeCityIn(root.getAsJsonObject("result").getAsJsonArray("path"));
         }
         else if (root.getAsJsonObject("result").get("searchType").getAsInt() == 1) {
             //도시간 직통, 도시간 이동이 포함된 이동
@@ -114,8 +95,21 @@ public class OdsayServiceImpl implements OdsayService{
             }
         }
         else {
-            System.out.println("jsonObject = " + jsonObject);
-            //에러코드 : {"error":{"code":"429","message":"Too Many Requests"}}
+            // root.has("error") 에러코드 : {"error":{"code":"429","message":"Too Many Requests"}}
+            int code = jsonObject.getAsJsonObject("error").get("code").getAsInt();
+            if( code == 3 ) {
+                //    {"msg":"출발지 정류장이 없습니다.","code":"3"}
+                // 택시 이동 시간 포함 필요
+                System.out.println("터미널 이동 중 택시필요 = " + jsonObject);
+                // 임의 시간 60분으로 지정
+                return 60;
+            } else if ( code == -98 ) {
+                //  {"error":{"msg":"출, 도착지가 700m이내입니다.","code":"-98"}
+                return 0;
+            } else {
+                System.out.println("터미널 이동 중 에러 = " + jsonObject);
+            }
+
         }
         return time;
     }
@@ -124,7 +118,7 @@ public class OdsayServiceImpl implements OdsayService{
         RestTemplate restTemplate = new RestTemplate();
         String url = "https://api.odsay.com/v1/api/searchPubTransPathT?apiKey=5MqWw1bKHuALfsdSCDSDZN4woc5F0h9KZ8g30QlVtuw&SX=" + SX + "&SY=" + SY + "&EX=" + EX + "&EY=" + EY;
         String result = restTemplate.getForObject(url, String.class);
-        System.out.println("최초 jsonObject = " + result);
+//        System.out.println("최초 jsonObject = " + result);
         try {
             Thread.sleep(300);
         } catch (InterruptedException e) {
@@ -133,7 +127,7 @@ public class OdsayServiceImpl implements OdsayService{
         return JsonParser.parseString(result).getAsJsonObject();
     }
 
-    private int getTimeCtiyIn(JsonArray path) {
+    private int getTimeCityIn(JsonArray path) {
         JsonElement shortRoot = null;
         int time = Integer.MAX_VALUE;
         for(JsonElement root : path) {
@@ -143,7 +137,7 @@ public class OdsayServiceImpl implements OdsayService{
                 time = tmpTime;
             }
         }
-        System.out.println("shortRoot = " + shortRoot);
+//        System.out.println("shortRoot = " + shortRoot);
         return time;
     }
 
@@ -185,7 +179,6 @@ public class OdsayServiceImpl implements OdsayService{
                 newSY = subPath.get(subPath.size()-1).getAsJsonObject().get("endY").getAsDouble();
                 sumTime += getTimeGoTerminal(newSX, newSY, EX, EY);
 
-
             }
 
             if( time > sumTime ) {
@@ -195,7 +188,7 @@ public class OdsayServiceImpl implements OdsayService{
             }
         }
 
-        System.out.println("shortRoot = " + shortRoot);
+//        System.out.println("shortRoot = " + shortRoot);
         return time;
     }
 }
