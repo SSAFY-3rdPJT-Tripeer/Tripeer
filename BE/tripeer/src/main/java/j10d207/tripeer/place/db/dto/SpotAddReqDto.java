@@ -26,6 +26,4 @@ public class SpotAddReqDto {
     private String cat2;
     private String cat3;
     private boolean addPlanCheck;
-
-
 }
