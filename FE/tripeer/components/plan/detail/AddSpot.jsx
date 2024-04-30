@@ -36,6 +36,17 @@ const AddSpot = (props) => {
     map.panTo(spot);
   };
 
+  useEffect(() => {
+    if (map && towns.length > 0) {
+      const { naver } = window;
+      const spot = new naver.maps.LatLng(
+        towns[targetStep]["latitude"],
+        towns[targetStep]["longitude"],
+      );
+      map.panTo(spot);
+    }
+  }, [targetStep, map, towns]);
+
   const searchKeyWord = useCallback(
     async (e) => {
       if (e.key === "Enter" && keyword.length > 0) {

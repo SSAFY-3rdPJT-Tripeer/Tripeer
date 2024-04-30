@@ -176,6 +176,7 @@
   width: 124px;
   border-radius: 10px;
   background-size: cover;
+  cursor: pointer;
 }
 
 .cardContent {
@@ -190,6 +191,7 @@
 .cardHeader {
   display: flex;
   justify-content: space-between;
+  cursor: pointer;
 }
 
 .cardTitle {
@@ -222,6 +224,7 @@
   color: #545454;
   font-size: 0.75rem;
   align-items: center;
+  cursor: pointer;
 }
 
 .positionIcon {
