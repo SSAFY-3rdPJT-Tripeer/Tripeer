@@ -1,5 +1,9 @@
 .main {
     cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .main:hover {
@@ -7,14 +11,16 @@
 }
 
 .image {
-    width: 25px;
-    height: 25px;
+    width: 30px;
+    height: 26px;
+    margin-bottom: 5px;
 }
 
 .p {
-
+    font-weight: bold;
 }
 
 .pCheck {
     color: #04ACB5;
+    font-weight: bold;
 }

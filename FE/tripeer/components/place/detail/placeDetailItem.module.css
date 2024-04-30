@@ -1,13 +1,93 @@
 .main {
     width: 380px;
-    height: 380px;
+    height: 400px;
     margin: 20px;
     border-radius: 10px;
     box-shadow: 1px 2px 8px 0 rgb(0, 0, 0, 0.1);
+    position: relative;
+    animation: fade-in 1s ease;
 }
 
 .image {
     width: 380px;
     height: 300px;
     border-radius: 10px 10px 0 0;
+    animation: fade-in 1s ease;
+}
+
+.like {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+}
+
+.like:hover {
+    transform: scale(1.1);
+}
+
+.vector {
+    width: 20px;
+    height: 25px;
+    margin-right: 10px;
+}
+
+.section {
+    margin: 15px 15px 0 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.article {
+    display: flex;
+    align-items: center;
+    color: #979797;
+    font-size: 15px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.p {
+    color: #545454;
+    margin-bottom: 15px;
+    font-size: 20px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.loading {
+    background-color: #8e8e8e;
+    border-radius: 10px 10px 0 0;
+    opacity: 0.3;
+}
+
+.complete {
+    animation: fade-in 1s ease;
+}
+
+.waitBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 150px;
+    left: 150px;
+}
+
+.noWaitBox {
+    display: none;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }

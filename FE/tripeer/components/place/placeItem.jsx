@@ -4,8 +4,9 @@ import { useRouter } from "next/navigation";
 import styles from "./placeItem.module.css";
 import vectorSrc from "@/public/place/vector.png";
 import usePlaceStore from "@/stores/place";
+import cityName from "@/utils/cityName";
 
-export default function PlaceItem({ data, isCity, cityId }) {
+export default function PlaceItem({ data, isCity }) {
   const router = useRouter();
   const store = usePlaceStore();
 
@@ -20,13 +21,14 @@ export default function PlaceItem({ data, isCity, cityId }) {
     else {
       store.setTownData(data);
       // 해당 타운의 디테일 페이지로 이동
-      router.push(`/place/detail/${cityId}/${data.townName}`);
+      router.push(`/place/detail/${data.cityId}/${data.townName}`);
     }
   };
 
   return (
     <main className={styles.main} onClick={onClick}>
       <img
+        key={isCity ? data.cityImg : data.townImg}
         src={isCity ? data.cityImg : data.townImg}
         className={styles.image}
         alt={"이미지"}
@@ -38,7 +40,10 @@ export default function PlaceItem({ data, isCity, cityId }) {
           alt={"벡터"}
           priority
         />
-        <p className={styles.p}>{isCity ? data.cityName : data.townName}</p>
+        <p className={styles.p}>
+          {`${isCity || cityName[data.cityId] === data.townName ? "" : cityName[data.cityId]} 
+          ${isCity ? data.cityName : data.townName}`}
+        </p>
       </section>
     </main>
   );
