@@ -6,6 +6,7 @@ import com.nimbusds.jose.shaded.gson.JsonObject;
 import com.nimbusds.jose.shaded.gson.JsonParser;
 import j10d207.tripeer.exception.CustomException;
 import j10d207.tripeer.exception.ErrorCode;
+import j10d207.tripeer.kakao.service.KakaoService;
 import j10d207.tripeer.odsay.db.dto.CoordinateDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ import java.util.Objects;
 @Slf4j
 public class OdsayServiceImpl implements OdsayService{
 
+    private final KakaoService kakaoService;
 
     @Override
     public String getOdsay(Double SX, Double SY, Double EX, Double EY) throws IOException {
@@ -60,9 +62,17 @@ public class OdsayServiceImpl implements OdsayService{
         JsonObject root = getResult(SX, SY, EX, EY);
         System.out.println("root = " + root);
         if(root.has("error")) {
-            // 방법이 없을 경우 자차 방법 (택시) 시간을 불러오는 로직 처리 필요
-            System.out.println("root = " + root + " :: " + "SX : " + SX + " SY : " + SY + " EX : " + EX + " EY : " + EY);
-            throw new CustomException(ErrorCode.NOT_FOUND_ROOT);
+            int code = root.getAsJsonObject("error").get("code").getAsInt();
+            if( code == 3 ) {
+                //    {"msg":"출발지 정류장이 없습니다.","code":"3"}
+                // 택시 이동 시간 포함 필요
+                return kakaoService.getDirections(SX, SY, EX, EY);
+            } else if ( code == -98 ) {
+                //  {"error":{"msg":"출, 도착지가 700m이내입니다.","code":"-98"}
+                return 0;
+            } else {
+                System.out.println("터미널 이동 중 에러 = " + root);
+            }
         }
         else if (root.getAsJsonObject("result").get("searchType").getAsInt() == 0) {
             //도시내 이동
@@ -100,9 +110,7 @@ public class OdsayServiceImpl implements OdsayService{
             if( code == 3 ) {
                 //    {"msg":"출발지 정류장이 없습니다.","code":"3"}
                 // 택시 이동 시간 포함 필요
-                System.out.println("터미널 이동 중 택시필요 = " + jsonObject);
-                // 임의 시간 60분으로 지정
-                return 60;
+                return kakaoService.getDirections(SX, SY, EX, EY);
             } else if ( code == -98 ) {
                 //  {"error":{"msg":"출, 도착지가 700m이내입니다.","code":"-98"}
                 return 0;
