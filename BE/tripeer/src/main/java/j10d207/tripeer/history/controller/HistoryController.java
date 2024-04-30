@@ -2,6 +2,7 @@ package j10d207.tripeer.history.controller;
 
 import j10d207.tripeer.history.db.dto.CostReqDTO;
 import j10d207.tripeer.history.db.dto.CostResDTO;
+import j10d207.tripeer.history.db.dto.GallertIdListDTO;
 import j10d207.tripeer.history.db.dto.GalleryDTO;
 import j10d207.tripeer.history.db.entity.GalleryEntity;
 import j10d207.tripeer.history.service.GalleryService;
@@ -79,9 +80,9 @@ public class HistoryController {
 
 
     @PostMapping("/gallery/delete")
-    public Response<String> deleteResources(@RequestBody List<Long> galleryIdList) {
+    public Response<String> deleteResources(@RequestBody GallertIdListDTO galleryIdList) {
         try {
-            String res = galleryService.deleteGalleryList(galleryIdList);
+            String res = galleryService.deleteGalleryList(galleryIdList.getGallertIdList());
             return Response.of(HttpStatus.OK, "사진 삭제 성공", res);
         } catch (Exception e) {
             throw new RuntimeException(e);
