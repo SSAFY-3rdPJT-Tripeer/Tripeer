@@ -213,6 +213,7 @@ public class PlanServiceImpl implements PlanService {
         return planListResDTOList;
     }
 
+    //플랜 디테일 메인 조회
     @Override
     public PlanDetailMainResDTO getPlanDetailMain(long planId, String token) {
         PlanEntity plan = planRepository.findByPlanId(planId);
@@ -232,6 +233,8 @@ public class PlanServiceImpl implements PlanService {
                         .title(planTownEntity.getCityOnly().getCityName())
                         .description(planTownEntity.getCityOnly().getDescription())
                         .img(planTownEntity.getCityOnly().getCityImg())
+                        .latitude(planTownEntity.getCityOnly().getLatitude())
+                        .longitude(planTownEntity.getCityOnly().getLongitude())
                         .build();
                 townDTOList.add(townDTO);
             } else {
@@ -241,6 +244,8 @@ public class PlanServiceImpl implements PlanService {
                         .title(planTownEntity.getTown().getTownName())
                         .description(planTownEntity.getTown().getDescription())
                         .img(planTownEntity.getTown().getTownImg())
+                        .latitude(planTownEntity.getTown().getLatitude())
+                        .longitude(planTownEntity.getTown().getLongitude())
                         .build();
                 townDTOList.add(townDTO);
             }
