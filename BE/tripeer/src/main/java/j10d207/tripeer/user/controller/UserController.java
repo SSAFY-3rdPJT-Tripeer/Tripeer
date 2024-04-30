@@ -58,6 +58,12 @@ public class UserController {
         return Response.of(HttpStatus.OK, "유저 검색", userService.userSearch(nickname));
     }
 
+    //내 정보 불러오기
+    @GetMapping("/myinfo")
+    public Response<UserSearchDTO> myInfo(HttpServletRequest request) {
+        return Response.of(HttpStatus.OK, "내 정보 불러오기 완료", userService.getMyInfo(request.getHeader("Authorization")));
+    }
+
     // access 토큰 재발급
     @PostMapping("/reissue")
     public Response<?> reissue(HttpServletRequest request, HttpServletResponse response) {

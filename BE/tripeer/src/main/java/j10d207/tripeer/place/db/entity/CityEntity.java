@@ -20,4 +20,6 @@ public class CityEntity {
     private String description;
     private String cityImg;
     private String cityName;
+    private double latitude;
+    private double longitude;
 }

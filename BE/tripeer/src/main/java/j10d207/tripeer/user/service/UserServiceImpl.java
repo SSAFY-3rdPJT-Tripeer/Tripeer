@@ -163,6 +163,17 @@ public class UserServiceImpl implements UserService{
         return userSearchDTOList;
     }
 
+    @Override
+    public UserSearchDTO getMyInfo(String token) {
+        // 정보 확장시 DTO 새로 만들어야함
+        UserEntity user = userRepository.findByUserId(jwtUtil.getUserId(jwtUtil.splitToken(token)));
+        return UserSearchDTO.builder()
+                .userId(user.getUserId())
+                .nickname(user.getNickname())
+                .profileImage(user.getProfileImage())
+                .build();
+    }
+
 
     // access 토큰 재발급
     @Override
