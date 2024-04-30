@@ -80,8 +80,10 @@
 }
 
 .checkDiv {
-  margin-top: 24px;
-  padding-left: 8px;
+  margin-top: 36px;
+  padding-left: 12px;
+  display: flex;
+  align-items: center;
 }
 
 .checkBox {
@@ -94,21 +96,63 @@
 
 .checkLabel {
   display: inline-block;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   border-radius: 3px;
   border: 1px solid #4fbdb7;
   position: relative;
-  margin-right: 10px;
+  margin-right: 8px;
 }
 .checkBox:checked + .checkLabel::after {
   content: "";
-  width: 10px;
-  height: 10px;
-  border-radius: 15px;
-  background-color: #fe724c;
+  width: 12px;
+  height: 12px;
+  background-image: url(../asset/Check.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
   position: absolute;
-  top: 3px;
+  top: 24%;
   left: 50%;
   transform: translateX(-50%);
+}
+
+.checkInfo {
+  font-weight: 500;
+}
+
+.footer {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding-top: 12px;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.nobtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 45%;
+  height: 40px;
+  background-color: #f7f7f7;
+  border-radius: 30px;
+}
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 45%;
+  height: 40px;
+  background-color: #04acb5;
+  border-radius: 30px;
+  color: white;
+}
+
+.warn {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+  font-size: 0.7rem;
+  color: red;
 }

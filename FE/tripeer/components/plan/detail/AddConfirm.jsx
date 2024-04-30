@@ -6,13 +6,23 @@ const AddConfirm = (props) => {
   const [title, setTitle] = useState("");
   const [place, setPlace] = useState("");
   const [radio, setRadio] = useState(-1);
+  const [newPlan, setNewPlan] = useState(false);
+  const [warn, setWarn] = useState("");
 
   const setCategory = (idx) => {
     setRadio(idx);
   };
 
+  const createPlan = () => {
+    if (radio === -1) {
+      setWarn("장소의 카테고리를 선택해주세요");
+      return;
+    }
+  };
+
   useEffect(() => {
     if (confirm) {
+      console.log(confirm);
       setTitle(confirm["place_name"]);
       setPlace(confirm["address_name"]);
     }
@@ -63,24 +73,52 @@ const AddConfirm = (props) => {
               />
               <span className={styles.category}>숙박</span>
             </label>
-            <input
-              type="radio"
-              style={{ accentColor: "black" }}
-              name="radio"
-              id="radio"
-              onClick={() => {
-                setCategory(2);
-              }}
-            />
-            <span className={styles.category}>명소</span>
+            <label className={styles.label}>
+              <input
+                type="radio"
+                style={{ accentColor: "black" }}
+                name="radio"
+                id="radio"
+                onClick={() => {
+                  setCategory(2);
+                }}
+              />
+              <span className={styles.category}>명소</span>
+            </label>
           </div>
         </div>
         <div className={styles.checkDiv}>
-          <input type="checkbox" id="check" className={styles.checkBox} />
+          <input
+            type="checkbox"
+            id="check"
+            className={styles.checkBox}
+            onChange={(e) => {
+              setNewPlan(e.target.checked);
+            }}
+          />
           <label htmlFor="check" className={styles.checkLabel} />
-          <span>해당 장소를 등록하고, 여행계획에 추가하시겠습니까?</span>
+          <span className={styles.checkInfo}>
+            해당 장소를 등록하고, 여행계획에 추가하시겠습니까?
+          </span>
         </div>
       </section>
+      <div className={styles.warn}>{warn}</div>
+      <footer className={styles.footer}>
+        <div
+          className={styles.nobtn}
+          onClick={() => {
+            setConfirm(null);
+          }}>
+          취소
+        </div>
+        <div
+          className={styles.btn}
+          onClick={() => {
+            createPlan();
+          }}>
+          확인
+        </div>
+      </footer>
     </div>
   );
 };

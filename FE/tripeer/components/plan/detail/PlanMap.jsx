@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from "react";
+import defaultImg from "../asset/image (42).png";
 import styles from "./planMap.module.css";
 import SleepIcon from "@/components/plan/asset/Sleep.svg";
 import EatIcon from "@/components/plan/asset/Eat.svg";
@@ -24,6 +25,9 @@ const PlanMap = (props) => {
   const [spotList, setSpotList] = useState([]);
   const [spotWishList, setSpotWishList] = useState([]);
   const [onModal, setOnModal] = useState(false);
+  const [mapLatitude, setMapLatitude] = useState(null);
+  const [mapLongitude, setMapLongitude] = useState(null);
+  const [isMarker, setIsMarker] = useState(false);
 
   const CATEGORY = ["전체", "숙박", "맛집", "명소", "즐겨찾기"];
   const HeartIcon = [FullHeart, Heart];
@@ -169,6 +173,19 @@ const PlanMap = (props) => {
     await api.post(`/plan/wishlist/${spotId}`);
   };
 
+  const moveMap = (spot) => {
+    setMapLongitude(spot.longitude);
+    setMapLatitude(spot.latitude);
+    setIsMarker(true);
+  };
+
+  useEffect(() => {
+    if (towns.length > 0) {
+      setMapLatitude(towns[targetStep]["latitude"]);
+      setMapLongitude(towns[targetStep]["longitude"]);
+    }
+  }, [targetStep, towns]);
+
   useEffect(() => {
     if (isTarget) {
       io.observe(targetRef.current);
@@ -258,10 +275,29 @@ const PlanMap = (props) => {
                   ref={idx === spotList.length - 1 ? targetRef : null}>
                   <div
                     className={styles.cardImg}
-                    style={{ backgroundImage: `url(${spot.img})` }}
-                  />
+                    onClick={() => {
+                      moveMap(spot);
+                    }}
+                    style={{ position: "relative" }}>
+                    <Image
+                      src={spot.img}
+                      fill
+                      alt="사진"
+                      placeholder="blur"
+                      blurDataURL={`${defaultImg}`}
+                      priority="true"
+                      sizes="(max-width: 768px) 100vw,
+                      (max-width: 1200px) 50vw,
+                      33vw"
+                      quality={50}
+                    />
+                  </div>
                   <div className={styles.cardContent}>
-                    <div className={styles.cardHeader}>
+                    <div
+                      className={styles.cardHeader}
+                      onClick={() => {
+                        moveMap(spot);
+                      }}>
                       <p className={styles.cardTitle}>{spot.title}</p>
                       <div className={styles.cardCategoryBox}>
                         <div
@@ -282,7 +318,11 @@ const PlanMap = (props) => {
                         </p>
                       </div>
                     </div>
-                    <div className={styles.cardPosition}>
+                    <div
+                      className={styles.cardPosition}
+                      onClick={() => {
+                        moveMap(spot);
+                      }}>
                       <div className={styles.positionIcon} />
                       <p className={styles.positionContent}>{spot.addr}</p>
                     </div>
@@ -298,6 +338,8 @@ const PlanMap = (props) => {
                           width={18}
                           height={18}
                           alt="heart"
+                          quality={50}
+                          loading="eager"
                         />
                       </div>
                       {spot.spot ? (
@@ -374,7 +416,14 @@ const PlanMap = (props) => {
           ) : null}
         </section>
       </aside>
-      <Map />
+      <Map
+        mapLatitude={mapLatitude}
+        mapLongitude={mapLongitude}
+        setMapLatitude={setMapLatitude}
+        setMapLongitude={setMapLongitude}
+        isMarker={isMarker}
+        setIsMarker={setIsMarker}
+      />
       {onModal ? <AddSpot towns={towns} setOnModal={setOnModal} /> : null}
     </div>
   );
