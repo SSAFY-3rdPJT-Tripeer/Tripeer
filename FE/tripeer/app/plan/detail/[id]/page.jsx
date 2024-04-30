@@ -17,7 +17,6 @@ const PageDetail = (props) => {
       if (props.params?.id) {
         const res = await api.get(`/plan/main/${props.params.id}`);
         setPlan(res.data.data);
-        console.log(res);
       }
     };
     getPlan();
