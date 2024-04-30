@@ -280,6 +280,7 @@ const PlanMap = (props) => {
                     }}
                     style={{ position: "relative" }}>
                     <Image
+                      loader={() => spot.img}
                       src={spot.img}
                       fill
                       alt="사진"
