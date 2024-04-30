@@ -1,17 +1,43 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: [
-      "cdn.visitkorea.or.kr",
-      "tong.visitkorea.or.kr",
-      "conlab.visitkorea.or.kr",
-      "lh3.googleusercontent.com",
-      "lh5.googleusercontent.com",
-      "encrypted-tbn2.gstatic.com",
-      "search.pstatic.net",
-      "encrypted-tbn0.gstatic.com",
-      "encrypted-tbn1.gstatic.com",
-      "tripeerbucket.s3.ap-southeast-2.amazonaws.com",
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "cdn.visitkorea.or.kr",
+      },
+      {
+        protocol: "https",
+        hostname: "conlab.visitkorea.or.kr",
+      },
+      {
+        protocol: "https",
+        hostname: "search.pstatic.net",
+      },
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+      },
+      {
+        protocol: "https",
+        hostname: "encrypted-tbn1.gstatic.com",
+      },
+      {
+        protocol: "https",
+        hostname: "encrypted-tbn2.gstatic.com",
+      },
+      {
+        protocol: "https",
+        hostname: "encrypted-tbn0.gstatic.com",
+      },
+      {
+        protocol: "https",
+        hostname: "tripeerbucket.s3.ap-southeast-2.amazonaws.com",
+      },
+      {
+        protocol: "http",
+        hostname: "tong.visitkorea.or.kr",
+      },
     ],
   },
   reactStrictMode: false,
