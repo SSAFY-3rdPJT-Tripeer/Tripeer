@@ -14,7 +14,7 @@ const nextConfig = {
       "tripeerbucket.s3.ap-southeast-2.amazonaws.com",
     ],
   },
-  resactStrictMode: false,
+  reactStrictMode: false,
   eslint: {
     ignoreDuringBuilds: true,
   },
