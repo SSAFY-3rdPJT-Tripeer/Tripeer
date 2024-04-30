@@ -22,6 +22,7 @@ const DiaryDetail = () => {
           <div style={{ position: "relative" }} className={styles.imageBox}>
             <Image
               src={detailData ? detailData.Img : defaultImg}
+              loader={() => detailData.Img}
               alt=""
               fill
               placeholder="blur"

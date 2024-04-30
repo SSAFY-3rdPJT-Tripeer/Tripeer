@@ -110,6 +110,7 @@ const DayAlbum = () => {
     const selectedGalleryIds = selectedPhotos.filter((id) => id !== null);
     if (selectedGalleryIds.length === 0) {
       alert("선택된 사진이 없습니다.");
+      console.log(`selectedGalleryIds가 없어요`);
       return;
     }
     selectedGalleryIds.forEach((id) => {
@@ -167,6 +168,7 @@ const DayAlbum = () => {
                 style={{ position: "relative" }}>
                 <Image
                   src={photo.img}
+                  loader={() => photo.img}
                   sizes="(max-width: 768px) 100vw,(max-width: 1200px) 50vw, 33vw"
                   fill
                   priority="false"
@@ -178,6 +180,7 @@ const DayAlbum = () => {
                   <Image
                     className={styles.userImg}
                     src={photo.userImg}
+                    loader={() => photo.userImg}
                     sizes="(max-width: 768px) 100vw,(max-width: 1200px) 50vw, 33vw"
                     fill
                     priority="false"
