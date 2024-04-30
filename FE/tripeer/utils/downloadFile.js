@@ -1,4 +1,4 @@
-const toDataURL = (url) => {
+const toDataURL = async (url) => {
   return fetch(url)
     .then((response) => {
       return response.blob();

@@ -110,6 +110,7 @@ const DayAlbum = () => {
     const selectedGalleryIds = selectedPhotos.filter((id) => id !== null);
     if (selectedGalleryIds.length === 0) {
       alert("선택된 사진이 없습니다.");
+      console.log(`selectedGalleryIds가 없어요`);
       return;
     }
     selectedGalleryIds.forEach((id) => {
