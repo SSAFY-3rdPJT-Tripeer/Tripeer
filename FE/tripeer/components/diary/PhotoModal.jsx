@@ -49,6 +49,7 @@ const PhotoModal = (props) => {
         <div className={styles.imageIndex} style={{ position: "relative" }}>
           <Image
             src={imageData ? imageData[step].img : defaultImg}
+            loader={() => imageData[step].img}
             className={styles.image}
             sizes="(max-width: 768px) 100vw,(max-width: 1200px) 50vw, 33vw"
             fill
@@ -58,6 +59,7 @@ const PhotoModal = (props) => {
             <div className={styles.userImgBox} style={{ position: "relative" }}>
               <Image
                 src={imageData ? imageData[step].userImg : defaultImg}
+                loader={() => imageData[step].userImg}
                 className={styles.userImg}
                 sizes="(max-width: 768px) 100vw,(max-width: 1200px) 50vw, 33vw"
                 fill

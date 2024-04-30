@@ -168,6 +168,7 @@ const DayAlbum = () => {
                 style={{ position: "relative" }}>
                 <Image
                   src={photo.img}
+                  loader={() => photo.img}
                   sizes="(max-width: 768px) 100vw,(max-width: 1200px) 50vw, 33vw"
                   fill
                   priority="false"
@@ -179,6 +180,7 @@ const DayAlbum = () => {
                   <Image
                     className={styles.userImg}
                     src={photo.userImg}
+                    loader={() => photo.userImg}
                     sizes="(max-width: 768px) 100vw,(max-width: 1200px) 50vw, 33vw"
                     fill
                     priority="false"
