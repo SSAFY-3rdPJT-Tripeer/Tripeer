@@ -84,7 +84,6 @@ export default function BottomSection() {
     const observer = new IntersectionObserver(
       async (entries) => {
         if (entries[0].isIntersecting) {
-          console.log("Intersecting, category:", store.category);
           let newPage = 0;
           let newList = [];
 

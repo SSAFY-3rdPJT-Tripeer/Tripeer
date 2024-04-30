@@ -6,6 +6,7 @@ import Image from "next/image";
 import styles from "./placeDetailItem.module.css";
 import src from "@/public/place/vectorGrey.png";
 import api from "@/utils/api";
+import { useRouter } from "next/navigation";
 
 export default function PlaceDetailItem({
   data,
@@ -15,11 +16,18 @@ export default function PlaceDetailItem({
 }) {
   const [loaded, setLoaded] = useState(false);
   const [isLike, setIsLike] = useState(false);
+  const router = useRouter();
 
   const likeOnClick = () => {
     setIsLike(!isLike);
     postWish();
     setLikeSpotId((prev) => [...prev, data.spotId]);
+  };
+
+  const onClick = () => {
+    router.push(
+      `https://map.naver.com/p/search/${`${data.address} ${data.spotName}`}`,
+    );
   };
 
   const postWish = async () => {
@@ -52,6 +60,7 @@ export default function PlaceDetailItem({
           src={data.spotImg}
           alt=""
           onLoad={() => setLoaded(true)}
+          onClick={onClick}
         />
       </div>
       <Image
@@ -62,7 +71,7 @@ export default function PlaceDetailItem({
         height={50}
         onClick={likeOnClick}
       />
-      <section className={styles.section}>
+      <section className={styles.section} onClick={onClick}>
         <p className={styles.p}>{data.spotName}</p>
         <article className={styles.article}>
           <Image className={styles.vector} src={src} alt="" />
