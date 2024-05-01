@@ -9,7 +9,29 @@ const PlanHome = (props) => {
   const [towns, setTowns] = useState([]);
   const [townShow, setTownShow] = useState(0);
   const [titleChange, setTitleChange] = useState(false);
+  const [onAdd, setOnAdd] = useState(false);
+  const [searchResult, setSearchResult] = useState([]);
   const titleInput = useRef(null);
+
+  const invite = async (member) => {
+    if (members.length < 8) {
+      const res = await api.post("/plan/member", {
+        planId: plan.planId,
+        userId: member.userId,
+      });
+      if (res.status === 200) {
+        setMembers([...members, member]);
+      }
+    }
+  };
+
+  const search = async (e) => {
+    const value = e.currentTarget.value;
+    if (value.length > 0) {
+      const res = await api.get(`/user/search/${value}`);
+      setSearchResult(res.data.data);
+    }
+  };
 
   const changeOn = () => {
     if (titleChange === true) {
@@ -37,10 +59,14 @@ const PlanHome = (props) => {
   };
 
   useEffect(() => {
+    const getMember = async () => {
+      const res = await api.get(`/plan/member/${plan.planId}`);
+      setMembers(res.data.data);
+    };
     if (plan) {
       setTitle(plan.title);
       setTowns(plan.townList);
-      setMembers(plan.coworkerList);
+      getMember();
     }
   }, [plan]);
 
@@ -138,7 +164,9 @@ const PlanHome = (props) => {
                           }}>
                           <div className={styles.onLine} />
                         </div>
-                        <p className={styles.memberName}>{member.nickname}</p>
+                        <p className={styles.memberName}>
+                          {member.userNickname}
+                        </p>
                       </div>
                       <div className={styles.memberSounds}>
                         <div className={styles.mic}></div>
@@ -149,10 +177,83 @@ const PlanHome = (props) => {
                   </div>
                 );
               })}
+              <div
+                className={styles.addMember}
+                onClick={() => {
+                  setOnAdd(true);
+                }}>
+                <div />
+                멤버 추가
+              </div>
             </div>
           </div>
         </aside>
       </article>
+      {onAdd ? (
+        <div
+          className={styles.addContainer}
+          onMouseDown={(e) => {
+            if (e.currentTarget === e.target) setOnAdd(false);
+          }}>
+          <div className={styles.addMemberBox}>
+            <div className={styles.addHeader}>
+              <div>멤버 추가</div>
+            </div>
+            <hr className={styles.notifyLine} style={{ margin: "12px 0px" }} />
+            <div className={styles.addContent}>
+              <input
+                type="text"
+                className={styles.addInput}
+                placeholder="추가할 멤버의 닉네임을 입력해주세요."
+                maxLength={10}
+                onChange={(e) => {
+                  search(e);
+                }}
+              />
+            </div>
+            <div className={styles.addSearch}>
+              {searchResult.map((member, idx) => {
+                return (
+                  <>
+                    <div className={styles.searchUserCard} key={idx}>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                        }}>
+                        <div
+                          className={styles.searchUserImg}
+                          style={{
+                            backgroundImage: `url(${member.profileImage})`,
+                          }}
+                        />
+                        <div className={styles.searchUserName}>
+                          {member.nickname}
+                        </div>
+                      </div>
+                      <div
+                        className={
+                          members.find((m) => m.userId === member.userId)
+                            ? styles.noBtn
+                            : styles.addBtn
+                        }
+                        onClick={() => {
+                          invite(member);
+                        }}>
+                        초대
+                      </div>
+                    </div>
+                    <hr className={styles.addLine} key={`line${idx}`} />
+                  </>
+                );
+              })}
+              {searchResult.length === 0 ? (
+                <div className={styles.noSearch}>검색 결과가 없습니다.</div>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 };

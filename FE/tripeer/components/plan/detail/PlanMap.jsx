@@ -10,6 +10,7 @@ import AddSpot from "./AddSpot";
 import Image from "next/image";
 import api from "@/utils/api";
 import Map from "./Map";
+import SpotList from "./SpotList";
 
 const PlanMap = (props) => {
   const { plan } = props;
@@ -28,6 +29,7 @@ const PlanMap = (props) => {
   const [mapLatitude, setMapLatitude] = useState(null);
   const [mapLongitude, setMapLongitude] = useState(null);
   const [isMarker, setIsMarker] = useState(false);
+  const [onSaveSpot, setOnSaveSpot] = useState(false);
 
   const CATEGORY = ["전체", "숙박", "맛집", "명소", "즐겨찾기"];
   const HeartIcon = [FullHeart, Heart];
@@ -202,6 +204,16 @@ const PlanMap = (props) => {
   return (
     <div className={styles.container}>
       <aside className={styles.searchBox}>
+        <SpotList onSaveSpot={onSaveSpot} />
+        <div
+          className={styles.saveSpotToggle}
+          onClick={() => {
+            setOnSaveSpot(!onSaveSpot);
+          }}>
+          <div
+            className={onSaveSpot ? styles.saveSpotIcon : styles.saveNoSpotIcon}
+          />
+        </div>
         <header className={styles.searchHeader}>
           <div className={styles.townList}>
             <span className={styles.townTitle}>
