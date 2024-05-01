@@ -19,12 +19,16 @@ export default function RedirectPage() {
     transition: { duration: 1, delay: 0 },
   };
 
-  useEffect(async () => {
+  const getData = async () => {
+    const res = await api.get("/user/myinfo");
+    store.setMyInfo(res.data.data);
+  };
+
+  useEffect(() => {
     // const accessToken = cookies.get("Authorization");
     // localStorage.setItem("accessToken", accessToken);
 
-    const res = await api.get("/user/myinfo");
-    store.setMyInfo(res.data.data);
+    getData();
 
     const timer = setTimeout(() => {
       router.push("/");
