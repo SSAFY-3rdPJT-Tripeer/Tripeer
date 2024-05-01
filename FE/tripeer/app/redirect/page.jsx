@@ -6,9 +6,12 @@ import { motion } from "framer-motion";
 import logo from "@/public/login/logo.png";
 import Image from "next/image";
 import styles from "./page.module.css";
+import api from "@/utils/api";
+import useRegisterStore from "@/stores/register";
 
 export default function RedirectPage() {
   const router = useRouter();
+  const store = useRegisterStore();
 
   const logoAnimation = {
     initial: { opacity: 1 },
@@ -16,9 +19,12 @@ export default function RedirectPage() {
     transition: { duration: 1, delay: 0 },
   };
 
-  useEffect(() => {
+  useEffect(async () => {
     // const accessToken = cookies.get("Authorization");
     // localStorage.setItem("accessToken", accessToken);
+
+    const res = await api.get("/user/myinfo");
+    store.setMyInfo(res.data.data);
 
     const timer = setTimeout(() => {
       router.push("/");
