@@ -45,6 +45,11 @@
 .list {
     width: calc(100% - 45px);
     margin-left: 30px;
+    margin-top: 10px;
+}
+
+.itemBox {
+    padding: 10px 0;
 }
 
 .scroll {
@@ -95,4 +100,40 @@
     color: #545454;
     font-size: 20px;
     font-weight: bold;
+}
+
+.update {
+    margin-left: 20px;
+    margin-top: 2px;
+}
+
+.scheduleContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.scheduleSection {
+    width: 420px;
+    height: auto;
+    margin: 30px;
+}
+
+.scheduleSection header {
+    display: flex;
+    align-items: end;
+    background-color: red;
+}
+
+.scP1 {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.scP2 {
+    margin-left: 10px;
+    font-size: 14px;
+    color: #979797;
+    font-weight: bold;
+    padding-bottom: 1px;
 }
