@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Slf4j
@@ -80,9 +81,9 @@ public class HistoryController {
 
 
     @PostMapping("/gallery/delete")
-    public Response<String> deleteResources(@RequestBody GallertIdListDTO galleryIdList) {
+    public Response<String> deleteResources(@RequestBody Map<String, List<Long>> galleryIdList) {
         try {
-            String res = galleryService.deleteGalleryList(galleryIdList.getGallertIdList());
+            String res = galleryService.deleteGalleryList(galleryIdList.get("galleryIdList"));
             return Response.of(HttpStatus.OK, "사진 삭제 성공", res);
         } catch (Exception e) {
             throw new RuntimeException(e);
