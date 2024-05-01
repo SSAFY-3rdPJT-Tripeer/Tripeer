@@ -295,9 +295,12 @@ public class PlanServiceImpl implements PlanService {
         //DTO로 변환
         List<CoworkerDTO> coworkerDTOList = new ArrayList<>();
         for (CoworkerEntity coworker : coworkerList) {
+            UserEntity user = coworker.getUser();
             CoworkerDTO coworkerDTO = CoworkerDTO.builder()
                     .planId(coworker.getPlan().getPlanId())
-                    .userId(coworker.getUser().getUserId())
+                    .userId(user.getUserId())
+                    .userNickname(user.getNickname())
+                    .profileImage(user.getProfileImage())
                     .build();
             coworkerDTOList.add(coworkerDTO);
         }
