@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class CoworkerDTO {
+public class CoworkerReqDTO {
 
     private long planId;
     private long userId;
