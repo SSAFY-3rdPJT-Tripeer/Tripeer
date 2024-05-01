@@ -96,7 +96,7 @@ public class GalleryServiceImpl implements GalleryService{
                 throw new IOException(); //커스텀 예외 던짐.
             }
             //저장된 Url
-            String url = "https://tripeerbucket.s3.ap-southeast-2.amazonaws.com/" + changedName;
+            String url = "https://tripeer207.s3.ap-northeast-2.amazonaws.com/" + changedName;
             System.out.println(changedName);
             //DB에 업로드 정보 저장
             GalleryEntity gallery = GalleryEntity.builder()
