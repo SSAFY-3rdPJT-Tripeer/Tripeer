@@ -11,12 +11,15 @@ import style from "./navbar.module.css";
 import Logo from "@/public/logo.png";
 import toggleIcon from "./assets/toggle.svg";
 import cookies from "js-cookie";
+import useRegisterStore from "@/stores/register";
 
 const NavBar = () => {
   const path = usePathname();
   const [toggle, setToggle] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const router = useRouter();
+  const store = useRegisterStore();
+  const [myInfo, setMyInfo] = useState();
   const navRenderPath = {
     "/": true,
     "/plan": true,
@@ -41,6 +44,8 @@ const NavBar = () => {
       setIsLogin(true);
       // getUserData();
     }
+    const data = store.myInfo;
+    setMyInfo(data);
   }, []);
 
   return (
@@ -69,7 +74,7 @@ const NavBar = () => {
             {isLogin ? (
               <div className={style.profileBox}>
                 <div className={style.userImg} />
-                <p className={style.userName}>부수환</p>
+                <p className={style.userName}>{myInfo.nickname}</p>
                 <Image
                   src={toggleIcon}
                   width={TOGGLE_WIDTH}

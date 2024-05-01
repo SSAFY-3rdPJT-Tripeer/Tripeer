@@ -4,6 +4,8 @@ import { persist } from "zustand/middleware";
 const useRegisterStore = create(
   persist(
     (set) => ({
+      myInfo: null,
+      setMyInfo: (myInfo) => set({ myInfo }),
       nickName: "",
       setNickName: (nickName) => set({ nickName }),
       year: "",

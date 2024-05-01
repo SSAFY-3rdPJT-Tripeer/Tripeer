@@ -1,0 +1,77 @@
+.container {
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    box-shadow: 5px 5px 16px 0 rgba(0, 0, 0, 0.1);
+    /*margin: 24px 0;*/
+    width: 100%;
+    height: 120px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.imgBox {
+    width: 90px;
+    height: 90px;
+    margin: 0 15px 0 5px;
+    position: relative;
+}
+
+.image {
+    border-radius: 10px;
+}
+
+.content {
+    width: calc(100% - 180px);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.right {
+    height: 100%;
+    width: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: end;
+    padding: 8px 16px 8px 0;
+}
+
+.exit {
+    width: 12px;
+    height: 12px;
+}
+
+.profileBox {
+    width: 35px;
+    height: 35px;
+    position: relative;
+}
+
+.profile {
+    border-radius: 100%;
+}
+
+.name {
+    font-weight: 480;
+    font-size: 1.1rem;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.address {
+    color: #545454;
+    font-size: 12px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    margin-left: 5px;
+}
+
+.box {
+    display: flex;
+    align-items: center;
+}

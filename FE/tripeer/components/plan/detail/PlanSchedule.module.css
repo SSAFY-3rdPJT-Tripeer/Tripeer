@@ -1,0 +1,139 @@
+.container {
+    width: calc(100vw - 72px);
+    height: 100vh;
+    display: flex;
+}
+
+.main {
+    width: 470px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: rgb(0, 0, 0, 0.1) 4px 4px 10px 0;
+}
+
+.titleBox {
+    display: flex;
+    align-items: center;
+    padding: 20px 30px;
+}
+
+.titleBox p {
+    color: #3D3C3C;
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.line {
+    border: #E6E8EC 1px solid;
+    margin: 0 30px;
+}
+
+.userBox {
+    display: flex;
+    padding: 10px 30px;
+}
+
+.userBox img {
+    width: 45px;
+    height: 45px;
+    border-radius: 100%;
+    margin-right: 10px;
+}
+
+.list {
+    width: calc(100% - 45px);
+    margin-left: 30px;
+    margin-top: 10px;
+}
+
+.itemBox {
+    padding: 10px 0;
+}
+
+.scroll {
+    overflow-y: scroll;
+    padding: 0 10px 0 3px;
+}
+
+.scroll::-webkit-scrollbar {
+    width: 4px;
+}
+
+.scroll::-webkit-scrollbar-thumb {
+    height: 10%;
+    background: #cecdcd;
+    border-radius: 10px;
+}
+
+.scroll::-webkit-scrollbar-track {
+    background: #fff;
+}
+
+
+/* 아래부턴 오른쪽 박스 */
+/*--------------------------------------------------------------*/
+
+
+.mainRight {
+    width: calc(100vw - 398px);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.rightHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 20px 30px;
+}
+
+.leftSection{
+    display: flex;
+    align-items: center;
+}
+
+.leftSection p {
+    margin-left: 10px;
+    color: #545454;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.update {
+    margin-left: 20px;
+    margin-top: 2px;
+}
+
+.scheduleContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.scheduleSection {
+    width: 420px;
+    height: auto;
+    margin: 30px;
+}
+
+.scheduleSection header {
+    display: flex;
+    align-items: end;
+    background-color: red;
+}
+
+.scP1 {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.scP2 {
+    margin-left: 10px;
+    font-size: 14px;
+    color: #979797;
+    font-weight: bold;
+    padding-bottom: 1px;
+}

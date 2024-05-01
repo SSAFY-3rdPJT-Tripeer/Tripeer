@@ -136,7 +136,7 @@
   text-decoration: underline;
 }
 
-.searchResult {
+.scroll {
   position: absolute;
   top: 180px;
   left: 10%;
@@ -148,17 +148,17 @@
   overflow-y: scroll;
 }
 
-.searchResult::-webkit-scrollbar {
+.scroll::-webkit-scrollbar {
   width: 2.5px; /* 스크롤바의 너비 */
 }
 
-.searchResult::-webkit-scrollbar-thumb {
+.scroll::-webkit-scrollbar-thumb {
   height: 5%; /* 스크롤바의 길이 */
   background: transparent; /* 스크롤바의 색상 */
   border-radius: 10px;
 }
 
-.searchResult::-webkit-scrollbar-track {
+.scroll::-webkit-scrollbar-track {
   background: rgba(0, 0, 0, 0); /*스크롤바 뒷 배경 색상*/
 }
 
