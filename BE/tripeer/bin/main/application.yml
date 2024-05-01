@@ -3,10 +3,10 @@ server:
     context-path: /api
 
 spring:
-  server:
-      multipart:
-        max-file-size: -1
-        max-request-size: -1
+  servlet:
+    multipart:
+      max-file-size: -1
+      max-request-size: -1
 
   datasource:
     url: ENC(O+6cd1DEPib/iu/hkn5SAWTMEKzAmV6xq+cqOjhR4rRka0UVt6VGVSL0uLG2i2c61l/2FP5EApg=)
