@@ -279,32 +279,36 @@ public class PlanServiceImpl implements PlanService {
 
     //동행자 추가
     @Override
-    public void joinPlan(CoworkerDTO coworkerDTO) {
-        CoworkerEntity coworker = CoworkerEntity.builder()
-                .plan(PlanEntity.builder().planId(coworkerDTO.getPlanId()).build())
-                .user(UserEntity.builder().userId(coworkerDTO.getUserId()).build())
-                .build();
-        coworkerRepository.save(coworker);
+    public void joinPlan(CoworkerReqDTO coworkerReqDTO) {
+        if(!coworkerRepository.existsByPlan_PlanIdAndUser_UserId(coworkerReqDTO.getPlanId(), coworkerReqDTO.getUserId())) {
+            CoworkerEntity coworker = CoworkerEntity.builder()
+                    .plan(PlanEntity.builder().planId(coworkerReqDTO.getPlanId()).build())
+                    .user(UserEntity.builder().userId(coworkerReqDTO.getUserId()).build())
+                    .build();
+            coworkerRepository.save(coworker);
+        } else {
+            throw new CustomException(ErrorCode.DUPLICATE_USER);
+        }
     }
 
     //동행자 조회
     @Override
-    public List<CoworkerDTO> getCoworker(long planId) {
+    public List<CoworkerReqDTO> getCoworker(long planId) {
         //요청된 플랜의 동행자 목록 조회
         List<CoworkerEntity> coworkerList = coworkerRepository.findByPlan_PlanId(planId);
         //DTO로 변환
-        List<CoworkerDTO> coworkerDTOList = new ArrayList<>();
+        List<CoworkerReqDTO> coworkerReqDTOList = new ArrayList<>();
         for (CoworkerEntity coworker : coworkerList) {
             UserEntity user = coworker.getUser();
-            CoworkerDTO coworkerDTO = CoworkerDTO.builder()
+            CoworkerReqDTO coworkerReqDTO = CoworkerReqDTO.builder()
                     .planId(coworker.getPlan().getPlanId())
                     .userId(user.getUserId())
                     .userNickname(user.getNickname())
                     .profileImage(user.getProfileImage())
                     .build();
-            coworkerDTOList.add(coworkerDTO);
+            coworkerReqDTOList.add(coworkerReqDTO);
         }
-        return coworkerDTOList;
+        return coworkerReqDTOList;
     }
 
     //관광지 검색

@@ -78,9 +78,9 @@ public class PlanController {
 
     //동행자 추가
     @PostMapping("/member")
-    public Response<?> joinPlan(@RequestBody CoworkerDTO coworkerDTO) {
+    public Response<?> joinPlan(@RequestBody CoworkerReqDTO coworkerReqDTO) {
         try {
-            planService.joinPlan(coworkerDTO);
+            planService.joinPlan(coworkerReqDTO);
             return Response.of(HttpStatus.OK, "초대 완료", null);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -89,10 +89,10 @@ public class PlanController {
 
     //동행자 조회
     @GetMapping("/member/{planId}")
-    public Response<List<CoworkerDTO>> getCoworker(@PathVariable("planId") long planId) {
+    public Response<List<CoworkerReqDTO>> getCoworker(@PathVariable("planId") long planId) {
         try {
-            List<CoworkerDTO> coworkerDTOList = planService.getCoworker(planId);
-            return Response.of(HttpStatus.OK, "조회 완료", coworkerDTOList);
+            List<CoworkerReqDTO> coworkerReqDTOList = planService.getCoworker(planId);
+            return Response.of(HttpStatus.OK, "조회 완료", coworkerReqDTOList);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

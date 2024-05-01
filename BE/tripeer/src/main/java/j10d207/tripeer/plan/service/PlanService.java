@@ -20,9 +20,9 @@ public interface PlanService {
     //플랜 날짜 수정
     public void changeDay(CreatePlanDTO createPlanDTO, String token);
     //동행자 추가
-    public void joinPlan(CoworkerDTO coworkerDTO);
+    public void joinPlan(CoworkerReqDTO coworkerReqDTO);
     //동행자 조회
-    public List<CoworkerDTO> getCoworker(long planId);
+    public List<CoworkerReqDTO> getCoworker(long planId);
     //관광지 검색
     public List<SpotSearchResDTO> getSpotSearch(long planId, String keyword, int page, int sortType, String token);
     //플랜버킷 관광지 추가
