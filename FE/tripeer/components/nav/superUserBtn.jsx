@@ -15,7 +15,7 @@ export default function SuperUserBtn({ id }) {
         const accessToken = res.data.data.replace("Bearer ", "");
         // localStorage.setItem("accessToken", accessToken);
         cookies.set("Authorization", accessToken);
-        router.push("/");
+        router.push("/redirect");
       });
   };
 
