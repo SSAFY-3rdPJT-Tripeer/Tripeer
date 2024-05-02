@@ -28,7 +28,7 @@ const Map = (props) => {
         position: new naver.maps.LatLng(mapLatitude, mapLongitude),
         map,
         icon: {
-          url: "https://tripeerbucket.s3.ap-southeast-2.amazonaws.com/front/static/marker.png",
+          url: "https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/marker.png",
           size: new naver.maps.Size(33, 45),
           scaledSize: new naver.maps.Size(33, 45),
           origin: new naver.maps.Point(0, 0),
