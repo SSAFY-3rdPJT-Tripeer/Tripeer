@@ -77,7 +77,13 @@ const Landing5 = () => {
           ].map((item, idx) => {
             return (
               <div className={styles.slide} key={idx}>
-                <Image src={item} height="400" width="250" alt="" />
+                <Image
+                  src={item}
+                  height="400"
+                  width="250"
+                  alt=""
+                  quality={100}
+                />
               </div>
             );
           })}

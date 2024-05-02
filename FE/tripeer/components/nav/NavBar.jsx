@@ -95,7 +95,11 @@ const NavBar = () => {
                         <div className={`${style.mypage} ${style.icon}`} />
                         <span>마이 페이지</span>
                       </li>
-                      <li className={style.option} onClick={logoutOnClick}>
+                      <li
+                        className={style.option}
+                        onClick={() => {
+                          logoutOnClick();
+                        }}>
                         <div className={`${style.logout} ${style.icon}`} />
                         <span>로그아웃</span>
                       </li>

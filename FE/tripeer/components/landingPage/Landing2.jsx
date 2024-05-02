@@ -2,9 +2,12 @@
 
 // 외부 모듈
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 
 // 내부 모듈
 import styles from "./landing2.module.css";
+import banner2 from "./assets/banner2.png";
+import defaultImg from "./assets/defaultImage.png";
 
 const Landing1 = () => {
   const refOne = useRef(null);
@@ -62,7 +65,21 @@ const Landing1 = () => {
         <section className={styles.bannerBack}>
           <div className={styles.bannerItem1} ref={refOne}></div>
           <div className={styles.bannerItem2} ref={refTwo}></div>
-          <div className={styles.secondBanner} ref={refThree}></div>
+          <div
+            className={styles.secondBanner}
+            ref={refThree}
+            style={{ position: "relative" }}>
+            <Image
+              src={banner2 ? banner2 : defaultImg}
+              fill
+              alt="banner"
+              placeholder="blur"
+              blurDataURL={`${defaultImg}`}
+              priority="true"
+              sizes="(max-width: 768px) 100vw,
+              (max-width: 1200px) 50vw,
+              33vw"></Image>
+          </div>
         </section>
       </article>
 

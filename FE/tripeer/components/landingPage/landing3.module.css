@@ -21,26 +21,14 @@
   width: 100%;
 }
 .titleIcon1 {
-  background: url(./assets/bannerIcon1.png);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
   height: 80px;
   width: 80px;
 }
 .titleIcon2 {
-  background: url(./assets/bannerIcon2.png);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
   height: 80px;
   width: 80px;
 }
 .titleIcon3 {
-  background: url(./assets/bannerIcon3.png);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
   height: 80px;
   width: 80px;
 }
@@ -67,10 +55,6 @@
 }
 .sampleCard {
   position: relative;
-  background: url(./assets/sampleCard.png);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
   height: 535px;
   width: 400px;
   border-radius: 30px;
@@ -83,12 +67,12 @@
 
 .sampleSubCard {
   position: absolute;
-  bottom: -80px;
-  right: -100px;
   background: url(./assets/sampleCard2.png);
   background-position: center;
-  background-repeat: no-repeat;
   background-size: contain;
+  background-repeat: no-repeat;
+  bottom: -80px;
+  right: -100px;
   height: 150px;
   width: 220px;
   border-radius: 15px;
