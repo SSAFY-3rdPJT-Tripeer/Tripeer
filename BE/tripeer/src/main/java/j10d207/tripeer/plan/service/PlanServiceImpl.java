@@ -363,7 +363,7 @@ public class PlanServiceImpl implements PlanService {
             spotSearchResDTO.setAddr(spotInfoEntity.getAddr1());
             spotSearchResDTO.setLatitude(spotInfoEntity.getLatitude());
             spotSearchResDTO.setLongitude(spotInfoEntity.getLongitude());
-            spotSearchResDTO.setImg(spotInfoEntity.getFirstImage());
+            spotSearchResDTO.setImg("https://tripeer207.s3.ap-northeast-2.amazonaws.com/spot/"+spotInfoEntity.getSpotInfoId()+".png");
             spotSearchResDTO.setWishlist(wishListRepository.existsByUser_UserIdAndSpotInfo_SpotInfoId(jwtUtil.getUserId(access), spotInfoEntity.getSpotInfoId()));
             spotSearchResDTO.setSpot(planBucketRepository.existsByPlan_PlanIdAndSpotInfo_SpotInfoId(planId, spotInfoEntity.getSpotInfoId()));
 
