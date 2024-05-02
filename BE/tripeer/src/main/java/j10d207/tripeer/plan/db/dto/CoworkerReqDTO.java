@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class CoworkerReqDTO {
-
+    private int order;
     private long planId;
     private long userId;
     private String profileImage;

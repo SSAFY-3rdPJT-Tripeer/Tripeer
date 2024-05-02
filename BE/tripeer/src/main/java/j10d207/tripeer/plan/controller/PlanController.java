@@ -87,6 +87,17 @@ public class PlanController {
         }
     }
 
+    //플랜에서 나의 정보 조회(기존 내정보 + 나의 coworker에서의 순서)
+    @GetMapping("/myinfo/{planId}")
+    public Response<CoworkerReqDTO> getCoworker(@PathVariable("planId") long planId, HttpServletRequest request) {
+        try {
+            CoworkerReqDTO coworkerReqDTOList = planService.getPlanMyinfo(planId, request.getHeader("Authorization"));
+            return Response.of(HttpStatus.OK, "조회 완료", coworkerReqDTOList);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     //동행자 조회
     @GetMapping("/member/{planId}")
     public Response<List<CoworkerReqDTO>> getCoworker(@PathVariable("planId") long planId) {
