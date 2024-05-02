@@ -34,8 +34,8 @@ const DiaryCard = () => {
                 style={{ position: "relative" }}>
                 <Image
                   src={item.Img}
-                  loader={() => item.Img}
                   fill
+                  // loader={() => detailData.Img}
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   alt="im"
                   className={styles.cardImg}

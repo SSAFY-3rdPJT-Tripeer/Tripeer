@@ -54,10 +54,6 @@
   position: absolute;
   left: 10px;
   top: -10px;
-  background: url("./assets/banner2.png");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
   height: 100%;
   width: 100%;
   z-index: 3;

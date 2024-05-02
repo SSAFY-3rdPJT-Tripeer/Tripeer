@@ -2,13 +2,20 @@
 
 // 외부 모듈
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 
 // 내부 모듈
 import styles from "./landing3.module.css";
+import bannerIcon1 from "./assets/bannerIcon1.png";
+import bannerIcon2 from "./assets/bannerIcon2.png";
+import bannerIcon3 from "./assets/bannerIcon3.png";
+import sampleCard1 from "./assets/sampleCard.png";
+import defaultImage2 from "./assets/defaultImage2.png";
+import defaultImage3 from "./assets/defaultImage2.png";
 
 const Landing3 = () => {
-  const refTitle1 = useRef(null); // 첫 번째 제목을 위한 ref
-  const refTitle2 = useRef(null); // 두 번째 제목을 위한 ref
+  const refTitle1 = useRef(null);
+  const refTitle2 = useRef(null);
   const refTitle3 = useRef(null);
   const refCard1 = useRef(null);
   const refCard2 = useRef(null);
@@ -51,7 +58,18 @@ const Landing3 = () => {
     <main className={styles.container}>
       <article className={styles.leftSection}>
         <section className={styles.contentBox} ref={refTitle1}>
-          <div className={styles.titleIcon1}></div>
+          <div className={styles.titleIcon1} style={{ position: "relative" }}>
+            <Image
+              src={bannerIcon1 ? bannerIcon1 : defaultImage2}
+              fill
+              alt="Icon1"
+              placeholder="blur"
+              blurDataURL={`${defaultImage2}`}
+              priority="true"
+              sizes="(max-width: 768px) 100vw,
+                        (max-width: 1200px) 50vw,
+                        33vw"></Image>
+          </div>
           <div className={styles.titleBox}>
             <div className={styles.title}>플랜 생성</div>
             <div className={styles.subTitle}>
@@ -61,7 +79,18 @@ const Landing3 = () => {
           </div>
         </section>
         <section className={styles.contentBox} ref={refTitle2}>
-          <div className={styles.titleIcon2}></div>
+          <div className={styles.titleIcon2} style={{ position: "relative" }}>
+            <Image
+              src={bannerIcon2 ? bannerIcon2 : defaultImage2}
+              fill
+              alt="Icon2"
+              placeholder="blur"
+              blurDataURL={`${defaultImage2}`}
+              priority="true"
+              sizes="(max-width: 768px) 100vw,
+                        (max-width: 1200px) 50vw,
+                        33vw"></Image>
+          </div>
           <div className={styles.titleBox}>
             <div className={styles.title}>스팟 선택</div>
             <div className={styles.subTitle}>
@@ -71,7 +100,18 @@ const Landing3 = () => {
           </div>
         </section>
         <section className={styles.contentBox} ref={refTitle3}>
-          <div className={styles.titleIcon3}></div>
+          <div className={styles.titleIcon3} style={{ position: "relative" }}>
+            <Image
+              src={bannerIcon3 ? bannerIcon3 : defaultImage2}
+              fill
+              alt="Icon3"
+              placeholder="blur"
+              blurDataURL={`${defaultImage3}`}
+              priority="true"
+              sizes="(max-width: 768px) 100vw,
+                        (max-width: 1200px) 50vw,
+                        33vw"></Image>
+          </div>
           <div className={styles.titleBox}>
             <div className={styles.title}>플랜 조정</div>
             <div className={styles.subTitle}>
@@ -82,7 +122,20 @@ const Landing3 = () => {
         </section>
       </article>
       <article className={styles.rightSection}>
-        <section className={styles.sampleCard} ref={refCard1}>
+        <section
+          className={styles.sampleCard}
+          ref={refCard1}
+          style={{ position: "relative" }}>
+          <Image
+            src={sampleCard1 ? sampleCard1 : defaultImage3}
+            fill
+            alt="card1"
+            placeholder="blur"
+            blurDataURL={`${defaultImage3}`}
+            priority="true"
+            sizes="(max-width: 768px) 100vw,
+            (max-width: 1200px) 50vw,
+            33vw"></Image>
           <div className={styles.sampleSubCard} ref={refCard2}></div>
         </section>
       </article>
