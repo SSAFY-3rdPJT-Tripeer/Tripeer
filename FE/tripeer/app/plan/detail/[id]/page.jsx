@@ -85,7 +85,7 @@ const PageDetail = (props) => {
           const res = await api.get(`/plan/main/${props.params.id}`);
           setPlan(res.data.data);
           const ws = new WebsocketProvider(
-            "wss://k10d207.p.ssafy.io:3001",
+            "wss://k10d207.p.ssafy.io/node",
             `room-${props.params.id}`,
             doc,
           );

@@ -93,14 +93,16 @@ const PlanMap = (props) => {
   );
 
   const updateMouse = (x, y) => {
-    provider.awareness.setLocalStateField("mouse", {
-      id: myInfo.userId,
-      nickname: myInfo.nickname,
-      color: myInfo.order,
-      page: 1,
-      x: x,
-      y: y,
-    });
+    if (provider) {
+      provider.awareness.setLocalStateField("mouse", {
+        id: myInfo.userId,
+        nickname: myInfo.nickname,
+        color: myInfo.order,
+        page: 1,
+        x: x,
+        y: y,
+      });
+    }
   };
 
   const updateList = async () => {

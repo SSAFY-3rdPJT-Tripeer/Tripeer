@@ -19,7 +19,7 @@ const OnlineBox = (props) => {
     <div className={styles.container}>
       <div className={styles.onlines}>
         {online.map((member, idx) => {
-          return member.id !== myInfo.userId ? (
+          return member?.id !== myInfo.userId ? (
             <div
               key={idx}
               className={styles.img}
