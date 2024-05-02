@@ -3,9 +3,12 @@
 // 외부 모듈
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 // 내부 모듈
 import styles from "./landing1.module.css";
+import banner1 from "./assets/firstBanner.png";
+import defaultImg from "./assets/defaultImage.png";
 
 const Landing1 = () => {
   const refTitle1 = useRef(null); // 첫 번째 제목을 위한 ref
@@ -72,7 +75,22 @@ const Landing1 = () => {
         </div>
       </article>
       <article className={styles.rightSection}>
-        <section className={styles.firstBanner} ref={refBanner}></section>
+        <section
+          className={styles.firstBanner}
+          ref={refBanner}
+          style={{ position: "relative" }}>
+          <Image
+            src={banner1 ? banner1 : defaultImg}
+            fill
+            alt="banner"
+            placeholder="blur"
+            blurDataURL={`${defaultImg}`}
+            priority="true"
+            sizes="(max-width: 768px) 100vw,
+            (max-width: 1200px) 50vw,
+            33vw"
+            quality={100}></Image>
+        </section>
       </article>
     </main>
   );
