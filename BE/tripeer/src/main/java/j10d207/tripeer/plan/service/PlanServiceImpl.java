@@ -298,9 +298,11 @@ public class PlanServiceImpl implements PlanService {
         List<CoworkerEntity> coworkerList = coworkerRepository.findByPlan_PlanId(planId);
         //DTO로 변환
         List<CoworkerReqDTO> coworkerReqDTOList = new ArrayList<>();
+        int order = 0;
         for (CoworkerEntity coworker : coworkerList) {
             UserEntity user = coworker.getUser();
             CoworkerReqDTO coworkerReqDTO = CoworkerReqDTO.builder()
+                    .order(order++)
                     .planId(coworker.getPlan().getPlanId())
                     .userId(user.getUserId())
                     .nickname(user.getNickname())
@@ -310,6 +312,7 @@ public class PlanServiceImpl implements PlanService {
         }
         return coworkerReqDTOList;
     }
+
 
     //관광지 검색
     @Override
@@ -501,6 +504,29 @@ public class PlanServiceImpl implements PlanService {
 
         }
         return planDetailResDTOMap;
+    }
+
+    //플랜 나의 정보 조회(기존 내정보 + 나의 coworker에서의 순서)
+    @Override
+    public CoworkerReqDTO getPlanMyinfo(long planId, String token) {
+        long userId = jwtUtil.getUserId(jwtUtil.splitToken(token));
+        //요청된 플랜의 동행자 목록 조회
+        List<CoworkerEntity> coworkerList = coworkerRepository.findByPlan_PlanId(planId);
+        int order = -1;
+        for (CoworkerEntity coworker : coworkerList) {
+            order++;
+            UserEntity user = coworker.getUser();
+            if(userId != coworker.getUser().getUserId()) continue;
+            CoworkerReqDTO coworkerReqDTO = CoworkerReqDTO.builder()
+                    .order(order)
+                    .planId(coworker.getPlan().getPlanId())
+                    .userId(user.getUserId())
+                    .nickname(user.getNickname())
+                    .profileImage(user.getProfileImage())
+                    .build();
+            return coworkerReqDTO;
+        }
+        throw new CustomException(ErrorCode.NOT_HAS_COWORKER);
     }
 
 }
