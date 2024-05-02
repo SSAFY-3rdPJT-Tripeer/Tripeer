@@ -10,5 +10,5 @@ public class CoworkerReqDTO {
     private long planId;
     private long userId;
     private String profileImage;
-    private String userNickname;
+    private String nickname;
 }

@@ -303,7 +303,7 @@ public class PlanServiceImpl implements PlanService {
             CoworkerReqDTO coworkerReqDTO = CoworkerReqDTO.builder()
                     .planId(coworker.getPlan().getPlanId())
                     .userId(user.getUserId())
-                    .userNickname(user.getNickname())
+                    .nickname(user.getNickname())
                     .profileImage(user.getProfileImage())
                     .build();
             coworkerReqDTOList.add(coworkerReqDTO);
