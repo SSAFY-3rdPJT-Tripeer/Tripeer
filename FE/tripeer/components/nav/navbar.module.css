@@ -69,8 +69,8 @@
   left: 40px;
   border-radius: 8px;
   background-color: #fff;
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
-  z-index: 999;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
+  z-index: 20;
 }
 
 .option {
@@ -78,16 +78,19 @@
   cursor: pointer;
   align-items: center;
   border-radius: 8px;
-  height: 30px;
-  background-color: #fff;
+  /* background-color: #fff; */
   font-size: 10px;
-  font-weight: 550;
+  font-weight: 500;
   padding: 10px;
-  width: 100px;
+  width: 150px;
+  height: 50px;
+}
+.option:hover {
+  background: #f7f7f7;
 }
 
-.option:hover {
-  background-color: #f2f2f2;
+.option span {
+  font-size: 0.9rem;
 }
 
 .logout {
@@ -98,8 +101,8 @@
 }
 
 .icon {
-  width: 13px;
-  height: 13px;
+  width: 20px;
+  height: 20px;
   background-size: cover;
   margin-right: 10px;
 }
@@ -110,7 +113,7 @@
   height: 100%;
   top: 0;
   left: 0;
-  z-index: 998;
+  z-index: 10;
 }
 
 .onToggle {

@@ -4,6 +4,7 @@
   left: 0;
   display: flex;
   justify-content: center;
+  z-index: 9;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.3);
   width: 100vw;
