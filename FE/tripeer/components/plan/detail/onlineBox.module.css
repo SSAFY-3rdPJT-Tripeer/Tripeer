@@ -17,6 +17,10 @@
   margin-right: 8px;
 }
 
+.onlines {
+  display: flex;
+}
+
 .myImg {
   flex: none;
   width: 40px;
@@ -79,8 +83,8 @@
 
 .others {
   cursor: default;
-  position: absolute;
-  left: -45px;
+  position: fixed;
+  right: 50px;
   top: 70px;
   width: 180px;
   max-height: 200px;

@@ -16,6 +16,7 @@ const SpotList = (props) => {
           })}
         </div>
         <hr className={styles.spotLine} />
+        <div className={styles.spotSection}></div>
       </div>
     </div>
   );

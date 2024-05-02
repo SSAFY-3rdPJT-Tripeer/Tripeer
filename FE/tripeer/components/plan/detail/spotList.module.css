@@ -72,10 +72,15 @@
 }
 
 .memberImg {
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   border: 1px solid black;
   margin-right: 4px;
   cursor: pointer;
+}
+
+.spotSection {
+  border: 1px solid black;
+  height: 550px;
 }

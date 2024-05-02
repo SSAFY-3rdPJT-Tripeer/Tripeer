@@ -25,14 +25,16 @@ const PlanHome = (props) => {
   ];
 
   const updateMouse = (x, y) => {
-    provider.awareness.setLocalStateField("mouse", {
-      id: myInfo.userId,
-      nickname: myInfo.nickname,
-      color: myInfo.order,
-      page: 0,
-      x: x,
-      y: y,
-    });
+    if (provider) {
+      provider.awareness.setLocalStateField("mouse", {
+        id: myInfo.userId,
+        nickname: myInfo.nickname,
+        color: myInfo.order,
+        page: 0,
+        x: x,
+        y: y,
+      });
+    }
   };
 
   const invite = async (member) => {
