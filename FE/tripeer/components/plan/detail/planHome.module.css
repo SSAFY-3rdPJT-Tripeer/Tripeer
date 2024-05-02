@@ -266,6 +266,17 @@
   border-radius: 50%;
   background-color: #40b681;
 }
+
+.offLine {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #757575;
+}
+
 .memberName {
   font-size: 1.1rem;
   font-weight: bold;
@@ -455,4 +466,14 @@
   align-items: center;
   font-size: 0.9rem;
   color: #979797;
+}
+
+.mouse {
+  position: fixed;
+  z-index: 999;
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  pointer-events: none;
 }

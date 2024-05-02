@@ -11,9 +11,10 @@ import Image from "next/image";
 import api from "@/utils/api";
 import Map from "./Map";
 import SpotList from "./SpotList";
+import OnlineBox from "./OnlineBox";
 
 const PlanMap = (props) => {
-  const { plan } = props;
+  const { plan, online, myInfo, provider, mouseInfo } = props;
   const [towns, setTowns] = useState([]);
   const targetRef = useRef(null);
   const [isTarget, setIsTarget] = useState(false);
@@ -30,6 +31,7 @@ const PlanMap = (props) => {
   const [mapLongitude, setMapLongitude] = useState(null);
   const [isMarker, setIsMarker] = useState(false);
   const [onSaveSpot, setOnSaveSpot] = useState(false);
+  const [members, setMembers] = useState([]);
 
   const CATEGORY = ["전체", "숙박", "맛집", "명소", "즐겨찾기"];
   const HeartIcon = [FullHeart, Heart];
@@ -89,6 +91,17 @@ const PlanMap = (props) => {
     },
     { threshold: 0.9 },
   );
+
+  const updateMouse = (x, y) => {
+    provider.awareness.setLocalStateField("mouse", {
+      id: myInfo.userId,
+      nickname: myInfo.nickname,
+      color: myInfo.order,
+      page: 1,
+      x: x,
+      y: y,
+    });
+  };
 
   const updateList = async () => {
     setIsTarget(false);
@@ -154,7 +167,7 @@ const PlanMap = (props) => {
         setIsTarget(true);
       }
     },
-    [sortType],
+    [sortType, plan],
   );
 
   const changeKeyword = (e) => {
@@ -196,13 +209,40 @@ const PlanMap = (props) => {
 
   useEffect(() => {
     if (plan) {
-      setTowns(plan.townList);
       searchApi(searchKeyword);
     }
   }, [plan, sortType, searchApi]);
 
+  useEffect(() => {
+    const getMember = async () => {
+      const res = await api.get(`/plan/member/${plan.planId}`);
+      setMembers(res.data.data);
+      console.log(res.data.data);
+    };
+    if (plan) {
+      setTowns(plan.townList);
+      getMember();
+    }
+  }, [plan]);
+
   return (
-    <div className={styles.container}>
+    <div
+      className={styles.container}
+      onMouseMove={(e) => {
+        updateMouse(e.clientX, e.clientY);
+      }}>
+      {mouseInfo.map((user, idx) => {
+        return user.id === myInfo.userId || user.page !== 1 ? null : (
+          <div
+            key={idx}
+            className={styles.mouse}
+            style={{
+              backgroundImage: `url(https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/mouse${user.color}.svg)`,
+              transform: `translate(${user.x - 50}px, ${user.y}px)`,
+              transition: `5s ease forwards`,
+            }}></div>
+        );
+      })}
       <aside className={styles.searchBox}>
         <SpotList onSaveSpot={onSaveSpot} />
         <div
@@ -438,6 +478,7 @@ const PlanMap = (props) => {
         setIsMarker={setIsMarker}
       />
       {onModal ? <AddSpot towns={towns} setOnModal={setOnModal} /> : null}
+      <OnlineBox members={members} online={online} myInfo={myInfo} />
     </div>
   );
 };

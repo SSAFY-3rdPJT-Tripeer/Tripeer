@@ -3,7 +3,7 @@ import styles from "./planHome.module.css";
 import api from "@/utils/api";
 
 const PlanHome = (props) => {
-  const { plan } = props;
+  const { plan, online, provider, myInfo, mouseInfo } = props;
   const [title, setTitle] = useState("");
   const [members, setMembers] = useState([]);
   const [towns, setTowns] = useState([]);
@@ -12,6 +12,28 @@ const PlanHome = (props) => {
   const [onAdd, setOnAdd] = useState(false);
   const [searchResult, setSearchResult] = useState([]);
   const titleInput = useRef(null);
+
+  const COLOR = [
+    "#0DA59D",
+    "#BD4F77",
+    "#65379F",
+    "#DE5000",
+    "#0065AE",
+    "#D78E00",
+    "#22970F",
+    "#A60000",
+  ];
+
+  const updateMouse = (x, y) => {
+    provider.awareness.setLocalStateField("mouse", {
+      id: myInfo.userId,
+      nickname: myInfo.nickname,
+      color: myInfo.order,
+      page: 0,
+      x: x,
+      y: y,
+    });
+  };
 
   const invite = async (member) => {
     if (members.length < 8) {
@@ -71,7 +93,23 @@ const PlanHome = (props) => {
   }, [plan]);
 
   return (
-    <div className={styles.container}>
+    <div
+      className={styles.container}
+      onMouseMove={(e) => {
+        updateMouse(e.clientX, e.clientY);
+      }}>
+      {mouseInfo.map((user, idx) => {
+        return user.id === myInfo.userId || user.page !== 0 ? null : (
+          <div
+            key={idx}
+            className={styles.mouse}
+            style={{
+              backgroundImage: `url(https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/mouse${user.color}.svg)`,
+              transform: `translate(${user.x - 300}px, ${user.y + -50}px)`,
+              transition: `5s ease forwards`,
+            }}></div>
+        );
+      })}
       <header className={styles.header}>
         <span className={!titleChange ? "" : styles.visible}>{title}</span>
         <input
@@ -161,12 +199,17 @@ const PlanHome = (props) => {
                           style={{
                             backgroundImage: `url(${member.profileImage})`,
                             backgroundSize: "cover",
+                            border: `3px solid ${COLOR[member.order]}`,
                           }}>
-                          <div className={styles.onLine} />
+                          <div
+                            className={
+                              online.find((mem) => mem?.id == member.userId)
+                                ? styles.onLine
+                                : styles.offLine
+                            }
+                          />
                         </div>
-                        <p className={styles.memberName}>
-                          {member.userNickname}
-                        </p>
+                        <p className={styles.memberName}>{member.nickname}</p>
                       </div>
                       <div className={styles.memberSounds}>
                         <div className={styles.mic}></div>
