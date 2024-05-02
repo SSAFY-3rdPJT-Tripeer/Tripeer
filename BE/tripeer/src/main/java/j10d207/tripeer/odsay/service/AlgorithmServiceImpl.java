@@ -2,6 +2,7 @@ package j10d207.tripeer.odsay.service;
 
 import j10d207.tripeer.odsay.db.dto.CoordinateDTO;
 
+import j10d207.tripeer.odsay.db.dto.TimeRootInfoDTO;
 import j10d207.tripeer.place.db.ContentTypeEnum;
 import j10d207.tripeer.place.db.entity.SpotInfoEntity;
 import j10d207.tripeer.place.db.repository.SpotInfoRepository;
@@ -41,10 +42,10 @@ public class AlgorithmServiceImpl implements AlgorithmService{
                     .build();
             coordinateDTOList.add(coordinateDTO);
         }
-        int[][] timeTable = odsayService.getTimeTable(coordinateDTOList);
+        TimeRootInfoDTO[][] timeTable = odsayService.getTimeTable(coordinateDTOList);
         for (int i = 0; i < timeTable.length; i++) {
             for (int j = 0; j < timeTable.length; j++) {
-                System.out.print(timeTable[i][j] + " ");
+                System.out.print(timeTable[i][j].getTime() + " ");
             }
             System.out.println();
         }
@@ -75,6 +76,7 @@ public class AlgorithmServiceImpl implements AlgorithmService{
                     .day(detailList.get(i).getDay())
                     .spotTime(LocalTime.of(root.getRootTime()[j]/60, root.getRootTime()[j++]%60))
                     .description(detailList.get(i).getDescription())
+                    .movingRoot(j == root.getResultNumbers().size() ? null : timeTable[i][root.getResultNumbers().get(j)].getRootInfo().toString())
                     .cost(detailList.get(i).getCost())
                     .build();
             planDetailResDTOList.add(planDetailResDTO);

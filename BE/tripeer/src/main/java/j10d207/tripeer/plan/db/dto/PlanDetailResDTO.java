@@ -16,5 +16,6 @@ public class PlanDetailResDTO {
     private int step;
     private LocalTime spotTime;
     private String description;
+    private String movingRoot;
     private int cost;
 }
