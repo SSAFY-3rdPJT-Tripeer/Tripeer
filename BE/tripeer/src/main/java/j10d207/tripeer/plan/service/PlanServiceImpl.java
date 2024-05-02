@@ -399,6 +399,24 @@ public class PlanServiceImpl implements PlanService {
         planBucketRepository.save(planBucket);
     }
 
+    @Override
+    public void delPlanSpot(long planId, int spotInfoId, String token) {
+        Optional<PlanBucketEntity> planBucket = planBucketRepository.findByPlan_PlanIdAndSpotInfo_SpotInfoId(planId, spotInfoId);
+        if (planBucket.isPresent()){
+            PlanBucketEntity planBucketEntity = planBucket.get();
+            if (coworkerRepository.existsByPlan_PlanIdAndUser_UserId(planBucketEntity.getPlan().getPlanId(), jwtUtil.getUserId(jwtUtil.splitToken(token)))) {
+                planBucketRepository.delete(planBucketEntity);
+            } else {
+                // 로그인된 사용자가 가지고 있지 않은 변경
+                throw new CustomException(ErrorCode.USER_NOT_CORRESPOND);
+            }
+
+        } else {
+            // 요청된 장소를 소유하지 않음
+            throw new CustomException(ErrorCode.SPOT_NOT_FOUND);
+        }
+    }
+
     //즐겨찾기 추가
     @Override
     public void addWishList(int spotInfoId, String token) {

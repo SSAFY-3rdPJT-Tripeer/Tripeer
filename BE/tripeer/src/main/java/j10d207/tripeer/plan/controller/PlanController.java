@@ -131,6 +131,16 @@ public class PlanController {
         }
     }
 
+    @DeleteMapping("/bucket")
+    public Response<?> delPlanSpot(@RequestParam("planId") long planId, @RequestParam("spotInfoId") int spotInfoId, HttpServletRequest request) {
+        try {
+            planService.delPlanSpot(planId, spotInfoId, request.getHeader("Authorization"));
+            return Response.of(HttpStatus.OK, "플랜버킷 관광지 삭제 완료", null);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     //즐겨찾기 추가
     @PostMapping("/wishlist/{spotInfoId}")
     public Response<?> addWishList(@PathVariable("spotInfoId") int spotInfoId, HttpServletRequest request) {
