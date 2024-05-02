@@ -1,0 +1,14 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    border: #4FBDB7 1px solid;
+    width: 103px;
+    height: 36px;
+}
+
+.p {
+    color: #979797;
+    font-size: 14px;
+}
