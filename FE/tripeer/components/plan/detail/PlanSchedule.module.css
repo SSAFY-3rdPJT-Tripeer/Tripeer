@@ -5,7 +5,7 @@
 }
 
 .main {
-    width: 470px;
+    width: 420px;
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -43,7 +43,9 @@
 }
 
 .list {
-    width: calc(100% - 45px);
+    /*width: calc(100% - 45px);*/
+    width: 380px;
+    height: 100%;
     margin-left: 30px;
     margin-top: 10px;
 }
@@ -77,20 +79,21 @@
 
 
 .mainRight {
-    width: calc(100vw - 398px);
+    width: calc(100vw - 492px);
     height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
 .rightHeader {
+    width: calc(100% - 60px);
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin: 20px 30px;
 }
 
-.leftSection{
+.leftSection {
     display: flex;
     align-items: center;
 }
@@ -114,15 +117,23 @@
 }
 
 .scheduleSection {
-    width: 420px;
+    min-width: 363px;
+    width: 363px;
     height: auto;
     margin: 30px;
 }
 
-.scheduleSection header {
+.scHeader {
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.scHeaderBox {
+    display: flex;
+    justify-content: center;
     align-items: end;
-    background-color: red;
 }
 
 .scP1 {
@@ -135,5 +146,46 @@
     font-size: 14px;
     color: #979797;
     font-weight: bold;
-    padding-bottom: 1px;
+}
+
+.line2 {
+    border: #E6E8EC 1px solid;
+    width: calc(100% - 60px);
+    margin: 0 30px;
+}
+
+.itemBox2 {
+    /*padding: 10px 0;*/
+}
+
+.divBox {
+    height: 100%;
+}
+
+.draggingItem {
+    /* 들고있을때 컴포넌트 스타일 변경 */
+}
+
+.placeholder {
+    /*  들고 있을때 원래 있던 자리의 플레이스홀더  */
+}
+
+.scrollX {
+    overflow-x: scroll;
+    padding: 0 10px 0 3px;
+    margin: 5px 10px;
+}
+
+.scrollX::-webkit-scrollbar {
+    height: 10px;
+}
+
+.scrollX::-webkit-scrollbar-thumb {
+    width: 10%;
+    background: #cecdcd;
+    border-radius: 10px;
+}
+
+.scrollX::-webkit-scrollbar-track {
+    background: #fff;
 }
