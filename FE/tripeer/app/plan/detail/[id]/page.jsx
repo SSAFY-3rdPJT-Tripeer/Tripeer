@@ -24,14 +24,14 @@ const PageDetail = (props) => {
   const router = useRouter();
 
   const COLOR = [
-    "#0DA59D",
-    "#BD4F77",
-    "#65379F",
-    "#DE5000",
-    "#0065AE",
-    "#D78E00",
-    "#22970F",
     "#A60000",
+    "#DE5000",
+    "#D78E00",
+    "#48B416",
+    "#0065AE",
+    "#20178B",
+    "#65379F",
+    "#F96976",
   ];
 
   useEffect(() => {
