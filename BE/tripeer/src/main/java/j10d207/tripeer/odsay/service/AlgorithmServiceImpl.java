@@ -69,6 +69,7 @@ public class AlgorithmServiceImpl implements AlgorithmService{
         List<PlanDetailResDTO> planDetailResDTOList = new ArrayList<>();
         int j = 0;
         for(Integer i : root.getResultNumbers()) {
+            System.out.println("i = " + i + ", j = " + j);
             PlanDetailResDTO planDetailResDTO = PlanDetailResDTO.builder()
                     .planDetailId(detailList.get(i).getPlanDetailId())
                     .title(detailList.get(i).getSpotInfo().getTitle())
