@@ -4,6 +4,7 @@ import j10d207.tripeer.place.db.entity.SpotInfoEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+
 @Entity(name = "wishlist")
 @Getter
 @Builder
