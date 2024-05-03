@@ -279,30 +279,40 @@ public class PlanServiceImpl implements PlanService {
 
     //동행자 추가
     @Override
-    public void joinPlan(CoworkerDTO coworkerDTO) {
-        CoworkerEntity coworker = CoworkerEntity.builder()
-                .plan(PlanEntity.builder().planId(coworkerDTO.getPlanId()).build())
-                .user(UserEntity.builder().userId(coworkerDTO.getUserId()).build())
-                .build();
-        coworkerRepository.save(coworker);
+    public void joinPlan(CoworkerReqDTO coworkerReqDTO) {
+        if(!coworkerRepository.existsByPlan_PlanIdAndUser_UserId(coworkerReqDTO.getPlanId(), coworkerReqDTO.getUserId())) {
+            CoworkerEntity coworker = CoworkerEntity.builder()
+                    .plan(PlanEntity.builder().planId(coworkerReqDTO.getPlanId()).build())
+                    .user(UserEntity.builder().userId(coworkerReqDTO.getUserId()).build())
+                    .build();
+            coworkerRepository.save(coworker);
+        } else {
+            throw new CustomException(ErrorCode.DUPLICATE_USER);
+        }
     }
 
     //동행자 조회
     @Override
-    public List<CoworkerDTO> getCoworker(long planId) {
+    public List<CoworkerReqDTO> getCoworker(long planId) {
         //요청된 플랜의 동행자 목록 조회
         List<CoworkerEntity> coworkerList = coworkerRepository.findByPlan_PlanId(planId);
         //DTO로 변환
-        List<CoworkerDTO> coworkerDTOList = new ArrayList<>();
+        List<CoworkerReqDTO> coworkerReqDTOList = new ArrayList<>();
+        int order = 0;
         for (CoworkerEntity coworker : coworkerList) {
-            CoworkerDTO coworkerDTO = CoworkerDTO.builder()
+            UserEntity user = coworker.getUser();
+            CoworkerReqDTO coworkerReqDTO = CoworkerReqDTO.builder()
+                    .order(order++)
                     .planId(coworker.getPlan().getPlanId())
-                    .userId(coworker.getUser().getUserId())
+                    .userId(user.getUserId())
+                    .nickname(user.getNickname())
+                    .profileImage(user.getProfileImage())
                     .build();
-            coworkerDTOList.add(coworkerDTO);
+            coworkerReqDTOList.add(coworkerReqDTO);
         }
-        return coworkerDTOList;
+        return coworkerReqDTOList;
     }
+
 
     //관광지 검색
     @Override
@@ -353,7 +363,7 @@ public class PlanServiceImpl implements PlanService {
             spotSearchResDTO.setAddr(spotInfoEntity.getAddr1());
             spotSearchResDTO.setLatitude(spotInfoEntity.getLatitude());
             spotSearchResDTO.setLongitude(spotInfoEntity.getLongitude());
-            spotSearchResDTO.setImg(spotInfoEntity.getFirstImage());
+            spotSearchResDTO.setImg("https://tripeer207.s3.ap-northeast-2.amazonaws.com/spot/"+spotInfoEntity.getSpotInfoId()+".png");
             spotSearchResDTO.setWishlist(wishListRepository.existsByUser_UserIdAndSpotInfo_SpotInfoId(jwtUtil.getUserId(access), spotInfoEntity.getSpotInfoId()));
             spotSearchResDTO.setSpot(planBucketRepository.existsByPlan_PlanIdAndSpotInfo_SpotInfoId(planId, spotInfoEntity.getSpotInfoId()));
 
@@ -389,6 +399,23 @@ public class PlanServiceImpl implements PlanService {
         planBucketRepository.save(planBucket);
     }
 
+    @Override
+    public void delPlanSpot(long planId, int spotInfoId, String token) {
+        Optional<PlanBucketEntity> planBucket = planBucketRepository.findByPlan_PlanIdAndSpotInfo_SpotInfoId(planId, spotInfoId);
+        if (planBucket.isPresent()){
+            PlanBucketEntity planBucketEntity = planBucket.get();
+            if (coworkerRepository.existsByPlan_PlanIdAndUser_UserId(planBucketEntity.getPlan().getPlanId(), jwtUtil.getUserId(jwtUtil.splitToken(token)))) {
+                planBucketRepository.delete(planBucketEntity);
+            } else {
+                // 로그인된 사용자가 가지고 있지 않은 변경
+                throw new CustomException(ErrorCode.USER_NOT_CORRESPOND);
+            }
+
+        } else {
+            // 요청된 장소를 소유하지 않음
+            throw new CustomException(ErrorCode.SPOT_NOT_FOUND);
+        }
+    }
 
     //즐겨찾기 추가
     @Override
@@ -495,6 +522,29 @@ public class PlanServiceImpl implements PlanService {
 
         }
         return planDetailResDTOMap;
+    }
+
+    //플랜 나의 정보 조회(기존 내정보 + 나의 coworker에서의 순서)
+    @Override
+    public CoworkerReqDTO getPlanMyinfo(long planId, String token) {
+        long userId = jwtUtil.getUserId(jwtUtil.splitToken(token));
+        //요청된 플랜의 동행자 목록 조회
+        List<CoworkerEntity> coworkerList = coworkerRepository.findByPlan_PlanId(planId);
+        int order = -1;
+        for (CoworkerEntity coworker : coworkerList) {
+            order++;
+            UserEntity user = coworker.getUser();
+            if(userId != coworker.getUser().getUserId()) continue;
+            CoworkerReqDTO coworkerReqDTO = CoworkerReqDTO.builder()
+                    .order(order)
+                    .planId(coworker.getPlan().getPlanId())
+                    .userId(user.getUserId())
+                    .nickname(user.getNickname())
+                    .profileImage(user.getProfileImage())
+                    .build();
+            return coworkerReqDTO;
+        }
+        throw new CustomException(ErrorCode.NOT_HAS_COWORKER);
     }
 
 }

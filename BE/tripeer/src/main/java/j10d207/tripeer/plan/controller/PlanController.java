@@ -78,10 +78,21 @@ public class PlanController {
 
     //동행자 추가
     @PostMapping("/member")
-    public Response<?> joinPlan(@RequestBody CoworkerDTO coworkerDTO) {
+    public Response<?> joinPlan(@RequestBody CoworkerReqDTO coworkerReqDTO) {
         try {
-            planService.joinPlan(coworkerDTO);
+            planService.joinPlan(coworkerReqDTO);
             return Response.of(HttpStatus.OK, "초대 완료", null);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //플랜에서 나의 정보 조회(기존 내정보 + 나의 coworker에서의 순서)
+    @GetMapping("/myinfo/{planId}")
+    public Response<CoworkerReqDTO> getCoworker(@PathVariable("planId") long planId, HttpServletRequest request) {
+        try {
+            CoworkerReqDTO coworkerReqDTOList = planService.getPlanMyinfo(planId, request.getHeader("Authorization"));
+            return Response.of(HttpStatus.OK, "조회 완료", coworkerReqDTOList);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -89,10 +100,10 @@ public class PlanController {
 
     //동행자 조회
     @GetMapping("/member/{planId}")
-    public Response<List<CoworkerDTO>> getCoworker(@PathVariable("planId") long planId) {
+    public Response<List<CoworkerReqDTO>> getCoworker(@PathVariable("planId") long planId) {
         try {
-            List<CoworkerDTO> coworkerDTOList = planService.getCoworker(planId);
-            return Response.of(HttpStatus.OK, "조회 완료", coworkerDTOList);
+            List<CoworkerReqDTO> coworkerReqDTOList = planService.getCoworker(planId);
+            return Response.of(HttpStatus.OK, "조회 완료", coworkerReqDTOList);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -115,6 +126,16 @@ public class PlanController {
         try {
             planService.addPlanSpot(planId, spotInfoId, request.getHeader("Authorization"));
             return Response.of(HttpStatus.OK, "플랜버킷 관광지 추가 완료", null);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @DeleteMapping("/bucket")
+    public Response<?> delPlanSpot(@RequestParam("planId") long planId, @RequestParam("spotInfoId") int spotInfoId, HttpServletRequest request) {
+        try {
+            planService.delPlanSpot(planId, spotInfoId, request.getHeader("Authorization"));
+            return Response.of(HttpStatus.OK, "플랜버킷 관광지 삭제 완료", null);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
