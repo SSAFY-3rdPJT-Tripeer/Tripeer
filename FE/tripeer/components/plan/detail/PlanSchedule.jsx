@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import * as Y from "yjs";
 
 import styles from "./PlanSchedule.module.css";
 import flagSrc from "@/public/plan/flag.png";
@@ -10,17 +11,18 @@ import updateIcon from "@/public/plan/update.png";
 
 // 더미 데이터
 import dummyUserList from "@/utils/dummyUserList";
-import dummyPlaceList from "@/utils/dummyItem";
+// import dummyPlaceList from "@/utils/dummyItem";
 import ScheduleItem from "@/components/plan/detail/schedule/scheduleItem";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import CalculateBtn from "@/components/plan/detail/schedule/calculateBtn";
 import ScheduleItem2 from "@/components/plan/detail/schedule/scheduleItem2";
 import Time from "@/components/plan/detail/schedule/time";
 
-const PlanSchedule = () => {
+const PlanSchedule = (props) => {
+  const { myInfo, provider } = props;
   const [userList, setUserList] = useState([]);
-  // const [placeList, setPlaceList] = useState([]);
   // dnd를 관리할 전체 배열
+  const [totalY, setTotalY] = useState(null);
   const [totalList, setTotalList] = useState([]);
 
   // 아이템을 놓을때 실행
@@ -39,29 +41,18 @@ const PlanSchedule = () => {
 
     // 같은 영역인 경우
     if (sIdx === dIdx) {
-      // 전체 배열 가져오기
-      let tList = [...totalList];
-      // 원래 있던 곳의 배열 가져오기
-      let sList = [...tList[sIdx]];
-      // 전체 배열에서 수정할 배열 지우기
-      tList.splice(sIdx, 1);
+      let sourceItems = totalY.get(sIdx);
 
-      // 옮길 데이터 임시 저장
-      const tmp = sList[source.index];
+      // 삭제할 값 미리 저장
+      const tmp = sourceItems.get(source.index);
 
-      // 데이터가 원래 있던 곳에서 지우고
-      sList.splice(source.index, 1);
-      // 데이터가 이동한 곳에 넣기
-      sList.splice(destination.index, 0, tmp);
+      // 아이템이 이동했으니 아이템 삭제
+      sourceItems.delete(source.index, 1);
 
-      // 전체 배열에서 수정된 새 배열 원래 위치에 넣기
-      tList.splice(dIdx, 0, sList);
-
-      // 화면에 랜더링하느 전체 배열 갱신
-      setTotalList(tList);
+      // 이동한곳에 아이템 추가
+      sourceItems.insert(destination.index, [tmp]);
     }
 
-    // 다른 영역인 경우
     // 다른 영역인 경우
     else {
       // 전체 배열 가져오기
@@ -94,11 +85,69 @@ const PlanSchedule = () => {
     }
   };
 
+  const update = (saveYSpot, totalYList) => {
+    const arr = saveYSpot.toArray();
+    const tArr = totalYList
+      .toJSON()
+      .flat()
+      .map((e) => e.spotInfoId);
+
+    const remain = arr.filter((e) => !tArr.includes(e.spotInfoId));
+    const yItems = new Y.Array();
+
+    // 만약에 스케쥴에 없는 장소가 있다 ?! >> 없는것 왼쪽 리스트에 추가해주기
+    if (totalYList.length === 0) {
+      yItems.insert(0, [...remain]);
+      totalYList.insert(0, [yItems]);
+    } else {
+      let leftArr = totalYList.get(0);
+      leftArr.push([...remain]);
+    }
+
+    setTotalY(totalYList);
+    setTotalList(totalYList.toJSON());
+  };
+
+  useEffect(() => {
+    if (myInfo && provider) {
+      // yjs 에서 장소 데이터를 가져와서
+      const saveYSpot = provider.doc.getArray("saveSpot");
+      const totalYList = provider.doc.getArray("totalYList");
+
+      // totalYList.delete(0, totalYList.length);
+
+      update(saveYSpot, totalYList);
+
+      saveYSpot.observe(() => {
+        // 추가했을때
+        update(saveYSpot, totalYList);
+
+        // 삭제했을때
+        const arr = saveYSpot.toArray().map((e) => e.spotInfoId);
+        const remain = totalYList
+          .toJSON()[0]
+          .filter((e) => arr.includes(e.spotInfoId));
+
+        const yItems = new Y.Array();
+
+        yItems.insert(0, [...remain]);
+        totalYList.insert(0, [yItems]);
+
+        setTotalY(totalYList);
+        setTotalList(totalYList.toJSON());
+      });
+
+      totalYList.observeDeep(() => {
+        console.log("left", totalYList.toJSON());
+        setTotalY(totalYList);
+        setTotalList(totalYList.toJSON());
+      });
+    }
+  }, [myInfo, provider]);
+
   useEffect(() => {
     setUserList(dummyUserList);
-    // setPlaceList(dummyPlaceList);
-    // 임시로 더미 데이터를 넣음
-    setTotalList([[...dummyPlaceList], [], [], [], []]);
+    console.log("g", totalList);
   }, []);
 
   return (
@@ -190,7 +239,7 @@ const PlanSchedule = () => {
             {totalList.map((el, arrIdx) => {
               return arrIdx === 0 ? null : (
                 // 일차별 일정 컴포넌트
-                <section className={styles.scheduleSection}>
+                <section key={arrIdx} className={styles.scheduleSection}>
                   {/*일차 및 계산 버튼  */}
                   <header className={styles.scHeader}>
                     <div className={styles.scHeaderBox}>

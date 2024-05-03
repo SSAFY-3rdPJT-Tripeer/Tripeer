@@ -23,22 +23,22 @@ export default function ScheduleItem({ data }) {
         />
       </div>
       <section className={styles.content}>
-        <p className={styles.name}>{data.name}</p>
+        <p className={styles.name}>{data.title}</p>
         <div className={styles.box}>
           <Image src={addressSrc} alt={""} width={15} height={15} />
-          <p className={styles.address}>{data.address}</p>
+          <p className={styles.address}>{data.addr}</p>
         </div>
-        <ScheduleCategoryChip category={data.category} />
+        {/*<ScheduleCategoryChip category={data.contentType} />*/}
       </section>
       <section className={styles.right}>
         <Image className={styles.exit} src={exitSrc} alt={""} />
         <div className={styles.profileBox}>
           <Image
             className={styles.profile}
-            src={data.profile}
+            src={data.profileImage}
             alt={""}
             fill
-            loader={() => data.profile}
+            loader={() => data.profileImage}
             priority="true"
             sizes="(max-width: 768px) 100vw,
                       (max-width: 1200px) 50vw,
