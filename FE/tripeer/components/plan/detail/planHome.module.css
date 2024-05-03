@@ -266,6 +266,17 @@
   border-radius: 50%;
   background-color: #40b681;
 }
+
+.offLine {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #757575;
+}
+
 .memberName {
   font-size: 1.1rem;
   font-weight: bold;
@@ -293,4 +304,176 @@
   background-repeat: no-repeat;
   background-size: cover;
   cursor: pointer;
+}
+
+.addMember {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 0px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.addMember > div {
+  width: 16px;
+  height: 16px;
+  background-image: url(../asset/addMember.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+  margin-right: 8px;
+}
+
+.addContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.addMemberBox {
+  width: 450px;
+  height: 300px;
+  background-color: white;
+  border-radius: 3px;
+  padding: 16px 16px;
+}
+
+.addHeader {
+  font-size: 1.1rem;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  color: #161616;
+}
+
+.addCancel {
+  cursor: pointer;
+}
+
+.addContent {
+  width: 100%;
+  display: flex;
+  position: relative;
+}
+
+.addInput {
+  width: 100%;
+  border-radius: 50px;
+  border: 1px solid #4fbdb7;
+  height: 36px;
+  font-size: 0.8rem;
+  background-image: url(../asset/IconButton.svg);
+  background-repeat: no-repeat;
+  background-size: 7%;
+  background-position: 99% 80%;
+  padding-left: 20px;
+  padding-right: 15px;
+  outline: none;
+  margin-bottom: 16px;
+}
+
+.addBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #4fbdb7;
+  color: white;
+  border-radius: 4px;
+  margin-left: 8px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  width: 50px;
+  height: 28px;
+}
+
+.noBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #979797;
+  color: white;
+  border-radius: 4px;
+  margin-left: 8px;
+  font-size: 0.8rem;
+  pointer-events: none;
+  width: 50px;
+  height: 28px;
+}
+
+.addSearch {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  width: 100%;
+  background-color: white;
+  border-radius: 8px;
+  max-height: 170px;
+  overflow-y: scroll;
+  border: 1px solid #f3f3f3;
+}
+
+.searchUserCard {
+  display: flex;
+  margin: 8px 12px 8px 12px;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.searchUserImg {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 12px;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.searchUserName {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.addSearch::-webkit-scrollbar {
+  width: 4px;
+}
+.addSearch::-webkit-scrollbar-thumb {
+  height: 10%;
+  background: #cecdcd;
+  border-radius: 10px;
+}
+
+.addSearch::-webkit-scrollbar-track {
+  background: #fff;
+}
+
+.addLine {
+  width: 100%;
+  border: #f3f3f3 1px solid;
+}
+
+.noSearch {
+  height: 160px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #979797;
+}
+
+.mouse {
+  position: fixed;
+  z-index: 999;
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  pointer-events: none;
 }

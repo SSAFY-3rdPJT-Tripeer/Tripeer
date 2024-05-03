@@ -1,0 +1,213 @@
+.container {
+  position: absolute;
+  top: 0;
+  left: 470px;
+  z-index: 101;
+  background-color: white;
+  width: 430px;
+  height: 100vh;
+  box-shadow: 4px 4px 10px 0px rgba(0, 0, 0, 0.1);
+  animation: show 0.5s ease forwards;
+  padding: 32px 0px 0px 36px;
+}
+
+.showBox {
+  animation: visible 2.5s ease forwards;
+}
+.none {
+  display: none;
+}
+
+@keyframes show {
+  0% {
+    width: 0px;
+    border-left: 0px solid #c4c4c4;
+  }
+
+  100% {
+    width: 430px;
+    border-left: 1px solid #c4c4c4;
+  }
+}
+
+@keyframes visible {
+  0% {
+    opacity: 0;
+  }
+
+  /* 90% {
+    opacity: 0;
+  } */
+  100% {
+    opacity: 1;
+  }
+}
+
+.header {
+  display: flex;
+  font-weight: bold;
+  font-size: 1.2rem;
+  align-items: center;
+}
+
+.flagIcon {
+  width: 16px;
+  height: 16px;
+  background-image: url(../asset/flag.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-right: 8px;
+}
+
+.spotLine {
+  margin: 16px 12px;
+  background-color: #d9d9d9;
+  height: 0.1px;
+  border: none;
+}
+
+.memberBox {
+  display: flex;
+  align-items: center;
+}
+
+.memberImg {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 8px;
+  cursor: pointer;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.spotSection {
+  height: calc(100vh - 170px);
+  overflow-y: scroll;
+  margin-right: 8px;
+  padding-right: 16px;
+}
+
+.spotSection::-webkit-scrollbar {
+  width: 4px;
+}
+
+.spotSection::-webkit-scrollbar-thumb {
+  height: 10%;
+  background: #cecdcd;
+  border-radius: 10px;
+}
+
+.spotSection::-webkit-scrollbar-track {
+  background: #fff;
+}
+
+.spotCard {
+  display: flex;
+  width: 100%;
+  height: 100px;
+  border-radius: 10px;
+  box-shadow: 5px 5px 16px 0px rgba(0, 0, 0, 0.25);
+  padding: 7px;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.cardFlex {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.spotImg {
+  width: 86px;
+  height: 86px;
+  border-radius: 10px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-right: 12px;
+}
+
+.cancelIcon {
+  background-image: url(../asset/grayCancel.svg);
+  width: 12px;
+  height: 12px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  cursor: pointer;
+}
+
+.spotTitle {
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.positionIcon {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-image: url(../asset/grayPointer.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-left: 2px;
+  margin-right: 4px;
+}
+
+.address {
+  width: 12rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  margin-top: 10px;
+  color: #545454;
+  font-size: 0.75rem;
+}
+
+.cardCategory {
+  width: 65px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  padding: 4px 0px;
+  margin-top: 8px;
+  border-radius: 50px;
+  border: 1px solid #d9d9d9;
+  font-size: 0.8rem;
+}
+
+.categoryTitle {
+  margin-left: 4px;
+}
+
+.endFlex {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.cardMember {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  margin-bottom: 2px;
+}
+
+.emptyPlan {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.9rem;
+  font-weight: 200;
+}

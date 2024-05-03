@@ -1,0 +1,122 @@
+.back {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.modalContainer {
+  width: 340px;
+  height: 408px;
+  background-color: white;
+  padding: 12px;
+  border-radius: 10px;
+  animation: slidefade 0.5s ease forwards;
+}
+
+.content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.img {
+  width: 316px;
+  height: 316px;
+  position: relative;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 5px;
+}
+
+.profileInfo {
+  position: absolute;
+  top: 16px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  color: white;
+}
+.userImg {
+  width: 40px;
+  height: 40px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+.username {
+  text-shadow: 1px 1px 20px rgba(0, 0, 0, 0.7);
+}
+
+.modalContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 8px;
+}
+
+.modalTitle {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.address {
+  font-size: 0.9rem;
+  margin-left: 8px;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.pointer {
+  width: 14px;
+  height: 14px;
+  background-image: url(../asset/grayPointer.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-left: 2px;
+  margin-right: 4px;
+  display: inline-block;
+}
+
+.modalFlex {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.category {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #d9d9d9;
+  border-radius: 50px;
+  padding: 8px;
+  width: 65px;
+  height: 30px;
+}
+.categoryTitle {
+  font-size: 0.8rem;
+  margin-left: 4px;
+  font-weight: 500;
+}
+
+@keyframes slidefade {
+  0% {
+    opacity: 0;
+    margin-top: -100px;
+  }
+  100% {
+    opacity: 1;
+    margin-top: 0px;
+  }
+}

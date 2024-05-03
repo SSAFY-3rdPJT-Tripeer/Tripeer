@@ -10,9 +10,11 @@ import AddSpot from "./AddSpot";
 import Image from "next/image";
 import api from "@/utils/api";
 import Map from "./Map";
+import SpotList from "./SpotList";
+import OnlineBox from "./OnlineBox";
 
 const PlanMap = (props) => {
-  const { plan } = props;
+  const { plan, online, myInfo, provider, mouseInfo } = props;
   const [towns, setTowns] = useState([]);
   const targetRef = useRef(null);
   const [isTarget, setIsTarget] = useState(false);
@@ -28,6 +30,13 @@ const PlanMap = (props) => {
   const [mapLatitude, setMapLatitude] = useState(null);
   const [mapLongitude, setMapLongitude] = useState(null);
   const [isMarker, setIsMarker] = useState(false);
+  const [onSaveSpot, setOnSaveSpot] = useState(false);
+  const [members, setMembers] = useState([]);
+  const [ySpot, setYSpot] = useState(null); // y.js에 y-Array(savespot)이 담길 객체
+  const [saveSpots, setSaveSpots] = useState([]); // y.js의 savespot 객체의 배열을 화면에 보여줄 State
+  const [io, setIo] = useState(null);
+
+  const [showSpots, setShowSpots] = useState([]);
 
   const CATEGORY = ["전체", "숙박", "맛집", "명소", "즐겨찾기"];
   const HeartIcon = [FullHeart, Heart];
@@ -76,17 +85,33 @@ const PlanMap = (props) => {
     };
   }, []);
 
-  const io = new IntersectionObserver(
-    (entris) => {
-      entris.forEach((entry) => {
-        if (entry.isIntersecting && isTarget) {
-          io.unobserve(entry.target);
-          updateList();
-        }
+  useEffect(() => {
+    const tempIo = new IntersectionObserver(
+      (entris) => {
+        entris.forEach((entry) => {
+          if (entry.isIntersecting && isTarget) {
+            tempIo.unobserve(entry.target);
+            updateList();
+          }
+        });
+      },
+      { threshold: 0.9 },
+    );
+    setIo(tempIo);
+  }, [isTarget]);
+
+  const updateMouse = (x, y) => {
+    if (provider) {
+      provider.awareness.setLocalStateField("mouse", {
+        id: myInfo.userId,
+        nickname: myInfo.nickname,
+        color: myInfo.order,
+        page: 1,
+        x: x,
+        y: y,
       });
-    },
-    { threshold: 0.9 },
-  );
+    }
+  };
 
   const updateList = async () => {
     setIsTarget(false);
@@ -152,7 +177,7 @@ const PlanMap = (props) => {
         setIsTarget(true);
       }
     },
-    [sortType],
+    [sortType, plan],
   );
 
   const changeKeyword = (e) => {
@@ -179,6 +204,50 @@ const PlanMap = (props) => {
     setIsMarker(true);
   };
 
+  const justMoveMap = (spot) => {
+    setMapLongitude(spot.longitude);
+    setMapLatitude(spot.latitude);
+  };
+
+  const addSaveSpot = async (spot) => {
+    try {
+      const tempSave = { ...spot, ...myInfo };
+      await api.post(
+        `/plan/bucket?planId=${plan.planId}&spotInfoId=${spot.spotInfoId}`,
+      );
+      ySpot.insert(0, [tempSave]);
+    } finally {
+      const tempSpot = spotList.map((item) => {
+        if (spot.spotInfoId !== item.spotInfoId) {
+          return item;
+        }
+        item.spot = true;
+        return item;
+      });
+      setSpotList(tempSpot);
+    }
+  };
+
+  const removeSaveSpot = async (spot) => {
+    try {
+      await api.delete(
+        `/plan/bucket?planId=${plan.planId}&spotInfoId=${spot.spotInfoId}`,
+      );
+      const arr = ySpot.toArray();
+      let index = arr.findIndex((item) => item.spotInfoId === spot.spotInfoId);
+      ySpot.delete(index);
+    } finally {
+      const tempSpot = spotList.map((item) => {
+        if (item.spotInfoId !== spot.spotInfoId) {
+          return item;
+        }
+        item.spot = false;
+        return item;
+      });
+      setSpotList(tempSpot);
+    }
+  };
+
   useEffect(() => {
     if (towns.length > 0) {
       setMapLatitude(towns[targetStep]["latitude"]);
@@ -187,21 +256,91 @@ const PlanMap = (props) => {
   }, [targetStep, towns]);
 
   useEffect(() => {
-    if (isTarget) {
+    if (isTarget && io && targetRef.current) {
       io.observe(targetRef.current);
     }
-  }, [isTarget, spotList]);
+  }, [isTarget, spotList, io]);
 
   useEffect(() => {
     if (plan) {
-      setTowns(plan.townList);
       searchApi(searchKeyword);
     }
   }, [plan, sortType, searchApi]);
 
+  useEffect(() => {
+    const getMember = async () => {
+      const res = await api.get(`/plan/member/${plan.planId}`);
+      setMembers(res.data.data);
+    };
+    if (plan) {
+      setTowns(plan.townList);
+      getMember();
+    }
+  }, [plan]);
+
+  useEffect(() => {
+    if (myInfo && provider && spotList.length > 0) {
+      const saveSpot = provider.doc.getArray("saveSpot");
+      setYSpot(saveSpot);
+      setSaveSpots(saveSpot.toArray());
+      saveSpot.observe(() => {
+        setIsTarget(false);
+        const spots = saveSpot.toArray();
+        const tempSpotList = spotList.map((spot) => {
+          if (
+            spots.findIndex((item) => item.spotInfoId === spot.spotInfoId) !==
+            -1
+          ) {
+            spot.spot = true;
+          } else {
+            spot.spot = false;
+          }
+          return spot;
+        });
+        setSpotList(tempSpotList);
+        setSaveSpots(spots);
+        setIsTarget(true);
+      });
+    }
+  }, [myInfo, provider, spotList]);
+
   return (
-    <div className={styles.container}>
+    <div
+      className={styles.container}
+      onMouseMove={(e) => {
+        updateMouse(e.clientX, e.clientY);
+      }}>
+      {mouseInfo.map((user, idx) => {
+        return user.id === myInfo.userId || user.page !== 1 ? null : (
+          <div
+            key={idx}
+            className={styles.mouse}
+            style={{
+              backgroundImage: `url(https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/mouse${user.color}.svg)`,
+              transform: `translate(${user.x - 50}px, ${user.y}px)`,
+              transition: `5s ease forwards`,
+            }}></div>
+        );
+      })}
       <aside className={styles.searchBox}>
+        <SpotList
+          onSaveSpot={onSaveSpot}
+          saveSpots={saveSpots}
+          members={members}
+          removeSaveSpot={removeSaveSpot}
+          showSpots={showSpots}
+          setShowSpots={setShowSpots}
+          justMoveMap={justMoveMap}
+        />
+        <div
+          className={styles.saveSpotToggle}
+          onClick={() => {
+            setOnSaveSpot(!onSaveSpot);
+          }}>
+          <div
+            className={onSaveSpot ? styles.saveSpotIcon : styles.saveNoSpotIcon}
+          />
+        </div>
         <header className={styles.searchHeader}>
           <div className={styles.townList}>
             <span className={styles.townTitle}>
@@ -344,9 +483,21 @@ const PlanMap = (props) => {
                         />
                       </div>
                       {spot.spot ? (
-                        <div className={styles.minusBtn}>선택취소</div>
+                        <div
+                          className={styles.minusBtn}
+                          onClick={() => {
+                            removeSaveSpot(spot);
+                          }}>
+                          선택취소
+                        </div>
                       ) : (
-                        <div className={styles.addBtn}>여행지 추가</div>
+                        <div
+                          className={styles.addBtn}
+                          onClick={() => {
+                            addSaveSpot(spot);
+                          }}>
+                          여행지 추가
+                        </div>
                       )}
                     </div>
                   </div>
@@ -400,9 +551,21 @@ const PlanMap = (props) => {
                           />
                         </div>
                         {spot.spot ? (
-                          <div className={styles.minusBtn}>선택취소</div>
+                          <div
+                            className={styles.minusBtn}
+                            onClick={() => {
+                              removeSaveSpot(spot);
+                            }}>
+                            선택취소
+                          </div>
                         ) : (
-                          <div className={styles.addBtn}>여행지 추가</div>
+                          <div
+                            className={styles.addBtn}
+                            onClick={() => {
+                              addSaveSpot(spot);
+                            }}>
+                            여행지 추가
+                          </div>
                         )}
                       </div>
                     </div>
@@ -424,8 +587,12 @@ const PlanMap = (props) => {
         setMapLongitude={setMapLongitude}
         isMarker={isMarker}
         setIsMarker={setIsMarker}
+        myInfo={myInfo}
+        showSpots={showSpots}
+        setShowSpots={setShowSpots}
       />
       {onModal ? <AddSpot towns={towns} setOnModal={setOnModal} /> : null}
+      <OnlineBox members={members} online={online} myInfo={myInfo} />
     </div>
   );
 };

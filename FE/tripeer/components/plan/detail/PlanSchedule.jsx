@@ -13,10 +13,14 @@ import dummyUserList from "@/utils/dummyUserList";
 import dummyPlaceList from "@/utils/dummyItem";
 import ScheduleItem from "@/components/plan/detail/schedule/scheduleItem";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import CalculateBtn from "@/components/plan/detail/schedule/calculateBtn";
+import ScheduleItem2 from "@/components/plan/detail/schedule/scheduleItem2";
+import Time from "@/components/plan/detail/schedule/time";
 
 const PlanSchedule = () => {
   const [userList, setUserList] = useState([]);
   // const [placeList, setPlaceList] = useState([]);
+  // dnd를 관리할 전체 배열
   const [totalList, setTotalList] = useState([]);
 
   // 아이템을 놓을때 실행
@@ -67,9 +71,6 @@ const PlanSchedule = () => {
       // 이동 한 곳의 배열 가져오기
       let dList = [...tList[dIdx]];
 
-      // 전체 배열에서 수정할 배열 지우기
-      tList.splice(sIdx, 1);
-
       // 옮길 데이터 임시 저장
       const tmp = sList[source.index];
 
@@ -78,26 +79,26 @@ const PlanSchedule = () => {
       // 데이터가 이동한 곳에 넣기
       dList.splice(destination.index, 0, tmp);
 
+      // 전체 배열에서 원래 있던 영역의 배열 지우기
+      tList.splice(sIdx, 1);
       //전체 배열에서 원래 있던 곳의 배열 수정본 원래 위치에 넣기
       tList.splice(sIdx, 0, sList);
+
+      // 전체 배열에서 이동한 영역의 배열 지우기
+      tList.splice(dIdx, 1);
       // 전체 배열에서 이동한 곳의 배열 수정본 원래 위치에 넣기
       tList.splice(dIdx, 0, dList);
 
       // 화면에 랜더링하느 전체 배열 갱신
       setTotalList(tList);
     }
-
-    // const tmp = placeList[source.index];
-    // let tmpList = [...placeList];
-    // tmpList.splice(source.index, 1);
-    // tmpList.splice(destination.index, 0, tmp);
-    // setPlaceList(tmpList);
   };
 
   useEffect(() => {
     setUserList(dummyUserList);
     // setPlaceList(dummyPlaceList);
-    setTotalList([dummyPlaceList, [], [], [], []]);
+    // 임시로 더미 데이터를 넣음
+    setTotalList([[...dummyPlaceList], [], [], [], []]);
   }, []);
 
   return (
@@ -138,7 +139,7 @@ const PlanSchedule = () => {
                     //   index 는 onDragEnd 에서 result 값에 있는 source destination 의 인덱스 값
                     <Draggable
                       key={idx}
-                      draggableId={`draggable-${idx}`}
+                      draggableId={`draggable-${0}-${idx}`}
                       index={idx}>
                       {(provided) => (
                         //   ref 를 줘야하기 때문에 div 로 한번 감싸서 dnd 속성들을 div 에 넣는데
@@ -180,16 +181,72 @@ const PlanSchedule = () => {
             </section>
             {/*  헤더의 오른쪽 부분  */}
           </header>
-          <div className={styles.line} />
+          <div className={styles.line2} />
           {/*  ---------------------------------------------------------------------------------*/}
           {/*  오른쪽 일정 관리 박스  */}
-          <div className={styles.scheduleContainer}>
-            <section className={styles.scheduleSection}>
-              <header>
-                <p className={styles.scP1}>1일차</p>
-                <p className={styles.scP2}>24.05.05(월)</p>
-              </header>
-            </section>
+          <div
+            className={`${styles.scheduleContainer} ${styles.scroll} ${styles.scrollX}`}>
+            {/*  1번부터 드롭가능한 영역 생성  */}
+            {totalList.map((el, arrIdx) => {
+              return arrIdx === 0 ? null : (
+                // 일차별 일정 컴포넌트
+                <section className={styles.scheduleSection}>
+                  {/*일차 및 계산 버튼  */}
+                  <header className={styles.scHeader}>
+                    <div className={styles.scHeaderBox}>
+                      <p className={styles.scP1}>1일차</p>
+                      <p className={styles.scP2}>24.05.05(월)</p>
+                    </div>
+                    {/*  최단거리계산 버튼  */}
+                    <CalculateBtn />
+                  </header>
+                  <Droppable droppableId={`${arrIdx}`}>
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        className={styles.divBox}>
+                        {totalList[arrIdx].map((el, idx) => (
+                          <Draggable
+                            key={idx}
+                            draggableId={`draggable-${arrIdx}-${idx}`}
+                            index={idx}>
+                            {(provided, snapshot) => (
+                              <>
+                                <div
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  className={
+                                    snapshot.isDragging
+                                      ? styles.draggingItem
+                                      : styles.itemBox2
+                                  }>
+                                  {idx <= totalList[arrIdx].length - 1 &&
+                                    idx !== 0 &&
+                                    !snapshot.isDragging && <Time />}
+                                  <ScheduleItem2 data={el} idx={idx} />
+                                </div>
+                                {snapshot.isDragging && (
+                                  <div
+                                    style={{
+                                      height:
+                                        provided.draggableProps.style.height,
+                                    }}
+                                    className={styles.placeholder}
+                                  />
+                                )}
+                              </>
+                            )}
+                          </Draggable>
+                        ))}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                </section>
+              );
+            })}
           </div>
           {/*  ---------------------------------------------------------------------------------*/}
         </main>
