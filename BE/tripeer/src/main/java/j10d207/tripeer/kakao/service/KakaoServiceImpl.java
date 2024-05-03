@@ -57,6 +57,7 @@ public class KakaoServiceImpl implements KakaoService{
             coordinateDTOList.add(coordinateDTO);
         }
         int[][] timeTable = getTimeTable(coordinateDTOList);
+
         for (int i = 0; i < timeTable.length; i++) {
             for (int j = 0; j < timeTable.length; j++) {
                 System.out.print(timeTable[i][j] + " ");

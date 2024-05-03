@@ -27,7 +27,7 @@ public interface PlanService {
     public List<SpotSearchResDTO> getSpotSearch(long planId, String keyword, int page, int sortType, String token);
     //플랜버킷 관광지 추가
     public void addPlanSpot(long planId, int spotInfoId, String token);
-    //즐겨찾기 추가
+     //즐겨찾기 추가
     public void addWishList(int spotInfoId, String token);
     //즐겨찾기 조회
     public List<SpotSearchResDTO> getWishList(String token, long planId);

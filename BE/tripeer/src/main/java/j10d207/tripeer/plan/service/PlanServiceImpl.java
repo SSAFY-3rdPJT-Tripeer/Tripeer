@@ -389,6 +389,7 @@ public class PlanServiceImpl implements PlanService {
         planBucketRepository.save(planBucket);
     }
 
+
     //즐겨찾기 추가
     @Override
     public void addWishList(int spotInfoId, String token) {
