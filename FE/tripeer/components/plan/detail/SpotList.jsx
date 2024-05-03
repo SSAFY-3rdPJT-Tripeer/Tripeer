@@ -13,6 +13,7 @@ const SpotList = (props) => {
     removeSaveSpot,
     setShowSpots,
     showSpots,
+    justMoveMap,
   } = props;
   const [memberChecks, setMemberChecks] = useState(null);
 
@@ -142,7 +143,11 @@ const SpotList = (props) => {
                       className={styles.spotImg}
                       style={{ backgroundImage: `url(${spot.img})` }}
                     />
-                    <div className={styles.cardContent}>
+                    <div
+                      className={styles.cardContent}
+                      onClick={() => {
+                        justMoveMap(spot);
+                      }}>
                       <p className={styles.spotTitle}>{spot.title}</p>
                       <div className={styles.address}>
                         <div className={styles.positionIcon} />

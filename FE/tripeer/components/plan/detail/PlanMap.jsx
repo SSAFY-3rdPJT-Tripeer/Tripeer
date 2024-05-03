@@ -204,7 +204,12 @@ const PlanMap = (props) => {
     setIsMarker(true);
   };
 
-  const addSaveSpot = async (spot, idx) => {
+  const justMoveMap = (spot) => {
+    setMapLongitude(spot.longitude);
+    setMapLatitude(spot.latitude);
+  };
+
+  const addSaveSpot = async (spot) => {
     try {
       const tempSave = { ...spot, ...myInfo };
       await api.post(
@@ -212,8 +217,8 @@ const PlanMap = (props) => {
       );
       ySpot.insert(0, [tempSave]);
     } finally {
-      const tempSpot = spotList.map((item, id) => {
-        if (idx !== id) {
+      const tempSpot = spotList.map((item) => {
+        if (spot.spotInfoId !== item.spotInfoId) {
           return item;
         }
         item.spot = true;
@@ -325,6 +330,7 @@ const PlanMap = (props) => {
           removeSaveSpot={removeSaveSpot}
           showSpots={showSpots}
           setShowSpots={setShowSpots}
+          justMoveMap={justMoveMap}
         />
         <div
           className={styles.saveSpotToggle}
@@ -480,7 +486,7 @@ const PlanMap = (props) => {
                         <div
                           className={styles.minusBtn}
                           onClick={() => {
-                            removeSaveSpot(spot, idx);
+                            removeSaveSpot(spot);
                           }}>
                           선택취소
                         </div>
@@ -488,7 +494,7 @@ const PlanMap = (props) => {
                         <div
                           className={styles.addBtn}
                           onClick={() => {
-                            addSaveSpot(spot, idx);
+                            addSaveSpot(spot);
                           }}>
                           여행지 추가
                         </div>
@@ -545,9 +551,21 @@ const PlanMap = (props) => {
                           />
                         </div>
                         {spot.spot ? (
-                          <div className={styles.minusBtn}>선택취소</div>
+                          <div
+                            className={styles.minusBtn}
+                            onClick={() => {
+                              removeSaveSpot(spot);
+                            }}>
+                            선택취소
+                          </div>
                         ) : (
-                          <div className={styles.addBtn}>여행지 추가</div>
+                          <div
+                            className={styles.addBtn}
+                            onClick={() => {
+                              addSaveSpot(spot);
+                            }}>
+                            여행지 추가
+                          </div>
                         )}
                       </div>
                     </div>
