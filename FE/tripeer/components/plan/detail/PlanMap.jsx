@@ -36,6 +36,8 @@ const PlanMap = (props) => {
   const [saveSpots, setSaveSpots] = useState([]); // y.js의 savespot 객체의 배열을 화면에 보여줄 State
   const [io, setIo] = useState(null);
 
+  const [showSpots, setShowSpots] = useState([]);
+
   const CATEGORY = ["전체", "숙박", "맛집", "명소", "즐겨찾기"];
   const HeartIcon = [FullHeart, Heart];
   const CARD_CATEGORY = useMemo(() => {
@@ -321,6 +323,8 @@ const PlanMap = (props) => {
           saveSpots={saveSpots}
           members={members}
           removeSaveSpot={removeSaveSpot}
+          showSpots={showSpots}
+          setShowSpots={setShowSpots}
         />
         <div
           className={styles.saveSpotToggle}
@@ -565,6 +569,9 @@ const PlanMap = (props) => {
         setMapLongitude={setMapLongitude}
         isMarker={isMarker}
         setIsMarker={setIsMarker}
+        myInfo={myInfo}
+        showSpots={showSpots}
+        setShowSpots={setShowSpots}
       />
       {onModal ? <AddSpot towns={towns} setOnModal={setOnModal} /> : null}
       <OnlineBox members={members} online={online} myInfo={myInfo} />
