@@ -32,6 +32,8 @@ const PlanMap = (props) => {
   const [isMarker, setIsMarker] = useState(false);
   const [onSaveSpot, setOnSaveSpot] = useState(false);
   const [members, setMembers] = useState([]);
+  const [ySpot, setYSpot] = useState(null); // y.js에 y-Array(savespot)이 담길 객체
+  const [saveSpots, setSaveSpots] = useState([]); // y.js의 savespot 객체의 배열을 화면에 보여줄 State
 
   const CATEGORY = ["전체", "숙박", "맛집", "명소", "즐겨찾기"];
   const HeartIcon = [FullHeart, Heart];
@@ -196,6 +198,45 @@ const PlanMap = (props) => {
     setIsMarker(true);
   };
 
+  const addSaveSpot = async (spot, idx) => {
+    try {
+      const tempSave = { ...spot, ...myInfo };
+      await api.post(
+        `/plan/bucket?planId=${plan.planId}&spotInfoId=${spot.spotInfoId}`,
+      );
+      ySpot.insert(0, [tempSave]);
+    } finally {
+      const tempSpot = spotList.map((item, id) => {
+        if (idx !== id) {
+          return item;
+        }
+        item.spot = true;
+        return item;
+      });
+      setSpotList(tempSpot);
+    }
+  };
+
+  const removeSaveSpot = async (spot) => {
+    try {
+      await api.delete(
+        `/plan/bucket?planId=${plan.planId}&spotInfoId=${spot.spotInfoId}`,
+      );
+      const arr = ySpot.toArray();
+      let index = arr.findIndex((item) => item.spotInfoId === spot.spotInfoId);
+      ySpot.delete(index);
+    } finally {
+      const tempSpot = spotList.map((item) => {
+        if (item.spotInfoId !== spot.spotInfoId) {
+          return item;
+        }
+        item.spot = false;
+        return item;
+      });
+      setSpotList(tempSpot);
+    }
+  };
+
   useEffect(() => {
     if (towns.length > 0) {
       setMapLatitude(towns[targetStep]["latitude"]);
@@ -219,13 +260,24 @@ const PlanMap = (props) => {
     const getMember = async () => {
       const res = await api.get(`/plan/member/${plan.planId}`);
       setMembers(res.data.data);
-      console.log(res.data.data);
     };
     if (plan) {
       setTowns(plan.townList);
       getMember();
     }
   }, [plan]);
+
+  useEffect(() => {
+    if (myInfo && provider) {
+      const saveSpot = provider.doc.getArray("saveSpot");
+      setYSpot(saveSpot);
+      setSaveSpots(saveSpot.toArray());
+      saveSpot.observe(() => {
+        const spots = saveSpot.toArray();
+        setSaveSpots(spots);
+      });
+    }
+  }, [myInfo, provider]);
 
   return (
     <div
@@ -246,7 +298,12 @@ const PlanMap = (props) => {
         );
       })}
       <aside className={styles.searchBox}>
-        <SpotList onSaveSpot={onSaveSpot} />
+        <SpotList
+          onSaveSpot={onSaveSpot}
+          saveSpots={saveSpots}
+          members={members}
+          removeSaveSpot={removeSaveSpot}
+        />
         <div
           className={styles.saveSpotToggle}
           onClick={() => {
@@ -398,9 +455,21 @@ const PlanMap = (props) => {
                         />
                       </div>
                       {spot.spot ? (
-                        <div className={styles.minusBtn}>선택취소</div>
+                        <div
+                          className={styles.minusBtn}
+                          onClick={() => {
+                            removeSaveSpot(spot, idx);
+                          }}>
+                          선택취소
+                        </div>
                       ) : (
-                        <div className={styles.addBtn}>여행지 추가</div>
+                        <div
+                          className={styles.addBtn}
+                          onClick={() => {
+                            addSaveSpot(spot, idx);
+                          }}>
+                          여행지 추가
+                        </div>
                       )}
                     </div>
                   </div>

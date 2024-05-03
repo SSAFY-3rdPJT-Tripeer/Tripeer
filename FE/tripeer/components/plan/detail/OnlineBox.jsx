@@ -24,8 +24,8 @@ const OnlineBox = (props) => {
               key={idx}
               className={styles.img}
               style={{
-                backgroundImage: `url(${member.img})`,
-                border: `3px solid ${member.color}`,
+                backgroundImage: `url(${member?.img})`,
+                border: `3px solid ${member?.color}`,
               }}
             />
           ) : null;
