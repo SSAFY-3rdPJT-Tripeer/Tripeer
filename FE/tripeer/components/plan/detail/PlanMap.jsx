@@ -34,6 +34,7 @@ const PlanMap = (props) => {
   const [members, setMembers] = useState([]);
   const [ySpot, setYSpot] = useState(null); // y.js에 y-Array(savespot)이 담길 객체
   const [saveSpots, setSaveSpots] = useState([]); // y.js의 savespot 객체의 배열을 화면에 보여줄 State
+  const [io, setIo] = useState(null);
 
   const CATEGORY = ["전체", "숙박", "맛집", "명소", "즐겨찾기"];
   const HeartIcon = [FullHeart, Heart];
@@ -82,17 +83,20 @@ const PlanMap = (props) => {
     };
   }, []);
 
-  const io = new IntersectionObserver(
-    (entris) => {
-      entris.forEach((entry) => {
-        if (entry.isIntersecting && isTarget) {
-          io.unobserve(entry.target);
-          updateList();
-        }
-      });
-    },
-    { threshold: 0.9 },
-  );
+  useEffect(() => {
+    const tempIo = new IntersectionObserver(
+      (entris) => {
+        entris.forEach((entry) => {
+          if (entry.isIntersecting && isTarget) {
+            tempIo.unobserve(entry.target);
+            updateList();
+          }
+        });
+      },
+      { threshold: 0.9 },
+    );
+    setIo(tempIo);
+  }, [isTarget]);
 
   const updateMouse = (x, y) => {
     if (provider) {
@@ -245,10 +249,10 @@ const PlanMap = (props) => {
   }, [targetStep, towns]);
 
   useEffect(() => {
-    if (isTarget) {
+    if (isTarget && io && targetRef.current) {
       io.observe(targetRef.current);
     }
-  }, [isTarget, spotList]);
+  }, [isTarget, spotList, io]);
 
   useEffect(() => {
     if (plan) {
@@ -268,16 +272,30 @@ const PlanMap = (props) => {
   }, [plan]);
 
   useEffect(() => {
-    if (myInfo && provider) {
+    if (myInfo && provider && spotList.length > 0) {
       const saveSpot = provider.doc.getArray("saveSpot");
       setYSpot(saveSpot);
       setSaveSpots(saveSpot.toArray());
       saveSpot.observe(() => {
+        setIsTarget(false);
         const spots = saveSpot.toArray();
+        const tempSpotList = spotList.map((spot) => {
+          if (
+            spots.findIndex((item) => item.spotInfoId === spot.spotInfoId) !==
+            -1
+          ) {
+            spot.spot = true;
+          } else {
+            spot.spot = false;
+          }
+          return spot;
+        });
+        setSpotList(tempSpotList);
         setSaveSpots(spots);
+        setIsTarget(true);
       });
     }
-  }, [myInfo, provider]);
+  }, [myInfo, provider, spotList]);
 
   return (
     <div
