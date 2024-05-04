@@ -1385,18 +1385,7 @@
     "townId": 24,
     "name": "전라남도 화순군"
   },
-  {
-    "idx": 232,
-    "cityId": 39,
-    "townId": 1,
-    "name": "제주도 남제주군"
-  },
-  {
-    "idx": 233,
-    "cityId": 39,
-    "townId": 2,
-    "name": "제주도 북제주군"
-  },
+
   {
     "idx": 234,
     "cityId": 39,
@@ -1501,7 +1490,7 @@
   },
   {
     "idx": 251,
-    "cityId": 37,
+    "cityId": 39,
     "townId": -1,
     "name": "제주도"
   }
