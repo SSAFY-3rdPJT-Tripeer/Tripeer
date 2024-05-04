@@ -89,13 +89,13 @@ const Map = (props) => {
   }, [map, mapLatitude, mapLongitude]);
 
   useEffect(() => {
-    if (isMarker) {
+    if (isMarker && map) {
       if (prevMarker) {
         prevMarker.setMap(null);
       }
       const { naver } = window;
       const marker = new naver.maps.Marker({
-        position: new naver.maps.LatLng(mapLatitude, mapLongitude),
+        position: new naver.maps.LatLng(isMarker.latitude, isMarker.longitude),
         map,
         icon: {
           url: `https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/marker${myInfo.order}.svg`,
@@ -105,10 +105,15 @@ const Map = (props) => {
           anchor: new naver.maps.Point(19, 58),
         },
       });
+      const spot = new naver.maps.LatLng(isMarker.latitude, isMarker.longitude);
+      naver.maps.Event.addListener(marker, "click", () => {
+        setModalInfo(isMarker);
+      });
+      map.panTo(spot);
       setPrevMarker(marker);
-      setIsMarker(false);
+      setIsMarker(null);
     }
-  }, [isMarker]);
+  }, [isMarker, map]);
 
   useEffect(() => {
     const INTERVAL = setInterval(() => {

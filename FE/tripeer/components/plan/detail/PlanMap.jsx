@@ -29,16 +29,25 @@ const PlanMap = (props) => {
   const [onModal, setOnModal] = useState(false);
   const [mapLatitude, setMapLatitude] = useState(null);
   const [mapLongitude, setMapLongitude] = useState(null);
-  const [isMarker, setIsMarker] = useState(false);
+  const [isMarker, setIsMarker] = useState(null);
   const [onSaveSpot, setOnSaveSpot] = useState(false);
   const [members, setMembers] = useState([]);
   const [ySpot, setYSpot] = useState(null); // y.js에 y-Array(savespot)이 담길 객체
   const [saveSpots, setSaveSpots] = useState([]); // y.js의 savespot 객체의 배열을 화면에 보여줄 State
   const [io, setIo] = useState(null);
-
   const [showSpots, setShowSpots] = useState([]);
 
   const CATEGORY = ["전체", "숙박", "맛집", "명소", "즐겨찾기"];
+  const COLOR = [
+    "#A60000",
+    "#DE5000",
+    "#D78E00",
+    "#48B416",
+    "#0065AE",
+    "#20178B",
+    "#65379F",
+    "#F96976",
+  ];
   const HeartIcon = [FullHeart, Heart];
   const CARD_CATEGORY = useMemo(() => {
     return {
@@ -199,9 +208,7 @@ const PlanMap = (props) => {
   };
 
   const moveMap = (spot) => {
-    setMapLongitude(spot.longitude);
-    setMapLatitude(spot.latitude);
-    setIsMarker(true);
+    setIsMarker(spot);
   };
 
   const justMoveMap = (spot) => {
@@ -312,14 +319,24 @@ const PlanMap = (props) => {
       }}>
       {mouseInfo.map((user, idx) => {
         return user.id === myInfo.userId || user.page !== 1 ? null : (
-          <div
-            key={idx}
-            className={styles.mouse}
-            style={{
-              backgroundImage: `url(https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/mouse${user.color}.svg)`,
-              transform: `translate(${user.x - 50}px, ${user.y}px)`,
-              transition: `5s ease forwards`,
-            }}></div>
+          <>
+            <div
+              key={`mouse${idx}`}
+              className={styles.mouse}
+              style={{
+                backgroundImage: `url(https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/mouse${user.color}.svg)`,
+                transform: `translate(${user.x - 50}px, ${user.y}px)`,
+              }}></div>
+            <span
+              key={`name${idx}`}
+              style={{
+                transform: `translate(${user.x - 30}px, ${user.y + 10}px)`,
+                backgroundColor: `${COLOR[user.color]}`,
+              }}
+              className={styles.userNickname}>
+              {user.nickname}
+            </span>
+          </>
         );
       })}
       <aside className={styles.searchBox}>

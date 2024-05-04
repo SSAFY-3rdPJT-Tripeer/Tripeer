@@ -102,14 +102,24 @@ const PlanHome = (props) => {
       }}>
       {mouseInfo.map((user, idx) => {
         return user.id === myInfo.userId || user.page !== 0 ? null : (
-          <div
-            key={idx}
-            className={styles.mouse}
-            style={{
-              backgroundImage: `url(https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/mouse${user.color}.svg)`,
-              transform: `translate(${user.x - 300}px, ${user.y + -50}px)`,
-              transition: `5s ease forwards`,
-            }}></div>
+          <>
+            <div
+              key={`mouse${idx}`}
+              className={styles.mouse}
+              style={{
+                backgroundImage: `url(https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/mouse${user.color}.svg)`,
+                transform: `translate(${user.x - 50}px, ${user.y}px)`,
+              }}></div>
+            <span
+              key={`name${idx}`}
+              style={{
+                transform: `translate(${user.x - 30}px, ${user.y + 10}px)`,
+                backgroundColor: `${COLOR[user.color]}`,
+              }}
+              className={styles.userNickname}>
+              {user.nickname}
+            </span>
+          </>
         );
       })}
       <header className={styles.header}>
