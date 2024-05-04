@@ -2,9 +2,8 @@
 
 import Image from "next/image";
 import styles from "./page.module.css";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import api from "@/utils/api";
-import defaultImg from "@/public/altImg.png";
 
 export default function MyPage() {
   const [myInfo, setMyInfo] = useState(null);
@@ -127,7 +126,11 @@ export default function MyPage() {
             </div>
             <div className={styles.inputBox}>
               <p className={styles.nickTitle}>닉네임</p>
-              <input type="text" maxLength={10} placeholder={myInfo.nickname} />
+              <input
+                type="text"
+                maxLength={10}
+                placeholder={myInfo?.nickname}
+              />
               <p className={styles.nickWarn}>1~10자 이내</p>
             </div>
             <div className={styles.inputBox}>
