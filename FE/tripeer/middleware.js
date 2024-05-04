@@ -26,6 +26,12 @@ export function middleware(request) {
       return NextResponse.redirect(new URL("/login", request.url));
     }
   }
+  if (request.nextUrl.pathname.startsWith("/mypage")) {
+    const cookieStore = cookies();
+    if (!cookieStore.has("Authorization")) {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
+  }
 }
 
 export default middleware;
