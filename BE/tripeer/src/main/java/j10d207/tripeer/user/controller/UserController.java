@@ -5,6 +5,7 @@ import j10d207.tripeer.exception.ErrorCode;
 import j10d207.tripeer.response.Response;
 import j10d207.tripeer.user.db.dto.JoinDTO;
 import j10d207.tripeer.user.db.dto.SocialInfoDTO;
+import j10d207.tripeer.user.db.dto.UserInfoDTO;
 import j10d207.tripeer.user.db.dto.UserSearchDTO;
 import j10d207.tripeer.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -60,8 +61,15 @@ public class UserController {
 
     //내 정보 불러오기
     @GetMapping("/myinfo")
-    public Response<UserSearchDTO> myInfo(HttpServletRequest request) {
+    public Response<UserInfoDTO> myInfo(HttpServletRequest request) {
         return Response.of(HttpStatus.OK, "내 정보 불러오기 완료", userService.getMyInfo(request.getHeader("Authorization")));
+    }
+
+    //내 정보 수정
+    @PatchMapping("/myinfo")
+    public Response<?> myInfoModify(HttpServletRequest request, @RequestBody UserInfoDTO userInfoDTO) {
+        userService.modifyMyInfo(request.getHeader("Authorization"), userInfoDTO);
+        return Response.of(HttpStatus.OK, "내 정보 수정 완료", null);
     }
 
     // access 토큰 재발급

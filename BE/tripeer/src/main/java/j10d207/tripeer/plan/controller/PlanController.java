@@ -131,6 +131,7 @@ public class PlanController {
         }
     }
 
+    //플랜버킷 관광지 삭제
     @DeleteMapping("/bucket")
     public Response<?> delPlanSpot(@RequestParam("planId") long planId, @RequestParam("spotInfoId") int spotInfoId, HttpServletRequest request) {
         try {

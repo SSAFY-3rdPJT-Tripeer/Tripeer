@@ -5,20 +5,19 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
+import com.nimbusds.openid.connect.sdk.claims.UserInfo;
 import io.jsonwebtoken.ExpiredJwtException;
 import j10d207.tripeer.exception.CustomException;
 import j10d207.tripeer.exception.ErrorCode;
 import j10d207.tripeer.user.config.JWTUtil;
 import j10d207.tripeer.user.db.TripStyleEnum;
-import j10d207.tripeer.user.db.dto.CustomOAuth2User;
-import j10d207.tripeer.user.db.dto.JoinDTO;
-import j10d207.tripeer.user.db.dto.SocialInfoDTO;
-import j10d207.tripeer.user.db.dto.UserSearchDTO;
+import j10d207.tripeer.user.db.dto.*;
 import j10d207.tripeer.user.db.entity.UserEntity;
 import j10d207.tripeer.user.db.repository.UserRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -123,6 +122,29 @@ public class UserServiceImpl implements UserService{
 
     }
 
+    //내 정보 수정
+    @Override
+    public void modifyMyInfo(String token, UserInfoDTO info) {
+        UserEntity user = userRepository.findByUserId(jwtUtil.getUserId(jwtUtil.splitToken(token)));
+        if(!user.getNickname().equals(info.getNickname()) && userRepository.existsByNickname(info.getNickname())){
+            throw new CustomException(ErrorCode.DUPLICATE_USER);
+        }
+        UserEntity newUser = UserEntity.builder()
+                .userId(user.getUserId())
+                .provider(user.getProvider())
+                .providerId(user.getProviderId())
+                .nickname(info.getNickname())
+                .birth(user.getBirth())
+                .profileImage(user.getProfileImage())
+                .role(user.getRole())
+                .style1(TripStyleEnum.getNameByCode(info.getStyle1Num()))
+                .style2(TripStyleEnum.getNameByCode(info.getStyle2Num()))
+                .style3(TripStyleEnum.getNameByCode(info.getStyle3Num()))
+                .isOnline(user.isOnline())
+                .build();
+        userRepository.save(newUser);
+    }
+
     //소셜정보 불러오기
     @Override
     public SocialInfoDTO getSocialInfo() {
@@ -164,13 +186,17 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserSearchDTO getMyInfo(String token) {
+    public UserInfoDTO getMyInfo(String token) {
         // 정보 확장시 DTO 새로 만들어야함
         UserEntity user = userRepository.findByUserId(jwtUtil.getUserId(jwtUtil.splitToken(token)));
-        return UserSearchDTO.builder()
+        return UserInfoDTO.builder()
                 .userId(user.getUserId())
                 .nickname(user.getNickname())
+                .birth(user.getBirth())
                 .profileImage(user.getProfileImage())
+                .style1(user.getStyle1())
+                .style2(user.getStyle2())
+                .style3(user.getStyle3())
                 .build();
     }
 
