@@ -14,7 +14,7 @@ import SpotList from "./SpotList";
 import OnlineBox from "./OnlineBox";
 
 const PlanMap = (props) => {
-  const { plan, online, myInfo, provider, mouseInfo } = props;
+  const { plan, online, myInfo, provider } = props;
   const [towns, setTowns] = useState([]);
   const targetRef = useRef(null);
   const [isTarget, setIsTarget] = useState(false);
@@ -108,19 +108,6 @@ const PlanMap = (props) => {
     );
     setIo(tempIo);
   }, [isTarget]);
-
-  const updateMouse = (x, y) => {
-    if (provider) {
-      provider.awareness.setLocalStateField("mouse", {
-        id: myInfo.userId,
-        nickname: myInfo.nickname,
-        color: myInfo.order,
-        page: 1,
-        x: x,
-        y: y,
-      });
-    }
-  };
 
   const updateList = async () => {
     setIsTarget(false);
@@ -312,33 +299,7 @@ const PlanMap = (props) => {
   }, [myInfo, provider, spotList]);
 
   return (
-    <div
-      className={styles.container}
-      onMouseMove={(e) => {
-        updateMouse(e.clientX, e.clientY);
-      }}>
-      {mouseInfo.map((user, idx) => {
-        return user.id === myInfo.userId || user.page !== 1 ? null : (
-          <>
-            <div
-              key={`mouse${idx}`}
-              className={styles.mouse}
-              style={{
-                backgroundImage: `url(https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/mouse${user.color}.svg)`,
-                transform: `translate(${user.x - 50}px, ${user.y}px)`,
-              }}></div>
-            <span
-              key={`name${idx}`}
-              style={{
-                transform: `translate(${user.x - 30}px, ${user.y + 10}px)`,
-                backgroundColor: `${COLOR[user.color]}`,
-              }}
-              className={styles.userNickname}>
-              {user.nickname}
-            </span>
-          </>
-        );
-      })}
+    <div className={styles.container}>
       <aside className={styles.searchBox}>
         <SpotList
           onSaveSpot={onSaveSpot}

@@ -24,19 +24,6 @@ const PlanHome = (props) => {
     "#F96976",
   ];
 
-  const updateMouse = (x, y) => {
-    if (provider) {
-      provider.awareness.setLocalStateField("mouse", {
-        id: myInfo.userId,
-        nickname: myInfo.nickname,
-        color: myInfo.order,
-        page: 0,
-        x: x,
-        y: y,
-      });
-    }
-  };
-
   const invite = async (member) => {
     if (members.length < 8) {
       const res = await api.post("/plan/member", {
@@ -95,33 +82,7 @@ const PlanHome = (props) => {
   }, [plan]);
 
   return (
-    <div
-      className={styles.container}
-      onMouseMove={(e) => {
-        updateMouse(e.clientX, e.clientY);
-      }}>
-      {mouseInfo.map((user, idx) => {
-        return user.id === myInfo.userId || user.page !== 0 ? null : (
-          <>
-            <div
-              key={`mouse${idx}`}
-              className={styles.mouse}
-              style={{
-                backgroundImage: `url(https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/mouse${user.color}.svg)`,
-                transform: `translate(${user.x - 50}px, ${user.y}px)`,
-              }}></div>
-            <span
-              key={`name${idx}`}
-              style={{
-                transform: `translate(${user.x - 30}px, ${user.y + 10}px)`,
-                backgroundColor: `${COLOR[user.color]}`,
-              }}
-              className={styles.userNickname}>
-              {user.nickname}
-            </span>
-          </>
-        );
-      })}
+    <div className={styles.container}>
       <header className={styles.header}>
         <span className={!titleChange ? "" : styles.visible}>{title}</span>
         <input

@@ -12,7 +12,7 @@ const nextConfig = {
       "encrypted-tbn0.gstatic.com",
       "encrypted-tbn1.gstatic.com",
       "tripeerbucket.s3.ap-southeast-2.amazonaws.com",
-      "tripeer207.s3.ap-northeast-2.amazonaws.com/",
+      "tripeer207.s3.ap-northeast-2.amazonaws.com",
     ],
   },
   reactStrictMode: false,
