@@ -209,3 +209,24 @@
   right: 0;
   pointer-events: none;
 }
+
+.searchResult {
+  position: absolute;
+  top: 180px;
+  max-height: 300px;
+  overflow-y: scroll;
+}
+
+.searchResult::-webkit-scrollbar {
+  width: 2.5px; /* 스크롤바의 너비 */
+}
+
+.searchResult::-webkit-scrollbar-thumb {
+  height: 5%; /* 스크롤바의 길이 */
+  background: transparent; /* 스크롤바의 색상 */
+  border-radius: 10px;
+}
+
+.searchResult::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0); /*스크롤바 뒷 배경 색상*/
+}

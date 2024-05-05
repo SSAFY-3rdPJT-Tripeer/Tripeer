@@ -67,6 +67,7 @@ const TitleModal = (props) => {
           type="text"
           placeholder="10글자 내로 입력하세요."
           className={styles.titleInput}
+          maxLength={10}
           onChange={(e) => {
             changeInput(e);
           }}

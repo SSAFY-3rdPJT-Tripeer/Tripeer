@@ -44,19 +44,19 @@
 
 @keyframes offSaveBtn {
   0% {
-    transform: rotate(180deg);
+    transform: rotate(0deg);
   }
   100% {
-    transform: rotate(0deg);
+    transform: rotate(180deg);
   }
 }
 
 @keyframes onSaveBtn {
   0% {
-    transform: rotate(0deg);
+    transform: rotate(180deg);
   }
   100% {
-    transform: rotate(180deg);
+    transform: rotate(0deg);
   }
 }
 
@@ -375,4 +375,13 @@
   background-repeat: no-repeat;
   background-size: cover;
   pointer-events: none;
+}
+
+.userNickname {
+  position: fixed;
+  z-index: 999;
+  color: white;
+  font-weight: 500;
+  border-radius: 50px;
+  padding: 0px 10px;
 }

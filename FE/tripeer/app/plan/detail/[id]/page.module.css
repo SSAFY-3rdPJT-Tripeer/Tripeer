@@ -3,3 +3,35 @@
   width: 100vw;
   height: 100vh;
 }
+
+.mouse {
+  position: fixed;
+  z-index: 999;
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  pointer-events: none;
+}
+
+.userNickname {
+  position: fixed;
+  z-index: 999;
+  color: white;
+  font-weight: 500;
+  border-radius: 50px;
+  max-width: 200px;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 5px 10px;
+}
+
+.userInput {
+  outline: none;
+  border: none;
+  max-height: 500px;
+  resize: none;
+  padding-left: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
