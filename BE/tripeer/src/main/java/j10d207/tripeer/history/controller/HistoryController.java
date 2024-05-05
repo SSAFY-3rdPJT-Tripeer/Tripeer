@@ -44,19 +44,11 @@ public class HistoryController {
 
     @PostMapping("/gallery/upload/{planDayId}")
     public Response<List<GalleryDTO>> uploadsImageAndMovie(
-            HttpServletRequest request,
-            @PathVariable("planDayId") long planDayId,
-            @RequestPart(value = "images") List<MultipartFile> multipartFiles) {
-        try {
-            List<GalleryDTO> galleryList = galleryService.uploadsImageAndMovie(multipartFiles, request.getHeader("Authorization"), planDayId);
-            return Response.of(HttpStatus.OK, "업로드 성공", galleryList);
-        } catch (IllegalArgumentException e) {
-            List<GalleryDTO> galleryList = new ArrayList<>();
-            return Response.of(HttpStatus.BAD_REQUEST, "지원하지 않는 파일타입", galleryList);
-        }
-        catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+                                        HttpServletRequest request,
+                                        @PathVariable("planDayId") long planDayId,
+                                        @RequestPart(value = "images") List<MultipartFile> multipartFiles) {
+        List<GalleryDTO> galleryList = galleryService.uploadsImageAndMovie(multipartFiles, request.getHeader("Authorization"), planDayId);
+        return Response.of(HttpStatus.OK, "업로드 성공", galleryList);
     }
 
     @GetMapping("/gallery/{planDayId}")

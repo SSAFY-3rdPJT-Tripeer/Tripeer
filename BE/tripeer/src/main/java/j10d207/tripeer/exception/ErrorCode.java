@@ -25,8 +25,10 @@ public enum ErrorCode {
     NOT_HAS_COWORKER(HttpStatus.BAD_REQUEST, "PLAN-002", "사용자가 소속되지 않은 플랜입니다."),
 
 
-    //history
-    GALLERY_NOT_FOUND(HttpStatus.NOT_FOUND, "history-001", "이미지를 찾을 수 없습니다."),
+    //gallery
+    GALLERY_NOT_FOUND(HttpStatus.NOT_FOUND, "gallery-001", "이미지를 찾을 수 없습니다."),
+    UNSUPPORTED_FILE_TYPE(HttpStatus.BAD_REQUEST, "gallery-002", "지원하지 않는 파일타입"),
+    S3_UPLOAD_ERROR(HttpStatus.BAD_REQUEST, "gallery-003", "지원하지 않는 파일타입"),
 
     //city
     CITY_NOT_FOUND(HttpStatus.NOT_FOUND, "CITY-001", "도시를 찾을 수 없습니다."),

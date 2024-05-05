@@ -49,7 +49,7 @@ public class GalleryServiceImpl implements GalleryService{
     }
 
     @Override
-    public List<GalleryDTO> uploadsImageAndMovie(List<MultipartFile> files, String token, long planDayId) throws IOException {
+    public List<GalleryDTO> uploadsImageAndMovie(List<MultipartFile> files, String token, long planDayId) {
 
         // 허용할 MIME 타입들 설정 (이미지, 동영상 파일만 허용하는 경우)
         List<String> allowedMimeTypes = List.of("image/jpeg", "image/png", "image/gif", "video/mp4", "video/webm", "video/ogg", "video/3gpp", "video/x-msvideo", "video/quicktime");
@@ -73,7 +73,7 @@ public class GalleryServiceImpl implements GalleryService{
             // 허용되지 않는 MIME 타입의 파일은 처리하지 않음
             String fileContentType = file.getContentType();
             if (!allowedMimeTypes.contains(fileContentType)) {
-                throw new IllegalArgumentException("Unsupported file type");
+                throw  new CustomException(ErrorCode.UNSUPPORTED_FILE_TYPE);
             }
 
             ObjectMetadata metadata = new ObjectMetadata(); //메타데이터
@@ -93,7 +93,7 @@ public class GalleryServiceImpl implements GalleryService{
 
             } catch (IOException e) {
                 log.error("file upload error " + e.getMessage());
-                throw new IOException(); //커스텀 예외 던짐.
+                throw  new CustomException(ErrorCode.S3_UPLOAD_ERROR);
             }
             //저장된 Url
             String url = "https://tripeer207.s3.ap-northeast-2.amazonaws.com/" + changedName;
