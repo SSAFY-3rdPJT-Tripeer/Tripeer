@@ -40,6 +40,7 @@
     height: 45px;
     border-radius: 100%;
     margin-right: 10px;
+    border: #858585 3px solid;
 }
 
 .list {

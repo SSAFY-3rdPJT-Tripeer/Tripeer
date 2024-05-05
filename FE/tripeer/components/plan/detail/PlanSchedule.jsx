@@ -17,13 +17,29 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import CalculateBtn from "@/components/plan/detail/schedule/calculateBtn";
 import ScheduleItem2 from "@/components/plan/detail/schedule/scheduleItem2";
 import Time from "@/components/plan/detail/schedule/time";
+import api from "@/utils/api";
 
 const PlanSchedule = (props) => {
-  const { myInfo, provider } = props;
+  const { myInfo, provider, plan, online } = props;
   const [userList, setUserList] = useState([]);
   // dnd를 관리할 전체 배열
   const [totalY, setTotalY] = useState(null);
   const [totalList, setTotalList] = useState([]);
+  // 날짜를 저장
+  const [day, setDay] = useState([]);
+  // 위의 day 를 요일로 저장
+  const [dayOfWeek, setDayOfWeek] = useState([]);
+
+  const COLOR = [
+    "#A60000",
+    "#DE5000",
+    "#D78E00",
+    "#48B416",
+    "#0065AE",
+    "#20178B",
+    "#65379F",
+    "#F96976",
+  ];
 
   // 아이템을 놓을때 실행
   const onDragEnd = (result) => {
@@ -55,33 +71,18 @@ const PlanSchedule = (props) => {
 
     // 다른 영역인 경우
     else {
-      // 전체 배열 가져오기
-      let tList = [...totalList];
-      // 원래 있던 곳의 배열 가져오기
-      let sList = [...tList[sIdx]];
-      // 이동 한 곳의 배열 가져오기
-      let dList = [...tList[dIdx]];
+      // 원래 있던곳의 배열 가져오기
+      let sourceItems = totalY.get(sIdx);
+      // 이동한 곳의 배열 가져오기
+      let destinationItems = totalY.get(dIdx);
 
       // 옮길 데이터 임시 저장
-      const tmp = sList[source.index];
+      const tmp = sourceItems.get(source.index);
 
-      // 데이터가 원래 있던 곳에서 지우고
-      sList.splice(source.index, 1);
-      // 데이터가 이동한 곳에 넣기
-      dList.splice(destination.index, 0, tmp);
-
-      // 전체 배열에서 원래 있던 영역의 배열 지우기
-      tList.splice(sIdx, 1);
-      //전체 배열에서 원래 있던 곳의 배열 수정본 원래 위치에 넣기
-      tList.splice(sIdx, 0, sList);
-
-      // 전체 배열에서 이동한 영역의 배열 지우기
-      tList.splice(dIdx, 1);
-      // 전체 배열에서 이동한 곳의 배열 수정본 원래 위치에 넣기
-      tList.splice(dIdx, 0, dList);
-
-      // 화면에 랜더링하느 전체 배열 갱신
-      setTotalList(tList);
+      // 원래 있던 배열에서 아이템 삭제
+      sourceItems.delete(source.index, 1);
+      // 이동한 배열에 추가
+      destinationItems.insert(destination.index, [tmp]);
     }
   };
 
@@ -93,19 +94,107 @@ const PlanSchedule = (props) => {
       .map((e) => e.spotInfoId);
 
     const remain = arr.filter((e) => !tArr.includes(e.spotInfoId));
-    const yItems = new Y.Array();
 
-    // 만약에 스케쥴에 없는 장소가 있다 ?! >> 없는것 왼쪽 리스트에 추가해주기
-    if (totalYList.length === 0) {
-      yItems.insert(0, [...remain]);
+    if (remain.length !== 0) {
+      const yItems = new Y.Array();
+
+      // 만약에 스케쥴에 없는 장소가 있다 ?! >> 없는것 왼쪽 리스트에 추가해주기
+      if (totalYList.length === 0) {
+        yItems.insert(0, [...remain]);
+        totalYList.insert(0, [yItems]);
+        console.log("데이길이: ", day.length);
+        for (let i = 0; i < day.length; i++) {
+          const yItems = new Y.Array();
+          yItems.insert(0, []);
+          totalYList.insert(i + 1, [yItems]);
+        }
+      } else {
+        let leftArr = totalYList.get(0);
+        if (remain.length !== 0) {
+          // leftArr.push([...remain]);
+          console.log("dasd", leftArr.toJSON());
+          leftArr.insert(leftArr.length, [...remain]);
+        }
+      }
+
+      const result = totalYList.toJSON();
+      setTotalY(totalYList);
+      setTotalList(result);
+    } else if (totalYList.length !== 0) {
+      const arr = saveYSpot.toJSON().map((e) => e.spotInfoId);
+      const leftArr = totalYList.toJSON()[0];
+
+      const result = leftArr.filter((e) => arr.includes(e.spotInfoId));
+
+      const yItems = new Y.Array();
+
+      yItems.insert(0, [...result]);
+      totalYList.delete(0, 1);
       totalYList.insert(0, [yItems]);
-    } else {
-      let leftArr = totalYList.get(0);
-      leftArr.push([...remain]);
-    }
 
-    setTotalY(totalYList);
-    setTotalList(totalYList.toJSON());
+      setTotalY(totalYList);
+      setTotalList(totalYList.toJSON());
+    }
+  };
+
+  const getDay = async (saveYSpot, totalYList) => {
+    try {
+      const res = await api.get("/plan");
+      const planIdArr = res.data.data.filter((e) => e.planId === plan.planId);
+
+      const start = planIdArr[0].startDay;
+      const end = planIdArr[0].endDay;
+      const arr = [];
+      const dt = new Date(start);
+
+      while (dt <= new Date(end)) {
+        arr.push(new Date(dt).toISOString().slice(0, 10));
+        dt.setDate(dt.getDate() + 1);
+      }
+
+      const result = arr.map(function (date) {
+        return date.replace(/-/g, ".");
+      });
+
+      setDay(result);
+
+      const sArr = saveYSpot.toArray();
+      const tArr = totalYList
+        .toJSON()
+        .flat()
+        .map((e) => e.spotInfoId);
+
+      const remain = sArr.filter((e) => !tArr.includes(e.spotInfoId));
+
+      const yItems = new Y.Array();
+
+      // 만약에 스케쥴에 없는 장소가 있다 ?! >> 없는것 왼쪽 리스트에 추가해주기
+      if (totalYList.length === 0) {
+        yItems.insert(0, [...remain]);
+        totalYList.insert(0, [yItems]);
+        console.log("데이길이: ", result.length);
+        for (let i = 0; i < 2; i++) {
+          const yItems = new Y.Array();
+          yItems.insert(0, []);
+          totalYList.insert(i + 1, [yItems]);
+        }
+      }
+
+      const getKoreanDayOfWeek = (dateString) => {
+        const days = ["일", "월", "화", "수", "목", "금", "토"];
+        const date = new Date(dateString.replace(/\./g, "-"));
+        const dayOfWeek = days[date.getDay()];
+        return dayOfWeek;
+      };
+
+      const resultWeek = result.map(function (date) {
+        return getKoreanDayOfWeek(date);
+      });
+      console.log("데이 ", result, resultWeek);
+      setDayOfWeek(resultWeek);
+    } catch (e) {
+      // console.log(e);
+    }
   };
 
   useEffect(() => {
@@ -115,39 +204,42 @@ const PlanSchedule = (props) => {
       const totalYList = provider.doc.getArray("totalYList");
 
       // totalYList.delete(0, totalYList.length);
+      // console.log(totalYList.length);
+
+      getDay(saveYSpot, totalYList);
 
       update(saveYSpot, totalYList);
+      console.log("casddddd  ");
 
       saveYSpot.observe(() => {
+        console.log(saveYSpot.length, totalYList.toJSON().flat().length);
         // 추가했을때
         update(saveYSpot, totalYList);
-
-        // 삭제했을때
-        const arr = saveYSpot.toArray().map((e) => e.spotInfoId);
-        const remain = totalYList
-          .toJSON()[0]
-          .filter((e) => arr.includes(e.spotInfoId));
-
-        const yItems = new Y.Array();
-
-        yItems.insert(0, [...remain]);
-        totalYList.insert(0, [yItems]);
-
-        setTotalY(totalYList);
-        setTotalList(totalYList.toJSON());
       });
 
+      let timeoutId = null;
+
       totalYList.observeDeep(() => {
-        console.log("left", totalYList.toJSON());
-        setTotalY(totalYList);
-        setTotalList(totalYList.toJSON());
+        // 이전 타임아웃이 있다면 취소
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
+
+        // 100ms 후에 내부 코드 실행
+        timeoutId = setTimeout(() => {
+          setTotalList(totalYList.toJSON());
+          setTotalY(totalYList);
+        }, 10);
       });
     }
   }, [myInfo, provider]);
 
   useEffect(() => {
-    setUserList(dummyUserList);
-    console.log("g", totalList);
+    setUserList(plan.coworkerList);
+    // 날짜 가져오기
+    // getDay();
+    console.log("온라인", online);
+    console.log("플랜", plan.coworkerList);
   }, []);
 
   return (
@@ -165,7 +257,14 @@ const PlanSchedule = (props) => {
           {/*  유저 프사 박스  */}
           <section className={styles.userBox}>
             {userList.map((el, idx) => {
-              return <img key={idx} src={el.img} alt={""} />;
+              return (
+                <img
+                  key={idx}
+                  src={el.profileImage}
+                  alt={""}
+                  style={{ borderColor: COLOR[idx] }}
+                />
+              );
             })}
           </section>
           <div className={styles.line} />
@@ -219,7 +318,10 @@ const PlanSchedule = (props) => {
             <section className={styles.leftSection}>
               <Image src={scheduleIcon} alt={""} width={18} height={18} />
               <p>여행일정</p>
-              <p>24.05.05(월) - 24.05.08(목)</p>
+              <p>
+                {day[0]}({dayOfWeek[0]}) - {day[day.length - 1]}(
+                {dayOfWeek[dayOfWeek.length - 1]})
+              </p>
               <Image
                 className={styles.update}
                 src={updateIcon}
@@ -243,8 +345,10 @@ const PlanSchedule = (props) => {
                   {/*일차 및 계산 버튼  */}
                   <header className={styles.scHeader}>
                     <div className={styles.scHeaderBox}>
-                      <p className={styles.scP1}>1일차</p>
-                      <p className={styles.scP2}>24.05.05(월)</p>
+                      <p className={styles.scP1}>{arrIdx}일차</p>
+                      <p className={styles.scP2}>
+                        {day[arrIdx - 1]}({dayOfWeek[arrIdx - 1]})
+                      </p>
                     </div>
                     {/*  최단거리계산 버튼  */}
                     <CalculateBtn />

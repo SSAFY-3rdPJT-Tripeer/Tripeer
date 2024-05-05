@@ -7,17 +7,20 @@ import Image from "next/image";
 
 export default function ScheduleItem2({ data, idx }) {
   const categoryList = {
-    명소: {
+    관광지: {
       src: GoodPlaceIcon,
       color: "#2D8F8A",
+      title: "명소",
     },
     숙박: {
       src: SleepIcon,
       color: "#D26D6D",
+      title: "숙박",
     },
-    맛집: {
+    음식점: {
       src: EatIcon,
       color: "#D25B06",
+      title: "맛집",
     },
   };
 
@@ -26,16 +29,16 @@ export default function ScheduleItem2({ data, idx }) {
       <section className={styles.left}>
         <div
           className={styles.numberBox}
-          style={{ backgroundColor: categoryList[data.category].color }}>
+          style={{ backgroundColor: categoryList[data.contentType].color }}>
           {idx + 1}
         </div>
-        <p className={styles.name}>{data.name}</p>
+        <p className={styles.name}>{data.title}</p>
       </section>
       <section className={styles.right}>
         <p
           className={styles.category}
-          style={{ color: categoryList[data.category].color }}>
-          {data.category}
+          style={{ color: categoryList[data.contentType].color }}>
+          {categoryList[data.contentType].title}
         </p>
         <Image src={kebobBtnSrc} alt={""} width={24} height={24} />
       </section>

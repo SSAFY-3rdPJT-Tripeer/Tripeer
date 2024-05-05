@@ -6,6 +6,17 @@ import addressSrc from "@/public/plan/address.png";
 import ScheduleCategoryChip from "@/components/plan/detail/schedule/scheduleCategoryChip";
 
 export default function ScheduleItem({ data }) {
+  const COLOR = [
+    "#A60000",
+    "#DE5000",
+    "#D78E00",
+    "#48B416",
+    "#0065AE",
+    "#20178B",
+    "#65379F",
+    "#F96976",
+  ];
+
   return (
     <div className={styles.container}>
       <div className={styles.imgBox}>
@@ -31,7 +42,8 @@ export default function ScheduleItem({ data }) {
         {/*<ScheduleCategoryChip category={data.contentType} />*/}
       </section>
       <section className={styles.right}>
-        <Image className={styles.exit} src={exitSrc} alt={""} />
+        {/*<Image className={styles.exit} src={exitSrc} alt={""} />*/}
+        <div></div>
         <div className={styles.profileBox}>
           <Image
             className={styles.profile}
@@ -44,6 +56,7 @@ export default function ScheduleItem({ data }) {
                       (max-width: 1200px) 50vw,
                       33vw"
             quality={50}
+            style={{ borderColor: COLOR[data.order] }}
           />
         </div>
       </section>

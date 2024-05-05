@@ -189,6 +189,7 @@ const PageDetail = (props) => {
       />,
       <PlanSchedule
         key={"PlanSchedule"}
+        plan={plan}
         online={online}
         myInfo={myInfo}
         provider={provider}
