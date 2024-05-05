@@ -18,7 +18,7 @@ public interface UserService {
     //회원가입
     public String memberSignup(JoinDTO joinDTO, HttpServletResponse response);
     //프로필 사진 변경
-    public String uploadProfileImage(MultipartFile file, String token) throws IOException;
+    public String uploadProfileImage(MultipartFile file, String token);
     //내 정보 수정
     public void modifyMyInfo(String token, UserInfoDTO info);
     //소셜 정보 획득
