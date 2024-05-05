@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService{
 
     //프로필 사진 변경
     @Override
-    public void uploadprofileImage(MultipartFile file, String token) throws IOException {
+    public String uploadProfileImage(MultipartFile file, String token) throws IOException {
 
         // 허용할 MIME 타입들 설정 (이미지만 허용하는 경우)
         List<String> allowedMimeTypes = List.of("image/jpg", "image/jpeg", "image/png");
@@ -93,15 +93,14 @@ public class UserServiceImpl implements UserService{
         // 허용되지 않는 MIME 타입의 파일은 처리하지 않음
         String fileContentType = file.getContentType();
         if (!allowedMimeTypes.contains(fileContentType)) {
-            throw new IllegalArgumentException("Unsupported file type");
+            throw new CustomException(ErrorCode.UNSUPPORTED_FILE_TYPE);
         }
 
         ObjectMetadata metadata = new ObjectMetadata(); //메타데이터
 
         metadata.setContentLength(file.getSize()); // 파일 크기 명시
         metadata.setContentType(fileContentType);   // 파일 확장자 명시
-
-        long userId = jwtUtil.getUserId(token);
+        long userId = jwtUtil.getUserId(jwtUtil.splitToken(token));
         String originName = file.getOriginalFilename(); //원본 이미지 이름
         String ext = originName.substring(originName.lastIndexOf(".")); //확장자
         String changedName = "ProfileImage/" + userId + ext;
@@ -113,13 +112,14 @@ public class UserServiceImpl implements UserService{
 
         } catch (IOException e) {
             log.error("file upload error " + e.getMessage());
-            throw new IOException(); //커스텀 예외 던짐.
+            throw new CustomException(ErrorCode.S3_UPLOAD_ERROR);
         }
 
         UserEntity user = userRepository.findByUserId(userId);
         user.setProfileImage(amazonS3.getUrl(bucketName, changedName).toString());
         userRepository.save(user);
-
+        String url = "https://tripeer207.s3.ap-northeast-2.amazonaws.com/" + changedName;
+        return url;
     }
 
     //내 정보 수정

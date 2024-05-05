@@ -2,6 +2,7 @@ package j10d207.tripeer.user.controller;
 
 import j10d207.tripeer.exception.CustomException;
 import j10d207.tripeer.exception.ErrorCode;
+import j10d207.tripeer.history.db.dto.GalleryDTO;
 import j10d207.tripeer.response.Response;
 import j10d207.tripeer.user.db.dto.JoinDTO;
 import j10d207.tripeer.user.db.dto.SocialInfoDTO;
@@ -14,8 +15,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -71,6 +75,14 @@ public class UserController {
         userService.modifyMyInfo(request.getHeader("Authorization"), userInfoDTO);
         return Response.of(HttpStatus.OK, "내 정보 수정 완료", null);
     }
+
+    //내 프로필 수정
+    @PatchMapping("/myinfo/profileimage")
+    public Response<?> myInfoModify(HttpServletRequest request, @RequestPart(value = "image") MultipartFile multipartFile) {
+        String imageUrl =  userService.uploadProfileImage(multipartFile, request.getHeader("Authorization"));
+        return Response.of(HttpStatus.OK, "내 프로필 수정 완료", Map.of("imageUrl", imageUrl));
+    }
+
 
     // access 토큰 재발급
     @PostMapping("/reissue")
