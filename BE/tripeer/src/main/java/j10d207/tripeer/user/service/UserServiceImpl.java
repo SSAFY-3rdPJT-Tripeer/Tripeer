@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService{
 
     //프로필 사진 변경
     @Override
-    public String uploadProfileImage(MultipartFile file, String token) throws IOException {
+    public String uploadProfileImage(MultipartFile file, String token){
 
         // 허용할 MIME 타입들 설정 (이미지만 허용하는 경우)
         List<String> allowedMimeTypes = List.of("image/jpg", "image/jpeg", "image/png");
