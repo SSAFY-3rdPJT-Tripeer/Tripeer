@@ -2,6 +2,8 @@ package j10d207.tripeer.plan.service;
 
 import j10d207.tripeer.exception.CustomException;
 import j10d207.tripeer.exception.ErrorCode;
+import j10d207.tripeer.odsay.db.dto.TimeRootInfoDTO;
+import j10d207.tripeer.odsay.service.OdsayService;
 import j10d207.tripeer.place.db.ContentTypeEnum;
 import j10d207.tripeer.place.db.entity.*;
 import j10d207.tripeer.place.db.repository.SpotInfoRepository;
@@ -47,6 +49,8 @@ public class PlanServiceImpl implements PlanService {
 
     private final SpotInfoRepository spotInfoRepository;
     private final PlanDetailRepository planDetailRepository;
+
+    private final OdsayService odsayService;
 
     //플랜 생성
     @Override
@@ -558,6 +562,21 @@ public class PlanServiceImpl implements PlanService {
             return coworkerReqDTO;
         }
         throw new CustomException(ErrorCode.NOT_HAS_COWORKER);
+    }
+
+    //목적지간 최단 루트 계산
+    @Override
+    public TimeRootInfoDTO getShortTime(int startId, int endId) {
+        SpotInfoEntity startSpot = spotInfoRepository.findBySpotInfoId(startId);
+        SpotInfoEntity endSpot = spotInfoRepository.findBySpotInfoId(endId);
+
+        TimeRootInfoDTO baseInfo = TimeRootInfoDTO.builder()
+                .startTitle(startSpot.getTitle())
+                .endTitle(endSpot.getTitle())
+                .build();
+
+        TimeRootInfoDTO result = odsayService.getPublicTime(startSpot.getLongitude(), startSpot.getLatitude(), endSpot.getLongitude(), endSpot.getLatitude(), baseInfo);
+        return result;
     }
 
 }

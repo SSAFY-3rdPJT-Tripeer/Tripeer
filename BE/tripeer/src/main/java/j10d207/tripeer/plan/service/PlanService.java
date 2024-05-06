@@ -1,5 +1,6 @@
 package j10d207.tripeer.plan.service;
 
+import j10d207.tripeer.odsay.db.dto.TimeRootInfoDTO;
 import j10d207.tripeer.plan.db.dto.*;
 
 import java.util.List;
@@ -39,4 +40,7 @@ public interface PlanService {
     public Map<Integer, List<PlanDetailResDTO>> getAllPlanDetail(long planId);
     //플랜 나의 정보 조회(기존 내정보 + 나의 coworker에서의 순서)
     public CoworkerReqDTO getPlanMyinfo(long planId, String token);
+    //목적지간 최단 루트 계산
+    public TimeRootInfoDTO getShortTime(int startId, int endId);
+    //플랜 최단거리 조정
 }

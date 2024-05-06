@@ -101,6 +101,7 @@ public class OdsayServiceImpl implements OdsayService{
             return timeRootInfoDTO;
         }
         if(root.has("error")) {
+            System.out.println("root = " + root);
             int code = root.getAsJsonObject("error").get("code").getAsInt();
             if( code == 3 ) {
                 //    {"msg":"출발지 정류장이 없습니다.","code":"3"}

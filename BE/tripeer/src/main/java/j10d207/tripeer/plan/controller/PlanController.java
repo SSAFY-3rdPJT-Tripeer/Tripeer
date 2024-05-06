@@ -1,5 +1,6 @@
 package j10d207.tripeer.plan.controller;
 
+import j10d207.tripeer.odsay.db.dto.TimeRootInfoDTO;
 import j10d207.tripeer.plan.db.dto.*;
 import j10d207.tripeer.plan.service.PlanService;
 import j10d207.tripeer.response.Response;
@@ -180,5 +181,12 @@ public class PlanController {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    //목적지간 최단 루트 계산
+    @GetMapping("/optimizing/short")
+    public Response<TimeRootInfoDTO> getShortTime(@RequestParam("startId") int startId, @RequestParam("endId") int endId) {
+        TimeRootInfoDTO result = planService.getShortTime(startId, endId);
+        return Response.of(HttpStatus.OK, "목적지 간 경로 조회 완료", result);
     }
 }
