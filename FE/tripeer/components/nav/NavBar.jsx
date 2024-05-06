@@ -20,6 +20,7 @@ const NavBar = () => {
   const router = useRouter();
   const store = useRegisterStore();
   const [myname, setMyname] = useState("");
+  const [myImg, setMyImg] = useState("");
   const navRenderPath = {
     "/": true,
     "/plan": true,
@@ -40,6 +41,7 @@ const NavBar = () => {
   const getName = async () => {
     const data = await store.myInfo;
     setMyname(data?.nickname);
+    setMyImg(data?.profileImage);
   };
 
   useEffect(() => {
@@ -76,8 +78,35 @@ const NavBar = () => {
             </Link>
             {isLogin ? (
               <div className={style.profileBox}>
-                <div className={style.userImg} />
-                <p className={style.userName}>{myname}</p>
+                {myImg ? (
+                  <div
+                    className={style.userImgBox}
+                    style={{
+                      background: `url(${myImg})`,
+                      width: "40px",
+                      height: "40px",
+                      backgroundRepeat: "no-repeat",
+                      backgroundSize: "contain",
+                      backgroundPosition: "center",
+                    }}>
+                    {/* <Image
+                    className={style.userImg}
+                    loader={() => myImg ? `${myImg}` : `${defaultImg}`}
+                    src={myImg ? `${myImg}` : `${defaultImg}`}
+                    fill
+                    placeholder="blur"
+                    blurDataURL={`${defaultImg}`}
+                    alt="사진"
+                    priority="false"
+                    sizes="(max-width: 768px) 100vw,
+                      (max-width: 1200px) 50vw,
+                      33vw"
+                    quality={50}></Image> */}
+                  </div>
+                ) : (
+                  <></>
+                )}
+                <p className={style.userName}>{myname ? myname : ""}</p>
                 <Image
                   src={toggleIcon}
                   width={TOGGLE_WIDTH}
