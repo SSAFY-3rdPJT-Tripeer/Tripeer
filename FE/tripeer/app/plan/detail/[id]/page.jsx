@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import * as Y from "yjs";
 import { WebsocketProvider } from "y-websocket";
 import { useRouter } from "next/navigation";
+import { io } from "socket.io-client";
 
 // 내부 모듈
 import PlanNav from "@/components/nav/PlanNav";
@@ -33,6 +34,13 @@ const PageDetail = (props) => {
   /** @type {RTCPeerConnection} */
   const [myPeerConnection, setMyPeerConnection] = useState(null);
   const [roomName, setRoomName] = useState(null);
+  const [myAudio, setMyaudio] = useState(null);
+  const [media, setMedia] = useState(null);
+  const myface = useRef(null);
+  const peerface = useRef(null);
+  const peer = useRef(null);
+  const socket = useRef(null);
+
   const COLOR = [
     "#A60000",
     "#DE5000",
@@ -171,26 +179,128 @@ const PageDetail = (props) => {
     }
   }, [mode]);
 
-  // socket code
-  socket.on("welcome", async () => {
-    const offer = await myPeerConnection.createOffer();
-    myPeerConnection.setLocalDescription(offer);
-    console.log("sent the offer");
-    socket.emit("offer", offer, roomName);
-  });
-
-  // RTC code
-  // const makeConnection = function () {
-  //   setMyPeerConnection(new RTCPeerConnection());
+  // const makeConnection = () => {
+  //   const peerInfo = new RTCPeerConnection({
+  //     iceServers: [
+  //       {
+  //         urls: [
+  //           "stun:stun.l.google.com:19302",
+  //           "stun:stun1.l.google.com:19302",
+  //           "stun:stun2.l.google.com:19302",
+  //           "stun:stun3.l.google.com:19302",
+  //           "stun:stun4.l.google.com:19302",
+  //         ],
+  //       },
+  //     ],
+  //   });
+  //   console.log(peerInfo);
+  //   peerInfo.addEventListener("icecandidate", handleIce);
+  //   setMyPeerConnection(peerInfo);
   // };
-
-  // const initCall = async function () {
-  //   makeConnection();
+  // const handleIce = function (data) {
+  //   console.log("sent candidate");
+  //   socket.emit("ice", data.candidate, roomName);
   // };
 
   useEffect(() => {
-    // initCall();
-    console.log(socket);
+    if (roomName && myStream) {
+      const sock = io("https://k10d207.p.ssafy.io", {
+        path: "/rtc",
+        transports: ["websocket", "polling"],
+        withCredentials: true,
+      });
+      const peerInfo = new RTCPeerConnection({
+        iceServers: [
+          {
+            urls: [
+              "stun:stun.l.google.com:19302",
+              "stun:stun1.l.google.com:19302",
+              "stun:stun2.l.google.com:19302",
+              "stun:stun3.l.google.com:19302",
+              "stun:stun4.l.google.com:19302",
+            ],
+          },
+        ],
+      });
+      peer.current = peerInfo;
+      peerInfo.addEventListener("icecandidate", (data) => {
+        console.log("sent candidate");
+        sock.emit("ice", data.candidate, roomName);
+      });
+      peerInfo.addEventListener("addstream", (data) => {
+        peerface.current.srcObject = data.stream;
+      });
+      myStream
+        .getTracks()
+        .forEach((track) => peerInfo.addTrack(track, myStream));
+      setMyPeerConnection(peerInfo);
+
+      socket.current = sock;
+      sock.emit("join_room", roomName);
+      sock.on("welcome", async () => {
+        const offer = await peerInfo.createOffer();
+        peerInfo.setLocalDescription(offer);
+        console.log("sent the offer");
+        sock.emit("offer", offer, roomName);
+      });
+      sock.on("offer", async (offer) => {
+        console.log("received the offer");
+        console.log(offer);
+        peerInfo.setRemoteDescription(offer);
+        const answer = await peerInfo.createAnswer();
+        console.log(answer);
+        peerInfo.setLocalDescription(answer);
+        sock.emit("answer", answer, roomName);
+        console.log("sent the answer");
+      });
+      sock.on("answer", (answer) => {
+        peerInfo.setRemoteDescription(answer);
+        console.log("received the answer");
+      });
+      sock.on("ice", (ice) => {
+        console.log("recieve candidate");
+        peerInfo.addIceCandidate(ice);
+      });
+    }
+  }, [roomName, myStream]);
+
+  useEffect(() => {
+    let stream;
+    const getAudios = async function () {
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const audios = devices.filter((device) => {
+          return device.kind === "audioinput";
+        });
+        const currentAudio = stream.getAudioTracks()[0];
+        console.log("커렌트", currentAudio);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    const getMedia = async function () {
+      const initialConstrains = {
+        audio: false,
+        video: false,
+      };
+      try {
+        stream = await navigator.mediaDevices.getUserMedia(initialConstrains);
+        console.log(myface.current);
+        myface.current.srcObject = stream;
+        await getAudios();
+        setMystream(stream);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getMedia();
+    return () => {
+      peer.current.close();
+      socket.current.close();
+      stream.getAudioTracks().forEach((track) => {
+        track.stop();
+      });
+    };
   }, []);
 
   const RENDER = useMemo(() => {
@@ -286,6 +396,25 @@ const PageDetail = (props) => {
       })}
       <PlanNav current={current} setCurrent={setCurrent}></PlanNav>
       {RENDER[current]}
+      <video
+        ref={myface}
+        autoPlay
+        playsInline
+        width={100}
+        height={100}
+        style={{ border: "1px red solid" }}>
+        myVoice
+      </video>
+      <button>음소거</button>
+      <video
+        ref={peerface}
+        autoPlay
+        playsInline
+        width={100}
+        height={100}
+        style={{ border: "1px red solid" }}>
+        myVoice
+      </video>
     </div>
   );
 };
