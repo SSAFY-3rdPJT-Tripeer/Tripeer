@@ -33,7 +33,6 @@ const PageDetail = (props) => {
   /** @type {RTCPeerConnection} */
   const [myPeerConnection, setMyPeerConnection] = useState(null);
   const [roomName, setRoomName] = useState(null);
-
   const COLOR = [
     "#A60000",
     "#DE5000",
@@ -74,6 +73,7 @@ const PageDetail = (props) => {
   useEffect(() => {
     const setUserState = async () => {
       const res = await api.get(`/plan/myinfo/${props.params.id}`);
+      setRoomName(props.params.id); // socket 연결을 위한 roomName 생성
       setMyInfo(res.data.data);
       setShowInfo(res.data.data.nickname);
       provider.awareness.setLocalStateField("user", {
@@ -170,6 +170,28 @@ const PageDetail = (props) => {
       inputBox.current.focus();
     }
   }, [mode]);
+
+  // socket code
+  socket.on("welcome", async () => {
+    const offer = await myPeerConnection.createOffer();
+    myPeerConnection.setLocalDescription(offer);
+    console.log("sent the offer");
+    socket.emit("offer", offer, roomName);
+  });
+
+  // RTC code
+  // const makeConnection = function () {
+  //   setMyPeerConnection(new RTCPeerConnection());
+  // };
+
+  // const initCall = async function () {
+  //   makeConnection();
+  // };
+
+  useEffect(() => {
+    // initCall();
+    console.log(socket);
+  }, []);
 
   const RENDER = useMemo(() => {
     return [
