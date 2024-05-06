@@ -4,48 +4,17 @@ import Image from "next/image";
 import styles from "./page.module.css";
 import { useEffect, useRef, useState } from "react";
 import api from "@/utils/api";
+import { useRouter } from "next/navigation";
 
 export default function MyPage() {
+  const router = useRouter();
   const [myInfo, setMyInfo] = useState(null);
   const [warn, setWarn] = useState(false);
-  const timer = useRef(null);
-
-  useEffect(() => {
-    const getInfo = async () => {
-      const res = await api.get("/user/myinfo");
-      setMyInfo(res.data.data);
-      console.log(res.data.data);
-    };
-    getInfo();
-    return () => {
-      if (timer.current) clearTimeout(timer.current);
-    };
-  }, []);
-
-  const changeBtns = (idx) => {
-    if (btns[idx].click === false) {
-      const checkBtns = btns.filter((btn) => {
-        return btn.click === true;
-      });
-      if (checkBtns.length >= 3) {
-        setWarn(true);
-        if (timer.current) clearTimeout(timer.current);
-        timer.current = setTimeout(() => {
-          setWarn(false);
-        }, [1000]);
-        return;
-      }
-    }
-    const newBtns = btns.map((btn, id) => {
-      if (id === idx) {
-        btn.click = !btn.click;
-      }
-      return btn;
-    });
-    setWarn(false);
-    setBtns(newBtns);
-  };
-
+  const [year, setYear] = useState("");
+  const [month, setMonth] = useState("");
+  const [day, setDay] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [duplicate, setDuplicate] = useState(false);
   const [btns, setBtns] = useState([
     {
       title: "관광지",
@@ -76,6 +45,122 @@ export default function MyPage() {
       click: false,
     },
   ]);
+
+  const inputNick = useRef(null);
+  const timer = useRef(null);
+
+  const editImage = async (file) => {
+    const form = new FormData();
+    form.append("image", file);
+
+    await api.patch("/user/myinfo/profileimage", form, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    window.location.reload();
+  };
+
+  useEffect(() => {
+    if (myInfo) {
+      console.log(myInfo);
+    }
+  }, [myInfo]);
+
+  const confirm = async () => {
+    if (nickname.length < 2) {
+      setDuplicate(true);
+
+      return false;
+    }
+    const data = await isDuplicate();
+    if (data) {
+      setDuplicate(true);
+      return;
+    } else {
+      let styles = [null, null, null];
+      let id = 0;
+      btns.forEach((item, idx) => {
+        if (item.click === true) {
+          styles[id] = idx + 1;
+          id += 1;
+        }
+      });
+      const request = {
+        nickname,
+        style1Num: styles[0],
+        style2Num: styles[1],
+        style3Num: styles[2],
+        userId: null,
+        birth: null,
+        profileImage: null,
+        style1: null,
+        style2: null,
+        style3: null,
+      };
+      await api.patch(`/user/myinfo`, request);
+      router.push("/");
+    }
+  };
+
+  const isDuplicate = async () => {
+    if (nickname === myInfo.nickname) return false;
+    const res = await api.get(`/user/name/duplicatecheck/${nickname}`);
+    return res.data.data;
+  };
+
+  const changeBtns = (idx) => {
+    if (btns[idx].click === false) {
+      const checkBtns = btns.filter((btn) => {
+        return btn.click === true;
+      });
+      if (checkBtns.length >= 3) {
+        setWarn(true);
+        if (timer.current) clearTimeout(timer.current);
+        timer.current = setTimeout(() => {
+          setWarn(false);
+        }, [1000]);
+        return;
+      }
+    }
+    const newBtns = btns.map((btn, id) => {
+      if (id === idx) {
+        btn.click = !btn.click;
+      }
+      return btn;
+    });
+    setWarn(false);
+    setBtns(newBtns);
+  };
+
+  useEffect(() => {
+    const getInfo = async () => {
+      const res = await api.get("/user/myinfo");
+      setMyInfo(res.data.data);
+      const date = new Date(res.data.data.birth);
+      setYear(date.getFullYear());
+      setMonth(date.getMonth() + 1);
+      setDay(date.getDate());
+      setNickname(res.data.data.nickname);
+      inputNick.current.value = res.data.data.nickname;
+
+      const arrs = [
+        res.data.data.style1,
+        res.data.data.style2,
+        res.data.data.style3,
+      ];
+      const myBtns = btns.map((btn) => {
+        if (arrs.find((item) => item === btn.title)) {
+          btn.click = true;
+        }
+        return btn;
+      });
+      setBtns(myBtns);
+      console.log(res.data.data);
+    };
+    getInfo();
+    return () => {
+      if (timer.current) clearTimeout(timer.current);
+    };
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -112,34 +197,67 @@ export default function MyPage() {
                   if (myInfo) {
                     return myInfo.profileImage;
                   }
-                  return "https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/lowRegisterBg.png";
+                  return "https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/default1.png";
                 }}
                 src={
-                  "https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/lowRegisterBg.png"
+                  "https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/default1.png"
                 }
                 alt="user image"
                 fill
               />
-              <div className={styles.settingBox}>
+              <label className={styles.settingBox} htmlFor="file">
+                <input
+                  type="file"
+                  id="file"
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  onChange={(e) => {
+                    if (e.target.files.length === 0) return;
+                    else editImage(e.target.files[0]);
+                  }}
+                />
                 <div className={styles.settingIcon} />
-              </div>
+              </label>
             </div>
             <div className={styles.inputBox}>
               <p className={styles.nickTitle}>닉네임</p>
               <input
                 type="text"
                 maxLength={10}
-                placeholder={myInfo?.nickname}
+                style={{ borderRadius: "5px" }}
+                ref={inputNick}
+                onChange={(e) => {
+                  setNickname(e.target.value);
+                }}
               />
-              <p className={styles.nickWarn}>1~10자 이내</p>
+              <p className={styles.nickWarn}>2~10자 이내</p>
             </div>
+
             <div className={styles.inputBox}>
               <p className={styles.nickTitle}>생년월일</p>
-              <input type="text" maxLength={4} style={{ width: "50px" }} />
+              <input
+                type="text"
+                maxLength={4}
+                style={{ width: "50px", borderRadius: "5px" }}
+                value={year}
+                disabled
+              />
               <p className={styles.birthInfo}>년</p>
-              <input type="text" maxLength={4} style={{ width: "50px" }} />
+              <input
+                type="text"
+                maxLength={2}
+                style={{ width: "50px", borderRadius: "5px" }}
+                value={month}
+                disabled
+              />
               <p className={styles.birthInfo}>월</p>
-              <input type="text" maxLength={4} style={{ width: "50px" }} />
+              <input
+                type="text"
+                maxLength={2}
+                style={{ width: "50px", borderRadius: "5px" }}
+                value={day}
+                disabled
+              />
               <p className={styles.birthInfo}>일</p>
             </div>
             <div className={styles.styleBox}>
@@ -171,9 +289,26 @@ export default function MyPage() {
               })}
             </div>
             <div className={styles.confirmBox}>
-              <div className={styles.cancelBtn}>이전</div>
-              <div className={styles.confirmBtn}>확인</div>
+              <div
+                className={styles.cancelBtn}
+                onClick={() => {
+                  router.back();
+                }}>
+                이전
+              </div>
+              <div
+                className={styles.confirmBtn}
+                onClick={() => {
+                  confirm();
+                }}>
+                확인
+              </div>
             </div>
+            {duplicate ? (
+              <p style={{ color: "red", marginTop: "12px" }}>
+                중복된 닉네임이거나 닉네임의 글자 수를 확인해주세요.
+              </p>
+            ) : null}
           </section>
         </div>
       </main>
