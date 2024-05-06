@@ -13,8 +13,10 @@ import PlanHome from "@/components/plan/detail/PlanHome";
 import PlanMap from "@/components/plan/detail/PlanMap";
 import PlanSchedule from "@/components/plan/detail/PlanSchedule";
 import api from "@/utils/api";
+import { socket } from "@/components/plan/detail/socket";
 
 const PageDetail = (props) => {
+  const [isConnected, setIsConnected] = useState(false);
   const [provider, setProvider] = useState(null);
   const [current, setCurrent] = useState(0);
   const [plan, setPlan] = useState(null);
@@ -27,6 +29,10 @@ const PageDetail = (props) => {
   const [showInfo, setShowInfo] = useState("...");
   const [timer, setTimer] = useState(null);
   const router = useRouter();
+  const [myStream, setMystream] = useState(null);
+  /** @type {RTCPeerConnection} */
+  const [myPeerConnection, setMyPeerConnection] = useState(null);
+  const [roomName, setRoomName] = useState(null);
 
   const COLOR = [
     "#A60000",
