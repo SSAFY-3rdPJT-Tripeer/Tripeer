@@ -38,20 +38,19 @@ const NavBar = () => {
     window.location.reload();
   };
 
-  const getName = async () => {
-    const data = await store.myInfo;
-    setMyname(data?.nickname);
-    setMyImg(data?.profileImage);
-  };
-
   useEffect(() => {
+    const getName = async () => {
+      const data = await store.myInfo;
+      setMyname(data?.nickname);
+      setMyImg(data?.profileImage);
+    };
     const token = cookies.get("Authorization");
     if (token) {
       setIsLogin(true);
       getName();
       // const data = store.myInfo;
     }
-  }, [path]);
+  }, [path, store]);
 
   return (
     <>
@@ -82,26 +81,28 @@ const NavBar = () => {
                   <div
                     className={style.userImgBox}
                     style={{
-                      background: `url(${myImg})`,
                       width: "40px",
                       height: "40px",
-                      backgroundRepeat: "no-repeat",
-                      backgroundSize: "contain",
-                      backgroundPosition: "center",
+                      position: "relative",
                     }}>
-                    {/* <Image
-                    className={style.userImg}
-                    loader={() => myImg ? `${myImg}` : `${defaultImg}`}
-                    src={myImg ? `${myImg}` : `${defaultImg}`}
-                    fill
-                    placeholder="blur"
-                    blurDataURL={`${defaultImg}`}
-                    alt="사진"
-                    priority="false"
-                    sizes="(max-width: 768px) 100vw,
+                    <Image
+                      className={style.userImg}
+                      loader={() =>
+                        myImg
+                          ? `${myImg}`
+                          : `https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/default1.png`
+                      }
+                      src={
+                        "https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/default1.png"
+                      }
+                      fill
+                      alt="사진"
+                      priority="false"
+                      sizes="(max-width: 768px) 100vw,
                       (max-width: 1200px) 50vw,
                       33vw"
-                    quality={50}></Image> */}
+                      quality={100}
+                    />
                   </div>
                 ) : (
                   <></>
@@ -120,7 +121,11 @@ const NavBar = () => {
                 {toggle ? (
                   <>
                     <ul className={style.options}>
-                      <li className={style.option}>
+                      <li
+                        className={style.option}
+                        onClick={() => {
+                          router.push("/mypage");
+                        }}>
                         <div className={`${style.mypage} ${style.icon}`} />
                         <span>마이 페이지</span>
                       </li>
