@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Slf4j
@@ -43,19 +44,11 @@ public class HistoryController {
 
     @PostMapping("/gallery/upload/{planDayId}")
     public Response<List<GalleryDTO>> uploadsImageAndMovie(
-            HttpServletRequest request,
-            @PathVariable("planDayId") long planDayId,
-            @RequestPart(value = "images") List<MultipartFile> multipartFiles) {
-        try {
-            List<GalleryDTO> galleryList = galleryService.uploadsImageAndMovie(multipartFiles, request.getHeader("Authorization"), planDayId);
-            return Response.of(HttpStatus.OK, "업로드 성공", galleryList);
-        } catch (IllegalArgumentException e) {
-            List<GalleryDTO> galleryList = new ArrayList<>();
-            return Response.of(HttpStatus.BAD_REQUEST, "지원하지 않는 파일타입", galleryList);
-        }
-        catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+                                        HttpServletRequest request,
+                                        @PathVariable("planDayId") long planDayId,
+                                        @RequestPart(value = "images") List<MultipartFile> multipartFiles) {
+        List<GalleryDTO> galleryList = galleryService.uploadsImageAndMovie(multipartFiles, request.getHeader("Authorization"), planDayId);
+        return Response.of(HttpStatus.OK, "업로드 성공", galleryList);
     }
 
     @GetMapping("/gallery/{planDayId}")
@@ -80,9 +73,9 @@ public class HistoryController {
 
 
     @PostMapping("/gallery/delete")
-    public Response<String> deleteResources(@RequestBody GallertIdListDTO galleryIdList) {
+    public Response<String> deleteResources(@RequestBody Map<String, List<Long>> galleryIdList) {
         try {
-            String res = galleryService.deleteGalleryList(galleryIdList.getGallertIdList());
+            String res = galleryService.deleteGalleryList(galleryIdList.get("galleryIdList"));
             return Response.of(HttpStatus.OK, "사진 삭제 성공", res);
         } catch (Exception e) {
             throw new RuntimeException(e);

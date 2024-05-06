@@ -5,6 +5,10 @@ import lombok.*;
 
 import java.math.BigDecimal;
 
+@Table(name = "spot_info", indexes = {
+        @Index(name = "idx_content_type_city", columnList = "contentTypeId, cityId"),
+        @Index(name = "idx_content_type_city_town", columnList = "contentTypeId, cityId, townId")
+})
 @Entity(name = "spot_info")
 @Getter
 @Builder

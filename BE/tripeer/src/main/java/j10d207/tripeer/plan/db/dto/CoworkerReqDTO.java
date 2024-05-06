@@ -5,8 +5,10 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class CoworkerDTO {
-
+public class CoworkerReqDTO {
+    private int order;
     private long planId;
     private long userId;
+    private String profileImage;
+    private String nickname;
 }

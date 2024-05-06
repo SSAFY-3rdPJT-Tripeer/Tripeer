@@ -18,12 +18,17 @@ public enum ErrorCode {
     INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "ACCOUNT-003", "비밀번호가 일치하지 않습니다."),
     USER_NOT_CORRESPOND(HttpStatus.BAD_REQUEST, "ACCOUNT-004", "사용자가 소유하지 않은 변경입니다."),
     TOKEN_EXPIRED_ERROR(HttpStatus.FORBIDDEN, "ACCOUNT-005", "만료되지 않은 access 또는 만료된 refresh 입니다"),
+    DUPLICATE_USER(HttpStatus.BAD_REQUEST, "ACCOUNT-006", "이미 등록된 사용자입니다."),
+
+    // plan
     HAS_BUCKET(HttpStatus.BAD_REQUEST, "PLAN-001", "이미 등록된 장소입니다."),
     NOT_HAS_COWORKER(HttpStatus.BAD_REQUEST, "PLAN-002", "사용자가 소속되지 않은 플랜입니다."),
 
 
-    //history
-    GALLERY_NOT_FOUND(HttpStatus.NOT_FOUND, "history-001", "이미지를 찾을 수 없습니다."),
+    //gallery
+    GALLERY_NOT_FOUND(HttpStatus.NOT_FOUND, "gallery-001", "이미지를 찾을 수 없습니다."),
+    UNSUPPORTED_FILE_TYPE(HttpStatus.BAD_REQUEST, "gallery-002", "지원하지 않는 파일타입"),
+    S3_UPLOAD_ERROR(HttpStatus.BAD_REQUEST, "gallery-003", "지원하지 않는 파일타입"),
 
     //city
     CITY_NOT_FOUND(HttpStatus.NOT_FOUND, "CITY-001", "도시를 찾을 수 없습니다."),
