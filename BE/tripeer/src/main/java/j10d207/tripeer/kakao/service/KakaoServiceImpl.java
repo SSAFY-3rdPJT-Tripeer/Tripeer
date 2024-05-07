@@ -46,8 +46,10 @@ public class KakaoServiceImpl implements KakaoService{
 
     @Override
     public List<PlanDetailResDTO> getShortTime(long planDayId) throws IOException {
+//      planDayId로 여행 루트 가져옴
         List<PlanDetailEntity> detailList = planDetailRepository.findByPlanDay_PlanDayId(planDayId, Sort.by(Sort.Direction.ASC, "step"));
 
+//      coordinate의 처음과 끝은 start와 end지점  => 이거 대신에 optimizingTime쓰기
         List<CoordinateDTO> coordinateDTOList = new ArrayList<>();
         for (int i = 0; i < detailList.size(); i++) {
             CoordinateDTO coordinateDTO = CoordinateDTO.builder()
@@ -57,8 +59,9 @@ public class KakaoServiceImpl implements KakaoService{
                     .build();
             coordinateDTOList.add(coordinateDTO);
         }
-        TimeRootInfoDTO[][] timeTable = getTimeTable(coordinateDTOList);
 
+//      timetable만들기
+        TimeRootInfoDTO[][] timeTable = getTimeTable(coordinateDTOList);
         for (int i = 0; i < timeTable.length; i++) {
             for (int j = 0; j < timeTable.length; j++) {
                 System.out.print(timeTable[i][j] + " ");
@@ -67,6 +70,7 @@ public class KakaoServiceImpl implements KakaoService{
         }
 
         ArrayList<Integer> startLocation  = new ArrayList<>();
+//      startlocation 재정의 필요
         startLocation.add(timeTable.length-2);
         RootSolve root = new RootSolve(timeTable);
         root.solve(0, timeTable.length-2, 0, new ArrayList<>(), startLocation);
@@ -105,6 +109,11 @@ public class KakaoServiceImpl implements KakaoService{
     @Override
     public TimeRootInfoDTO[][] getTimeTable(List<CoordinateDTO> coordinates) throws IOException {
         TimeRootInfoDTO[][] timeTable = new TimeRootInfoDTO[coordinates.size()][coordinates.size()];
+        for (int i = 0; i < timeTable.length; i++) {
+            for (int j = 0; j < timeTable[i].length; j++) {
+                timeTable[i][j] = new TimeRootInfoDTO(); // TimeRootInfoDTO의 새 인스턴스를 생성하여 할당
+            }
+        }
         for (int i = 0; i < coordinates.size(); i++) {
             for (int j = i; j < coordinates.size(); j++) {
                 if(i == j) continue;
@@ -112,7 +121,13 @@ public class KakaoServiceImpl implements KakaoService{
                 timeTable[j][i] = timeTable[i][j];
             }
         }
-        System.out.println("Arrays.deepToString(timeTable) = " + Arrays.deepToString(timeTable));
+
+        for (int i = 0; i < coordinates.size(); i++) {
+            for (int j = i; j < coordinates.size(); j++) {
+                System.out.println(timeTable[i][j] + " ");
+            }
+            System.out.println();
+        }
 
         return timeTable;
     }
