@@ -169,7 +169,6 @@ public class SpotServiceImpl implements SpotService{
 
         if(spotAddReqDTO.isAddPlanCheck()) {
             planService.addPlanSpot(spotAddReqDTO.getPlanId(), newSpotInfo.getSpotInfoId(), request.getHeader("Authorization"));
-
             return true;
         }
 
