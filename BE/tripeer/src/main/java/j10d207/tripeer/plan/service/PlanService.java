@@ -43,4 +43,5 @@ public interface PlanService {
     //목적지간 최단 루트 계산
     public TimeRootInfoDTO getShortTime(int startId, int endId);
     //플랜 최단거리 조정
+    public List<PlanDetailResDTO> getOptimizingTime(List<Integer> spotIdList);
 }
