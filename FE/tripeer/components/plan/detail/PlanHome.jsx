@@ -3,7 +3,7 @@ import styles from "./planHome.module.css";
 import api from "@/utils/api";
 
 const PlanHome = (props) => {
-  const { plan, online, provider, myInfo, mouseInfo } = props;
+  const { plan, online, provider, myInfo, mouseInfo, handleMuteBtn } = props;
   const [title, setTitle] = useState("");
   const [members, setMembers] = useState([]);
   const [towns, setTowns] = useState([]);
@@ -185,7 +185,15 @@ const PlanHome = (props) => {
                         <p className={styles.memberName}>{member.nickname}</p>
                       </div>
                       <div className={styles.memberSounds}>
-                        <div className={styles.mic}></div>
+                        {member.nickname === myInfo.nickname ? (
+                          <div
+                            className={styles.mic}
+                            onClick={() => {
+                              handleMuteBtn();
+                            }}></div>
+                        ) : (
+                          <div className={styles.mic}></div>
+                        )}
                         <div className={styles.speaker}></div>
                       </div>
                     </div>

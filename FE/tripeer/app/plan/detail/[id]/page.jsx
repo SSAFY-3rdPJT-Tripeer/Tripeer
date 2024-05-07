@@ -31,8 +31,7 @@ const PageDetail = (props) => {
   const [timer, setTimer] = useState(null);
   const router = useRouter();
   const [myStream, setMystream] = useState(null);
-  /** @type {RTCPeerConnection} */
-  const [myPeerConnection, setMyPeerConnection] = useState(null);
+  const myPeerConnection = useRef({});
   const [roomName, setRoomName] = useState(null);
   const [myAudio, setMyaudio] = useState(null);
   const [media, setMedia] = useState(null);
@@ -40,6 +39,21 @@ const PageDetail = (props) => {
   const peerface = useRef(null);
   const peer = useRef(null);
   const socket = useRef(null);
+  const [muted, setMuted] = useState(false);
+  const selectedCandidate = useRef({});
+  const localStream = useRef(null);
+  const box = useRef(null);
+
+  const handleMuteBtn = function () {
+    localStream.current.getAudioTracks().forEach((track) => {
+      track.enabled = !track.enabled;
+    });
+    if (!muted) {
+      setMuted(true);
+    } else {
+      setMuted(false);
+    }
+  };
 
   const COLOR = [
     "#A60000",
@@ -179,129 +193,151 @@ const PageDetail = (props) => {
     }
   }, [mode]);
 
-  // const makeConnection = () => {
-  //   const peerInfo = new RTCPeerConnection({
-  //     iceServers: [
-  //       {
-  //         urls: [
-  //           "stun:stun.l.google.com:19302",
-  //           "stun:stun1.l.google.com:19302",
-  //           "stun:stun2.l.google.com:19302",
-  //           "stun:stun3.l.google.com:19302",
-  //           "stun:stun4.l.google.com:19302",
-  //         ],
-  //       },
-  //     ],
-  //   });
-  //   console.log(peerInfo);
-  //   peerInfo.addEventListener("icecandidate", handleIce);
-  //   setMyPeerConnection(peerInfo);
-  // };
-  // const handleIce = function (data) {
-  //   console.log("sent candidate");
-  //   socket.emit("ice", data.candidate, roomName);
-  // };
-
   useEffect(() => {
-    if (roomName && myStream) {
-      const sock = io("https://k10d207.p.ssafy.io", {
+    if (roomName) {
+      const makeConnect = async (userId) => {
+        myPeerConnection.current[userId] = new Object();
+        myPeerConnection.current[userId].connection = new RTCPeerConnection({
+          iceServers: [
+            {
+              urls: [
+                "stun:stun.l.google.com:19302",
+                "stun:stun1.l.google.com:19302",
+                "stun:stun2.l.google.com:19302",
+                "stun:stun3.l.google.com:19302",
+                "stun:stun4.l.google.com:19302",
+              ],
+            },
+          ],
+        });
+        myPeerConnection.current[userId].connection.addEventListener(
+          "icecandidate",
+          icecandidate,
+        );
+        myPeerConnection.current[userId].connection.addEventListener(
+          "addstream",
+          addstream,
+        );
+
+        localStream.current.getTracks().forEach(async (track) => {
+          await myPeerConnection.current[userId].connection.addTrack(
+            track,
+            localStream.current,
+          );
+        });
+      };
+
+      const socket = io("https://k10d207.p.ssafy.io", {
         path: "/rtc",
         transports: ["websocket", "polling"],
         withCredentials: true,
       });
-      const peerInfo = new RTCPeerConnection({
-        iceServers: [
-          {
-            urls: [
-              "stun:stun.l.google.com:19302",
-              "stun:stun1.l.google.com:19302",
-              "stun:stun2.l.google.com:19302",
-              "stun:stun3.l.google.com:19302",
-              "stun:stun4.l.google.com:19302",
-            ],
-          },
-        ],
+      socket.emit("join_room", roomName);
+      socket.on("welcome", async ({ userId }) => {
+        await makeConnect(userId);
+        const offer =
+          await myPeerConnection.current[userId].connection.createOffer();
+        await myPeerConnection.current[userId].connection.setLocalDescription(
+          offer,
+        );
+        socket.emit("offer", offer, roomName);
       });
-      peer.current = peerInfo;
-      peerInfo.addEventListener("icecandidate", (data) => {
-        console.log("sent candidate");
-        sock.emit("ice", data.candidate, roomName);
+      socket.on("offer", async ({ userId, offer }) => {
+        await makeConnect(userId);
+        console.log("여기:", myPeerConnection.current[userId]);
+        if (!myPeerConnection.current[userId].connection.remoteDescription) {
+          await myPeerConnection.current[
+            userId
+          ].connection.setRemoteDescription(offer);
+          console.log("갓니");
+          console.log(roomName);
+          const answer =
+            await myPeerConnection.current[userId].connection.createAnswer(
+              offer,
+            );
+          await myPeerConnection.current[userId].connection.setLocalDescription(
+            answer,
+          );
+          socket.emit("answer", {
+            answer,
+            // offer,
+            toUserId: userId,
+            roomName: roomName,
+          });
+        }
+        // console.log("offer : ", offer);
+        // console.log("myPeerConnection : ", myPeerConnection);
       });
-      peerInfo.addEventListener("addstream", (data) => {
-        peerface.current.srcObject = data.stream;
-      });
-      myStream
-        .getTracks()
-        .forEach((track) => peerInfo.addTrack(track, myStream));
-      setMyPeerConnection(peerInfo);
+      socket.on("answer", async ({ userId, answer, toUserId }) => {
+        if (myPeerConnection.current[userId] === undefined) {
+          await myPeerConnection.current[
+            userId
+          ].connection.setRemoteDescription(answer);
+        }
+        console.log("여기는ㄴ~~~??");
 
-      socket.current = sock;
-      sock.emit("join_room", roomName);
-      sock.on("welcome", async () => {
-        const offer = await peerInfo.createOffer();
-        peerInfo.setLocalDescription(offer);
-        console.log("sent the offer");
-        sock.emit("offer", offer, roomName);
+        console.log("answer : ", answer);
+        console.log("toUserId :", toUserId);
       });
-      sock.on("offer", async (offer) => {
-        console.log("received the offer");
-        console.log(offer);
-        peerInfo.setRemoteDescription(offer);
-        const answer = await peerInfo.createAnswer();
-        console.log(answer);
-        peerInfo.setLocalDescription(answer);
-        sock.emit("answer", answer, roomName);
-        console.log("sent the answer");
+      socket.on("ice", async ({ userId, candidate }) => {
+        if (selectedCandidate.current[candidate.candidate] === undefined) {
+          selectedCandidate.current[candidate.candidate] = true;
+          console.log(myPeerConnection.current);
+          console.log(userId);
+          await myPeerConnection.current[userId].connection.addIceCandidate(
+            candidate,
+          );
+        }
+        console.log("ice:", candidate);
       });
-      sock.on("answer", (answer) => {
-        peerInfo.setRemoteDescription(answer);
-        console.log("received the answer");
-      });
-      sock.on("ice", (ice) => {
-        console.log("recieve candidate");
-        peerInfo.addIceCandidate(ice);
-      });
-    }
-  }, [roomName, myStream]);
 
-  useEffect(() => {
-    let stream;
-    const getAudios = async function () {
-      try {
-        const devices = await navigator.mediaDevices.enumerateDevices();
-        const audios = devices.filter((device) => {
-          return device.kind === "audioinput";
-        });
-        const currentAudio = stream.getAudioTracks()[0];
-        console.log("커렌트", currentAudio);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    const getMedia = async function () {
-      const initialConstrains = {
-        audio: false,
-        video: false,
+      socket.on("userDisconnect", ({ userId }) => {
+        delete myPeerConnection.current[userId];
+        console.log("소켓 끝");
+      });
+
+      const useMedia = async () => {
+        await getMedia();
       };
-      try {
-        stream = await navigator.mediaDevices.getUserMedia(initialConstrains);
-        console.log(myface.current);
-        myface.current.srcObject = stream;
-        await getAudios();
-        setMystream(stream);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getMedia();
-    return () => {
-      peer.current.close();
-      socket.current.close();
-      stream.getAudioTracks().forEach((track) => {
-        track.stop();
-      });
-    };
-  }, []);
+
+      const getMedia = async () => {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({
+            audio: true,
+            video: false,
+          });
+          localStream.current = stream;
+          myface.current.srcObject = stream;
+        } catch (err) {
+          console.log(err);
+        }
+      };
+
+      const icecandidate = (ice) => {
+        if (ice.candidate) {
+          socket.emit("ice", ice.candidate, roomName);
+        }
+      };
+
+      const addstream = (data) => {
+        let videoArea = document.createElement("video");
+        videoArea.autoplay = true;
+        videoArea.srcObject = data.stream;
+        box.current.appendChild(videoArea);
+      };
+
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      useMedia();
+
+      return () => {
+        for (let key in myPeerConnection.current) {
+          myPeerConnection.current[key].close();
+        }
+        socket.close();
+        localStream.current.getAudioTracks().forEach((t) => t.stop());
+      };
+    }
+  }, [myPeerConnection, roomName]);
 
   const RENDER = useMemo(() => {
     return [
@@ -314,6 +350,7 @@ const PageDetail = (props) => {
         myInfo={myInfo}
         provider={provider}
         mouseInfo={mouseInfo}
+        handleMuteBtn={handleMuteBtn}
       />,
       <PlanMap
         key={"PlanMap"}
@@ -396,25 +433,27 @@ const PageDetail = (props) => {
       })}
       <PlanNav current={current} setCurrent={setCurrent}></PlanNav>
       {RENDER[current]}
-      <video
-        ref={myface}
-        autoPlay
-        playsInline
-        width={100}
-        height={100}
-        style={{ border: "1px red solid" }}>
-        myVoice
-      </video>
-      <button>음소거</button>
-      <video
-        ref={peerface}
-        autoPlay
-        playsInline
-        width={100}
-        height={100}
-        style={{ border: "1px red solid" }}>
-        myVoice
-      </video>
+      <div className={styles.socketBox} ref={box}>
+        <video
+          ref={myface}
+          autoPlay
+          playsInline
+          width={50}
+          height={50}
+          style={{ border: "1px red solid", display: "none" }}>
+          myVoice
+        </video>
+
+        <video
+          ref={peerface}
+          autoPlay
+          playsInline
+          width={50}
+          height={50}
+          style={{ border: "1px red solid", display: "none" }}>
+          myVoice
+        </video>
+      </div>
     </div>
   );
 };
