@@ -4,8 +4,6 @@ import j10d207.tripeer.odsay.db.dto.CoordinateDTO;
 
 import j10d207.tripeer.odsay.db.dto.TimeRootInfoDTO;
 import j10d207.tripeer.place.db.ContentTypeEnum;
-import j10d207.tripeer.place.db.entity.SpotInfoEntity;
-import j10d207.tripeer.place.db.repository.SpotInfoRepository;
 import j10d207.tripeer.plan.db.dto.PlanDetailResDTO;
 import j10d207.tripeer.plan.db.entity.PlanDetailEntity;
 import j10d207.tripeer.plan.db.repository.PlanDetailRepository;
