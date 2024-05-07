@@ -59,12 +59,6 @@ export default function MyPage() {
     window.location.reload();
   };
 
-  useEffect(() => {
-    if (myInfo) {
-      console.log(myInfo);
-    }
-  }, [myInfo]);
-
   const confirm = async () => {
     if (nickname.length < 2) {
       setDuplicate(true);
@@ -154,7 +148,6 @@ export default function MyPage() {
         return btn;
       });
       setBtns(myBtns);
-      console.log(res.data.data);
     };
     getInfo();
     return () => {
@@ -177,6 +170,7 @@ export default function MyPage() {
           priority
           quality={100}
           loading="eager"
+          unoptimized={false}
         />
       </div>
       <main className={styles.contentBox}>
