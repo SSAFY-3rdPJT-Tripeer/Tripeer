@@ -12,4 +12,6 @@ public interface CityRepository extends JpaRepository <CityEntity, Integer> {
 
     Optional<CityEntity> findByCityName(String cityName);
 
+    Optional<CityEntity> findByCityNameContains(String cityName);
+
 }
