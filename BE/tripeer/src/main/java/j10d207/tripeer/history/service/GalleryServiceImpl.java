@@ -137,13 +137,11 @@ public class GalleryServiceImpl implements GalleryService{
 
     public String deleteGalleryList(List<Long> galleryIdList) {
         for(Long galleryId : galleryIdList){
-            try {
-                GalleryEntity galleryEntity = galleryRepository.findById(galleryId)
-                        .orElseThrow(() -> new CustomException(ErrorCode.GALLERY_NOT_FOUND));
-                amazonS3.deleteObject(bucketName, galleryEntity.getUrl().substring(54));
-                System.out.println(galleryEntity.getUrl().substring(54));
-                galleryRepository.delete(galleryEntity);
-            }
+            GalleryEntity galleryEntity = galleryRepository.findById(galleryId)
+                    .orElseThrow(() -> new CustomException(ErrorCode.GALLERY_NOT_FOUND));
+            amazonS3.deleteObject(bucketName, galleryEntity.getUrl().substring(54));
+            System.out.println(galleryEntity.getUrl().substring(54));
+            galleryRepository.delete(galleryEntity);
         }
         return "갤러리 삭제 성공";
     }
