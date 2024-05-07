@@ -44,15 +44,32 @@ const PageDetail = (props) => {
   const localStream = useRef(null);
   const box = useRef(null);
 
+  // const handleMuteBtn = function () {
+  //   localStream.current.getAudioTracks().forEach((track) => {
+  //     track.enabled = !track.enabled;
+  //   });
+  //   if (!muted) {
+  //     setMuted(true);
+  //   } else {
+  //     setMuted(false);
+  //   }
+  // };
   const handleMuteBtn = function () {
     localStream.current.getAudioTracks().forEach((track) => {
       track.enabled = !track.enabled;
+
+      if (!track.enabled) {
+        myface.current.srcObject
+          .getAudioTracks()
+          .forEach((t) => (t.enabled = false));
+      } else {
+        myface.current.srcObject
+          .getAudioTracks()
+          .forEach((t) => (t.enabled = true));
+      }
     });
-    if (!muted) {
-      setMuted(true);
-    } else {
-      setMuted(false);
-    }
+
+    setMuted(!muted);
   };
 
   const COLOR = [
@@ -215,8 +232,10 @@ const PageDetail = (props) => {
           icecandidate,
         );
         myPeerConnection.current[userId].connection.addEventListener(
-          "addstream",
-          addstream,
+          // "addstream",
+          // addstream,
+          "track",
+          handleTrackEvent,
         );
 
         localStream.current.getTracks().forEach(async (track) => {
@@ -244,13 +263,10 @@ const PageDetail = (props) => {
       });
       socket.on("offer", async ({ userId, offer }) => {
         await makeConnect(userId);
-        console.log("여기:", myPeerConnection.current[userId]);
         if (!myPeerConnection.current[userId].connection.remoteDescription) {
           await myPeerConnection.current[
             userId
           ].connection.setRemoteDescription(offer);
-          console.log("갓니");
-          console.log(roomName);
           const answer =
             await myPeerConnection.current[userId].connection.createAnswer(
               offer,
@@ -274,42 +290,75 @@ const PageDetail = (props) => {
             userId
           ].connection.setRemoteDescription(answer);
         }
-        console.log("여기는ㄴ~~~??");
-
-        console.log("answer : ", answer);
-        console.log("toUserId :", toUserId);
       });
       socket.on("ice", async ({ userId, candidate }) => {
         if (selectedCandidate.current[candidate.candidate] === undefined) {
           selectedCandidate.current[candidate.candidate] = true;
-          console.log(myPeerConnection.current);
-          console.log(userId);
           await myPeerConnection.current[userId].connection.addIceCandidate(
             candidate,
           );
         }
-        console.log("ice:", candidate);
       });
 
       socket.on("userDisconnect", ({ userId }) => {
         delete myPeerConnection.current[userId];
-        console.log("소켓 끝");
       });
 
       const useMedia = async () => {
         await getMedia();
       };
 
+      const getAudios = async () => {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const audios = devices.filter((device) => {
+          return device.kind === "audiooutput";
+          // return device.kind === "audioinput";
+        });
+        const currentAudio = localStream.current.getAudioTracks()[0];
+      };
+      // const getMedia = async () => {
+      //   try {
+      //     const stream = await navigator.mediaDevices.getUserMedia({
+      //       audio: true,
+      //       video: false,
+      //     });
+      //     localStream.current = stream;
+      //     // myface.current.srcObject = stream;
+      //     // 로컬에서 오디오 트랙 재생을 방지
+
+      //     getAudios();
+      //   } catch (err) {
+      //     console.log(err);
+      //   }
+      // };
+
       const getMedia = async () => {
         try {
+          // 오디오와 비디오 트랙을 사용자로부터 요청
           const stream = await navigator.mediaDevices.getUserMedia({
             audio: true,
             video: false,
           });
           localStream.current = stream;
-          myface.current.srcObject = stream;
+
+          // 오디오 트랙을 숨겨 로컬에서는 재생되지 않도록 처리
+          const audioTracks = stream.getAudioTracks();
+          audioTracks.forEach((track) => {
+            track.enabled = true; // 상대방에게는 오디오가 전송되지만, 로컬에서는 재생되지 않음
+          });
+
+          // 로컬 플레이어(myface)에 오디오 스트림을 설정하지 않음
+          if (myface.current) {
+            myface.current.srcObject = new MediaStream(); // 오디오를 제외한 빈 스트림을 설정
+          }
+
+          // 오디오 트랙이 로컬에서 재생되지 않도록 설정
+          const localAudioPlayer = document.createElement("audio");
+          localAudioPlayer.srcObject = new MediaStream(audioTracks); // 오디오 트랙을 포함하지만 재생되지 않음
+          localAudioPlayer.muted = true; // 이 audio 태그는 음소거되어 있으므로 아무 소리도 들리지 않음
+          document.body.appendChild(localAudioPlayer); // 문서에 추가하여 오디오를 활성화하지만 뮤트된 상태로 관리
         } catch (err) {
-          console.log(err);
+          console.log("미디어 접근 에러:", err);
         }
       };
 
@@ -319,14 +368,27 @@ const PageDetail = (props) => {
         }
       };
 
-      const addstream = (data) => {
-        let videoArea = document.createElement("video");
-        videoArea.autoplay = true;
-        videoArea.srcObject = data.stream;
-        box.current.appendChild(videoArea);
+      // const addstream = (data) => {
+      //   let videoArea = document.createElement("video");
+      //   videoArea.autoplay = true;
+      //   videoArea.srcObject = data.stream;
+      //   box.current.appendChild(videoArea);
+      //   console.log("video: ", videoArea.srcObject);
+      // };
+      const handleTrackEvent = (event) => {
+        console.log("트랙 받음:", event.track); // 트랙 정보 로깅
+        console.log("스트림 받음:", event.streams[0]); // 스트림 정보 로깅
+
+        if (event.track.kind === "video") {
+          let videoArea = document.createElement("video");
+          videoArea.autoplay = true;
+          videoArea.srcObject = event.streams[0];
+          box.current.appendChild(videoArea);
+        } else if (event.track.kind === "audio") {
+          // 오디오 트랙을 처리하는 로직, 필요한 경우
+        }
       };
 
-      console.log("hi");
       // eslint-disable-next-line react-hooks/rules-of-hooks
       useMedia();
 
