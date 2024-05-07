@@ -1,10 +1,7 @@
 package j10d207.tripeer.user.service;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.PutObjectResult;
+import com.amazonaws.services.s3.model.*;
 import com.nimbusds.openid.connect.sdk.claims.UserInfo;
 import io.jsonwebtoken.ExpiredJwtException;
 import j10d207.tripeer.exception.CustomException;
@@ -32,6 +29,7 @@ import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -101,9 +99,19 @@ public class UserServiceImpl implements UserService{
         metadata.setContentLength(file.getSize()); // 파일 크기 명시
         metadata.setContentType(fileContentType);   // 파일 확장자 명시
         long userId = jwtUtil.getUserId(jwtUtil.splitToken(token));
+        UserEntity user = userRepository.findByUserId(userId);
+
+
         String originName = file.getOriginalFilename(); //원본 이미지 이름
         String ext = originName.substring(originName.lastIndexOf(".")); //확장자
-        String changedName = "ProfileImage/" + userId + ext;
+        String changedName = "ProfileImage/" + userId + "/" + UUID.randomUUID().toString() + ext;
+
+        String userPreviousUrl = user.getProfileImage();
+        if (userPreviousUrl.contains("tripeer207.s3")) {
+            String splitStr = ".com/";
+            String fileName = userPreviousUrl.substring(userPreviousUrl.lastIndexOf(splitStr) + splitStr.length());
+            amazonS3.deleteObject(new DeleteObjectRequest(bucketName, fileName));
+        }
 
         try {
             PutObjectResult putObjectResult = amazonS3.putObject(new PutObjectRequest(
@@ -115,7 +123,6 @@ public class UserServiceImpl implements UserService{
             throw new CustomException(ErrorCode.S3_UPLOAD_ERROR);
         }
 
-        UserEntity user = userRepository.findByUserId(userId);
         user.setProfileImage(amazonS3.getUrl(bucketName, changedName).toString());
         userRepository.save(user);
         String url = "https://tripeer207.s3.ap-northeast-2.amazonaws.com/" + changedName;
