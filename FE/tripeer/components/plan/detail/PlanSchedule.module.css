@@ -40,6 +40,7 @@
     height: 45px;
     border-radius: 100%;
     margin-right: 10px;
+    border: #858585 3px solid;
 }
 
 .list {
@@ -98,7 +99,7 @@
     align-items: center;
 }
 
-.leftSection p {
+.leftSectionP {
     margin-left: 10px;
     color: #545454;
     font-size: 20px;
@@ -168,6 +169,7 @@
 
 .placeholder {
     /*  들고 있을때 원래 있던 자리의 플레이스홀더  */
+    display: none;
 }
 
 .scrollX {

@@ -7,17 +7,20 @@ import GoodPlaceIcon from "@/components/plan/asset/GoodPlace.svg";
 
 export default function ScheduleCategoryChip({ category }) {
   const categoryList = {
-    명소: {
+    관광지: {
       src: GoodPlaceIcon,
       color: "#2D8F8A",
+      title: "명소",
     },
     숙박: {
       src: SleepIcon,
       color: "#D26D6D",
+      title: "숙박",
     },
-    맛집: {
+    음식점: {
       src: EatIcon,
       color: "#D25B06",
+      title: "맛집",
     },
   };
 
@@ -27,7 +30,7 @@ export default function ScheduleCategoryChip({ category }) {
       <p
         className={styles.p}
         style={{ color: `${categoryList[category].color}` }}>
-        {category}
+        {categoryList[category].title}
       </p>
     </div>
   );
