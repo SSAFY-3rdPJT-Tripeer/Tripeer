@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 import styles from "./scheduleItem.module.css";
-import exitSrc from "@/public/plan/exit.png";
+// import exitSrc from "@/public/plan/exit.png";
 import addressSrc from "@/public/plan/address.png";
 import ScheduleCategoryChip from "@/components/plan/detail/schedule/scheduleCategoryChip";
 
@@ -39,7 +39,7 @@ export default function ScheduleItem({ data }) {
           <Image src={addressSrc} alt={""} width={15} height={15} />
           <p className={styles.address}>{data.addr}</p>
         </div>
-        {/*<ScheduleCategoryChip category={data.contentType} />*/}
+        <ScheduleCategoryChip category={data.contentType} />
       </section>
       <section className={styles.right}>
         {/*<Image className={styles.exit} src={exitSrc} alt={""} />*/}
