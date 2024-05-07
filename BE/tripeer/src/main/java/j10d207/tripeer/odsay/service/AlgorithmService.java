@@ -8,4 +8,5 @@ import java.util.List;
 public interface AlgorithmService {
 
     public List<PlanDetailResDTO> getShortTime(long planDayId) throws IOException;
+    public List<PlanDetailResDTO> getOptimizingTime(List<Integer> spotIdList);
 }

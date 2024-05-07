@@ -2,7 +2,9 @@ package j10d207.tripeer.plan.service;
 
 import j10d207.tripeer.exception.CustomException;
 import j10d207.tripeer.exception.ErrorCode;
+import j10d207.tripeer.odsay.db.dto.CoordinateDTO;
 import j10d207.tripeer.odsay.db.dto.TimeRootInfoDTO;
+import j10d207.tripeer.odsay.service.AlgorithmService;
 import j10d207.tripeer.odsay.service.OdsayService;
 import j10d207.tripeer.place.db.ContentTypeEnum;
 import j10d207.tripeer.place.db.entity.*;
@@ -51,6 +53,7 @@ public class PlanServiceImpl implements PlanService {
     private final PlanDetailRepository planDetailRepository;
 
     private final OdsayService odsayService;
+    private final AlgorithmService algorithmService;
 
     //플랜 생성
     @Override
@@ -577,6 +580,11 @@ public class PlanServiceImpl implements PlanService {
 
         TimeRootInfoDTO result = odsayService.getPublicTime(startSpot.getLongitude(), startSpot.getLatitude(), endSpot.getLongitude(), endSpot.getLatitude(), baseInfo);
         return result;
+    }
+
+    @Override
+    public List<PlanDetailResDTO> getOptimizingTime(List<Integer> spotIdList) {
+        return algorithmService.getOptimizingTime(spotIdList);
     }
 
 }

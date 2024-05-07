@@ -120,7 +120,6 @@ public class GalleryServiceImpl implements GalleryService{
         PlanDayEntity planDay = planDayRepository.findByPlanDayId(planDayId);
         List<GalleryEntity> galleryEntityList = galleryRepository.findAllByPlanDay(planDay);
         for(GalleryEntity galleryEntity : galleryEntityList) {
-
             String url = galleryEntity.getUrl();
             String[] splitUrl = url.split("/");
             long userId = Long.parseLong(splitUrl[4]);
