@@ -330,9 +330,6 @@ const PageDetail = (props) => {
       useMedia();
 
       return () => {
-        for (let key in myPeerConnection.current) {
-          myPeerConnection.current[key].close();
-        }
         socket.close();
         localStream.current.getAudioTracks().forEach((t) => t.stop());
       };
