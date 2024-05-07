@@ -12,6 +12,7 @@ import j10d207.tripeer.kakao.db.entity.RouteDto;
 import j10d207.tripeer.kakao.db.entity.RouteResponse;
 import j10d207.tripeer.kakao.db.entity.SectionDto;
 import j10d207.tripeer.odsay.db.dto.CoordinateDTO;
+import j10d207.tripeer.odsay.db.dto.TimeRootInfoDTO;
 import j10d207.tripeer.odsay.service.OdsayService;
 import j10d207.tripeer.odsay.service.RootSolve;
 import j10d207.tripeer.place.db.ContentTypeEnum;
@@ -56,7 +57,7 @@ public class KakaoServiceImpl implements KakaoService{
                     .build();
             coordinateDTOList.add(coordinateDTO);
         }
-        int[][] timeTable = getTimeTable(coordinateDTOList);
+        TimeRootInfoDTO[][] timeTable = getTimeTable(coordinateDTOList);
 
         for (int i = 0; i < timeTable.length; i++) {
             for (int j = 0; j < timeTable.length; j++) {
@@ -102,12 +103,12 @@ public class KakaoServiceImpl implements KakaoService{
 
 
     @Override
-    public int[][] getTimeTable(List<CoordinateDTO> coordinates) throws IOException {
-        int[][] timeTable = new int[coordinates.size()][coordinates.size()];
+    public TimeRootInfoDTO[][] getTimeTable(List<CoordinateDTO> coordinates) throws IOException {
+        TimeRootInfoDTO[][] timeTable = new TimeRootInfoDTO[coordinates.size()][coordinates.size()];
         for (int i = 0; i < coordinates.size(); i++) {
             for (int j = i; j < coordinates.size(); j++) {
                 if(i == j) continue;
-                timeTable[i][j] = getDirections(coordinates.get(i).getLongitude(), coordinates.get(i).getLatitude(), coordinates.get(j).getLongitude(), coordinates.get(j).getLatitude());
+                timeTable[i][j].setTime(getDirections(coordinates.get(i).getLongitude(), coordinates.get(i).getLatitude(), coordinates.get(j).getLongitude(), coordinates.get(j).getLatitude()));
                 timeTable[j][i] = timeTable[i][j];
             }
         }

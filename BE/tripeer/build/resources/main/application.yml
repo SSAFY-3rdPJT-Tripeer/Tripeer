@@ -66,8 +66,10 @@ spring:
   jwt:
     access: 18000000
     refresh: 36000000
-    secret: dlatlfhTjshgdmsrjseprmsidgkqtlek
+    secret: ENC(+TMgIEAtgPTpRvh8SSGMLDPoaEzVbkBA8RFQBsNplM5IAmNxrATCqM9itNRpS5BX)
 
+odsay:
+  apikey: ENC(LATQ/BqKAqGJBePHethXpBKOm0GvpqwICuxB4wZuRBF/AXFjn5VsTeJ7qSO3ejq62h1z8f/ZXJ4=)
 
 cloud:
   aws:

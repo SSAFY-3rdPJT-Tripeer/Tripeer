@@ -2,6 +2,8 @@ package j10d207.tripeer.plan.service;
 
 import j10d207.tripeer.exception.CustomException;
 import j10d207.tripeer.exception.ErrorCode;
+import j10d207.tripeer.odsay.db.dto.TimeRootInfoDTO;
+import j10d207.tripeer.odsay.service.OdsayService;
 import j10d207.tripeer.place.db.ContentTypeEnum;
 import j10d207.tripeer.place.db.entity.*;
 import j10d207.tripeer.place.db.repository.SpotInfoRepository;
@@ -47,6 +49,8 @@ public class PlanServiceImpl implements PlanService {
 
     private final SpotInfoRepository spotInfoRepository;
     private final PlanDetailRepository planDetailRepository;
+
+    private final OdsayService odsayService;
 
     //플랜 생성
     @Override
@@ -322,12 +326,23 @@ public class PlanServiceImpl implements PlanService {
         Pageable pageable = PageRequest.of(page, 10);
         String access = jwtUtil.splitToken(token);
 
-        spotInfoSpec = spotInfoSpec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("title"), "%" + keyword + "%"));
+        Specification<SpotInfoEntity> titleSpec = Specification.where(null);
+        titleSpec = titleSpec.or((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("title"), "%" + keyword + "%"));
+        titleSpec = titleSpec.or((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("addr1"), "%" + keyword + "%"));
 
-        Specification<SpotInfoEntity> addr1Spec = Specification.where(null);
+        Specification<SpotInfoEntity> townSpec = Specification.where(null);
         for (PlanTownEntity planTownEntity : planTownList) {
-            String name = planTownEntity.getCityOnly() == null ? planTownEntity.getTown().getTownName() : planTownEntity.getCityOnly().getCityName();
-            addr1Spec = addr1Spec.or((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("addr1"), "%" + name + "%"));
+            Specification<SpotInfoEntity> cityAndTownSpec = Specification.where(null);
+            if ( planTownEntity.getCityOnly() == null ) {
+                int cityId = planTownEntity.getTown().getTownPK().getCity().getCityId();
+                int townId = planTownEntity.getTown().getTownPK().getTownId();
+                cityAndTownSpec = cityAndTownSpec.and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.join("town").join("townPK").join("city").get("cityId"), cityId));
+                cityAndTownSpec = cityAndTownSpec.and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.join("town").join("townPK").get("townId"), townId));
+            } else {
+                int cityId = planTownEntity.getCityOnly().getCityId();
+                cityAndTownSpec = cityAndTownSpec.and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.join("town").join("townPK").join("city").get("cityId"), cityId));
+            }
+            townSpec = townSpec.or(cityAndTownSpec);
         }
 
         Specification<SpotInfoEntity> contentTypeSpec = Specification.where(null);
@@ -343,8 +358,9 @@ public class PlanServiceImpl implements PlanService {
         } else if ( sortType == 4 ) {
             contentTypeSpec = contentTypeSpec.or((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("contentTypeId"), 39));
         }
+        spotInfoSpec = spotInfoSpec.and(titleSpec);
         spotInfoSpec = spotInfoSpec.and(contentTypeSpec);
-        spotInfoSpec = spotInfoSpec.and(addr1Spec);
+        spotInfoSpec = spotInfoSpec.and(townSpec);
         List<SpotInfoEntity> spotInfoList = spotInfoRepository.findAll(spotInfoSpec, pageable);
         if(spotInfoList.isEmpty() && page == 0) {
             throw new CustomException(ErrorCode.SEARCH_NULL);
@@ -399,6 +415,7 @@ public class PlanServiceImpl implements PlanService {
         planBucketRepository.save(planBucket);
     }
 
+    //플랜 버킷 관광지 삭제
     @Override
     public void delPlanSpot(long planId, int spotInfoId, String token) {
         Optional<PlanBucketEntity> planBucket = planBucketRepository.findByPlan_PlanIdAndSpotInfo_SpotInfoId(planId, spotInfoId);
@@ -545,6 +562,21 @@ public class PlanServiceImpl implements PlanService {
             return coworkerReqDTO;
         }
         throw new CustomException(ErrorCode.NOT_HAS_COWORKER);
+    }
+
+    //목적지간 최단 루트 계산
+    @Override
+    public TimeRootInfoDTO getShortTime(int startId, int endId) {
+        SpotInfoEntity startSpot = spotInfoRepository.findBySpotInfoId(startId);
+        SpotInfoEntity endSpot = spotInfoRepository.findBySpotInfoId(endId);
+
+        TimeRootInfoDTO baseInfo = TimeRootInfoDTO.builder()
+                .startTitle(startSpot.getTitle())
+                .endTitle(endSpot.getTitle())
+                .build();
+
+        TimeRootInfoDTO result = odsayService.getPublicTime(startSpot.getLongitude(), startSpot.getLatitude(), endSpot.getLongitude(), endSpot.getLatitude(), baseInfo);
+        return result;
     }
 
 }

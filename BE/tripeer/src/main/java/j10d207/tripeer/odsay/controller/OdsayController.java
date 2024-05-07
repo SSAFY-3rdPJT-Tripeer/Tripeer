@@ -3,6 +3,7 @@ package j10d207.tripeer.odsay.controller;
 import j10d207.tripeer.odsay.db.dto.CoordinateDTO;
 import j10d207.tripeer.odsay.db.dto.OptimizeDto;
 import j10d207.tripeer.odsay.db.dto.OptimizeListDTO;
+import j10d207.tripeer.odsay.db.dto.TimeRootInfoDTO;
 import j10d207.tripeer.odsay.service.AlgorithmService;
 import j10d207.tripeer.odsay.service.AlgorithmServiceImpl;
 import j10d207.tripeer.odsay.service.OdsayService;
@@ -34,7 +35,7 @@ public class OdsayController {
 
     @GetMapping("/test2")
     public Response<Integer> getOdsay2(@RequestParam("SX") double SX, @RequestParam("SY") double SY, @RequestParam("EX") double EX, @RequestParam("EY") double EY) {
-        int result = odsayService.getPublicTime(SX, SY, EX, EY);
+        int result = odsayService.getPublicTime(SX, SY, EX, EY, null).getTime();
 //        return odsayService.getOdsay();
         return Response.of(HttpStatus.OK, "조회완료", result);
     }
