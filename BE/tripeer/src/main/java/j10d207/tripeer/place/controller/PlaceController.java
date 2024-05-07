@@ -125,7 +125,6 @@ public class PlaceController {
     @PostMapping("/wishList/{spotInfoId}")
     public Response<?> addWishList(@PathVariable("spotInfoId") int spotInfoId, HttpServletRequest request) {
         try {
-            System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+ spotInfoId);
             planService.addWishList(spotInfoId, request.getHeader("Authorization"));
             return Response.of(HttpStatus.OK, "즐겨찾기 추가 완료", null);
         } catch (Exception e) {

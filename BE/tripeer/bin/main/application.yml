@@ -13,6 +13,9 @@ spring:
     username: ENC(9m9o70ex2187SXtUNb1JQA==)
     password: ENC(Wstc5/so3a0smxXFvZP5pvCfQhdj10v007R2AGIcNY8=)
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 30
+      minimum-idle: 30
 
   jpa:
     hibernate:
@@ -72,9 +75,9 @@ cloud:
       accessKey: ENC(MDEIv0Elsed+UziTOhX2wkJGzw5jldwD0qxnjRVePpA=)
       secretKey: ENC(UZXZhURI7oZXplXNSYhkH0hUN0+rMIG4DkqDXvp2kufY5tY3UCv+hj3IRrvEnHrOxACeK2+jIRI=)
     s3:
-      bucketName: tripeerbucket
+      bucketName: tripeer207
     region:
-      static: ap-southeast-2
+      static: ap-northeast-2
   cloudformation:
     auto: false
 
