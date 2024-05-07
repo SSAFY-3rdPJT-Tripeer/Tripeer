@@ -11,12 +11,15 @@ import cookies from "js-cookie";
 import style from "@/components/nav/navbar.module.css";
 import Logo from "@/public/logo.png";
 import toggleIcon from "@/components/nav/assets/toggle.svg";
-import api from "@/utils/api";
+// import api from "@/utils/api";
+import useRegisterStore from "@/stores/register";
 
 const NavBar = () => {
   const [toggle, setToggle] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
+  const [myinfo, setMyinfo] = useState(null);
   const router = useRouter();
+  const store = useRegisterStore();
   const LOGO_WIDTH = 130;
   const LOGO_HEIGHT = 50;
   const TOGGLE_WIDTH = 15;
@@ -25,23 +28,24 @@ const NavBar = () => {
   const logoutOnClick = () => {
     cookies.remove("Authorization");
     router.push("/");
-  };
-
-  const getUserData = async () => {
-    try {
-      const res = await api.get("user/social/info");
-      console.log(res.data);
-    } catch (e) {
-      console.log("유저 정보 GET 에러 : ", e);
-    }
+    window.location.reload();
   };
 
   useEffect(() => {
+    const getUserData = async () => {
+      try {
+        // const res = await api.get("user/social/info");
+        const data = await store.myInfo;
+        setMyinfo(data);
+      } catch (e) {
+        console.log("유저 정보 GET 에러 : ", e);
+      }
+    };
     const token = cookies.get("Authorization");
 
     if (token) {
       setIsLogin(true);
-      // getUserData();
+      getUserData();
     }
   }, []);
 
@@ -69,13 +73,42 @@ const NavBar = () => {
           </Link>
           {isLogin ? (
             <div className={style.profileBox}>
-              <div className={style.userImg} />
-              <p className={style.userName}>부수환</p>
+              <div
+                className={style.userImg}
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  position: "relative",
+                }}>
+                <Image
+                  className={style.userImg}
+                  loader={() =>
+                    myinfo
+                      ? `${myinfo.profileImage}`
+                      : `https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/default1.png`
+                  }
+                  src={
+                    "https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/default1.png"
+                  }
+                  fill
+                  alt="사진"
+                  priority="false"
+                  sizes="(max-width: 768px) 100vw,
+                      (max-width: 1200px) 50vw,
+                      33vw"
+                  quality={100}
+                  unoptimized={false}
+                />
+              </div>
+              <p className={style.userName}>
+                {myinfo ? myinfo.nickname : null}
+              </p>
               <Image
                 src={toggleIcon}
                 width={TOGGLE_WIDTH}
                 height={TOGGLE_HEIGHT}
                 alt="toggle"
+                unoptimized={true}
                 className={`${style.toggleIcon} ${toggle ? style.onToggle : style.offToggle}`}
                 onClick={() => {
                   setToggle(!toggle);
