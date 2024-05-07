@@ -16,9 +16,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -60,28 +67,23 @@ public class OdsayServiceImpl implements OdsayService{
             }
         }
         for (int i = 0; i < coordinates.size(); i++) {
-            for (int j = i; j < coordinates.size(); j++) {
-                if(i == j || (i == coordinates.size() - 2 && j== coordinates.size() - 1) ) continue;
+            for (int j = 0; j < coordinates.size(); j++) {
+                if(i == j || (i == coordinates.size() - 2 && j== coordinates.size() - 1) || (i == coordinates.size() - 1 && j== coordinates.size() - 2) ) continue;
                 timeTable[i][j].setStartTitle(coordinates.get(i).getTitle());
                 timeTable[i][j].setEndTitle(coordinates.get(j).getTitle());
+                // 경로 재활용
                 int recycleTime = getRecycleRootTime(coordinates.get(i).getLongitude(), coordinates.get(i).getLatitude(), coordinates.get(j).getLongitude(), coordinates.get(j).getLatitude());
                 if (recycleTime != -1) {
                     timeTable[i][j] = TimeRootInfoDTO.builder().time(recycleTime).build();
                     timeTable[j][i] = timeTable[i][j];
                 } else {
+                    //경로 추적
                     timeTable[i][j] = getPublicTime(coordinates.get(i).getLongitude(), coordinates.get(i).getLatitude(), coordinates.get(j).getLongitude(), coordinates.get(j).getLatitude(), timeTable[i][j]);
+                    //경로 재활용을 위해 넣기
                     addRecycleRootTime(coordinates.get(i).getLongitude(), coordinates.get(i).getLatitude(), coordinates.get(j).getLongitude(), coordinates.get(j).getLatitude(), timeTable[i][j].getTime());
-                    timeTable[j][i].setRootInfo(timeTable[i][j].getRootInfo());
-                    timeTable[j][i].setTime(timeTable[i][j].getTime());
-                    timeTable[j][i].setStartTitle(coordinates.get(j).getTitle());
-                    timeTable[j][i].setEndTitle(coordinates.get(i).getTitle());
                     StringBuilder startAndEnd = new StringBuilder();
                     startAndEnd.append(coordinates.get(i).getTitle()).append("에서 ").append(coordinates.get(j).getTitle()).append("로 이동하는 경로는 \n");
                     timeTable[i][j].setRootInfo(startAndEnd.append(timeTable[i][j].getRootInfo()));
-                    StringBuilder endAndStart = new StringBuilder();
-                    endAndStart.append(coordinates.get(j).getTitle()).append("에서 ").append(coordinates.get(i).getTitle()).append("로 이동하는 경로는 \n");
-                    timeTable[j][i].setRootInfo(endAndStart.append(timeTable[j][i].getRootInfo()));
-
                 }
 
             }
@@ -95,7 +97,8 @@ public class OdsayServiceImpl implements OdsayService{
     public TimeRootInfoDTO getPublicTime(double SX, double SY, double EX, double EY, TimeRootInfoDTO timeRootInfoDTO) {
         JsonObject root = getResult(SX, SY, EX, EY);
         if (root == null) {
-            StringBuilder sb = new StringBuilder("대중교통 수단이 없거나 너무 가까워 택시(자차)로 이동해야합니다.");
+            StringBuilder sb = new StringBuilder();
+            sb.append(timeRootInfoDTO.getStartTitle()).append("에서 ").append(timeRootInfoDTO.getEndTitle()).append("로 가는 경로는 대중교통 수단이 없거나 너무 가까워 택시(자차)로 이동해야합니다.");
             timeRootInfoDTO.setRootInfo(sb);
             timeRootInfoDTO.setTime(kakaoService.getDirections(SX, SY, EX, EY));
             return timeRootInfoDTO;
@@ -106,12 +109,16 @@ public class OdsayServiceImpl implements OdsayService{
             if( code == 3 ) {
                 //    {"msg":"출발지 정류장이 없습니다.","code":"3"}
                 // 택시 이동 시간 포함 필요
-                StringBuilder sb = new StringBuilder("대중교통 수단이 없거나 너무 가까워 택시(자차)로 이동해야합니다.");
+                StringBuilder sb = new StringBuilder();
+                sb.append(timeRootInfoDTO.getStartTitle()).append("에서 ").append(timeRootInfoDTO.getEndTitle()).append("로 가는 경로는 대중교통 수단이 없거나 너무 가까워 택시(자차)로 이동해야합니다.");
                 timeRootInfoDTO.setRootInfo(sb);
                 timeRootInfoDTO.setTime(kakaoService.getDirections(SX, SY, EX, EY));
                 return timeRootInfoDTO;
             } else if ( code == -98 ) {
                 //  {"error":{"msg":"출, 도착지가 700m이내입니다.","code":"-98"}
+                StringBuilder sb = new StringBuilder();
+                sb.append(timeRootInfoDTO.getStartTitle()).append("에서 ").append(timeRootInfoDTO.getEndTitle()).append("로 가는 너무 가까워 도보로 이동해야합니다.");
+                timeRootInfoDTO.setRootInfo(sb);
                 return timeRootInfoDTO;
             } else {
                 System.out.println("터미널 이동 중 에러 = " + root);
@@ -140,9 +147,27 @@ public class OdsayServiceImpl implements OdsayService{
             System.out.println("측정 직선거리가 1.0km 이내입니다. distance = " + distance);
             return null;
         }
+
         RestTemplate restTemplate = new RestTemplate();
-        String url = "https://api.odsay.com/v1/api/searchPubTransPathT?apiKey=" + apikey + "&SX=" + SX + "&SY=" + SY + "&EX=" + EX + "&EY=" + EY;
-        String result = restTemplate.getForObject(url, String.class);
+        System.out.println("apikey = " + apikey);
+//        String url = "https://api.odsay.com/v1/api/searchPubTransPathT?apiKey=" + apikey + "&SX=" + SX + "&SY=" + SY + "&EX=" + EX + "&EY=" + EY;
+        String url = "https://api.odsay.com/v1/api/searchPubTransPathT";
+        String fullUrl = String.format("%s?SX=%s&SY=%s&EX=%s&EY=%s&apiKey=%s",
+                url,
+                URLEncoder.encode(String.valueOf(SX), StandardCharsets.UTF_8),
+                URLEncoder.encode(String.valueOf(SY), StandardCharsets.UTF_8),
+                URLEncoder.encode(String.valueOf(EX), StandardCharsets.UTF_8),
+                URLEncoder.encode(String.valueOf(EY), StandardCharsets.UTF_8),
+                apikey); // API 키는 이미 인코딩되어 있음
+
+        URI targetUrl = null;
+        try {
+            targetUrl = new URI(fullUrl);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("targetUrl = " + targetUrl);
+        String result = restTemplate.getForObject(targetUrl, String.class);
 //        System.out.println("최초 jsonObject = " + result);
         try {
             Thread.sleep(300);
@@ -188,8 +213,12 @@ public class OdsayServiceImpl implements OdsayService{
             if(re.getAsJsonObject().get("pathType").getAsInt() == 13) {
                 continue;
             }
-            System.out.println("re = " + re);
+            String firstStartStation = re.getAsJsonObject().getAsJsonObject("info").get("firstStartStation").getAsString();
+            String lastEndStation = re.getAsJsonObject().getAsJsonObject("info").get("lastEndStation").getAsString();
+            terminalString.append("먼저 ").append(firstStartStation).append("으로 이동합니다.\n");
             tmpInfo.setTime(re.getAsJsonObject().getAsJsonObject("info").get("totalTime").getAsInt());
+            terminalString.append("도시간 이동을 위해 시외 이동의 총 이동 소요 시간은 ").append(tmpInfo.getTime()).append("분 입니다.\n").append("출발지에서 터미널로 이동 후 목적지 까지 이동하는 방법을 안내합니다.");
+            System.out.println("re = " + re);
             if (tmpInfo.getTime() > time) {
                 continue ;
             }
@@ -216,18 +245,24 @@ public class OdsayServiceImpl implements OdsayService{
                     continue ;
                 }
 //                sumTime += getTimeGoTerminal(SX, SY, newEX, newEY, tmpInfo);
-                TimeRootInfoDTO tmpTerminalInfo = getTimeGoTerminal(SX, SY, newEX, newEY, tmpInfo);
+                TimeRootInfoDTO tmpTerminalInfo = getTimeGoTerminal(SX, SY, newEX, newEY, tmpInfo.getStartTitle(), tmpInfo.getEndTitle());
+                if(tmpTerminalInfo == null) {
+                    System.out.println("터미널 가는데 또 도시간 이동, 억지루트");
+                    continue ;
+                }
                 tmpInfo.setTime(tmpInfo.getTime() + tmpTerminalInfo.getTime());
                 terminalString.append(tmpInfo.getStartTitle()).append("에서 ").append(tmpInfo.getEndTitle()).append("로 이동합니다.\n");
                 terminalString.append(tmpTerminalInfo.getRootInfo()).append("\n");
                 if (tmpInfo.getTime() > time) {
                     continue ;
                 }
+
+                terminalString.append("시외 이동을 위해 ").append(firstStartStation).append("에서 ").append(subPath.get(0).getAsJsonObject().get("endName").getAsString()).append("으로 이동합니다.\n");
                 for (int i = 1; i < subPath.size(); i++) {
                     //터미널 to 터미널
                     newSX = subPath.get(i-1).getAsJsonObject().get("endX").getAsDouble();
                     newSY = subPath.get(i-1).getAsJsonObject().get("endY").getAsDouble();
-                    tmpInfo.setStartTitle(tmpInfo.getEndTitle());
+                    tmpInfo.setStartTitle(subPath.get(i).getAsJsonObject().get("endName").getAsString());
                     newEX = subPath.get(i).getAsJsonObject().get("startX").getAsDouble();
                     newEY = subPath.get(i).getAsJsonObject().get("startY").getAsDouble();
                     tmpInfo.setEndTitle(subPath.get(i).getAsJsonObject().get("startName").getAsString());
@@ -242,7 +277,11 @@ public class OdsayServiceImpl implements OdsayService{
                             System.out.println("출발지 터미널 - 차로 2배 빠르게 가도 기존 경로보다 느려지는 경우 sumTime : " + tmpInfo.getTime() + " tmpCarTime2 : " + tmpCarTime + " time : " + time);
                             continue ;
                         }
-                        TimeRootInfoDTO tmpTerminalToTerminalInfo = getTimeGoTerminal(newSX, newSY, newEX, newEY, tmpInfo);
+                        TimeRootInfoDTO tmpTerminalToTerminalInfo = getTimeGoTerminal(newSX, newSY, newEX, newEY, tmpInfo.getStartTitle(), tmpInfo.getEndTitle());
+                        if(tmpTerminalToTerminalInfo == null) {
+                            System.out.println("터미널 가는데 또 도시간 이동, 억지루트2");
+                            continue ;
+                        }
                         tmpInfo.setTime(tmpInfo.getTime() + tmpTerminalToTerminalInfo.getTime());
                         terminalString.append(tmpTerminalToTerminalInfo.getRootInfo()).append("\n");
                         addRecycleRootTime(newSX, newSY, newEX, newEY, tmpTerminalToTerminalInfo.getTime());
@@ -250,21 +289,28 @@ public class OdsayServiceImpl implements OdsayService{
                     if (tmpInfo.getTime() > time) {
                         continue searchRootList;
                     }
+                    terminalString.append("시외 이동을 위해 ").append(subPath.get(i).getAsJsonObject().get("startName").getAsString()).append("에서 ").append(subPath.get(i).getAsJsonObject().get("endName").getAsString()).append("으로 이동합니다.\n");
                 }
                 //마지막 터미널에서 도착지로
                 newSX = subPath.get(subPath.size()-1).getAsJsonObject().get("endX").getAsDouble();
                 newSY = subPath.get(subPath.size()-1).getAsJsonObject().get("endY").getAsDouble();
-                tmpInfo.setStartTitle(tmpInfo.getEndTitle());
+                tmpInfo.setStartTitle(subPath.get(subPath.size()-1).getAsJsonObject().get("endName").getAsString());
                 tmpInfo.setEndTitle(timeRootInfoDTO.getEndTitle());
                 tmpCarTime = kakaoService.getDirections(newSX, newSY, EX, EY);
                 if ( tmpInfo.getTime()+(tmpCarTime/2) > time ) {
                     System.out.println("마지막 터미널 - 차로 2배 빠르게 가도 기존 경로보다 느려지는 경우 sumTime : " + tmpInfo.getTime() + " tmpCarTime : " + tmpCarTime + " time : " + time);
                     continue ;
                 }
-                TimeRootInfoDTO tmpEndPointInfo = getTimeGoTerminal(newSX, newSY, EX, EY, tmpInfo);
+                TimeRootInfoDTO tmpEndPointInfo = getTimeGoTerminal(newSX, newSY, EX, EY, tmpInfo.getStartTitle(), tmpInfo.getEndTitle());
+                if (tmpEndPointInfo == null) {
+                    System.out.println("터미널 가는데 또 도시간 이동, 억지루트3");
+                    continue ;
+                }
                 tmpInfo.setTime(tmpInfo.getTime() + tmpEndPointInfo.getTime());
                 terminalString.append(tmpInfo.getStartTitle()).append("에서 ").append(tmpInfo.getEndTitle()).append("로 이동합니다.\n");
                 terminalString.append(tmpEndPointInfo.getRootInfo()).append("\n");
+
+
 
             }
 
@@ -282,8 +328,12 @@ public class OdsayServiceImpl implements OdsayService{
         return timeRootInfoDTO;
     }
 
-    private TimeRootInfoDTO getTimeGoTerminal(double SX, double SY, double EX, double EY, TimeRootInfoDTO timeRootInfoDTO) {
+    private TimeRootInfoDTO getTimeGoTerminal(double SX, double SY, double EX, double EY, String startTitle, String endTitle) {
         int recycleTime = getRecycleRootTime(SX, SY, EX, EY);
+        TimeRootInfoDTO timeRootInfoDTO = TimeRootInfoDTO.builder()
+                .startTitle(startTitle)
+                .endTitle(endTitle)
+                .build();
         if (recycleTime != -1) {
             timeRootInfoDTO.setTime(recycleTime);
             return timeRootInfoDTO;
@@ -299,19 +349,22 @@ public class OdsayServiceImpl implements OdsayService{
 //        System.out.println("jsonObject = " + jsonObject);
 
         if(jsonObject.has("result")) {
+            int searchType = jsonObject.getAsJsonObject("result").get("searchType").getAsInt();
+            if(searchType == 1) {
+                return null;
+            }
             time = Integer.MAX_VALUE;
             JsonArray root = jsonObject.getAsJsonObject("result").getAsJsonArray("path");
             JsonElement shortRoot = null;
             for(JsonElement re : root) {
                 if( time > re.getAsJsonObject().getAsJsonObject("info").get("totalTime").getAsInt() ) {
                     time = re.getAsJsonObject().getAsJsonObject("info").get("totalTime").getAsInt();
-                    StringBuilder startAndEnd = new StringBuilder();
-                    startAndEnd.append(timeRootInfoDTO.getStartTitle()).append("에서 ").append(timeRootInfoDTO.getEndTitle()).append("로 이동하는 경로는 \n").append(makeRootInfo(re));
-                    timeRootInfoDTO.setRootInfo(startAndEnd);
-                    shortRoot = re.getAsJsonObject().getAsJsonObject("info");
+                    shortRoot = re;
                 }
             }
-            System.out.println("테스트 : " + SX);
+            StringBuilder startAndEnd = new StringBuilder();
+            startAndEnd.append(timeRootInfoDTO.getStartTitle()).append("에서 ").append(timeRootInfoDTO.getEndTitle()).append("로 이동하는 경로는 \n").append(makeRootInfo(shortRoot));
+            timeRootInfoDTO.setRootInfo(startAndEnd);
             addRecycleRootTime(SX, SY, EX, EY, time);
         }
         else {
@@ -332,7 +385,6 @@ public class OdsayServiceImpl implements OdsayService{
             }
 
         }
-        System.out.println("time = " + time);
         timeRootInfoDTO.setTime(time);
         return timeRootInfoDTO;
     }
@@ -403,7 +455,7 @@ public class OdsayServiceImpl implements OdsayService{
                     }
                     break;
                 default:
-                    System.out.println("지원하지 않는 이동 방법");
+                    System.out.println("지원하지 않는 이동 방법" + path.getAsJsonObject().get("trafficType").getAsInt());
             }
         }
 
