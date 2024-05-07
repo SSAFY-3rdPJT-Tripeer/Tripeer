@@ -21,6 +21,9 @@
   font-weight: bold;
   margin: 15px;
 }
+.linkClicked {
+  color: #04acb5;
+}
 
 .profileBox {
   /* margin-left: 50px; */

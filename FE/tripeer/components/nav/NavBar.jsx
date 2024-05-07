@@ -66,13 +66,31 @@ const NavBar = () => {
             />
           </Link>
           <nav className={style.linkBox}>
-            <Link href="/plan" className={style.link}>
+            <Link
+              href="/plan"
+              className={
+                path === "/plan"
+                  ? `${style.link} ${style.linkClicked}`
+                  : `${style.link}`
+              }>
               일정 계획
             </Link>
-            <Link href="/diary" className={style.link}>
+            <Link
+              href="/diary"
+              className={
+                path === "/diary"
+                  ? `${style.link} ${style.linkClicked}`
+                  : `${style.link}`
+              }>
               지난 여행
             </Link>
-            <Link href="/place/all/all" className={style.link}>
+            <Link
+              href="/place/all/all"
+              className={
+                path === "/place/all/all"
+                  ? `${style.link} ${style.linkClicked}`
+                  : `${style.link}`
+              }>
               여행지
             </Link>
             {isLogin ? (

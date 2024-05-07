@@ -68,7 +68,10 @@ const NavBar = () => {
           <Link href="/diary" className={style.link}>
             지난 여행
           </Link>
-          <Link href="/place/all/all" className={style.link}>
+          <Link
+            href="/place/all/all"
+            className={style.link}
+            style={{ color: "#04acb5" }}>
             여행지
           </Link>
           {isLogin ? (
