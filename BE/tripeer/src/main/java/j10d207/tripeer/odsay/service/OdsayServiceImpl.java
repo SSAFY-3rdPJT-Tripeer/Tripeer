@@ -52,7 +52,7 @@ public class OdsayServiceImpl implements OdsayService{
     }
 
     @Override
-    public TimeRootInfoDTO[][] getTimeTable(List<CoordinateDTO> coordinates) throws IOException {
+    public TimeRootInfoDTO[][] getTimeTable(List<CoordinateDTO> coordinates) {
         TimeRootInfoDTO[][] timeTable = new TimeRootInfoDTO[coordinates.size()][coordinates.size()];
         for (int i = 0; i < timeTable.length; i++) {
             for (int j = 0; j < timeTable[i].length; j++) {

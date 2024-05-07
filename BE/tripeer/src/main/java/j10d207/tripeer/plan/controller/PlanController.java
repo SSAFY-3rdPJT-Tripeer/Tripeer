@@ -189,4 +189,11 @@ public class PlanController {
         TimeRootInfoDTO result = planService.getShortTime(startId, endId);
         return Response.of(HttpStatus.OK, "목적지 간 경로 조회 완료", result);
     }
+
+    //플랜 최단거리 조정
+    @PostMapping("/optimizing")
+    public Response<List<PlanDetailResDTO>> getOptimizedPlan(@RequestBody List<Integer> spotIdList) {
+        List<PlanDetailResDTO> result = planService.getOptimizingTime(spotIdList);
+        return Response.of(HttpStatus.OK, "목적지 리스트 최적화 완료", result);
+    }
 }
