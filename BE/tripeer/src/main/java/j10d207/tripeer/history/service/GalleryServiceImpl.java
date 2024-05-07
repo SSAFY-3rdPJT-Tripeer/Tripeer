@@ -120,7 +120,6 @@ public class GalleryServiceImpl implements GalleryService{
         PlanDayEntity planDay = planDayRepository.findByPlanDayId(planDayId);
         List<GalleryEntity> galleryEntityList = galleryRepository.findAllByPlanDay(planDay);
         for(GalleryEntity galleryEntity : galleryEntityList) {
-
             String url = galleryEntity.getUrl();
             String[] splitUrl = url.split("/");
             long userId = Long.parseLong(splitUrl[4]);
@@ -138,11 +137,13 @@ public class GalleryServiceImpl implements GalleryService{
 
     public String deleteGalleryList(List<Long> galleryIdList) {
         for(Long galleryId : galleryIdList){
-            GalleryEntity galleryEntity = galleryRepository.findById(galleryId)
-                    .orElseThrow(() -> new CustomException(ErrorCode.GALLERY_NOT_FOUND));
-            amazonS3.deleteObject(bucketName, galleryEntity.getUrl().substring(54));
-            System.out.println(galleryEntity.getUrl().substring(54));
-            galleryRepository.delete(galleryEntity);
+            try {
+                GalleryEntity galleryEntity = galleryRepository.findById(galleryId)
+                        .orElseThrow(() -> new CustomException(ErrorCode.GALLERY_NOT_FOUND));
+                amazonS3.deleteObject(bucketName, galleryEntity.getUrl().substring(54));
+                System.out.println(galleryEntity.getUrl().substring(54));
+                galleryRepository.delete(galleryEntity);
+            }
         }
         return "갤러리 삭제 성공";
     }
