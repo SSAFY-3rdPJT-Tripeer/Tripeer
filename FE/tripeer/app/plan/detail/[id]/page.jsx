@@ -326,6 +326,7 @@ const PageDetail = (props) => {
         box.current.appendChild(videoArea);
       };
 
+      console.log("hi");
       // eslint-disable-next-line react-hooks/rules-of-hooks
       useMedia();
 
