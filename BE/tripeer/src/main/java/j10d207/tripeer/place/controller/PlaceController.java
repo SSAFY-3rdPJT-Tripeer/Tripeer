@@ -108,7 +108,7 @@ public class PlaceController {
      * 스팟 생성
      * */
     @PostMapping("/spot/create")
-    public Response<?> createNewSpot(@RequestBody SpotAddReqDto spotAddReqDto, HttpServletRequest request) {
+    public Response<SpotInfoDto> createNewSpot(@RequestBody SpotAddReqDto spotAddReqDto, HttpServletRequest request) {
 
         return Response.of(HttpStatus.OK, "새로운 스팟 생성", spotService.createNewSpot(spotAddReqDto, request));
     }
@@ -118,7 +118,7 @@ public class PlaceController {
     * */
     @GetMapping("/all")
     public Response<CityAndTownDto> getAllCityAndTown() {
-        return Response.of(HttpStatus.OK, "새로운 스팟 생성", townService.getAllCityAndTown());
+        return Response.of(HttpStatus.OK, "모든 도시, 타운 조회", townService.getAllCityAndTown());
     }
 
     //즐겨찾기 추가
@@ -131,5 +131,4 @@ public class PlaceController {
             throw new RuntimeException(e);
         }
     }
-
 }
