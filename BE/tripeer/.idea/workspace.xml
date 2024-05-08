@@ -4,6 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="f2828d7a-f2ab-4d01-bbeb-dad2e3c3297f" name="변경" comment="[BE] merge : backend">
       <change beforePath="$PROJECT_DIR$/.gradle/8.5/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.5/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.5/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.5/executionHistory/executionHistory.lock" afterDir="false" />
@@ -33,6 +34,18 @@
       <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/email/controller/EmailController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/email/controller/EmailController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/exception/ErrorCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/exception/ErrorCode.java" afterDir="false" />
+=======
+    <list default="true" id="f2828d7a-f2ab-4d01-bbeb-dad2e3c3297f" name="변경" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/common/ODsaySetting.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.5/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.5/checksums/checksums.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.5/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.5/checksums/md5-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.5/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.5/checksums/sha1-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/plan/db/dto/RootOptimizeDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/plan/db/dto/RootOptimizeDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/plan/service/PlanServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/plan/service/PlanServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+>>>>>>> 7c4b97b6a851fde421f377eb4b0a23ceefd887df
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,7 +69,19 @@
       </state>
     </system>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/../.." value="backend" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
   <component name="ProjectColorInfo">{
@@ -99,6 +124,14 @@
       </method>
     </configuration>
   </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-18abd8497189-intellij.indexing.shared.core-IU-241.14494.240" />
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-IU-241.14494.240" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="애플리케이션 수준" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="디폴트 작업">
@@ -108,6 +141,8 @@
       <option name="presentableId" value="Default" />
       <updated>1715148731399</updated>
       <workItem from="1715148733271" duration="2275000" />
+      <workItem from="1715151788555" duration="185000" />
+      <workItem from="1715152029433" duration="2310000" />
     </task>
     <servers />
   </component>
