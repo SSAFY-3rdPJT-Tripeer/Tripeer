@@ -154,7 +154,7 @@
 }
 .notifyBox {
   width: 100%;
-  height: 228px;
+  height: 250px;
   border-radius: 8px;
   box-shadow: 0px 0px 30px 0px rgba(48, 54, 77, 0.1);
   padding: 32px 24px 24px 32px;
@@ -266,9 +266,30 @@
   border: #f3f3f3 1px solid;
 }
 .notifyText {
-  margin: 20px 4px 20px 4px;
-  text-align: center;
-  color: #7a7a7a;
+  margin-top: 0px;
+  margin-bottom: 20px;
+  border: 1px #d9d9d9 solid;
+  height: 150px;
+  padding: 10px;
+  width: 100%;
+  resize: none;
+}
+
+.notifyText::-webkit-scrollbar {
+  width: 4px;
+}
+.notifyText::-webkit-scrollbar-thumb {
+  height: 10%;
+  background: #cecdcd;
+  border-radius: 10px;
+}
+
+.notifyText::-webkit-scrollbar-track {
+  background: #fff;
+}
+
+.notifyText:focus {
+  outline: none;
 }
 
 .notifyContent {
