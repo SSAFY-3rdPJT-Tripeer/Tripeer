@@ -635,13 +635,19 @@ public class PlanServiceImpl implements PlanService {
 
 
         List<RootOptimizeDTO.place> newPlaceList = new ArrayList<>();
-        List<LocalTime> newSpotTimeList = new ArrayList<>();
+        List<String> newSpotTimeList = new ArrayList<>();
 
         if (root != null) {
 
             int j = 0;
             for(Integer i : root.getResultNumbers()) {
-                newSpotTimeList.add(LocalTime.of(root.getRootTime()[j]/60, root.getRootTime()[j++]%60));
+                StringBuilder sb = new StringBuilder();
+                if( root.getRootTime()[j]/60 != 0 ) {
+                    sb.append(root.getRootTime()[j]/60).append("시간 ");
+                }
+                sb.append(root.getRootTime()[j++]%60).append("분");
+
+                newSpotTimeList.add(sb.toString());
                 RootOptimizeDTO.place newPlace = rootOptimizeDTO.getPlaceList().get(i);
                 if (result.getOption() == 1) {
                     newPlace.setMovingRoot(j == root.getResultNumbers().size() ? "null" : root.getTimeTable()[i][root.getResultNumbers().get(j)].getRootInfo().toString());

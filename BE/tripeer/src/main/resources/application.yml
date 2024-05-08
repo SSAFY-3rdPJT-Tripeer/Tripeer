@@ -101,7 +101,6 @@ odsay:
   list16: ENC(PPec6pJRYjPuNUnNkIawaGRdWHUkmXxAIpQ+3C63lAN7wfHcx3E6I0t7u8BTDOD78OWrlfvUcH9yJwfW6WCghA==)
   list17: ENC(sNpB8bk/0YOKqGd3RgcKKmm4yYFi9pg9S0skspqe8pPQAodr3MzMMsxo4yCFIBcDl3BAS78Ummk=)
 
-
 cloud:
   aws:
     credentials:

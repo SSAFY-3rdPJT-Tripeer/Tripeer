@@ -1,6 +1,8 @@
 package j10d207.tripeer.common;
 
+
 import lombok.Getter;
+
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.ArrayList;
@@ -64,5 +66,6 @@ public class ODsaySetting {
         list.add(list15);
         list.add(list16);
         list.add(list17);
+
     }
 }
