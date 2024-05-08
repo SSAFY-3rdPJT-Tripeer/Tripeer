@@ -36,8 +36,8 @@
 }
 
 .userBox img {
-    width: 45px;
-    height: 45px;
+    width: 40px;
+    height: 40px;
     border-radius: 100%;
     margin-right: 10px;
     border: #858585 3px solid;
@@ -191,4 +191,18 @@
 
 .scrollX::-webkit-scrollbar-track {
     background: #fff;
+}
+
+.loadingModal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1100;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.3);
 }
