@@ -154,7 +154,8 @@ public class OdsayServiceImpl implements OdsayService{
                 URLEncoder.encode(String.valueOf(SY), StandardCharsets.UTF_8),
                 URLEncoder.encode(String.valueOf(EX), StandardCharsets.UTF_8),
                 URLEncoder.encode(String.valueOf(EY), StandardCharsets.UTF_8),
-                setting.getList().get(count%17)); // API 키는 이미 인코딩되어 있음
+//                setting.getList().get(count%17)); // API 키는 이미 인코딩되어 있음
+                apikey);
         count++;
         System.out.println("count = " + count);
         URI targetUrl = null;
@@ -165,12 +166,10 @@ public class OdsayServiceImpl implements OdsayService{
         }
         String result = restTemplate.getForObject(targetUrl, String.class);
 //        System.out.println("최초 jsonObject = " + result);
-        if (count%17 == 0) {
-            try {
-                Thread.sleep(300);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
         return JsonParser.parseString(result).getAsJsonObject();
     }
