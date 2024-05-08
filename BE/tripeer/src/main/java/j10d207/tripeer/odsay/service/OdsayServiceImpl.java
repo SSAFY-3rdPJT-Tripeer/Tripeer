@@ -4,8 +4,7 @@ import com.nimbusds.jose.shaded.gson.JsonArray;
 import com.nimbusds.jose.shaded.gson.JsonElement;
 import com.nimbusds.jose.shaded.gson.JsonObject;
 import com.nimbusds.jose.shaded.gson.JsonParser;
-import j10d207.tripeer.exception.CustomException;
-import j10d207.tripeer.exception.ErrorCode;
+import j10d207.tripeer.common.ODsaySetting;
 import j10d207.tripeer.kakao.service.KakaoService;
 import j10d207.tripeer.odsay.db.dto.CoordinateDTO;
 import j10d207.tripeer.odsay.db.dto.TimeRootInfoDTO;
@@ -16,19 +15,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
-
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 
 @Service
@@ -41,6 +35,8 @@ public class OdsayServiceImpl implements OdsayService{
 
     @Value("${odsay.apikey}")
     private String apikey;
+
+    private int count;
 
     @Override
     public String getOdsay(Double SX, Double SY, Double EX, Double EY) throws IOException {
@@ -148,8 +144,8 @@ public class OdsayServiceImpl implements OdsayService{
             return null;
         }
 
+        ODsaySetting setting = new ODsaySetting();
         RestTemplate restTemplate = new RestTemplate();
-        System.out.println("apikey = " + apikey);
 //        String url = "https://api.odsay.com/v1/api/searchPubTransPathT?apiKey=" + apikey + "&SX=" + SX + "&SY=" + SY + "&EX=" + EX + "&EY=" + EY;
         String url = "https://api.odsay.com/v1/api/searchPubTransPathT";
         String fullUrl = String.format("%s?SX=%s&SY=%s&EX=%s&EY=%s&apiKey=%s",
@@ -158,21 +154,23 @@ public class OdsayServiceImpl implements OdsayService{
                 URLEncoder.encode(String.valueOf(SY), StandardCharsets.UTF_8),
                 URLEncoder.encode(String.valueOf(EX), StandardCharsets.UTF_8),
                 URLEncoder.encode(String.valueOf(EY), StandardCharsets.UTF_8),
-                apikey); // API 키는 이미 인코딩되어 있음
-
+                setting.getList().get(count%17)); // API 키는 이미 인코딩되어 있음
+        count++;
+        System.out.println("count = " + count);
         URI targetUrl = null;
         try {
             targetUrl = new URI(fullUrl);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("targetUrl = " + targetUrl);
         String result = restTemplate.getForObject(targetUrl, String.class);
 //        System.out.println("최초 jsonObject = " + result);
-        try {
-            Thread.sleep(300);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        if (count%17 == 0) {
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
         return JsonParser.parseString(result).getAsJsonObject();
     }

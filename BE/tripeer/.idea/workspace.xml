@@ -5,13 +5,203 @@
   </component>
   <component name="ChangeListManager">
 <<<<<<< HEAD
+    <list default="true" id="c28b537b-7a05-4069-b4fc-eaf6d0d99e90" name="Changes" comment="">
+=======
+<<<<<<< HEAD
     <list default="true" id="f2828d7a-f2ab-4d01-bbeb-dad2e3c3297f" name="변경" comment="[BE] merge : backend">
+>>>>>>> backend
       <change beforePath="$PROJECT_DIR$/.gradle/8.5/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.5/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.5/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.5/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.5/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.5/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.5/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.5/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.5/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.5/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+<<<<<<< HEAD
+      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/tripeer.main.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/TripeerApplication.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/common/JasyptConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/common/S3Config.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/common/SecurityConfig$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/common/SecurityConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/common/WebConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/email/controller/EmailController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/email/db/dto/EmailDTO$EmailDTOBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/email/db/dto/EmailDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/email/service/EmailService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/email/service/EmailServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/exception/CustomException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/exception/CustomExceptionHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/exception/ErrorCode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/exception/ErrorResponseEntity$ErrorResponseEntityBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/exception/ErrorResponseEntity.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/history/controller/HistoryController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/history/db/dto/CostReqDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/history/db/dto/CostResDTO$CostResDTOBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/history/db/dto/CostResDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/history/db/dto/GallertIdListDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/history/db/dto/GalleryDTO$GalleryDTOBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/history/db/dto/GalleryDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/history/db/dto/HistoryListResDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/history/db/entity/GalleryEntity$GalleryEntityBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/history/db/entity/GalleryEntity.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/history/db/repository/GalleryRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/history/service/GalleryService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/history/service/GalleryServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/history/service/HistoryService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/history/service/HistoryServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/kakao/db/entity/DirectionDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/kakao/db/entity/RouteDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/kakao/db/entity/RouteResponse$Fare.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/kakao/db/entity/RouteResponse$Location.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/kakao/db/entity/RouteResponse$Route.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/kakao/db/entity/RouteResponse$Section.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/kakao/db/entity/RouteResponse$Summary.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/kakao/db/entity/RouteResponse.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/kakao/db/entity/SectionDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/kakao/service/KakaoService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/kakao/service/KakaoServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/odsay/controller/OdsayController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/odsay/db/dto/CoordinateDTO$CoordinateDTOBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/odsay/db/dto/CoordinateDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/odsay/db/dto/OptimizeDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/odsay/db/dto/OptimizeListDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/odsay/db/dto/OptimizeOptionReq.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/odsay/db/dto/TimeRootInfoDTO$TimeRootInfoDTOBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/odsay/db/dto/TimeRootInfoDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/odsay/db/entity/TerminalTimeLogEntity$TerminalTimeLogEntityBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/odsay/db/entity/TerminalTimeLogEntity.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/odsay/db/repository/TerminalTimeLogRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/odsay/service/AlgorithmService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/odsay/service/AlgorithmServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/odsay/service/OdsayService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/odsay/service/OdsayServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/odsay/service/RootSolve.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/controller/PlaceController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/db/ContentTypeEnum$ContentTypeListEnum.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/db/ContentTypeEnum.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/db/dto/CityAndTownDto$CityAndTownDtoBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/db/dto/CityAndTownDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/db/dto/CityListDto$CityListDtoBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/db/dto/CityListDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/db/dto/SpotAddReqDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/db/dto/SpotDetailDto$SpotDetailDtoBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/db/dto/SpotDetailDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/db/dto/SpotInfoDto$SpotInfoDtoBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/db/dto/SpotInfoDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/db/dto/SpotListDto$SpotListDtoBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/db/dto/SpotListDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/db/dto/TownListDto$TownListDtoBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/db/dto/TownListDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/db/entity/CityEntity$CityEntityBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/db/entity/CityEntity.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/db/entity/SpotDescriptionEntity$SpotDescriptionEntityBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/db/entity/SpotDescriptionEntity.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/db/entity/SpotDetailEntity$SpotDetailEntityBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/db/entity/SpotDetailEntity.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/db/entity/SpotInfoEntity$SpotInfoEntityBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/db/entity/SpotInfoEntity.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/db/entity/TownEntity$TownEntityBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/db/entity/TownEntity.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/db/entity/TownPK$TownPKBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/db/entity/TownPK.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/db/repository/CityRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/db/repository/SpotDescriptionRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/db/repository/SpotDetailRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/db/repository/SpotInfoRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/db/repository/TownRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/service/CityService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/service/CityServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/service/SpotService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/service/SpotServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/service/TownService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/place/service/TownServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/controller/PlanController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/db/dto/CoworkerReqDTO$CoworkerReqDTOBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/db/dto/CoworkerReqDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/db/dto/CreatePlanDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/db/dto/PlanDetailMainResDTO$PlanDetailMainResDTOBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/db/dto/PlanDetailMainResDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/db/dto/PlanDetailReqDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/db/dto/PlanDetailResDTO$PlanDetailResDTOBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/db/dto/PlanDetailResDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/db/dto/PlanListResDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/db/dto/PlanResDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/db/dto/RootOptimizeDTO$place.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/db/dto/RootOptimizeDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/db/dto/SpotSearchResDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/db/dto/TitleChangeDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/db/dto/TownDTO$TownDTOBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/db/dto/TownDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/db/entity/PlanBucketEntity$PlanBucketEntityBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/db/entity/PlanBucketEntity.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/db/entity/PlanDayEntity$PlanDayEntityBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/db/entity/PlanDayEntity.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/db/entity/PlanDetailEntity$PlanDetailEntityBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/db/entity/PlanDetailEntity.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/db/entity/PlanEntity$PlanEntityBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/db/entity/PlanEntity.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/db/entity/PlanTownEntity$PlanTownEntityBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/db/entity/PlanTownEntity.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/db/repository/PlanBucketRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/db/repository/PlanDayRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/db/repository/PlanDetailRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/db/repository/PlanRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/db/repository/PlanTownRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/service/PlanService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/service/PlanServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/response/Response.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/config/CustomSuccessHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/config/JWTFilter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/config/JWTUtil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/controller/UserController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/TripStyleEnum$TripStyleListEnum.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/TripStyleEnum.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/dto/CustomOAuth2User$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/dto/CustomOAuth2User.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/dto/GoogleResponse.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/dto/JoinDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/dto/KakaoResponse.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/dto/NaverResponse.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/dto/OAuth2Response.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/dto/SocialInfoDTO$SocialInfoDTOBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/dto/SocialInfoDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/dto/UserInfoDTO$UserInfoDTOBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/dto/UserInfoDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/dto/UserSearchDTO$UserSearchDTOBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/dto/UserSearchDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/entity/CoworkerEntity$CoworkerEntityBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/entity/CoworkerEntity.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/entity/UserEntity$UserEntityBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/entity/UserEntity.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/entity/WishListEntity$WishListEntityBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/entity/WishListEntity.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/repository/CoworkerRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/repository/UserRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/repository/WishListRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/service/CustomOAuth2UserService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/service/UserService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/service/UserServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/j10d207/tripeer/history/controller/HistoryController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/j10d207/tripeer/history/controller/HistoryController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/j10d207/tripeer/history/service/GalleryService.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/j10d207/tripeer/history/service/GalleryService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/j10d207/tripeer/history/service/GalleryServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/j10d207/tripeer/history/service/GalleryServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/j10d207/tripeer/history/service/HistoryService.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/j10d207/tripeer/history/service/HistoryService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/j10d207/tripeer/history/service/HistoryServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/j10d207/tripeer/history/service/HistoryServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/j10d207/tripeer/odsay/controller/OdsayController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/j10d207/tripeer/odsay/controller/OdsayController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/j10d207/tripeer/odsay/service/AlgorithmService.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/j10d207/tripeer/odsay/service/AlgorithmService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/j10d207/tripeer/odsay/service/AlgorithmServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/j10d207/tripeer/odsay/service/AlgorithmServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/j10d207/tripeer/odsay/service/OdsayService.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/j10d207/tripeer/odsay/service/OdsayService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/j10d207/tripeer/odsay/service/OdsayServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/j10d207/tripeer/odsay/service/OdsayServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/j10d207/tripeer/plan/service/PlanServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/j10d207/tripeer/plan/service/PlanServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/odsay/service/OdsayServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/odsay/service/OdsayServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/user/config/JWTUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/user/config/JWTUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+=======
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/email/controller/EmailController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/email/controller/EmailController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/exception/ErrorCode.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/exception/ErrorCode.class" afterDir="false" />
@@ -46,6 +236,7 @@
       <change beforePath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/plan/service/PlanServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/plan/service/PlanServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
 >>>>>>> 7c4b97b6a851fde421f377eb4b0a23ceefd887df
+>>>>>>> backend
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,6 +248,8 @@
       <ProjectState />
     </projectState>
   </component>
+<<<<<<< HEAD
+=======
   <component name="ExternalProjectsManager">
     <system id="GRADLE">
       <state>
@@ -76,6 +269,7 @@
       </list>
     </option>
   </component>
+>>>>>>> backend
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
@@ -84,31 +278,41 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
+<<<<<<< HEAD
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 1
+}]]></component>
+  <component name="ProjectId" id="2gB2MJuu8tH89KjaQEje9YQBHrM" />
+=======
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
   <component name="ProjectId" id="2gAmP7fvNmuqWdeYuRRC49yP4zZ" />
+>>>>>>> backend
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Gradle.tripeer 빌드.executor": "Run",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
     "RequestMappingsPanelWidth0": "75",
     "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "Spring Boot.TripeerApplication.executor": "Run",
+<<<<<<< HEAD
+    "git-widget-placeholder": "be/feat/odsay-apikey",
+=======
     "git-widget-placeholder": "backend",
+>>>>>>> backend
     "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -132,17 +336,26 @@
       </set>
     </attachedChunks>
   </component>
+<<<<<<< HEAD
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+=======
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="애플리케이션 수준" UseSingleDictionary="true" transferred="true" />
+>>>>>>> backend
   <component name="TaskManager">
-    <task active="true" id="Default" summary="디폴트 작업">
-      <changelist id="f2828d7a-f2ab-4d01-bbeb-dad2e3c3297f" name="변경" comment="" />
-      <created>1715148731399</created>
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c28b537b-7a05-4069-b4fc-eaf6d0d99e90" name="Changes" comment="" />
+      <created>1715156602969</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
+<<<<<<< HEAD
+      <updated>1715156602969</updated>
+      <workItem from="1715156603688" duration="101000" />
+=======
       <updated>1715148731399</updated>
       <workItem from="1715148733271" duration="2275000" />
       <workItem from="1715151788555" duration="185000" />
       <workItem from="1715152029433" duration="2310000" />
+>>>>>>> backend
     </task>
     <servers />
   </component>
