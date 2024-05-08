@@ -2,6 +2,8 @@ package j10d207.tripeer.odsay.service;
 
 import j10d207.tripeer.odsay.db.dto.TimeRootInfoDTO;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +41,7 @@ public class RootSolve {
             resultNumbers = local;
             return;
         }
-        for (int i = 0; i < N - 2; i++) {
+        for (int i = 1; i < N - 1; i++) {
 
             if (!isSelected[i]) {
                 isSelected[i] = true;
