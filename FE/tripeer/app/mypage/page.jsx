@@ -165,6 +165,9 @@ export default function MyPage() {
     <div className={styles.container}>
       <div style={{ position: "relative" }}>
         <Image
+          loader={() =>
+            "https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/lowRegisterBg.png"
+          }
           src={
             "https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/lowRegisterBg.png"
           }
