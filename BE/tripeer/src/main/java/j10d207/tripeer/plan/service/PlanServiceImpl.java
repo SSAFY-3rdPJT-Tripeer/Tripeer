@@ -585,65 +585,50 @@ public class PlanServiceImpl implements PlanService {
     }
 
     @Override
-    public List<PlanDetailResDTO> getOptimizingTime(RootOptimizeDTO rootOptimizeDTO) {
+    public RootOptimizeDTO getOptimizingTime(RootOptimizeDTO rootOptimizeDTO) {
         List<CoordinateDTO> coordinateDTOList = new ArrayList<>();
 
         List<RootOptimizeDTO.place> placeList = rootOptimizeDTO.getPlaceList();
-        for (int i = 1 ; i < placeList.size()-1 ; i++) {
+        for (RootOptimizeDTO.place place : placeList) {
             CoordinateDTO coordinateDTO = CoordinateDTO.builder()
-                    .title(placeList.get(i).getTitle())
-                    .latitude(placeList.get(i).getLatitude())
-                    .longitude(placeList.get(i).getLongitude())
+                    .title(place.getTitle())
+                    .latitude(place.getLatitude())
+                    .longitude(place.getLongitude())
                     .build();
             coordinateDTOList.add(coordinateDTO);
         }
 
-        CoordinateDTO startPoint = CoordinateDTO.builder()
-                .title(placeList.getFirst().getTitle())
-                .latitude(placeList.getFirst().getLatitude())
-                .longitude(placeList.getLast().getLongitude())
-                .build();
-        coordinateDTOList.add(startPoint);
-
-        CoordinateDTO endPoint = CoordinateDTO.builder()
-                .title(placeList.getLast().getTitle())
-                .latitude(placeList.getLast().getLatitude())
-                .longitude(placeList.getLast().getLongitude())
-                .build();
-        coordinateDTOList.add(endPoint);
-
         RootSolve root = null;
+        RootOptimizeDTO result = new RootOptimizeDTO();
         // 자동차
         if ( rootOptimizeDTO.getOption() == 0 ) {
-
+            result.setOption(0);
         }
         // 대중교통
         else if ( rootOptimizeDTO.getOption() == 1 ) {
+            result.setOption(1);
             root = algorithmService.getOptimizingTime(coordinateDTOList);
         } else {
-
+            result.setOption(-1);
         }
 
-        RootOptimizeDTO result = new RootOptimizeDTO();
+
         List<RootOptimizeDTO.place> newPlaceList = new ArrayList<>();
-        newPlaceList.add(rootOptimizeDTO.getPlaceList().getFirst());
+        List<LocalTime> newSpotTimeList = new ArrayList<>();
 
         if (root != null) {
 
-            for (int i = 1; i < root.getResultNumbers().size() -1 ; i ++) {
-                rootOptimizeDTO.getPlaceList().get(root.getResultNumbers().get(i));
-            }
             int j = 0;
-//            for(Integer i : root.getResultNumbers()) {
-//                System.out.println("i = " + i + ", j = " + j);
-//                PlanDetailResDTO planDetailResDTO = PlanDetailResDTO.builder()
-//                        .title(infoList.get(i).getTitle())
-//                        .contentType(ContentTypeEnum.getNameByCode(infoList.get(i).getContentTypeId()))
-//                        .spotTime(LocalTime.of(root.getRootTime()[j]/60, root.getRootTime()[j++]%60))
-//                        .movingRoot(j == root.getResultNumbers().size() ? null : timeTable[i][root.getResultNumbers().get(j)].getRootInfo().toString())
-//                        .build();
-//                planDetailResDTOList.add(planDetailResDTO);
-//            }
+            for(Integer i : root.getResultNumbers()) {
+                newSpotTimeList.add(LocalTime.of(root.getRootTime()[j]/60, root.getRootTime()[j++]%60));
+                RootOptimizeDTO.place newPlace = rootOptimizeDTO.getPlaceList().get(i);
+                newPlace.setMovingRoot(j == root.getResultNumbers().size() ? null : root.getTimeTable()[i][root.getResultNumbers().get(j)].getRootInfo().toString());
+                newPlaceList.add(newPlace);
+            }
+            result.setPlaceList(newPlaceList);
+            result.setSpotTime(newSpotTimeList);
+
+            return result;
         }
 
 

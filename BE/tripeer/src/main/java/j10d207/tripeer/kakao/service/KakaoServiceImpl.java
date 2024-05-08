@@ -160,6 +160,8 @@ public class KakaoServiceImpl implements KakaoService{
         Gson gson = new Gson();
         RouteResponse data = gson.fromJson(response.getBody(), RouteResponse.class);
 
+        System.out.println("data = " + data);
+
 
         return data.getRoutes().getFirst().getSummary().getDuration() / 60;
     }

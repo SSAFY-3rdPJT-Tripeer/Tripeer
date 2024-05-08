@@ -68,7 +68,7 @@ public class OdsayServiceImpl implements OdsayService{
         }
         for (int i = 0; i < coordinates.size(); i++) {
             for (int j = 0; j < coordinates.size(); j++) {
-                if(i == j || (i == coordinates.size() - 2 && j== coordinates.size() - 1) || (i == coordinates.size() - 1 && j== coordinates.size() - 2) ) continue;
+                if(i == j || (i == 0 && j== coordinates.size() - 1) || (i == coordinates.size() - 1 && j == 0) ) continue;
                 timeTable[i][j].setStartTitle(coordinates.get(i).getTitle());
                 timeTable[i][j].setEndTitle(coordinates.get(j).getTitle());
                 // 경로 재활용

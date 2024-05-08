@@ -52,9 +52,9 @@ public class AlgorithmServiceImpl implements AlgorithmService{
         }
 
         ArrayList<Integer> startLocation  = new ArrayList<>();
-        startLocation.add(timeTable.length-2);
+        startLocation.add(0);
         RootSolve root = new RootSolve(timeTable);
-        root.solve(0, timeTable.length-2, 0, new ArrayList<>(), startLocation);
+        root.solve(0, 0, 0, new ArrayList<>(), startLocation);
 
         for (int s : root.getResultNumbers()) {
             System.out.print(s + " -> ");
@@ -99,9 +99,9 @@ public class AlgorithmServiceImpl implements AlgorithmService{
         }
 
         ArrayList<Integer> startLocation  = new ArrayList<>();
-        startLocation.add(timeTable.length-2);
+        startLocation.add(0);
         RootSolve root = new RootSolve(timeTable);
-        root.solve(0, timeTable.length-2, 0, new ArrayList<>(), startLocation);
+        root.solve(0, 0, 0, new ArrayList<>(), startLocation);
 
         for (int s : root.getResultNumbers()) {
             System.out.print(s + " -> ");
