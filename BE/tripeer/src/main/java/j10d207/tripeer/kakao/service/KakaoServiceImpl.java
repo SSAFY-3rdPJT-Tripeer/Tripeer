@@ -42,6 +42,88 @@ import java.util.Optional;
 public class KakaoServiceImpl implements KakaoService{
 
     private final PlanDetailRepository planDetailRepository;
+    private final SpotInfoRepository spotInfoRepository;
+
+    @Override
+    public List<PlanDetailResDTO> getOptimizingTime(List<Integer> spotIdList) throws IOException {
+        List<CoordinateDTO> coordinates = new ArrayList<>();
+        List<SpotInfoEntity> infoList = new ArrayList<>();
+
+//      처음과 마지막 제외하고 추가
+        for(int i = 1; i < spotIdList.size()-1; i++) {
+            SpotInfoEntity tmpSpotInfo = spotInfoRepository.findBySpotInfoId(spotIdList.get(i));
+            infoList.add(tmpSpotInfo);
+            CoordinateDTO tmpCoordinate = CoordinateDTO.builder()
+                    .latitude(tmpSpotInfo.getLatitude())
+                    .longitude(tmpSpotInfo.getLongitude())
+                    .title(tmpSpotInfo.getTitle())
+                    .build();
+            coordinates.add(tmpCoordinate);
+        }
+
+//      처음 부분 추가
+        SpotInfoEntity startSpotInfo = spotInfoRepository.findBySpotInfoId(spotIdList.getFirst());
+        infoList.add(startSpotInfo);
+        CoordinateDTO startCoordinate = CoordinateDTO.builder()
+                .latitude(startSpotInfo.getLatitude())
+                .longitude(startSpotInfo.getLongitude())
+                .title(startSpotInfo.getTitle())
+                .build();
+        coordinates.add(startCoordinate);
+
+//      마지막 부분 추가
+        SpotInfoEntity endSpotInfo = spotInfoRepository.findBySpotInfoId(spotIdList.getLast());
+        infoList.add(endSpotInfo);
+        CoordinateDTO endCoordinate = CoordinateDTO.builder()
+                .latitude(endSpotInfo.getLatitude())
+                .longitude(endSpotInfo.getLongitude())
+                .title(endSpotInfo.getTitle())
+                .build();
+        coordinates.add(endCoordinate);
+
+//      타임테이블 만들기
+        TimeRootInfoDTO[][] timeTable = getTimeTable(coordinates);
+        for (int i = 0; i < timeTable.length; i++) {
+            for (int j = 0; j < timeTable.length; j++) {
+                System.out.print(timeTable[i][j].getTime() + " ");
+            }
+            System.out.println();
+        }
+
+//      최적화 뽑기
+        ArrayList<Integer> startLocation  = new ArrayList<>();
+        startLocation.add(timeTable.length-2);
+        RootSolve root = new RootSolve(timeTable);
+        root.solve(0, timeTable.length-2, 0, new ArrayList<>(), startLocation);
+
+        for (int s : root.getResultNumbers()) {
+            System.out.print(s + " -> ");
+        }
+        System.out.println();
+        for (int value : root.getRootTime()) {
+            System.out.print(value + " -> ");
+        }
+
+        System.out.println();
+        System.out.println("최종 : " + root.getMinTime());
+
+
+//      값 반환
+        List<PlanDetailResDTO> planDetailResDTOList = new ArrayList<>();
+        int j = 0;
+        for(Integer i : root.getResultNumbers()) {
+            System.out.println("i = " + i + ", j = " + j);
+            PlanDetailResDTO planDetailResDTO = PlanDetailResDTO.builder()
+                    .title(infoList.get(i).getTitle())
+                    .contentType(ContentTypeEnum.getNameByCode(infoList.get(i).getContentTypeId()))
+                    .spotTime(LocalTime.of(root.getRootTime()[j]/60, root.getRootTime()[j++]%60))
+                    .movingRoot(j == root.getResultNumbers().size() ? null : timeTable[i][root.getResultNumbers().get(j)].getRootInfo().toString())
+                    .build();
+            planDetailResDTOList.add(planDetailResDTO);
+        }
+
+        return planDetailResDTOList;
+    }
 
 
     @Override
