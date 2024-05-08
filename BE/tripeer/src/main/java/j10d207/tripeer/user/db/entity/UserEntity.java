@@ -22,6 +22,7 @@ public class UserEntity {
     private long userId;
     private String provider;
     private String providerId;
+    private String email;
     private String nickname;
     private LocalDate birth;
     @Setter
