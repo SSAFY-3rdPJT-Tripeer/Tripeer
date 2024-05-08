@@ -4,42 +4,35 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f2828d7a-f2ab-4d01-bbeb-dad2e3c3297f" name="변경" comment="">
-      <change beforePath="$PROJECT_DIR$/../.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/BE.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/vcs.xml" beforeDir="false" />
+    <list default="true" id="f2828d7a-f2ab-4d01-bbeb-dad2e3c3297f" name="변경" comment="[BE] merge : backend">
       <change beforePath="$PROJECT_DIR$/.gradle/8.5/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.5/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.5/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.5/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.5/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.5/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.5/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.5/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.5/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.5/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/BE.tripeer.main.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/j10d207.tripeer.main.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/tripeer.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/tripeer.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/kakao/controller/KakaoController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/kakao/service/KakaoService.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/kakao/service/KakaoService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/kakao/service/KakaoServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/kakao/service/KakaoServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/controller/PlanController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/controller/PlanController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/service/PlanService.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/service/PlanService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/service/PlanServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/service/PlanServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/PlanServiceImpl.class.uniqueId0" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/email/controller/EmailController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/email/controller/EmailController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/exception/ErrorCode.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/exception/ErrorCode.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/dto/CustomOAuth2User.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/dto/CustomOAuth2User.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/dto/GoogleResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/dto/GoogleResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/dto/KakaoResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/dto/KakaoResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/dto/NaverResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/dto/NaverResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/dto/OAuth2Response.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/dto/OAuth2Response.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/dto/UserInfoDTO$UserInfoDTOBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/dto/UserInfoDTO$UserInfoDTOBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/dto/UserInfoDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/dto/UserInfoDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/entity/UserEntity$UserEntityBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/entity/UserEntity$UserEntityBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/entity/UserEntity.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/db/entity/UserEntity.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/service/UserServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/user/service/UserServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/EmailServiceImpl.class.uniqueId0" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/KakaoController.class.uniqueId2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/KakaoService.class.uniqueId0" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/KakaoServiceImpl.class.uniqueId4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/OdsayServiceImpl.class.uniqueId3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/PlanServiceImpl.class.uniqueId1" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/kakao/controller/KakaoController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/kakao/service/KakaoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/kakao/service/KakaoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/kakao/service/KakaoServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/kakao/service/KakaoServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/plan/controller/PlanController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/plan/controller/PlanController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/plan/service/PlanService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/plan/service/PlanService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/plan/service/PlanServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/plan/service/PlanServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/email/controller/EmailController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/email/controller/EmailController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/exception/ErrorCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/exception/ErrorCode.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,9 +59,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 1
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
   <component name="ProjectId" id="2gAmP7fvNmuqWdeYuRRC49yP4zZ" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -84,7 +77,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "Spring Boot.TripeerApplication.executor": "Run",
-    "git-widget-placeholder": "be/fix/carAlgorithm",
+    "git-widget-placeholder": "backend",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -120,5 +113,9 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="[BE] merge : backend" />
+    <option name="LAST_COMMIT_MESSAGE" value="[BE] merge : backend" />
   </component>
 </project>
