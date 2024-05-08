@@ -6,7 +6,7 @@ const api = axios.create({
   // 기본 주소
   baseURL: `${process.env.NEXT_PUBLIC_API_URL}`,
   withCredentials: true,
-  timeout: 7000,
+  timeout: 20000,
 });
 api.interceptors.request.use(async (config) => {
   // 액세스 토큰 로컬에서 가져오기

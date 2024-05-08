@@ -16,6 +16,7 @@ import ScheduleItem2 from "@/components/plan/detail/schedule/scheduleItem2";
 import Time from "@/components/plan/detail/schedule/time";
 import api from "@/utils/api";
 import OnlineBox from "./OnlineBox";
+import ScheduleModal from "@/components/plan/detail/schedule/scheduleModal";
 
 const PlanSchedule = (props) => {
   const { myInfo, provider, plan, online } = props;
@@ -30,6 +31,10 @@ const PlanSchedule = (props) => {
   const [members, setMembers] = useState([]);
   const [timeList, setTimeList] = useState(null);
   const [timeY, setTimeY] = useState(null);
+  const [isModal, setIsModal] = useState(false);
+  const [option, setOption] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [cirIdx, setCirIdx] = useState(0);
 
   const COLOR = [
     "#A60000",
@@ -42,10 +47,62 @@ const PlanSchedule = (props) => {
     "#F96976",
   ];
 
+  const onClickTime = (arrIdx, idx) => {
+    console.log("내가 인덱스", arrIdx, idx);
+    // let opt = 0;
+    // if (option === 0) {
+    //   opt = 1;
+    //   setOption(1);
+    // } else {
+    //   opt = 0;
+    //   setOption(0);
+    // }
+    // const timeIdx = idx;
+    // const startId = totalList[arrIdx][idx].spotInfoId;
+    // const endId = totalList[arrIdx][idx + 1].spotInfoId;
+    // let timeArr = timeY.get(arrIdx);
+    // getTime(startId, endId, timeArr, timeIdx, "insert");
+  };
+
+  // 최단거리 계산 온클릭 이벤트
+  const postData = async (option) => {
+    console.log("로딩중");
+    setIsLoading(true);
+    try {
+      const res = await api.post("/plan/optimizing", {
+        placeList: totalList[cirIdx],
+        option: option,
+      });
+      console.log("넘겨준거", res.data.data);
+      const arr = totalY.get(cirIdx);
+      arr.delete(0, arr.length);
+      arr.insert(0, [...res.data.data.placeList]);
+      const time = timeY.get(cirIdx);
+      time.delete(0, time.length);
+      time.insert(0, [...res.data.data.spotTime]);
+
+      setIsLoading(false);
+      setIsModal(false);
+      console.log("로딩끝");
+    } catch (e) {
+      console.log("최단거리 오류 ", e);
+    }
+    // setTimeout(() => {
+    //   setIsLoading(false);
+    //   console.log("대따");
+    //   setIsModal(false);
+    // }, 5000);
+  };
+
+  const onClickCalculate = (arrIdx) => {
+    setCirIdx(arrIdx);
+    setIsModal(!isModal);
+  };
+
   const getTime = async (startId, endId, arr, index, type) => {
     try {
       const res = await api.get("/plan/optimizing/short", {
-        params: { startId: startId, endId: endId },
+        params: { startId: startId, endId: endId, option: option },
       });
       console.log("res", res);
       console.log("몇분? ", res.data.data.time);
@@ -650,6 +707,14 @@ const PlanSchedule = (props) => {
   return (
     // 화면 전체
     <div className={styles.container}>
+      {isModal ? (
+        <ScheduleModal
+          isModal={isModal}
+          setIsModal={setIsModal}
+          setOption={setOption}
+          postData={postData}
+        />
+      ) : null}
       <DragDropContext onDragEnd={onDragEnd}>
         {/*  왼쪽 우리의 여행지 목록 전체 박스  */}
         <main className={styles.main}>
@@ -757,7 +822,10 @@ const PlanSchedule = (props) => {
                       </p>
                     </div>
                     {/*  최단거리계산 버튼  */}
-                    <CalculateBtn />
+                    <CalculateBtn
+                      onClickCalculate={onClickCalculate}
+                      arrIdx={arrIdx}
+                    />
                   </header>
                   <Droppable droppableId={`${arrIdx}`}>
                     {(provided) => (
@@ -788,6 +856,7 @@ const PlanSchedule = (props) => {
                                         arrIdx={arrIdx}
                                         idx={idx - 1}
                                         timeList={timeList}
+                                        onClickTime={onClickTime}
                                       />
                                     )}
                                   <ScheduleItem2 data={el} idx={idx} />

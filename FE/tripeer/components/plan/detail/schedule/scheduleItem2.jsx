@@ -8,19 +8,44 @@ import Image from "next/image";
 export default function ScheduleItem2({ data, idx }) {
   const categoryList = {
     관광지: {
-      src: GoodPlaceIcon,
+      name: "명소",
       color: "#2D8F8A",
-      title: "명소",
+      img: GoodPlaceIcon,
+    },
+    문화시설: {
+      name: "명소",
+      color: "#2D8F8A",
+      img: GoodPlaceIcon,
+    },
+    "축제 공연 행사": {
+      name: "명소",
+      color: "#2D8F8A",
+      img: GoodPlaceIcon,
+    },
+    "여행 코스": {
+      name: "명소",
+      color: "#2D8F8A",
+      img: GoodPlaceIcon,
+    },
+    레포츠: {
+      name: "명소",
+      color: "#2D8F8A",
+      img: GoodPlaceIcon,
     },
     숙박: {
-      src: SleepIcon,
+      name: "숙박",
       color: "#D26D6D",
-      title: "숙박",
+      img: SleepIcon,
+    },
+    쇼핑: {
+      name: "명소",
+      color: "#2D8F8A",
+      img: GoodPlaceIcon,
     },
     음식점: {
-      src: EatIcon,
+      name: "맛집",
       color: "#D25B06",
-      title: "맛집",
+      img: EatIcon,
     },
   };
 
@@ -38,9 +63,17 @@ export default function ScheduleItem2({ data, idx }) {
         <p
           className={styles.category}
           style={{ color: categoryList[data.contentType].color }}>
-          {categoryList[data.contentType].title}
+          {categoryList[data.contentType].name}
         </p>
-        <Image src={kebobBtnSrc} alt={""} width={24} height={24} />
+        <Image
+          src={kebobBtnSrc}
+          alt={""}
+          width={24}
+          height={24}
+          onClick={() => {
+            console.log("click");
+          }}
+        />
       </section>
     </div>
   );
