@@ -1,0 +1,111 @@
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.box {
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 350px;
+    height: 200px;
+    background-color: white;
+}
+
+.btnBox {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.p {
+    font-size: 18px;
+}
+
+.btnLeft {
+    width: 120px;
+    height: 120px;
+    border: #04ACB5 1px solid;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.selectBtnLeft {
+    width: 120px;
+    height: 120px;
+    border: #04ACB5 1px solid;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #04ACB5;
+}
+
+.btnLeft:hover {
+    background-color: #04ACB5;
+}
+
+.btnRight {
+    margin-left: 30px;
+    width: 120px;
+    height: 120px;
+    border: #04ACB5 1px solid;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.selectBtnRight {
+    margin-left: 30px;
+    width: 120px;
+    height: 120px;
+    border: #04ACB5 1px solid;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #04ACB5;
+}
+
+.btnRight:hover {
+    background-color: #04ACB5;
+}
+
+.btnLeft:hover .btnP,
+.btnRight:hover .btnP {
+    color: white;
+}
+
+.btnP {
+    color: #757575;
+    font-size: 15px;
+}
+
+.selectBtnP {
+    color: white;
+    font-size: 15px;
+}
+
+.image {
+    margin-top: 10px;
+    width: 40px;
+    height: auto;
+}
