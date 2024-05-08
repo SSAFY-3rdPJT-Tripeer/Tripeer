@@ -10,6 +10,7 @@ import java.time.LocalDate;
 public class UserInfoDTO {
 
     private long userId;
+    private String email;
     private String nickname;
     private LocalDate birth;
     private String profileImage;
