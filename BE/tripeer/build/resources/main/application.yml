@@ -68,6 +68,17 @@ spring:
     refresh: 36000000
     secret: ENC(+TMgIEAtgPTpRvh8SSGMLDPoaEzVbkBA8RFQBsNplM5IAmNxrATCqM9itNRpS5BX)
 
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: hmy940424@gmail.com
+    password: jajv pslg hygu wpcc
+    debug: true
+    properties.mail.smtp:
+      auth: true
+      starttls.enable: true
+
 odsay:
 #  apikey: ENC(LATQ/BqKAqGJBePHethXpBKOm0GvpqwICuxB4wZuRBF/AXFjn5VsTeJ7qSO3ejq62h1z8f/ZXJ4=)
 #  apikey: ENC(yfzzcAsOP7Yn6JYBzeeVekmNyQQLqTyJ7M3FI1Uf4fs7vVKYzJE0EzZkvE32YT503dwZg1CcyRQRD6jo5fJ/3w==)
