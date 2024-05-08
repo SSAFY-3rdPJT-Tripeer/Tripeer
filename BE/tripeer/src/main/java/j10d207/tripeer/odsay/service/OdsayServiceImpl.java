@@ -145,7 +145,6 @@ public class OdsayServiceImpl implements OdsayService{
         }
 
         ODsaySetting setting = new ODsaySetting();
-        count++;
         RestTemplate restTemplate = new RestTemplate();
 //        String url = "https://api.odsay.com/v1/api/searchPubTransPathT?apiKey=" + apikey + "&SX=" + SX + "&SY=" + SY + "&EX=" + EX + "&EY=" + EY;
         String url = "https://api.odsay.com/v1/api/searchPubTransPathT";
@@ -166,10 +165,12 @@ public class OdsayServiceImpl implements OdsayService{
         }
         String result = restTemplate.getForObject(targetUrl, String.class);
 //        System.out.println("최초 jsonObject = " + result);
-        try {
-            Thread.sleep(300);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        if (count%17 == 0) {
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
         return JsonParser.parseString(result).getAsJsonObject();
     }
