@@ -6,6 +6,7 @@ import j10d207.tripeer.odsay.db.dto.CoordinateDTO;
 import j10d207.tripeer.odsay.db.dto.TimeRootInfoDTO;
 import j10d207.tripeer.odsay.service.AlgorithmService;
 import j10d207.tripeer.odsay.service.OdsayService;
+import j10d207.tripeer.odsay.service.RootSolve;
 import j10d207.tripeer.place.db.ContentTypeEnum;
 import j10d207.tripeer.place.db.entity.*;
 import j10d207.tripeer.place.db.repository.SpotInfoRepository;
@@ -29,6 +30,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -583,8 +585,54 @@ public class PlanServiceImpl implements PlanService {
     }
 
     @Override
-    public List<PlanDetailResDTO> getOptimizingTime(List<Integer> spotIdList) {
-        return algorithmService.getOptimizingTime(spotIdList);
+    public RootOptimizeDTO getOptimizingTime(RootOptimizeDTO rootOptimizeDTO) {
+        List<CoordinateDTO> coordinateDTOList = new ArrayList<>();
+
+        List<RootOptimizeDTO.place> placeList = rootOptimizeDTO.getPlaceList();
+        for (RootOptimizeDTO.place place : placeList) {
+            CoordinateDTO coordinateDTO = CoordinateDTO.builder()
+                    .title(place.getTitle())
+                    .latitude(place.getLatitude())
+                    .longitude(place.getLongitude())
+                    .build();
+            coordinateDTOList.add(coordinateDTO);
+        }
+
+        RootSolve root = null;
+        RootOptimizeDTO result = new RootOptimizeDTO();
+        // 자동차
+        if ( rootOptimizeDTO.getOption() == 0 ) {
+            result.setOption(0);
+        }
+        // 대중교통
+        else if ( rootOptimizeDTO.getOption() == 1 ) {
+            result.setOption(1);
+            root = algorithmService.getOptimizingTime(coordinateDTOList);
+        } else {
+            result.setOption(-1);
+        }
+
+
+        List<RootOptimizeDTO.place> newPlaceList = new ArrayList<>();
+        List<LocalTime> newSpotTimeList = new ArrayList<>();
+
+        if (root != null) {
+
+            int j = 0;
+            for(Integer i : root.getResultNumbers()) {
+                newSpotTimeList.add(LocalTime.of(root.getRootTime()[j]/60, root.getRootTime()[j++]%60));
+                RootOptimizeDTO.place newPlace = rootOptimizeDTO.getPlaceList().get(i);
+                newPlace.setMovingRoot(j == root.getResultNumbers().size() ? null : root.getTimeTable()[i][root.getResultNumbers().get(j)].getRootInfo().toString());
+                newPlaceList.add(newPlace);
+            }
+            result.setPlaceList(newPlaceList);
+            result.setSpotTime(newSpotTimeList);
+
+            return result;
+        }
+
+
+        return null;
     }
 
 }
