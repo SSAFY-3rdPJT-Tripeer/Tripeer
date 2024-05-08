@@ -3,7 +3,7 @@ import styles from "./planHome.module.css";
 import api from "@/utils/api";
 
 const PlanHome = (props) => {
-  const { plan, online, provider, myInfo, mouseInfo, handleMuteBtn } = props;
+  const { plan, online, provider, myInfo } = props;
   const [title, setTitle] = useState("");
   const [members, setMembers] = useState([]);
   const [towns, setTowns] = useState([]);
@@ -96,7 +96,7 @@ const PlanHome = (props) => {
       const textArea = provider.doc.getText("textArea");
       setYNotify(textArea);
       notifyTextArea.current.value = textArea.toString();
-      textArea.observe((e) => {
+      textArea.observe(() => {
         notifyTextArea.current.value = textArea.toString();
       });
     }
@@ -123,7 +123,6 @@ const PlanHome = (props) => {
       <article className={styles.contentBox}>
         <section className={styles.regionBox}>
           <div className={styles.regionHeader}>
-            {" "}
             <div className={styles.pointerIcon} />
             <span className={styles.regionHeaderFont}>목적지</span>
           </div>
@@ -209,11 +208,7 @@ const PlanHome = (props) => {
                       </div>
                       <div className={styles.memberSounds}>
                         {member.nickname === myInfo.nickname ? (
-                          <div
-                            className={styles.mic}
-                            onClick={() => {
-                              handleMuteBtn();
-                            }}></div>
+                          <div className={styles.mic} onClick={() => {}}></div>
                         ) : (
                           <div className={styles.mic}></div>
                         )}
