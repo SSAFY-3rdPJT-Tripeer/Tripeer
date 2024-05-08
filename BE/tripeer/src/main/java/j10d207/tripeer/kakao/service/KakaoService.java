@@ -12,6 +12,7 @@ public interface KakaoService {
     public int getDirections(double SX, double SY, double EX, double EY);
     public TimeRootInfoDTO[][] getTimeTable(List<CoordinateDTO> coordinates) throws IOException;
     public List<PlanDetailResDTO> getShortTime(long planDayId) throws IOException;
+    public List<PlanDetailResDTO> getOptimizingTime(List<Integer> spotIdList) throws IOException;
 
 
 }

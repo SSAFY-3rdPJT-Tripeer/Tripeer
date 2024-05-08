@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -23,9 +24,17 @@ public class KakaoController {
 
         return kakaoService.getShortTime(9);
     }
-//    @GetMapping("/test")
-//    public void ss(@RequestBody List<CoordinateDTO> coordinateDTOS) throws IOException {
-//        kakaoService.getShortTime(9);
-//    }
+
+    @GetMapping("/ss")
+    public List<PlanDetailResDTO> sss() throws IOException {
+        List<Integer> spotIdList = new ArrayList<>();
+
+        // Adding some sample integer values to the list
+        spotIdList.add(1);
+        spotIdList.add(2);
+        spotIdList.add(3);
+
+        return kakaoService.getOptimizingTime(spotIdList);
+    }
 
 }
