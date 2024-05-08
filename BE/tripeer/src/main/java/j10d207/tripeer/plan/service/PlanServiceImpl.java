@@ -2,6 +2,7 @@ package j10d207.tripeer.plan.service;
 
 import j10d207.tripeer.exception.CustomException;
 import j10d207.tripeer.exception.ErrorCode;
+import j10d207.tripeer.kakao.service.KakaoService;
 import j10d207.tripeer.odsay.db.dto.CoordinateDTO;
 import j10d207.tripeer.odsay.db.dto.TimeRootInfoDTO;
 import j10d207.tripeer.odsay.service.AlgorithmService;
@@ -29,6 +30,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -56,6 +58,8 @@ public class PlanServiceImpl implements PlanService {
 
     private final OdsayService odsayService;
     private final AlgorithmService algorithmService;
+
+    private final KakaoService kakaoService;
 
     //플랜 생성
     @Override
@@ -571,21 +575,37 @@ public class PlanServiceImpl implements PlanService {
 
     //목적지간 최단 루트 계산
     @Override
-    public TimeRootInfoDTO getShortTime(int startId, int endId) {
+    public TimeRootInfoDTO getShortTime(int startId, int endId, int option) {
         SpotInfoEntity startSpot = spotInfoRepository.findBySpotInfoId(startId);
         SpotInfoEntity endSpot = spotInfoRepository.findBySpotInfoId(endId);
+        TimeRootInfoDTO result = null;
 
-        TimeRootInfoDTO baseInfo = TimeRootInfoDTO.builder()
-                .startTitle(startSpot.getTitle())
-                .endTitle(endSpot.getTitle())
-                .build();
+        if (option == 1) {
+            TimeRootInfoDTO baseInfo = TimeRootInfoDTO.builder()
+                    .startTitle(startSpot.getTitle())
+                    .endTitle(endSpot.getTitle())
+                    .build();
 
-        TimeRootInfoDTO result = odsayService.getPublicTime(startSpot.getLongitude(), startSpot.getLatitude(), endSpot.getLongitude(), endSpot.getLatitude(), baseInfo);
+            result = odsayService.getPublicTime(startSpot.getLongitude(), startSpot.getLatitude(), endSpot.getLongitude(), endSpot.getLatitude(), baseInfo);
+            return result;
+        } else if (option == 0) {
+            int time = kakaoService.getDirections(startSpot.getLongitude(), startSpot.getLatitude(), endSpot.getLongitude(), endSpot.getLatitude());
+            StringBuilder rootInfoBuilder = new StringBuilder();
+            rootInfoBuilder.append("이동 시간은 ").append(time).append("분 입니다.");
+
+            result = TimeRootInfoDTO.builder()
+                    .startTitle(startSpot.getTitle())
+                    .endTitle(endSpot.getTitle())
+                    .time(time)
+                    .rootInfo(rootInfoBuilder)
+                    .build();
+        }
         return result;
     }
 
+
     @Override
-    public RootOptimizeDTO getOptimizingTime(RootOptimizeDTO rootOptimizeDTO) {
+    public RootOptimizeDTO getOptimizingTime(RootOptimizeDTO rootOptimizeDTO) throws IOException {
         List<CoordinateDTO> coordinateDTOList = new ArrayList<>();
 
         List<RootOptimizeDTO.place> placeList = rootOptimizeDTO.getPlaceList();
@@ -602,6 +622,7 @@ public class PlanServiceImpl implements PlanService {
         RootOptimizeDTO result = new RootOptimizeDTO();
         // 자동차
         if ( rootOptimizeDTO.getOption() == 0 ) {
+            root = kakaoService.getOptimizingTime(coordinateDTOList);
             result.setOption(0);
         }
         // 대중교통
@@ -622,7 +643,9 @@ public class PlanServiceImpl implements PlanService {
             for(Integer i : root.getResultNumbers()) {
                 newSpotTimeList.add(LocalTime.of(root.getRootTime()[j]/60, root.getRootTime()[j++]%60));
                 RootOptimizeDTO.place newPlace = rootOptimizeDTO.getPlaceList().get(i);
-                newPlace.setMovingRoot(j == root.getResultNumbers().size() ? null : root.getTimeTable()[i][root.getResultNumbers().get(j)].getRootInfo().toString());
+                if (result.getOption() == 1) {
+                    newPlace.setMovingRoot(j == root.getResultNumbers().size() ? "null" : root.getTimeTable()[i][root.getResultNumbers().get(j)].getRootInfo().toString());
+                }
                 newPlaceList.add(newPlace);
             }
             result.setPlaceList(newPlaceList);

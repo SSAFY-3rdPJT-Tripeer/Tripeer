@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -188,20 +189,12 @@ public class PlanController {
     //목적지간 최단 루트 계산
     @GetMapping("/optimizing/short")
     public Response<TimeRootInfoDTO> getShortTime(@RequestParam("startId") int startId, @RequestParam("endId") int endId, @RequestParam("option") int option) {
-        if ( option == 0 ) {
-            return Response.of(HttpStatus.OK, "목적지 간 자동차 경로 조회 완료", null);
-        } else if ( option == 1) {
-            TimeRootInfoDTO result = planService.getShortTime(startId, endId);
-            return Response.of(HttpStatus.OK, "목적지 간 대중교통 경로 조회 완료", result);
-        } else {
-            throw new CustomException(ErrorCode.TEST_EXCEPTION);
-        }
-
+        return Response.of(HttpStatus.OK, "목적지 간 대중교통 경로, 자차 소요시간 조회.", planService.getShortTime(startId, endId, option));
     }
 
     //플랜 최단거리 조정
     @PostMapping("/optimizing")
-    public Response<RootOptimizeDTO> getOptimizedPlan(@RequestBody RootOptimizeDTO rootOptimizeReqDTO) {
+    public Response<RootOptimizeDTO> getOptimizedPlan(@RequestBody RootOptimizeDTO rootOptimizeReqDTO) throws IOException {
         RootOptimizeDTO result = planService.getOptimizingTime(rootOptimizeReqDTO);
         return Response.of(HttpStatus.OK, "목적지 리스트 최적화 완료", result);
     }
