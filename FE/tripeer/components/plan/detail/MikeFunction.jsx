@@ -86,14 +86,16 @@ const MikeFunction = (props) => {
     };
   }, [myVideo, roomName]);
   return (
-    <div style={{ display: "none" }}>
+    <div style={{ zIndex: "-1", pointerEvents: "none" }}>
       <video
         ref={myVideo}
         onLoadedMetadata={(e) => {
           e.currentTarget.play();
         }}
       />
-      <div ref={videoGrid} style={{ display: "none" }}></div>
+      <div
+        ref={videoGrid}
+        style={{ zIndex: "-1", pointerEvents: "none" }}></div>
     </div>
   );
 };
