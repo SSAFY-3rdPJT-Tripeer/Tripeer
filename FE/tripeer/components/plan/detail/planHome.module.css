@@ -160,6 +160,91 @@
   padding: 32px 24px 24px 32px;
 }
 
+.notifyModalBack {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.notifyModalBox {
+  width: 450px;
+  height: 500px;
+  background-color: white;
+  border-radius: 3px;
+  padding: 16px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.notifyModalHeader {
+  font-size: 1.1rem;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  color: #161616;
+}
+
+.notifyModalContentBox {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: 1px #d9d9d9 solid;
+  height: 350px;
+  padding: 10px;
+  resize: none;
+  font-size: 1.1rem;
+}
+.notifyModalContentBox::-webkit-scrollbar {
+  width: 4px;
+}
+.notifyModalContentBox::-webkit-scrollbar-thumb {
+  height: 10%;
+  background: #cecdcd;
+  border-radius: 10px;
+}
+
+.notifyModalContentBox::-webkit-scrollbar-track {
+  background: #fff;
+}
+.notifyModalContentBox:focus {
+  outline: 1.5px #d9d9d9 solid;
+}
+
+.notifyModalBtns {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  width: 100%;
+}
+.notifyModalCancelBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f7f7f7;
+  color: #3d3c3c;
+  width: 45%;
+  height: 50px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.notifyModalConfirmBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #04acb5;
+  color: #fff;
+  width: 45%;
+  height: 50px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.notifyModalCancelBtn:hover {
+  transform: scale(1.01);
+}
+.notifyModalConfirmBtn:hover {
+  transform: scale(1.01);
+}
+
 .configIcon {
   width: 26px;
   height: 26px;

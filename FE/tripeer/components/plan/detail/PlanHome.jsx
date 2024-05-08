@@ -11,7 +11,9 @@ const PlanHome = (props) => {
   const [titleChange, setTitleChange] = useState(false);
   const [onAdd, setOnAdd] = useState(false);
   const [searchResult, setSearchResult] = useState([]);
+  const [isNotify, setIsNotify] = useState(false);
   const titleInput = useRef(null);
+  const notifyText = useRef();
 
   const COLOR = [
     "#A60000",
@@ -144,7 +146,12 @@ const PlanHome = (props) => {
           <div className={styles.notifyBox}>
             <div className={styles.notifyHeader}>
               <p className={styles.functionTitle}>공지사항</p>
-              <div className={styles.configIcon} />
+              <div
+                className={styles.configIcon}
+                onClick={() => {
+                  setIsNotify(true);
+                }}
+              />
             </div>
             <div className={styles.notifyContent}>
               <hr className={styles.notifyLine} />
@@ -278,6 +285,38 @@ const PlanHome = (props) => {
           </div>
         </div>
       ) : null}
+      {isNotify ? (
+        <div
+          className={styles.addContainer}
+          onMouseDown={(e) => {
+            if (e.currentTarget === e.target) setIsNotify(false);
+          }}>
+          <div className={styles.notifyModalBox}>
+            <div className={styles.notifyModalHeader}>공지사항</div>
+            <textarea
+              className={styles.notifyModalContentBox}
+              ref={notifyText}></textarea>
+            <div className={styles.notifyModalBtns}>
+              <div
+                className={styles.notifyModalCancelBtn}
+                onClick={() => {
+                  setIsNotify(false);
+                }}>
+                취소
+              </div>
+              <div
+                className={styles.notifyModalConfirmBtn}
+                onClick={() => {
+                  setIsNotify(false);
+                }}>
+                확인
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };
