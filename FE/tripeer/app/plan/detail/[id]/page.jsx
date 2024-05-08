@@ -13,6 +13,7 @@ import PlanHome from "@/components/plan/detail/PlanHome";
 import PlanMap from "@/components/plan/detail/PlanMap";
 import PlanSchedule from "@/components/plan/detail/PlanSchedule";
 import api from "@/utils/api";
+import MikeFunction from "@/components/plan/detail/MikeFunction";
 
 const PageDetail = (props) => {
   const [provider, setProvider] = useState(null);
@@ -27,6 +28,7 @@ const PageDetail = (props) => {
   const [showInfo, setShowInfo] = useState("...");
   const [timer, setTimer] = useState(null);
   const router = useRouter();
+  const [roomName, setRoomName] = useState(null);
 
   const COLOR = [
     "#A60000",
@@ -68,6 +70,7 @@ const PageDetail = (props) => {
   useEffect(() => {
     const setUserState = async () => {
       const res = await api.get(`/plan/myinfo/${props.params.id}`);
+      setRoomName(props.params.id); // socket 연결을 위한 roomName 생성
       setMyInfo(res.data.data);
       setShowInfo(res.data.data.nickname);
       provider.awareness.setLocalStateField("user", {
@@ -189,6 +192,7 @@ const PageDetail = (props) => {
       />,
       <PlanSchedule
         key={"PlanSchedule"}
+        plan={plan}
         online={online}
         myInfo={myInfo}
         provider={provider}
@@ -198,67 +202,70 @@ const PageDetail = (props) => {
   }, [props, plan, online, myInfo, provider, mouseInfo]);
 
   return (
-    <div
-      className={styles.container}
-      onMouseMove={(e) => {
-        updateMouse(e.clientX, e.clientY);
-        setMyMouse([e.clientX, e.clientY]);
-      }}>
-      {!mode ? (
-        <span
-          style={{
-            transform: `translate(${myMouse[0] + 10}px, ${myMouse[1] + 10}px)`,
-            backgroundColor: `${COLOR[myInfo.order]}`,
-          }}
-          className={styles.userNickname}>
-          Me
-        </span>
-      ) : (
-        <textarea
-          style={{
-            transform: `translate(${myMouse[0] + 10}px, ${myMouse[1] + 10}px)`,
-            backgroundColor: `${COLOR[myInfo.order]}`,
-          }}
-          className={`${styles.userNickname} ${styles.userInput}`}
-          placeholder="글을 입력하세요."
-          ref={inputBox}
-          rows={3}
-          maxLength={35}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-            }
-          }}
-          onChange={(e) => {
-            chat(e);
-          }}
-        />
-      )}
-      {mouseInfo.map((user, idx) => {
-        return user.id === myInfo.userId || user.page !== current ? null : (
-          <div key={idx}>
-            <div
-              key={`mouse${idx}`}
-              className={styles.mouse}
-              style={{
-                backgroundImage: `url(https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/mouse${user.color}.svg)`,
-                transform: `translate(${user.x}px, ${user.y}px)`,
-              }}></div>
-            <span
-              key={`name${idx}`}
-              style={{
-                transform: `translate(${user.x + 20}px, ${user.y + 10}px)`,
-                backgroundColor: `${COLOR[user.color]}`,
-              }}
-              className={styles.userNickname}>
-              {user.nickname}
-            </span>
-          </div>
-        );
-      })}
-      <PlanNav current={current} setCurrent={setCurrent}></PlanNav>
-      {RENDER[current]}
-    </div>
+    <>
+      <MikeFunction roomName={roomName} />
+      <div
+        className={styles.container}
+        onMouseMove={(e) => {
+          updateMouse(e.clientX, e.clientY);
+          setMyMouse([e.clientX, e.clientY]);
+        }}>
+        {!mode ? (
+          <span
+            style={{
+              transform: `translate(${myMouse[0] + 10}px, ${myMouse[1] + 10}px)`,
+              backgroundColor: `${COLOR[myInfo.order]}`,
+            }}
+            className={styles.userNickname}>
+            Me
+          </span>
+        ) : (
+          <textarea
+            style={{
+              transform: `translate(${myMouse[0] + 10}px, ${myMouse[1] + 10}px)`,
+              backgroundColor: `${COLOR[myInfo.order]}`,
+            }}
+            className={`${styles.userNickname} ${styles.userInput}`}
+            placeholder="글을 입력하세요."
+            ref={inputBox}
+            rows={3}
+            maxLength={35}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+              }
+            }}
+            onChange={(e) => {
+              chat(e);
+            }}
+          />
+        )}
+        {mouseInfo.map((user, idx) => {
+          return user.id === myInfo.userId || user.page !== current ? null : (
+            <div key={idx}>
+              <div
+                key={`mouse${idx}`}
+                className={styles.mouse}
+                style={{
+                  backgroundImage: `url(https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/mouse${user.color}.svg)`,
+                  transform: `translate(${user.x}px, ${user.y}px)`,
+                }}></div>
+              <span
+                key={`name${idx}`}
+                style={{
+                  transform: `translate(${user.x + 20}px, ${user.y + 10}px)`,
+                  backgroundColor: `${COLOR[user.color]}`,
+                }}
+                className={styles.userNickname}>
+                {user.nickname}
+              </span>
+            </div>
+          );
+        })}
+        <PlanNav current={current} setCurrent={setCurrent}></PlanNav>
+        {RENDER[current]}
+      </div>
+    </>
   );
 };
 

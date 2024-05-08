@@ -3,7 +3,7 @@ import styles from "./planHome.module.css";
 import api from "@/utils/api";
 
 const PlanHome = (props) => {
-  const { plan, online, provider, myInfo, mouseInfo } = props;
+  const { plan, online, provider, myInfo } = props;
   const [title, setTitle] = useState("");
   const [members, setMembers] = useState([]);
   const [towns, setTowns] = useState([]);
@@ -11,7 +11,9 @@ const PlanHome = (props) => {
   const [titleChange, setTitleChange] = useState(false);
   const [onAdd, setOnAdd] = useState(false);
   const [searchResult, setSearchResult] = useState([]);
+  const [yNotify, setYNotify] = useState(null);
   const titleInput = useRef(null);
+  const notifyTextArea = useRef(null);
 
   const COLOR = [
     "#A60000",
@@ -81,6 +83,25 @@ const PlanHome = (props) => {
     }
   }, [plan]);
 
+  const notifyChange = (e) => {
+    if (yNotify && e.nativeEvent.isComposing === false) {
+      const temp = e.target.value;
+      yNotify.delete(0, yNotify.length);
+      yNotify.insert(0, temp);
+    }
+  };
+
+  useEffect(() => {
+    if (provider) {
+      const textArea = provider.doc.getText("textArea");
+      setYNotify(textArea);
+      notifyTextArea.current.value = textArea.toString();
+      textArea.observe(() => {
+        notifyTextArea.current.value = textArea.toString();
+      });
+    }
+  }, [provider]);
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>
@@ -102,7 +123,6 @@ const PlanHome = (props) => {
       <article className={styles.contentBox}>
         <section className={styles.regionBox}>
           <div className={styles.regionHeader}>
-            {" "}
             <div className={styles.pointerIcon} />
             <span className={styles.regionHeaderFont}>목적지</span>
           </div>
@@ -144,12 +164,14 @@ const PlanHome = (props) => {
           <div className={styles.notifyBox}>
             <div className={styles.notifyHeader}>
               <p className={styles.functionTitle}>공지사항</p>
-              <div className={styles.configIcon} />
             </div>
             <div className={styles.notifyContent}>
-              <hr className={styles.notifyLine} />
-              <p className={styles.notifyText}>공지사항이 없습니다.</p>
-              <hr className={styles.notifyLine} />
+              <textarea
+                className={styles.notifyText}
+                ref={notifyTextArea}
+                onChange={(e) => {
+                  notifyChange(e);
+                }}></textarea>
             </div>
           </div>
           <div className={styles.memberBox}>
@@ -185,7 +207,11 @@ const PlanHome = (props) => {
                         <p className={styles.memberName}>{member.nickname}</p>
                       </div>
                       <div className={styles.memberSounds}>
-                        <div className={styles.mic}></div>
+                        {member.nickname === myInfo.nickname ? (
+                          <div className={styles.mic} onClick={() => {}}></div>
+                        ) : (
+                          <div className={styles.mic}></div>
+                        )}
                         <div className={styles.speaker}></div>
                       </div>
                     </div>

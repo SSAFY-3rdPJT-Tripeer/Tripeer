@@ -75,7 +75,7 @@ export default function PlacePage({ params }) {
     } else {
       setIsCity(false);
     }
-    console.log("플레이스 정보 : ", list);
+    // console.log("플레이스 정보 : ", list);
   }, [list]);
 
   return (

@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 
 // 내부 모듈
 import { card } from "./diaryDummy";
-import styles from "./diaryCard.module.css";
+import styles from "./diaryCardList.module.css";
 import Image from "next/image";
 
 const DiaryCard = () => {

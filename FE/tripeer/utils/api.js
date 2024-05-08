@@ -6,7 +6,7 @@ const api = axios.create({
   // 기본 주소
   baseURL: `${process.env.NEXT_PUBLIC_API_URL}`,
   withCredentials: true,
-  timeout: 7000,
+  timeout: 20000,
 });
 api.interceptors.request.use(async (config) => {
   // 액세스 토큰 로컬에서 가져오기
@@ -16,6 +16,11 @@ api.interceptors.request.use(async (config) => {
   // 만료 됐는지 확인
   const decodedToken = jwtDecode(token);
   const isTokenExpired = decodedToken.exp * 1000 < Date.now();
+
+  // const re = cookies.get("Authorization-re");
+  // // 만료 됐는지 확인
+  // const decodedTokenRe = jwtDecode(re);
+  // const isTokenExpiredRe = decodedTokenRe.exp * 1000 < Date.now();
 
   // 만료된 경우
   if (isTokenExpired) {

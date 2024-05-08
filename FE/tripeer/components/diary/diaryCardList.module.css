@@ -18,10 +18,10 @@
   position: relative;
   margin: 20px 2.1% 50px;
   width: 29%;
-  height: 360px;
+  height: 400px;
   padding: 15px;
   background: #fff;
-  box-shadow: 4px 4px 20px rgba(0, 0, 0, 25%);
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 15%);
   border-radius: 10px;
   cursor: pointer;
   animation: fade-in 1s ease;
@@ -44,6 +44,7 @@
   font-size: 1.1rem;
   font-weight: 600;
   color: #545454;
+  margin-top: 10px;
   margin-bottom: 10px;
 }
 .placeList {

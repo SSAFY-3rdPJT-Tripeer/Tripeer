@@ -83,8 +83,8 @@ const Landing1 = () => {
             src={banner1 ? banner1 : defaultImg}
             fill
             alt="banner"
-            placeholder="blur"
-            blurDataURL={`${defaultImg}`}
+            // placeholder="blur"
+            // blurDataURL={`${defaultImg}`}
             priority="true"
             sizes="(max-width: 768px) 100vw,
             (max-width: 1200px) 50vw,

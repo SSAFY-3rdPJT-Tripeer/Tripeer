@@ -3,6 +3,7 @@
 // 외부 모듈
 import Link from "next/link";
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 
 // 내부 모듈
 import styles from "./notFound.module.css";
@@ -50,7 +51,22 @@ const NotFound = () => {
   return (
     <>
       <main className={styles.container}>
-        <div className={styles.backImg} ref={refImg}>
+        <div
+          className={styles.backImgBox}
+          ref={refImg}
+          style={{ position: "relative" }}>
+          <Image
+            loader={() => {
+              return "https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/notFoundImg.png";
+            }}
+            src={
+              "https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/notFoundImg.png"
+            }
+            alt="notfound"
+            fill
+            property="false"
+            unoptimized={true}
+            quality={100}></Image>
           <div className={styles.notfoundText} ref={refTitle}></div>
           <p className={styles.notfoundSubText} ref={refSubTitle1}>
             페이지의 주소가 잘못 입력되었거나,

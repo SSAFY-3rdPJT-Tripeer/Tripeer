@@ -154,10 +154,95 @@
 }
 .notifyBox {
   width: 100%;
-  height: 228px;
+  height: 250px;
   border-radius: 8px;
   box-shadow: 0px 0px 30px 0px rgba(48, 54, 77, 0.1);
   padding: 32px 24px 24px 32px;
+}
+
+.notifyModalBack {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.notifyModalBox {
+  width: 450px;
+  height: 500px;
+  background-color: white;
+  border-radius: 3px;
+  padding: 16px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.notifyModalHeader {
+  font-size: 1.1rem;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  color: #161616;
+}
+
+.notifyModalContentBox {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: 1px #d9d9d9 solid;
+  height: 350px;
+  padding: 10px;
+  resize: none;
+  font-size: 1.1rem;
+}
+.notifyModalContentBox::-webkit-scrollbar {
+  width: 4px;
+}
+.notifyModalContentBox::-webkit-scrollbar-thumb {
+  height: 10%;
+  background: #cecdcd;
+  border-radius: 10px;
+}
+
+.notifyModalContentBox::-webkit-scrollbar-track {
+  background: #fff;
+}
+.notifyModalContentBox:focus {
+  outline: 1.5px #d9d9d9 solid;
+}
+
+.notifyModalBtns {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  width: 100%;
+}
+.notifyModalCancelBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f7f7f7;
+  color: #3d3c3c;
+  width: 45%;
+  height: 50px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.notifyModalConfirmBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #04acb5;
+  color: #fff;
+  width: 45%;
+  height: 50px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.notifyModalCancelBtn:hover {
+  transform: scale(1.01);
+}
+.notifyModalConfirmBtn:hover {
+  transform: scale(1.01);
 }
 
 .configIcon {
@@ -181,9 +266,30 @@
   border: #f3f3f3 1px solid;
 }
 .notifyText {
-  margin: 20px 4px 20px 4px;
-  text-align: center;
-  color: #7a7a7a;
+  margin-top: 0px;
+  margin-bottom: 20px;
+  border: 1px #d9d9d9 solid;
+  height: 150px;
+  padding: 10px;
+  width: 100%;
+  resize: none;
+}
+
+.notifyText::-webkit-scrollbar {
+  width: 4px;
+}
+.notifyText::-webkit-scrollbar-thumb {
+  height: 10%;
+  background: #cecdcd;
+  border-radius: 10px;
+}
+
+.notifyText::-webkit-scrollbar-track {
+  background: #fff;
+}
+
+.notifyText:focus {
+  outline: none;
 }
 
 .notifyContent {

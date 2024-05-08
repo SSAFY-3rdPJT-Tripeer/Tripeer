@@ -7,27 +7,55 @@ import GoodPlaceIcon from "@/components/plan/asset/GoodPlace.svg";
 
 export default function ScheduleCategoryChip({ category }) {
   const categoryList = {
-    명소: {
-      src: GoodPlaceIcon,
+    관광지: {
+      name: "명소",
       color: "#2D8F8A",
+      img: GoodPlaceIcon,
+    },
+    문화시설: {
+      name: "명소",
+      color: "#2D8F8A",
+      img: GoodPlaceIcon,
+    },
+    "축제 공연 행사": {
+      name: "명소",
+      color: "#2D8F8A",
+      img: GoodPlaceIcon,
+    },
+    "여행 코스": {
+      name: "명소",
+      color: "#2D8F8A",
+      img: GoodPlaceIcon,
+    },
+    레포츠: {
+      name: "명소",
+      color: "#2D8F8A",
+      img: GoodPlaceIcon,
     },
     숙박: {
-      src: SleepIcon,
+      name: "숙박",
       color: "#D26D6D",
+      img: SleepIcon,
     },
-    맛집: {
-      src: EatIcon,
+    쇼핑: {
+      name: "명소",
+      color: "#2D8F8A",
+      img: GoodPlaceIcon,
+    },
+    음식점: {
+      name: "맛집",
       color: "#D25B06",
+      img: EatIcon,
     },
   };
 
   return (
     <div className={styles.container}>
-      <Image src={categoryList[category].src} alt={""} />
+      <Image src={categoryList[category].img} alt={""} />
       <p
         className={styles.p}
         style={{ color: `${categoryList[category].color}` }}>
-        {category}
+        {categoryList[category].name}
       </p>
     </div>
   );
