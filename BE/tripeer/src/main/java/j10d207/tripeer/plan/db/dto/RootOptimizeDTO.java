@@ -13,7 +13,7 @@ import java.util.List;
 public class RootOptimizeDTO {
 
     private int option;
-    private List<LocalTime> spotTime;
+    private List<String> spotTime;
     private List<place> placeList;
 
     @Getter
@@ -31,7 +31,7 @@ public class RootOptimizeDTO {
         private long planId;
         private String profileImage;
         private boolean spot;
-        private boolean spotInfoId;
+        private String spotInfoId;
         private String title;
         private int userId;
         private boolean wishlist;

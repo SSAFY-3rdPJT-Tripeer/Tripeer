@@ -5,41 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f2828d7a-f2ab-4d01-bbeb-dad2e3c3297f" name="변경" comment="">
-      <change beforePath="$PROJECT_DIR$/../.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/BE.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.5/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.5/executionHistory/executionHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.5/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.5/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.5/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.5/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.5/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.5/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.5/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.5/fileHashes/resourceHashesCache.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/common/ODsaySetting.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.5/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.5/checksums/checksums.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.5/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.5/checksums/md5-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.5/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.5/checksums/sha1-checksums.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/BE.tripeer.main.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/j10d207.tripeer.main.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/tripeer.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/tripeer.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/kakao/controller/KakaoController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/kakao/service/KakaoService.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/kakao/service/KakaoService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/kakao/service/KakaoServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/kakao/service/KakaoServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/controller/PlanController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/controller/PlanController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/service/PlanService.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/service/PlanService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/service/PlanServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/j10d207/tripeer/plan/service/PlanServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/PlanServiceImpl.class.uniqueId0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/kakao/controller/KakaoController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/kakao/service/KakaoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/kakao/service/KakaoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/kakao/service/KakaoServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/kakao/service/KakaoServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/plan/controller/PlanController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/plan/controller/PlanController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/plan/service/PlanService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/plan/service/PlanService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/plan/db/dto/RootOptimizeDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/plan/db/dto/RootOptimizeDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/plan/service/PlanServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/j10d207/tripeer/plan/service/PlanServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,12 +37,24 @@
       </state>
     </system>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/../.." value="backend" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 1
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
   <component name="ProjectId" id="2gAmP7fvNmuqWdeYuRRC49yP4zZ" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -84,7 +70,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "Spring Boot.TripeerApplication.executor": "Run",
-    "git-widget-placeholder": "be/fix/carAlgorithm",
+    "git-widget-placeholder": "backend",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -106,6 +92,14 @@
       </method>
     </configuration>
   </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-18abd8497189-intellij.indexing.shared.core-IU-241.14494.240" />
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-IU-241.14494.240" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="애플리케이션 수준" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="디폴트 작업">
@@ -115,6 +109,8 @@
       <option name="presentableId" value="Default" />
       <updated>1715148731399</updated>
       <workItem from="1715148733271" duration="2275000" />
+      <workItem from="1715151788555" duration="185000" />
+      <workItem from="1715152029433" duration="2310000" />
     </task>
     <servers />
   </component>
