@@ -192,8 +192,8 @@ public class PlanController {
 
     //플랜 최단거리 조정
     @PostMapping("/optimizing")
-    public Response<List<PlanDetailResDTO>> getOptimizedPlan(@RequestBody List<Integer> spotIdList) {
-        List<PlanDetailResDTO> result = planService.getOptimizingTime(spotIdList);
+    public Response<List<PlanDetailResDTO>> getOptimizedPlan(@RequestBody RootOptimizeDTO rootOptimizeReqDTO) {
+        List<PlanDetailResDTO> result = planService.getOptimizingTime(rootOptimizeReqDTO);
         return Response.of(HttpStatus.OK, "목적지 리스트 최적화 완료", result);
     }
 }

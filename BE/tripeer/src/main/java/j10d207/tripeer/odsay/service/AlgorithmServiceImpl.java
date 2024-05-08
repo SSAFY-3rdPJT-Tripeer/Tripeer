@@ -88,37 +88,7 @@ public class AlgorithmServiceImpl implements AlgorithmService{
     }
 
     @Override
-    public List<PlanDetailResDTO> getOptimizingTime(List<Integer> spotIdList) {
-        List<CoordinateDTO> coordinates = new ArrayList<>();
-        List<SpotInfoEntity> infoList = new ArrayList<>();
-
-        for(int i = 1; i < spotIdList.size()-1; i++) {
-            SpotInfoEntity tmpSpotInfo = spotInfoRepository.findBySpotInfoId(spotIdList.get(i));
-            infoList.add(tmpSpotInfo);
-            CoordinateDTO tmpCoordinate = CoordinateDTO.builder()
-                    .latitude(tmpSpotInfo.getLatitude())
-                    .longitude(tmpSpotInfo.getLongitude())
-                    .title(tmpSpotInfo.getTitle())
-                    .build();
-            coordinates.add(tmpCoordinate);
-        }
-        SpotInfoEntity startSpotInfo = spotInfoRepository.findBySpotInfoId(spotIdList.getFirst());
-        infoList.add(startSpotInfo);
-        CoordinateDTO startCoordinate = CoordinateDTO.builder()
-                .latitude(startSpotInfo.getLatitude())
-                .longitude(startSpotInfo.getLongitude())
-                .title(startSpotInfo.getTitle())
-                .build();
-        coordinates.add(startCoordinate);
-
-        SpotInfoEntity endSpotInfo = spotInfoRepository.findBySpotInfoId(spotIdList.getLast());
-        infoList.add(endSpotInfo);
-        CoordinateDTO endCoordinate = CoordinateDTO.builder()
-                .latitude(endSpotInfo.getLatitude())
-                .longitude(endSpotInfo.getLongitude())
-                .title(endSpotInfo.getTitle())
-                .build();
-        coordinates.add(endCoordinate);
+    public RootSolve getOptimizingTime(List<CoordinateDTO> coordinates) {
 
         TimeRootInfoDTO[][] timeTable = odsayService.getTimeTable(coordinates);
         for (int i = 0; i < timeTable.length; i++) {
@@ -144,19 +114,6 @@ public class AlgorithmServiceImpl implements AlgorithmService{
         System.out.println();
         System.out.println("최종 : " + root.getMinTime());
 
-        List<PlanDetailResDTO> planDetailResDTOList = new ArrayList<>();
-        int j = 0;
-        for(Integer i : root.getResultNumbers()) {
-            System.out.println("i = " + i + ", j = " + j);
-            PlanDetailResDTO planDetailResDTO = PlanDetailResDTO.builder()
-                    .title(infoList.get(i).getTitle())
-                    .contentType(ContentTypeEnum.getNameByCode(infoList.get(i).getContentTypeId()))
-                    .spotTime(LocalTime.of(root.getRootTime()[j]/60, root.getRootTime()[j++]%60))
-                    .movingRoot(j == root.getResultNumbers().size() ? null : timeTable[i][root.getResultNumbers().get(j)].getRootInfo().toString())
-                    .build();
-            planDetailResDTOList.add(planDetailResDTO);
-        }
-
-        return planDetailResDTOList;
+        return root;
     }
 }

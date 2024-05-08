@@ -6,6 +6,7 @@ import j10d207.tripeer.odsay.db.dto.CoordinateDTO;
 import j10d207.tripeer.odsay.db.dto.TimeRootInfoDTO;
 import j10d207.tripeer.odsay.service.AlgorithmService;
 import j10d207.tripeer.odsay.service.OdsayService;
+import j10d207.tripeer.odsay.service.RootSolve;
 import j10d207.tripeer.place.db.ContentTypeEnum;
 import j10d207.tripeer.place.db.entity.*;
 import j10d207.tripeer.place.db.repository.SpotInfoRepository;
@@ -29,6 +30,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -583,8 +585,69 @@ public class PlanServiceImpl implements PlanService {
     }
 
     @Override
-    public List<PlanDetailResDTO> getOptimizingTime(List<Integer> spotIdList) {
-        return algorithmService.getOptimizingTime(spotIdList);
+    public List<PlanDetailResDTO> getOptimizingTime(RootOptimizeDTO rootOptimizeDTO) {
+        List<CoordinateDTO> coordinateDTOList = new ArrayList<>();
+
+        List<RootOptimizeDTO.place> placeList = rootOptimizeDTO.getPlaceList();
+        for (int i = 1 ; i < placeList.size()-1 ; i++) {
+            CoordinateDTO coordinateDTO = CoordinateDTO.builder()
+                    .title(placeList.get(i).getTitle())
+                    .latitude(placeList.get(i).getLatitude())
+                    .longitude(placeList.get(i).getLongitude())
+                    .build();
+            coordinateDTOList.add(coordinateDTO);
+        }
+
+        CoordinateDTO startPoint = CoordinateDTO.builder()
+                .title(placeList.getFirst().getTitle())
+                .latitude(placeList.getFirst().getLatitude())
+                .longitude(placeList.getLast().getLongitude())
+                .build();
+        coordinateDTOList.add(startPoint);
+
+        CoordinateDTO endPoint = CoordinateDTO.builder()
+                .title(placeList.getLast().getTitle())
+                .latitude(placeList.getLast().getLatitude())
+                .longitude(placeList.getLast().getLongitude())
+                .build();
+        coordinateDTOList.add(endPoint);
+
+        RootSolve root = null;
+        // 자동차
+        if ( rootOptimizeDTO.getOption() == 0 ) {
+
+        }
+        // 대중교통
+        else if ( rootOptimizeDTO.getOption() == 1 ) {
+            root = algorithmService.getOptimizingTime(coordinateDTOList);
+        } else {
+
+        }
+
+        RootOptimizeDTO result = new RootOptimizeDTO();
+        List<RootOptimizeDTO.place> newPlaceList = new ArrayList<>();
+        newPlaceList.add(rootOptimizeDTO.getPlaceList().getFirst());
+
+        if (root != null) {
+
+            for (int i = 1; i < root.getResultNumbers().size() -1 ; i ++) {
+                rootOptimizeDTO.getPlaceList().get(root.getResultNumbers().get(i));
+            }
+            int j = 0;
+//            for(Integer i : root.getResultNumbers()) {
+//                System.out.println("i = " + i + ", j = " + j);
+//                PlanDetailResDTO planDetailResDTO = PlanDetailResDTO.builder()
+//                        .title(infoList.get(i).getTitle())
+//                        .contentType(ContentTypeEnum.getNameByCode(infoList.get(i).getContentTypeId()))
+//                        .spotTime(LocalTime.of(root.getRootTime()[j]/60, root.getRootTime()[j++]%60))
+//                        .movingRoot(j == root.getResultNumbers().size() ? null : timeTable[i][root.getResultNumbers().get(j)].getRootInfo().toString())
+//                        .build();
+//                planDetailResDTOList.add(planDetailResDTO);
+//            }
+        }
+
+
+        return null;
     }
 
 }

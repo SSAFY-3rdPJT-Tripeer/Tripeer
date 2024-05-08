@@ -70,7 +70,8 @@ spring:
 
 odsay:
 #  apikey: ENC(LATQ/BqKAqGJBePHethXpBKOm0GvpqwICuxB4wZuRBF/AXFjn5VsTeJ7qSO3ejq62h1z8f/ZXJ4=)
-  apikey: ENC(yfzzcAsOP7Yn6JYBzeeVekmNyQQLqTyJ7M3FI1Uf4fs7vVKYzJE0EzZkvE32YT503dwZg1CcyRQRD6jo5fJ/3w==)
+#  apikey: ENC(yfzzcAsOP7Yn6JYBzeeVekmNyQQLqTyJ7M3FI1Uf4fs7vVKYzJE0EzZkvE32YT503dwZg1CcyRQRD6jo5fJ/3w==)
+  apikey: ENC(VPccuDijcDl/BxPtuZIyWBuoATh7weX9Vcjy8138taDrnqv1ZrwFXsoo0G5etBXNNFglxAsERcxte0lOifHh4w==)
 
 cloud:
   aws:
