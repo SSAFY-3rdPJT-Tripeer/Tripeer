@@ -40,7 +40,10 @@ public enum ErrorCode {
     SPOT_NOT_FOUND(HttpStatus.NOT_FOUND, "SPOT-001", "스팟을 찾을 수 없습니다."),
 
     //root
-    NOT_FOUND_ROOT(HttpStatus.BAD_REQUEST, "ROOT-001", "대중교통 수단이 없습니다.");
+    NOT_FOUND_ROOT(HttpStatus.BAD_REQUEST, "ROOT-001", "대중교통 수단이 없습니다."),
+
+    //Email
+    EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "EMAIL-001", "이메일 주소를 찾을 수 없습니다.");
 
     private final HttpStatus httpStatus;	// HttpStatus
     private final String code;				// ACCOUNT-001

@@ -1,0 +1,23 @@
+package j10d207.tripeer.email.controller;
+
+
+import j10d207.tripeer.email.db.dto.EmailDTO;
+import j10d207.tripeer.email.service.EmailService;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
+
+@Slf4j
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/email")
+public class EmailController {
+
+    private final EmailService emailService;
+
+    @PostMapping("")
+    public boolean test(@RequestBody EmailDTO emailDTO) {
+        return emailService.sendEmail(emailDTO);
+    }
+}
