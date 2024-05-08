@@ -3,9 +3,8 @@
 import LoadComponent from "@/components/loading/LoadComponent";
 import { useEffect, useState } from "react";
 
-const Loading = () => {
+export default function Loading() {
   const [step, setStep] = useState(2);
-
   useEffect(() => {
     const timeout = setTimeout(() => {
       setStep(1);
@@ -15,12 +14,9 @@ const Loading = () => {
       clearTimeout(timeout);
     };
   }, []);
-
   return (
     <div>
       <LoadComponent step={step} />
     </div>
   );
-};
-
-export default Loading;
+}

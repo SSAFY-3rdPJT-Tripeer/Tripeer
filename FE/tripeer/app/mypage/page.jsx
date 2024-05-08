@@ -5,9 +5,11 @@ import styles from "./page.module.css";
 import { useEffect, useRef, useState } from "react";
 import api from "@/utils/api";
 import { useRouter } from "next/navigation";
+import useRegisterStore from "@/stores/register";
 
 export default function MyPage() {
   const router = useRouter();
+  const store = useRegisterStore();
   const [myInfo, setMyInfo] = useState(null);
   const [warn, setWarn] = useState(false);
   const [year, setYear] = useState("");
@@ -53,9 +55,11 @@ export default function MyPage() {
     const form = new FormData();
     form.append("image", file);
 
-    await api.patch("/user/myinfo/profileimage", form, {
+    const res = await api.patch("/user/myinfo/profileimage", form, {
       headers: { "Content-Type": "multipart/form-data" },
     });
+    const image = res.data.data.imageUrl;
+    store.setMyInfo({ ...store.myInfo, profileImage: image });
     window.location.reload();
   };
 
@@ -90,7 +94,9 @@ export default function MyPage() {
         style2: null,
         style3: null,
       };
-      await api.patch(`/user/myinfo`, request);
+      const res = await api.patch(`/user/myinfo`, request);
+      console.log(res);
+      store.setMyInfo({ ...store.myInfo, nickname: nickname });
       router.push("/");
     }
   };
