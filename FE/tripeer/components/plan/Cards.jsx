@@ -257,7 +257,7 @@ const Cards = () => {
         <div className={styles.removeBack}>
           <div className={styles.removeContainer}>
             <p className={styles.removeTitle}>
-              정말 해당 플랜에서 나가시겠습니까?
+              해당 여행 계획을 삭제하시겠습니까?
             </p>
             <div className={styles.removeBtns}>
               <button
