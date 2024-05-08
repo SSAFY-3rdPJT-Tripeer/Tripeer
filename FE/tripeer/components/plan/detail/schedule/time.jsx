@@ -12,7 +12,7 @@ export default function Time({ arrIdx, idx, timeList, onClickTime }) {
       <div className={styles.line} />
       <div className={styles.box}>
         <Image src={carSrc} alt={""} width={16} height={15} />
-        <p className={styles.time}>{timeList[arrIdx][idx]}분</p>
+        <p className={styles.time}>{timeList[arrIdx][idx]}</p>
       </div>
       <div className={styles.line} />
     </main>
