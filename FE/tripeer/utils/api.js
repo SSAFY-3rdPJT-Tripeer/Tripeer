@@ -17,6 +17,11 @@ api.interceptors.request.use(async (config) => {
   const decodedToken = jwtDecode(token);
   const isTokenExpired = decodedToken.exp * 1000 < Date.now();
 
+  // const re = cookies.get("Authorization-re");
+  // // 만료 됐는지 확인
+  // const decodedTokenRe = jwtDecode(re);
+  // const isTokenExpiredRe = decodedTokenRe.exp * 1000 < Date.now();
+
   // 만료된 경우
   if (isTokenExpired) {
     try {
