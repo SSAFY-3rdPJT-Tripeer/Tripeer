@@ -80,7 +80,7 @@ spring:
       starttls.enable: true
 
 odsay:
-  apikey: ENC(OC5mY8a/odGZFsEF+wZiszmYl8pA95aVNNUQvuKgUW4UcDBW2XJbw0WyG8Z32ay10cjGgYQ8Edk=)
+  apikey: ENC(WY4s6rkLclxdcAy0yC5Qzkz5srAwLMT1XChs29iWl59GKBggZbQW4isM/Lx75BVXfvIVkk4poNc=)
 
 
 cloud:
