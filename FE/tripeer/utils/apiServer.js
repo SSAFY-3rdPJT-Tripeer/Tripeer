@@ -4,13 +4,13 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import cookies from "js-cookie";
 
-const api = axios.create({
+const apiServer = axios.create({
   // 기본 주소
-  baseURL: `${process.env.NEXT_PUBLIC_API_URL}`,
+  baseURL: `http://localhost:3001`,
   withCredentials: true,
   timeout: 20000,
 });
-api.interceptors.request.use(async (config) => {
+apiServer.interceptors.request.use(async (config) => {
   // 액세스 토큰 로컬에서 가져오기
   // const token = localStorage.getItem("accessToken");
   // 쿠키에서 액세스 토큰 가져오기
@@ -35,7 +35,7 @@ api.interceptors.request.use(async (config) => {
     try {
       // 재발급 요청
       const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/user/reissue`,
+        `https://k10d207.p.ssafy.io`,
         {},
         { withCredentials: true },
       );
@@ -57,4 +57,4 @@ api.interceptors.request.use(async (config) => {
   return config;
 });
 
-export default api;
+export default apiServer;

@@ -42,20 +42,20 @@ export default function ScheduleModal({
   };
 
   const onClickPost = () => {
-    if (selectedLeft === null) {
+    if (selectedLeft === null || totalList[cirIdx].length < 3) {
       setIsOk(false);
       setTimeout(() => {
         setIsOk(true);
-      }, 1000);
+      }, 1500);
       return;
     }
 
     if (selectedLeft) {
-      setOption(0);
-      postData(0);
+      setOption("0");
+      postData("0");
     } else {
-      setOption(1);
-      postData(1);
+      setOption("1");
+      postData("1");
     }
   };
 
@@ -106,7 +106,7 @@ export default function ScheduleModal({
         <div
           className={isOk ? styles.postBtn : styles.notOk}
           onClick={onClickPost}>
-          {isOk ? "확인" : "교통수단을 선택해주세요"}
+          {isOk ? "확인" : "3개 이상의 장소와 교통수단을 선택해주세요"}
         </div>
       </div>
     </main>
