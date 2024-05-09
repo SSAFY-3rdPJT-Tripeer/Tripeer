@@ -19,15 +19,27 @@ api.interceptors.request.use(async (config) => {
   const decodedToken = jwtDecode(token);
   const isTokenExpired = decodedToken.exp * 1000 < Date.now();
 
-  // const re = cookies.get("Authorization-re");
-  // // 만료 됐는지 확인
-  // const decodedTokenRe = jwtDecode(re);
-  // const isTokenExpiredRe = decodedTokenRe.exp * 1000 < Date.now();
+  const re = cookies.get("Authorization-re");
+  console.log("re", re);
+
+  if (re !== undefined && isTokenExpired) {
+    cookies.remove("Authorization");
+    window.location.reload();
+  }
+  // if (re !== undefined) {
+  //   console.log("asd");
+  //   // 만료 됐는지 확인
+  //   const decodedTokenRe = jwtDecode(re);
+  //   const isTokenExpiredRe = decodedTokenRe.exp * 1000 < Date.now();
   //
-  // // 리프레시가 만료된 경우
-  // if (isTokenExpiredRe) {
-  //   await router.push("/login");
-  //   return;
+  //   // 리프레시가 만료된 경우
+  //   if (isTokenExpiredRe) {
+  //     console.log("리프레시 만료");
+  //     cookies.remove("Authorization");
+  //     router.push("/login");
+  //     window.location.reload();
+  //     return;
+  //   }
   // }
 
   // 만료된 경우
