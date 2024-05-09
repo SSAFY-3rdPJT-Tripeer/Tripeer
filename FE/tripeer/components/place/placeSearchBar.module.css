@@ -1,24 +1,27 @@
 .main {
-    border: none;
-    border-radius: 50px;
-    box-shadow: rgb(224, 224, 224) 0 2px 4px 0;
-    width: 600px;
-    height: 60px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  border: none;
+  border-radius: 50px;
+  width: 600px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 30%);
 }
 
 .input {
-    outline: none;
-    height: 50px;
-    width: 480px;
-    font-size: 25px;
-    border: none;
-    margin: 0 20px 0 10px;
+  outline: none;
+  height: 50px;
+  width: 480px;
+  font-size: 25px;
+  border: none;
+  margin: 0 40px 0 10px;
+  background-color: rgba(255, 255, 255, 0%);
+  /* border: 1px red solid; */
 }
 
 .image {
-    width: 45px;
-    height: 42px;
+  width: 45px;
+  height: 42px;
 }
