@@ -167,14 +167,14 @@ public class OdsayServiceImpl implements OdsayService{
         }
         String result = restTemplate.getForObject(targetUrl, String.class);
 //        System.out.println("최초 jsonObject = " + result);
-//        if( count%setting.getList().size() == 0) {
+        if( count%setting.getList().size() == 0) {
             System.out.println("sleep 300");
             try {
                 Thread.sleep(300);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-//        }
+        }
         return JsonParser.parseString(result).getAsJsonObject();
     }
 
