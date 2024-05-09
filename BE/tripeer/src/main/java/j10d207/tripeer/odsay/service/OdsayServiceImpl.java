@@ -12,6 +12,7 @@ import j10d207.tripeer.odsay.db.entity.TerminalTimeLogEntity;
 import j10d207.tripeer.odsay.db.repository.TerminalTimeLogRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -21,6 +22,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,6 +34,7 @@ public class OdsayServiceImpl implements OdsayService{
 
     private final KakaoService kakaoService;
     private final TerminalTimeLogRepository terminalTimeLogRepository;
+    private final ODsaySetting setting;
 
     @Value("${odsay.apikey}")
     private String apikey;
@@ -144,7 +147,8 @@ public class OdsayServiceImpl implements OdsayService{
             return null;
         }
 
-        ODsaySetting setting = new ODsaySetting();
+        System.out.println("setting.getList1() = " + setting.getList1());
+        System.out.println("setting = " + Arrays.toString(setting.getList().toArray()));
         RestTemplate restTemplate = new RestTemplate();
 //        String url = "https://api.odsay.com/v1/api/searchPubTransPathT?apiKey=" + apikey + "&SX=" + SX + "&SY=" + SY + "&EX=" + EX + "&EY=" + EY;
         String url = "https://api.odsay.com/v1/api/searchPubTransPathT";
@@ -167,10 +171,12 @@ public class OdsayServiceImpl implements OdsayService{
         System.out.println("targetUrl = " + targetUrl);
         String result = restTemplate.getForObject(targetUrl, String.class);
 //        System.out.println("최초 jsonObject = " + result);
-        try {
-            Thread.sleep(300);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        if( count%17 == 0) {
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
         return JsonParser.parseString(result).getAsJsonObject();
     }

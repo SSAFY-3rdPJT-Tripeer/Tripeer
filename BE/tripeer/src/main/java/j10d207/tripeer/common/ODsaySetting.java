@@ -1,13 +1,19 @@
 package j10d207.tripeer.common;
 
 
+import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Component
 public class ODsaySetting {
 
     @Value("${odsay.list1}")
@@ -45,10 +51,14 @@ public class ODsaySetting {
     @Value("${odsay.list17}")
     private String list17;
 
-    @Getter
-    List<String> list = new ArrayList<String>();
+    private List<String> list;
 
     public ODsaySetting() {
+        list = new ArrayList<>();
+    }
+
+    @PostConstruct
+    private void init() {
         list.add(list1);
         list.add(list2);
         list.add(list3);
@@ -66,6 +76,5 @@ public class ODsaySetting {
         list.add(list15);
         list.add(list16);
         list.add(list17);
-
     }
 }
