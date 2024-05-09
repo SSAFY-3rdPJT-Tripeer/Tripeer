@@ -14,6 +14,7 @@ const PlanHome = (props) => {
   const [yNotify, setYNotify] = useState(null);
   const titleInput = useRef(null);
   const notifyTextArea = useRef(null);
+  const [mutes, setMutes] = useState({});
 
   const COLOR = [
     "#A60000",
@@ -69,6 +70,15 @@ const PlanHome = (props) => {
     if (townCurrent < 0) setTownShow(towns.length - 1);
     else if (townCurrent > towns.length - 1) setTownShow(0);
     else setTownShow(townCurrent);
+  };
+
+  const turnSpeaker = (userId, video) => {
+    if (video) {
+      const temp = Object.assign(mutes);
+      mutes[userId] ? (temp[userId] = false) : (temp[userId] = true);
+      video.mute = temp[userId];
+      setMutes(temp);
+    }
   };
 
   useEffect(() => {
@@ -206,14 +216,24 @@ const PlanHome = (props) => {
                         </div>
                         <p className={styles.memberName}>{member.nickname}</p>
                       </div>
-                      <div className={styles.memberSounds}>
-                        {member.nickname === myInfo.nickname ? (
-                          <div className={styles.mic} onClick={() => {}}></div>
-                        ) : (
-                          <div className={styles.mic}></div>
-                        )}
-                        <div className={styles.speaker}></div>
-                      </div>
+                      {member.nickname === myInfo.nickname ? null : (
+                        <div className={styles.memberSounds}>
+                          <div
+                            className={
+                              mutes[member.userId]
+                                ? styles.noSpeaker
+                                : styles.speaker
+                            }
+                            onClick={() => {
+                              turnSpeaker(
+                                member.userId,
+                                document.querySelector(
+                                  `.Tripeer${member.userId}`,
+                                ),
+                              );
+                            }}></div>
+                        </div>
+                      )}
                     </div>
                     <hr className={styles.notifyLine} />
                   </div>

@@ -1,194 +1,192 @@
 .container {
-    width: calc(100vw - 72px);
-    height: 100vh;
-    display: flex;
+  width: calc(100vw - 72px);
+  height: 100vh;
+  display: flex;
 }
 
 .main {
-    width: 420px;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    box-shadow: rgb(0, 0, 0, 0.1) 4px 4px 10px 0;
+  width: 420px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: rgb(0, 0, 0, 0.1) 4px 4px 10px 0;
 }
 
 .titleBox {
-    display: flex;
-    align-items: center;
-    padding: 20px 30px;
+  display: flex;
+  align-items: center;
+  padding: 20px 30px;
 }
 
 .titleBox p {
-    color: #3D3C3C;
-    font-size: 20px;
-    font-weight: bold;
-    margin-left: 10px;
+  color: #3d3c3c;
+  font-size: 20px;
+  font-weight: bold;
+  margin-left: 10px;
 }
 
 .line {
-    border: #E6E8EC 1px solid;
-    margin: 0 30px;
+  border: #e6e8ec 1px solid;
+  margin: 0 30px;
 }
 
 .userBox {
-    display: flex;
-    padding: 10px 30px;
+  display: flex;
+  padding: 10px 30px;
 }
 
 .userBox img {
-    width: 45px;
-    height: 45px;
-    border-radius: 100%;
-    margin-right: 10px;
-    border: #858585 3px solid;
+  width: 45px;
+  height: 45px;
+  border-radius: 100%;
+  margin-right: 10px;
+  border: #858585 3px solid;
 }
 
 .list {
-    /*width: calc(100% - 45px);*/
-    width: 380px;
-    height: 100%;
-    margin-left: 30px;
-    margin-top: 10px;
+  /*width: calc(100% - 45px);*/
+  width: 380px;
+  height: 100%;
+  margin-left: 30px;
+  margin-top: 10px;
 }
 
 .itemBox {
-    padding: 10px 0;
+  padding: 10px 0;
 }
 
 .scroll {
-    overflow-y: scroll;
-    padding: 0 10px 0 3px;
+  overflow-y: scroll;
+  padding: 0 10px 0 3px;
 }
 
 .scroll::-webkit-scrollbar {
-    width: 4px;
+  width: 4px;
 }
 
 .scroll::-webkit-scrollbar-thumb {
-    height: 10%;
-    background: #cecdcd;
-    border-radius: 10px;
+  height: 10%;
+  background: #cecdcd;
+  border-radius: 10px;
 }
 
 .scroll::-webkit-scrollbar-track {
-    background: #fff;
+  background: #fff;
 }
-
 
 /* 아래부턴 오른쪽 박스 */
 /*--------------------------------------------------------------*/
 
-
 .mainRight {
-    width: calc(100vw - 492px);
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
+  width: calc(100vw - 492px);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .rightHeader {
-    width: calc(100% - 60px);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 20px 30px;
+  width: calc(100% - 60px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 20px 30px;
 }
 
 .leftSection {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .leftSectionP {
-    margin-left: 10px;
-    color: #545454;
-    font-size: 20px;
-    font-weight: bold;
+  margin-left: 10px;
+  color: #545454;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .update {
-    margin-left: 20px;
-    margin-top: 2px;
+  margin-left: 20px;
+  margin-top: 2px;
 }
 
 .scheduleContainer {
-    width: 100%;
-    height: 100%;
-    display: flex;
+  width: 100%;
+  height: 100%;
+  display: flex;
 }
 
 .scheduleSection {
-    min-width: 363px;
-    width: 363px;
-    height: auto;
-    margin: 30px;
-    padding-bottom: 20px;
+  min-width: 363px;
+  width: 363px;
+  height: auto;
+  margin: 30px;
+  padding-bottom: 20px;
 }
 
 .scHeader {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
 }
 
 .scHeaderBox {
-    display: flex;
-    justify-content: center;
-    align-items: end;
+  display: flex;
+  justify-content: center;
+  align-items: end;
 }
 
 .scP1 {
-    font-size: 20px;
-    font-weight: bold;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .scP2 {
-    margin-left: 10px;
-    font-size: 14px;
-    color: #979797;
-    font-weight: bold;
+  margin-left: 10px;
+  font-size: 14px;
+  color: #979797;
+  font-weight: bold;
 }
 
 .line2 {
-    border: #E6E8EC 1px solid;
-    width: calc(100% - 60px);
-    margin: 0 30px;
+  border: #e6e8ec 1px solid;
+  width: calc(100% - 60px);
+  margin: 0 30px;
 }
 
 .itemBox2 {
-    /*padding: 10px 0;*/
+  /*padding: 10px 0;*/
 }
 
 .divBox {
-    height: 100%;
+  height: 100%;
 }
 
 .draggingItem {
-    /* 들고있을때 컴포넌트 스타일 변경 */
+  /* 들고있을때 컴포넌트 스타일 변경 */
 }
 
 .placeholder {
-    /*  들고 있을때 원래 있던 자리의 플레이스홀더  */
-    display: none;
+  /*  들고 있을때 원래 있던 자리의 플레이스홀더  */
+  display: none;
 }
 
 .scrollX {
-    overflow-x: scroll;
-    padding: 0 10px 0 3px;
-    margin: 5px 10px;
+  overflow-x: scroll;
+  padding: 0 10px 0 3px;
+  margin: 5px 10px;
 }
 
 .scrollX::-webkit-scrollbar {
-    height: 10px;
+  height: 10px;
 }
 
 .scrollX::-webkit-scrollbar-thumb {
-    width: 10%;
-    background: #cecdcd;
-    border-radius: 10px;
+  width: 10%;
+  background: #cecdcd;
+  border-radius: 10px;
 }
 
 .scrollX::-webkit-scrollbar-track {
-    background: #fff;
+  background: #fff;
 }
