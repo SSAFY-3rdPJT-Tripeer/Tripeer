@@ -17,6 +17,7 @@ import Time from "@/components/plan/detail/schedule/time";
 import api from "@/utils/api";
 import OnlineBox from "./OnlineBox";
 import ScheduleModal from "@/components/plan/detail/schedule/scheduleModal";
+import LoadComponent from "@/components/loading/LoadComponent";
 
 const PlanSchedule = (props) => {
   const { myInfo, provider, plan, online } = props;
@@ -32,7 +33,7 @@ const PlanSchedule = (props) => {
   const [timeList, setTimeList] = useState(null);
   const [timeY, setTimeY] = useState(null);
   const [isModal, setIsModal] = useState(false);
-  const [option, setOption] = useState(1);
+  const [option, setOption] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [cirIdx, setCirIdx] = useState(0);
 
@@ -67,6 +68,7 @@ const PlanSchedule = (props) => {
   // 최단거리 계산 온클릭 이벤트
   const postData = async (option) => {
     console.log("로딩중");
+    console.log("option : ", option);
     setIsLoading(true);
     try {
       const res = await api.post("/plan/optimizing", {
@@ -512,9 +514,17 @@ const PlanSchedule = (props) => {
       const tArr = totalYList
         .toJSON()
         .flat()
-        .map((e) => e.spotInfoId);
+        .map((e) => {
+          if (typeof e.spotInfoId === "string") {
+            const parsed = parseInt(e.spotInfoId, 10);
+            return isNaN(parsed) ? 0 : parsed;
+          }
+          return e.spotInfoId;
+        });
 
+      console.log("체크", arr, tArr);
       const remain = arr.filter((e) => !tArr.includes(e.spotInfoId));
+      console.log("리메인", remain);
 
       if (remain.length !== 0) {
         const yItems = new Y.Array();
@@ -713,7 +723,15 @@ const PlanSchedule = (props) => {
           setIsModal={setIsModal}
           setOption={setOption}
           postData={postData}
+          cirIdx={cirIdx}
+          day={day}
+          totalList={totalList}
         />
+      ) : null}
+      {isLoading ? (
+        <div className={styles.loadingModal}>
+          <LoadComponent step={2} />
+        </div>
       ) : null}
       <DragDropContext onDragEnd={onDragEnd}>
         {/*  왼쪽 우리의 여행지 목록 전체 박스  */}
