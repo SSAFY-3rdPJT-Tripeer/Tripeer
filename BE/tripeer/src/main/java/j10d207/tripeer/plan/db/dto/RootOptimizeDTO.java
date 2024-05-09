@@ -31,7 +31,7 @@ public class RootOptimizeDTO {
         private long planId;
         private String profileImage;
         private boolean spot;
-        private String spotInfoId;
+        private int spotInfoId;
         private String title;
         private int userId;
         private boolean wishlist;
