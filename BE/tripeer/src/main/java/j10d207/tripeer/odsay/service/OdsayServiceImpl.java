@@ -4,7 +4,6 @@ import com.nimbusds.jose.shaded.gson.JsonArray;
 import com.nimbusds.jose.shaded.gson.JsonElement;
 import com.nimbusds.jose.shaded.gson.JsonObject;
 import com.nimbusds.jose.shaded.gson.JsonParser;
-import j10d207.tripeer.common.ODsaySetting;
 import j10d207.tripeer.kakao.service.KakaoService;
 import j10d207.tripeer.odsay.db.dto.CoordinateDTO;
 import j10d207.tripeer.odsay.db.dto.TimeRootInfoDTO;
@@ -12,7 +11,6 @@ import j10d207.tripeer.odsay.db.entity.TerminalTimeLogEntity;
 import j10d207.tripeer.odsay.db.repository.TerminalTimeLogRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -22,7 +20,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -34,7 +31,6 @@ public class OdsayServiceImpl implements OdsayService{
 
     private final KakaoService kakaoService;
     private final TerminalTimeLogRepository terminalTimeLogRepository;
-    private final ODsaySetting setting;
 
     @Value("${odsay.apikey}")
     private String apikey;
@@ -155,8 +151,7 @@ public class OdsayServiceImpl implements OdsayService{
                 URLEncoder.encode(String.valueOf(SY), StandardCharsets.UTF_8),
                 URLEncoder.encode(String.valueOf(EX), StandardCharsets.UTF_8),
                 URLEncoder.encode(String.valueOf(EY), StandardCharsets.UTF_8),
-                setting.getList().get(count%setting.getList().size())); // API 키는 이미 인코딩되어 있음
-//                apikey);
+                apikey);
         count++;
         System.out.println("count = " + count);
         URI targetUrl = null;
@@ -167,13 +162,11 @@ public class OdsayServiceImpl implements OdsayService{
         }
         String result = restTemplate.getForObject(targetUrl, String.class);
 //        System.out.println("최초 jsonObject = " + result);
-        if( count%setting.getList().size() == 0) {
-            System.out.println("sleep 300");
-            try {
-                Thread.sleep(300);
+
+        try {
+            Thread.sleep(300);
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            throw new RuntimeException(e);
         }
         return JsonParser.parseString(result).getAsJsonObject();
     }
