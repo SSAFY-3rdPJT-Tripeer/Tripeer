@@ -154,8 +154,8 @@ public class OdsayServiceImpl implements OdsayService{
                 URLEncoder.encode(String.valueOf(SY), StandardCharsets.UTF_8),
                 URLEncoder.encode(String.valueOf(EX), StandardCharsets.UTF_8),
                 URLEncoder.encode(String.valueOf(EY), StandardCharsets.UTF_8),
-//                setting.getList().get(count%17)); // API 키는 이미 인코딩되어 있음
-                apikey);
+                setting.getList().get(count%17)); // API 키는 이미 인코딩되어 있음
+//                apikey);
         count++;
         System.out.println("count = " + count);
         URI targetUrl = null;
@@ -164,6 +164,7 @@ public class OdsayServiceImpl implements OdsayService{
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
+        System.out.println("targetUrl = " + targetUrl);
         String result = restTemplate.getForObject(targetUrl, String.class);
 //        System.out.println("최초 jsonObject = " + result);
         try {

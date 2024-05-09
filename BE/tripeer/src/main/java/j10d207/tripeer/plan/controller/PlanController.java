@@ -187,9 +187,9 @@ public class PlanController {
     }
 
     //목적지간 최단 루트 계산
-    @GetMapping("/optimizing/short")
-    public Response<TimeRootInfoDTO> getShortTime(@RequestParam("startId") int startId, @RequestParam("endId") int endId, @RequestParam("option") int option) {
-        return Response.of(HttpStatus.OK, "목적지 간 대중교통 경로, 자차 소요시간 조회.", planService.getShortTime(startId, endId, option));
+    @PostMapping("/optimizing/short")
+    public Response<RootOptimizeDTO> getShortTime(@RequestBody RootOptimizeDTO rootOptimizeDTO) {
+        return Response.of(HttpStatus.OK, "목적지 간 대중교통 경로, 자차 소요시간 조회.", planService.getShortTime(rootOptimizeDTO));
     }
 
     //플랜 최단거리 조정
