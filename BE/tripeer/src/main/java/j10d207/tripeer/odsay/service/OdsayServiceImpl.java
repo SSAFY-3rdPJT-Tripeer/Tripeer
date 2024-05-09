@@ -146,9 +146,6 @@ public class OdsayServiceImpl implements OdsayService{
             System.out.println("측정 직선거리가 1.0km 이내입니다. distance = " + distance);
             return null;
         }
-
-        System.out.println("setting.getList1() = " + setting.getList1());
-        System.out.println("setting = " + Arrays.toString(setting.getList().toArray()));
         RestTemplate restTemplate = new RestTemplate();
 //        String url = "https://api.odsay.com/v1/api/searchPubTransPathT?apiKey=" + apikey + "&SX=" + SX + "&SY=" + SY + "&EX=" + EX + "&EY=" + EY;
         String url = "https://api.odsay.com/v1/api/searchPubTransPathT";
@@ -168,10 +165,10 @@ public class OdsayServiceImpl implements OdsayService{
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("targetUrl = " + targetUrl);
         String result = restTemplate.getForObject(targetUrl, String.class);
 //        System.out.println("최초 jsonObject = " + result);
         if( count%setting.getList().size() == 0) {
+            System.out.println("sleep 300");
             try {
                 Thread.sleep(300);
             } catch (InterruptedException e) {
