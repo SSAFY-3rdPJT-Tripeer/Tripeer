@@ -32,7 +32,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -575,32 +574,41 @@ public class PlanServiceImpl implements PlanService {
 
     //목적지간 최단 루트 계산
     @Override
-    public TimeRootInfoDTO getShortTime(int startId, int endId, int option) {
-        SpotInfoEntity startSpot = spotInfoRepository.findBySpotInfoId(startId);
-        SpotInfoEntity endSpot = spotInfoRepository.findBySpotInfoId(endId);
-        TimeRootInfoDTO result = null;
-
-        if (option == 1) {
-            TimeRootInfoDTO baseInfo = TimeRootInfoDTO.builder()
-                    .startTitle(startSpot.getTitle())
-                    .endTitle(endSpot.getTitle())
-                    .build();
-
-            result = odsayService.getPublicTime(startSpot.getLongitude(), startSpot.getLatitude(), endSpot.getLongitude(), endSpot.getLatitude(), baseInfo);
-            return result;
-        } else if (option == 0) {
-            int time = kakaoService.getDirections(startSpot.getLongitude(), startSpot.getLatitude(), endSpot.getLongitude(), endSpot.getLatitude());
+    public RootOptimizeDTO getShortTime(RootOptimizeDTO rootOptimizeDTO) {
+        if (rootOptimizeDTO.getOption() == 0) {
+            int resultTime = kakaoService.getDirections(rootOptimizeDTO.getPlaceList().getFirst().getLongitude(),
+                    rootOptimizeDTO.getPlaceList().getFirst().getLatitude(),
+                    rootOptimizeDTO.getPlaceList().getLast().getLongitude(),
+                    rootOptimizeDTO.getPlaceList().getLast().getLatitude());
             StringBuilder rootInfoBuilder = new StringBuilder();
-            rootInfoBuilder.append("이동 시간은 ").append(time).append("분 입니다.");
-
-            result = TimeRootInfoDTO.builder()
-                    .startTitle(startSpot.getTitle())
-                    .endTitle(endSpot.getTitle())
-                    .time(time)
-                    .rootInfo(rootInfoBuilder)
+            if(resultTime/60 > 0) {
+                rootInfoBuilder.append(resultTime/60).append("시간 ");
+            }
+            rootInfoBuilder.append(resultTime%60).append("분");
+            List<String> timeList = new ArrayList<>();
+            timeList.add(rootInfoBuilder.toString());
+            rootOptimizeDTO.setSpotTime(timeList);
+            rootInfoBuilder.append("이동 시간은 ").append(rootInfoBuilder).append(" 입니다.");
+        } else if (rootOptimizeDTO.getOption() == 1) {
+            TimeRootInfoDTO baseInfo = TimeRootInfoDTO.builder()
+                    .startTitle(rootOptimizeDTO.getPlaceList().getFirst().getTitle())
+                    .endTitle(rootOptimizeDTO.getPlaceList().getLast().getTitle())
                     .build();
+
+            TimeRootInfoDTO result = odsayService.getPublicTime(rootOptimizeDTO.getPlaceList().getFirst().getLongitude(),
+                    rootOptimizeDTO.getPlaceList().getFirst().getLatitude(),
+                    rootOptimizeDTO.getPlaceList().getLast().getLongitude(),
+                    rootOptimizeDTO.getPlaceList().getLast().getLatitude(), baseInfo);
+            StringBuilder time = new StringBuilder();
+            if(result.getTime()/60 > 0) {
+                time.append(result.getTime()/60).append("시간 ");
+            }
+            time.append(result.getTime()%60).append("분");
+            List<String> timeList = new ArrayList<>();
+            timeList.add(time.toString());
+            rootOptimizeDTO.setSpotTime(timeList);
         }
-        return result;
+        return rootOptimizeDTO;
     }
 
 

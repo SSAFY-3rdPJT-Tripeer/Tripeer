@@ -194,6 +194,7 @@ public class UserServiceImpl implements UserService{
         return userSearchDTOList;
     }
 
+    //내 정보 불러오기
     @Override
     public UserInfoDTO getMyInfo(String token) {
         // 정보 확장시 DTO 새로 만들어야함
@@ -201,6 +202,7 @@ public class UserServiceImpl implements UserService{
         return UserInfoDTO.builder()
                 .userId(user.getUserId())
                 .nickname(user.getNickname())
+                .email(user.getEmail())
                 .birth(user.getBirth())
                 .profileImage(user.getProfileImage())
                 .style1(user.getStyle1())
