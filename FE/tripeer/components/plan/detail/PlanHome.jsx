@@ -76,7 +76,7 @@ const PlanHome = (props) => {
     if (video) {
       const temp = Object.assign(mutes);
       mutes[userId] ? (temp[userId] = false) : (temp[userId] = true);
-      video.mute = temp[userId];
+      video.muted = temp[userId];
       setMutes(temp);
     }
   };
