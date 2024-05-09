@@ -203,7 +203,7 @@ const PageDetail = (props) => {
 
   return (
     <>
-      <MikeFunction roomName={roomName} />
+      <MikeFunction roomName={roomName} myInfo={myInfo} />
       <div
         className={styles.container}
         onMouseMove={(e) => {

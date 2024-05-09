@@ -17,6 +17,7 @@ export default function MyPage() {
   const [day, setDay] = useState("");
   const [nickname, setNickname] = useState("");
   const [duplicate, setDuplicate] = useState(false);
+  const [email, setEmail] = useState("");
   const [btns, setBtns] = useState([
     {
       title: "관광지",
@@ -50,6 +51,7 @@ export default function MyPage() {
 
   const inputNick = useRef(null);
   const timer = useRef(null);
+  const emailInput = useRef(null);
 
   const editImage = async (file) => {
     const form = new FormData();
@@ -93,6 +95,7 @@ export default function MyPage() {
         style1: null,
         style2: null,
         style3: null,
+        email: email,
       };
       const res = await api.patch(`/user/myinfo`, request);
       console.log(res);
@@ -140,7 +143,11 @@ export default function MyPage() {
       setMonth(date.getMonth() + 1);
       setDay(date.getDate());
       setNickname(res.data.data.nickname);
+      if (res.data.data.email) {
+        setEmail(res.data.data.email);
+      }
       inputNick.current.value = res.data.data.nickname;
+      emailInput.current.value = res.data.data.email;
 
       const arrs = [
         res.data.data.style1,
@@ -234,6 +241,18 @@ export default function MyPage() {
                 }}
               />
               <p className={styles.nickWarn}>2~10자 이내</p>
+            </div>
+            <div className={styles.inputBox}>
+              <p className={styles.nickTitle}>이메일</p>
+              <input
+                type="text"
+                maxLength={30}
+                style={{ borderRadius: "5px" }}
+                ref={emailInput}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+              />
             </div>
 
             <div className={styles.inputBox}>

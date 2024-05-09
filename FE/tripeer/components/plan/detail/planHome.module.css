@@ -393,14 +393,14 @@
   display: flex;
 }
 
-.mic {
-  background-image: url(../asset/mic.svg);
+.noSpeaker {
+  background-image: url(../asset/speackerOff.svg);
   width: 24px;
   height: 24px;
   background-repeat: no-repeat;
   background-size: cover;
   cursor: pointer;
-  margin-right: 12px;
+  margin-right: 8px;
 }
 
 .speaker {
@@ -410,6 +410,7 @@
   background-repeat: no-repeat;
   background-size: cover;
   cursor: pointer;
+  margin-right: 8px;
 }
 
 .addMember {
