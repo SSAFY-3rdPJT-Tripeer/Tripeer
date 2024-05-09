@@ -10,13 +10,26 @@ import { useRouter } from "next/navigation";
 import { card } from "./diaryDummy";
 import styles from "./diaryCardList.module.css";
 import Image from "next/image";
+import api from "@/utils/api";
 
 const DiaryCard = () => {
   const [dummy, setDummy] = useState([]);
+  const [diaryList, setDiaryList] = useState([]);
   const router = useRouter();
+
+  const getDiarys = async () => {
+    try {
+      const res = await api.get("/history");
+      console.log("diaryList: ", res);
+      // setDiaryList(res.data.data)
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   useEffect(() => {
     setDummy(card);
+    getDiarys();
   }, []);
 
   const goDiary = (id) => {

@@ -81,14 +81,22 @@ export default function PlacePage({ params }) {
   return (
     <main className={styles.main}>
       <section className={styles.sectionTop}>
-        <p className={styles.p}>우리 이번엔 어디로 갈까?</p>
-        {/* 검색바 */}
-        <PlaceSearchBar setList={setList} />
+        <div className={styles.banner}>
+          <div className={styles.bannerBack}></div>
+        </div>
+        <div className={styles.searchBarBox}>
+          <p className={styles.searchBarText}>우리 이번엔 어디로 갈까?</p>
+          {/* 검색바 */}
+          <PlaceSearchBar setList={setList} />
+        </div>
       </section>
       {/* 플레이스 출력 */}
       <section className={styles.sectionBottom}>
         {list.length === 0 ? (
-          <div className={styles.noData}>검색 결과가 없어요 !</div>
+          <div className={styles.noDataBox}>
+            <div className={styles.noDataImg}></div>
+            <div className={styles.noData}>검색 결과가 없습니다.</div>
+          </div>
         ) : (
           list.map((item, idx) => {
             return <PlaceItem key={idx} data={item} isCity={isCity} />;
