@@ -587,6 +587,7 @@ public class PlanServiceImpl implements PlanService {
             rootInfoBuilder.append(resultTime%60).append("분");
             List<String> timeList = new ArrayList<>();
             timeList.add(rootInfoBuilder.toString());
+            timeList.add(rootOptimizeDTO.getOption() + "");
             rootOptimizeDTO.setSpotTime(timeList);
             rootInfoBuilder.append("이동 시간은 ").append(rootInfoBuilder).append(" 입니다.");
         } else if (rootOptimizeDTO.getOption() == 1) {
@@ -606,6 +607,7 @@ public class PlanServiceImpl implements PlanService {
             time.append(result.getTime()%60).append("분");
             List<String> timeList = new ArrayList<>();
             timeList.add(time.toString());
+            timeList.add(rootOptimizeDTO.getOption() + "");
             rootOptimizeDTO.setSpotTime(timeList);
         }
         return rootOptimizeDTO;
