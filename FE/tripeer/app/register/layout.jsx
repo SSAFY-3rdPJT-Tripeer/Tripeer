@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 import styles from "./layout.module.css";
-import bg from "/public/register/registerBg.png";
+// import bg from "/public/register/registerBg.png";
 
 export default function RegisterLayout({ children }) {
   return (
@@ -9,7 +9,7 @@ export default function RegisterLayout({ children }) {
       <div style={{ position: "relative" }} className={styles.bg}>
         <Image
           src={
-            "https://tripeerbucket.s3.ap-southeast-2.amazonaws.com/front/static/lowRegisterBg.png"
+            "https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/lowRegisterBg.png"
           }
           alt={"bg"}
           fill

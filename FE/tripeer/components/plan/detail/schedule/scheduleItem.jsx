@@ -44,21 +44,27 @@ export default function ScheduleItem({ data }) {
       <section className={styles.right}>
         {/*<Image className={styles.exit} src={exitSrc} alt={""} />*/}
         <div></div>
-        <div className={styles.profileBox}>
-          <Image
-            className={styles.profile}
-            src={data.profileImage}
-            alt={""}
-            fill
-            loader={() => data.profileImage}
-            priority="true"
-            sizes="(max-width: 768px) 100vw,
-                      (max-width: 1200px) 50vw,
-                      33vw"
-            quality={50}
-            style={{ borderColor: COLOR[data.order] }}
-          />
-        </div>
+        {/*<div className={styles.profileBox}>*/}
+        {/*  <Image*/}
+        {/*    className={styles.profile}*/}
+        {/*    src={data.profileImage}*/}
+        {/*    alt={""}*/}
+        {/*    fill*/}
+        {/*    loader={() => data.profileImage}*/}
+        {/*    priority="true"*/}
+        {/*    sizes="(max-width: 768px) 100vw,*/}
+        {/*              (max-width: 1200px) 50vw,*/}
+        {/*              33vw"*/}
+        {/*    quality={50}*/}
+        {/*    style={{ borderColor: COLOR[data.order] }}*/}
+        {/*  />*/}
+        {/*</div>*/}
+        <div
+          className={styles.newProfile}
+          style={{
+            backgroundImage: `url(${data.profileImage})`,
+            borderColor: COLOR[data.order],
+          }}></div>
       </section>
     </div>
   );

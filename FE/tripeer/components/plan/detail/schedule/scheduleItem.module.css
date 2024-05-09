@@ -54,6 +54,15 @@
     border: #858585 3px solid;
 }
 
+.newProfile {
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    border: #858585 3px solid;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
 .name {
     font-weight: 480;
     font-size: 1.1rem;

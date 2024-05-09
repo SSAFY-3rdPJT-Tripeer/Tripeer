@@ -3,6 +3,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    animation: fade-in 1s ease;
 }
 
 .line {
@@ -15,9 +16,23 @@
     justify-content: center;
     align-items: center;
     margin: 5px 0;
+    height: 20px;
+}
+
+.image {
+    animation: fade-in 1s ease;
 }
 
 .time {
     margin-left: 5px;
     color: #757575;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
