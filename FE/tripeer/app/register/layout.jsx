@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 
 import styles from "./layout.module.css";
@@ -8,6 +10,9 @@ export default function RegisterLayout({ children }) {
     <main className={styles.main}>
       <div style={{ position: "relative" }} className={styles.imgBox}>
         <Image
+          loader={() =>
+            "https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/lowRegisterBg.png"
+          }
           src={
             "https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/lowRegisterBg.png"
           }
@@ -19,6 +24,7 @@ export default function RegisterLayout({ children }) {
           priority
           quality={20}
           loading="eager"
+          unoptimized={false}
         />
       </div>
       <div className={`${styles.center} ${styles.box}`}>{children}</div>
