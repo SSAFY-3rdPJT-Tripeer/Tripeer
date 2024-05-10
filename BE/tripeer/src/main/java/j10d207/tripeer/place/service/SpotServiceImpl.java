@@ -2,6 +2,7 @@ package j10d207.tripeer.place.service;
 
 import j10d207.tripeer.exception.CustomException;
 import j10d207.tripeer.exception.ErrorCode;
+import j10d207.tripeer.place.db.ContentTypeEnum;
 import j10d207.tripeer.place.db.dto.*;
 import j10d207.tripeer.place.db.entity.*;
 import j10d207.tripeer.place.db.repository.*;
@@ -261,7 +262,7 @@ public class SpotServiceImpl implements SpotService{
                 .contentTypeId(spotAddReqDTO.getContentTypeId())
                 .title(spotAddReqDTO.getTitle())
                 .addr1(newAddr.toString())
-//                .tel(spotAddReqDTO.getTel())
+                .tel(spotAddReqDTO.getTel())
                 .firstImage(spotAddReqDTO.getFirstImage())
                 .firstImage2(spotAddReqDTO.getSecondImage())
                 .latitude(spotAddReqDTO.getLatitude())
@@ -280,7 +281,7 @@ public class SpotServiceImpl implements SpotService{
         return SpotAddResDto.builder()
                 .spotInfoId(spotInfo.getSpotInfoId())
                 .title(spotInfo.getTitle())
-                .contentType(spotInfo.getContentTypeId())
+                .contentType(ContentTypeEnum.getNameByCode(spotInfo.getContentTypeId()))
                 .addr(spotInfo.getAddr1())
                 .latitude(spotInfo.getLatitude())
                 .longitude(spotInfo.getLongitude())

@@ -304,25 +304,26 @@ public class PlanServiceImpl implements PlanService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         PlanEntity planEntity = planRepository.findById(coworkerReqDTO.getPlanId())
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_PLAN));
-
-        String title = userEntity.getNickname() + "님의 초대입니다";
-        String content = userEntity.getNickname() + "님이 " + planEntity.getTitle()
-                + " 여행계획에 초대하셨습니다.";
-
-        EmailDTO emailDTO = EmailDTO.builder()
-                .userId(userEntity.getUserId())
-                .content(content)
-                .title(title)
-                .build();
-
-        emailService.sendEmail(emailDTO);
+        UserEntity user = UserEntity.builder().userId(coworkerReqDTO.getUserId()).build();
 
         if(!coworkerRepository.existsByPlan_PlanIdAndUser_UserId(coworkerReqDTO.getPlanId(), coworkerReqDTO.getUserId())) {
             CoworkerEntity coworker = CoworkerEntity.builder()
                     .plan(PlanEntity.builder().planId(coworkerReqDTO.getPlanId()).build())
-                    .user(UserEntity.builder().userId(coworkerReqDTO.getUserId()).build())
+                    .user(user)
                     .build();
             coworkerRepository.save(coworker);
+
+            String title = userEntity.getNickname() + "님의 초대입니다";
+            String content = userEntity.getNickname() + "님이 " + planEntity.getTitle()
+                    + " 여행계획에 초대하셨습니다.";
+
+            EmailDTO emailDTO = EmailDTO.builder()
+                    .userId(user.getUserId())
+                    .content(content)
+                    .title(title)
+                    .build();
+
+            emailService.sendEmail(emailDTO);
         } else {
             throw new CustomException(ErrorCode.DUPLICATE_USER);
         }
