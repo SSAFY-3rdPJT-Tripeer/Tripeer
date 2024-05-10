@@ -2,10 +2,8 @@ package j10d207.tripeer.place.service;
 
 import j10d207.tripeer.exception.CustomException;
 import j10d207.tripeer.exception.ErrorCode;
-import j10d207.tripeer.place.db.dto.SpotAddReqDto;
-import j10d207.tripeer.place.db.dto.SpotDetailDto;
-import j10d207.tripeer.place.db.dto.SpotInfoDto;
-import j10d207.tripeer.place.db.dto.SpotListDto;
+import j10d207.tripeer.place.db.ContentTypeEnum;
+import j10d207.tripeer.place.db.dto.*;
 import j10d207.tripeer.place.db.entity.*;
 import j10d207.tripeer.place.db.repository.*;
 import j10d207.tripeer.plan.service.PlanService;
@@ -215,7 +213,7 @@ public class SpotServiceImpl implements SpotService{
     
     @Override
     @Transactional
-    public SpotInfoDto createNewSpot(SpotAddReqDto spotAddReqDTO, HttpServletRequest request) {
+    public SpotAddResDto createNewSpot(SpotAddReqDto spotAddReqDTO, HttpServletRequest request) {
 
 //        1. city 찾기
         String fullAddr = spotAddReqDTO.getAddr1();
@@ -226,7 +224,7 @@ public class SpotServiceImpl implements SpotService{
 
         TownEntity townEntity = null;
 
-        Optional<TownEntity> townEntityOptional = townRepository.findByTownNameContains(splitAddr[1]);
+        Optional<TownEntity> townEntityOptional = townRepository.findByTownNameAndTownPK_City_CityId(splitAddr[1], cityEntity.getCityId());
         if (townEntityOptional.isPresent()) {
             townEntity = townEntityOptional.get();
             System.out.println("townEntity = 타운 있음 있는곳에 추가함" + townEntity.getTownName());
@@ -241,19 +239,20 @@ public class SpotServiceImpl implements SpotService{
                     .longitude(spotAddReqDTO.getLongitude())
                     .latitude(spotAddReqDTO.getLatitude())
                     .description("discription")
-                    .townImg("basic_image")
+                    .townImg("https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/default1.png")
                     .townPK(townPK)
                     .build();
             townRepository.save(townEntity);
             System.out.println("Town 없어서 새로 추가함");
         }
 
-        String newAddr = cityEntity.getCityName() + " " + townEntity.getTownName() + " ";
-        for (String addr : splitAddr) {
-            if (!Objects.equals(splitAddr[splitAddr.length - 1], addr)) {
-                newAddr = newAddr + addr + " ";
+        StringBuilder newAddr = new StringBuilder(cityEntity.getCityName() + " " + townEntity.getTownName() + " ");
+
+        for (int i = 2;  i < splitAddr.length; i+=1) {
+            if (i != splitAddr.length-1) {
+                newAddr.append(splitAddr[i]).append(" ");
             } else {
-                newAddr = newAddr + addr;
+                newAddr.append(splitAddr[i]);
             }
         }
 
@@ -262,8 +261,8 @@ public class SpotServiceImpl implements SpotService{
                 .town(townEntity)
                 .contentTypeId(spotAddReqDTO.getContentTypeId())
                 .title(spotAddReqDTO.getTitle())
-                .addr1(newAddr)
-//                .tel(spotAddReqDTO.getTel())
+                .addr1(newAddr.toString())
+                .tel(spotAddReqDTO.getTel())
                 .firstImage(spotAddReqDTO.getFirstImage())
                 .firstImage2(spotAddReqDTO.getSecondImage())
                 .latitude(spotAddReqDTO.getLatitude())
@@ -279,7 +278,17 @@ public class SpotServiceImpl implements SpotService{
             planService.addPlanSpot(spotAddReqDTO.getPlanId(), newSpotInfo.getSpotInfoId(), request.getHeader("Authorization"));
         }
 
-        return SpotInfoDto.convertToDto(newSpotInfo, false);
+        return SpotAddResDto.builder()
+                .spotInfoId(spotInfo.getSpotInfoId())
+                .title(spotInfo.getTitle())
+                .contentType(ContentTypeEnum.getNameByCode(spotInfo.getContentTypeId()))
+                .addr(spotInfo.getAddr1())
+                .latitude(spotInfo.getLatitude())
+                .longitude(spotInfo.getLongitude())
+                .img(spotInfo.getFirstImage())
+                .spot(spotAddReqDTO.isAddPlanCheck())
+                .wishlist(false)
+                .build();
     }
 
 

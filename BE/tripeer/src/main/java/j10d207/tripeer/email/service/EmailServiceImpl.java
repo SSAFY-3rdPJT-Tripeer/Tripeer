@@ -25,7 +25,10 @@ public class EmailServiceImpl implements EmailService{
     public boolean sendEmail(EmailDTO emailDTO) {
         UserEntity userEntity = userRepository.findById(emailDTO.getUserId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-
+        String email = userEntity.getEmail();
+        if (email == null || !email.contains("@")) { // 간단한 이메일 유효성 검사
+            throw new CustomException(ErrorCode.INVALID_EMAIL);
+        }
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true);
             messageHelper.setTo(userEntity.getEmail());

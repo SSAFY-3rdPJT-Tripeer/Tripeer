@@ -22,7 +22,8 @@ public enum ErrorCode {
 
     // plan
     HAS_BUCKET(HttpStatus.BAD_REQUEST, "PLAN-001", "이미 등록된 장소입니다."),
-    NOT_HAS_COWORKER(HttpStatus.BAD_REQUEST, "PLAN-002", "사용자가 소속되지 않은 플랜입니다."),
+    NOT_FOUND_PLAN(HttpStatus.BAD_REQUEST, "PLAN-002", "존재하지 않는 플랜입니다."),
+    NOT_HAS_COWORKER(HttpStatus.BAD_REQUEST, "PLAN-003", "사용자가 소속되지 않은 플랜입니다."),
 
 
     //gallery
@@ -45,7 +46,8 @@ public enum ErrorCode {
     NOT_ENOUGH_INFO(HttpStatus.BAD_REQUEST, "ROOT-003", "요청된 정보가 너무 적습니다."),
 
     //Email
-    EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "EMAIL-001", "이메일 전송 중 오류가 발생 했습니다.");
+    EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "EMAIL-001", "이메일 전송 중 오류가 발생 했습니다."),
+    INVALID_EMAIL(HttpStatus.NOT_FOUND, "EMAIL-002", "유효하지 않은 이메일 주소입니다.");
 
     private final HttpStatus httpStatus;	// HttpStatus
     private final String code;				// ACCOUNT-001
