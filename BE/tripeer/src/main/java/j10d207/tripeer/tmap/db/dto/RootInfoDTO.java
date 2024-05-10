@@ -12,8 +12,7 @@ import java.time.LocalTime;
 @ToString
 public class RootInfoDTO {
 
-    private LocalTime time;
-    private int timeMin;
+    private int time;
     private String startTitle;
     private String endTitle;
 

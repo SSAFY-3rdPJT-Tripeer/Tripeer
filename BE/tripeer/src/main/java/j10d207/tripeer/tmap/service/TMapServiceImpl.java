@@ -22,7 +22,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class tMapServiceImpl implements tMapService {
+public class TMapServiceImpl implements TMapService {
 
     @Value("${tmap.apikey}")
     private String apikey;
@@ -99,7 +99,7 @@ public class tMapServiceImpl implements tMapService {
             sb.append(rootInfoDTO.getStartTitle()).append("에서 ").append(rootInfoDTO.getEndTitle()).append("로 가는 경로는 대중교통 수단이 없거나 너무 가까워 택시(자차)로 이동해야합니다.");
             rootInfoDTO.setRootInfo(sb);
             int carTime = kakaoService.getDirections(SX, SY, EX, EY);
-            rootInfoDTO.setTime(LocalTime.of(carTime/60, carTime%60));
+            rootInfoDTO.setTime(carTime);
 
             return rootInfoDTO;
         }
@@ -113,7 +113,7 @@ public class tMapServiceImpl implements tMapService {
 
         //반환 정보 생성
         int totalTime = bestRoot.getAsJsonObject().get("totalTime").getAsInt();
-        rootInfoDTO.setTime(LocalTime.of(totalTime/3600, totalTime%3600/60, totalTime%60));
+        rootInfoDTO.setTime(totalTime/60);
         rootInfoDTO.setVehicleType(bestRoot.getAsJsonObject().get("pathType").getAsInt());
         rootInfoDTO.setRootInfo(new StringBuilder("임시값"));
 
@@ -143,6 +143,7 @@ public class tMapServiceImpl implements tMapService {
     // A에서 B로 가는 경로의 정보를 조회 (tMap API 요청)
     private JsonObject getResult(double SX, double SY, double EX, double EY) {
         double distance = calculateDistance(SX, SY, EX, EY);
+        System.out.println("요청좌표 - SX = " + SX + ", SY = " + SY + ", EX = " + EX + ", EY = " + EY);
         if(distance < 1.0) {
             System.out.println("측정 직선거리가 1.0km 이내입니다. distance = " + distance);
             return null;
@@ -160,6 +161,7 @@ public class tMapServiceImpl implements tMapService {
                 .build();
         HttpEntity<RouteReqDTO> request = new HttpEntity<>(route, headers);
         String result = restTemplate.postForObject("https://apis.openapi.sk.com/transit/routes", request, String.class);
+        System.out.println("result = " + result);
 
         return JsonParser.parseString(result).getAsJsonObject().getAsJsonObject("metaData");
     }

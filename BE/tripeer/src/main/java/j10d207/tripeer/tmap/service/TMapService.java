@@ -5,7 +5,7 @@ import j10d207.tripeer.tmap.db.dto.RootInfoDTO;
 
 import java.util.List;
 
-public interface tMapService {
+public interface TMapService {
 
     //최단 경로 찾기
     public FindRoot getOptimizingTime(List<CoordinateDTO> coordinates);

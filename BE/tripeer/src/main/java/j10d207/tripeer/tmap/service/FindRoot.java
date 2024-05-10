@@ -25,13 +25,13 @@ public class FindRoot {
     }
 
     public void solve(int index, int now, int sum, ArrayList<Integer> result, ArrayList<Integer> local) {
-        if (sum + timeTable[now][N - 1].getTimeMin() > minTime) {
+        if (sum + timeTable[now][N - 1].getTime() > minTime) {
             return;
         }
         if (index == N - 2) {
-            result.add(timeTable[now][N - 1].getTimeMin());
+            result.add(timeTable[now][N - 1].getTime());
             local.add(N - 1);
-            minTime = sum + timeTable[now][N - 1].getTimeMin();
+            minTime = sum + timeTable[now][N - 1].getTime();
             rootTime = new int[result.size()+1];
             for (int i = 0; i < result.size(); i++) {
                 rootTime[i] = result.get(i);
@@ -44,10 +44,10 @@ public class FindRoot {
             if (!isSelected[i]) {
                 isSelected[i] = true;
                 ArrayList<Integer> newResult = new ArrayList<>(result);
-                newResult.add(timeTable[now][i].getTimeMin());
+                newResult.add(timeTable[now][i].getTime());
                 ArrayList<Integer> newLocal = new ArrayList<>(local);
                 newLocal.add(i);
-                solve(index +1, i, sum + timeTable[now][i].getTimeMin(), newResult, newLocal);
+                solve(index +1, i, sum + timeTable[now][i].getTime(), newResult, newLocal);
                 isSelected[i] = false;
             }
         }
