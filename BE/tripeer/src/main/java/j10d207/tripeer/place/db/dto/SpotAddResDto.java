@@ -9,7 +9,7 @@ import lombok.Getter;
 public class SpotAddResDto {
         private int spotInfoId;    // 장소 정보 ID
         private String title;       // 장소 제목
-        private int contentType; // 컨텐츠 타입
+        private String contentType; // 컨텐츠 타입
         private String addr;        // 주소
         private double latitude;    // 위도
         private double longitude;   // 경도
