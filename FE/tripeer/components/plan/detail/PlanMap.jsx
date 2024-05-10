@@ -227,18 +227,20 @@ const PlanMap = (props) => {
 
   const removeSaveSpot = async (spot) => {
     const totalYList = provider.doc.getArray("totalYList").toJSON();
-    console.log(totalYList[0]);
-    const tempList = totalYList[0].filter((item) => {
-      return item.spotInfoId === spot.spotInfoId;
-    });
-    if (tempList.length === 0) {
-      setAlert(true);
-      setInit(true);
-      let time = setTimeout(() => {
-        setAlert(false);
-        setTimer(time);
-      }, 2000);
-      return;
+    if (totalYList.length > 0) {
+      const findTotal = totalYList[0].filter((item) => {
+        return item.spotInfoId === spot.spotInfoId;
+      });
+
+      if (findTotal.length === 0) {
+        setAlert(true);
+        setInit(true);
+        let time = setTimeout(() => {
+          setAlert(false);
+          setTimer(time);
+        }, 2000);
+        return;
+      }
     }
     try {
       await api.delete(
@@ -309,11 +311,25 @@ const PlanMap = (props) => {
           return spot;
         });
         setSpotList(tempSpotList);
+        if (onCategory === 4) {
+          const tempWishSpotList = spotWishList.map((spot) => {
+            if (
+              spots.findIndex((item) => item.spotInfoId === spot.spotInfoId) !==
+              -1
+            ) {
+              spot.spot = true;
+            } else {
+              spot.spot = false;
+            }
+            return spot;
+          });
+          setSpotWishList(tempWishSpotList);
+        }
         setSaveSpots(spots);
         setIsTarget(true);
       });
     }
-  }, [myInfo, provider, spotList]);
+  }, [myInfo, provider, spotList, spotWishList]);
 
   useEffect(() => {
     if (timer) {
