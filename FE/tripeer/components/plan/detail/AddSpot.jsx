@@ -6,7 +6,7 @@ import AddConfirm from "./AddConfirm";
 import axios from "axios";
 
 const AddSpot = (props) => {
-  const { towns, setOnModal } = props;
+  const { towns, setOnModal, planId, myInfo, provider } = props;
   const [targetStep, setTargetStep] = useState(0);
   const [onToggle, setOnToggle] = useState(false);
   const [map, setMap] = useState(null);
@@ -152,6 +152,9 @@ const AddSpot = (props) => {
           confirm={confirm}
           setConfirm={setConfirm}
           setOnModal={setOnModal}
+          planId={planId}
+          myInfo={myInfo}
+          provider={provider}
         />
       ) : (
         <div className={styles.backContainer}>
