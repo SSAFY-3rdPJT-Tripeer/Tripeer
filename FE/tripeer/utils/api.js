@@ -25,6 +25,19 @@ api.interceptors.request.use(async (config) => {
   if (re !== undefined && isTokenExpired) {
     cookies.remove("Authorization");
     window.location.reload();
+    return;
+  } else if (re === undefined) {
+    console.log("local");
+  } else {
+    const decodedTokenRe = jwtDecode(re);
+    const isTokenExpiredRe = decodedTokenRe.exp * 1000 < Date.now();
+
+    if (isTokenExpiredRe) {
+      console.log("리프레시 만료");
+      cookies.remove("Authorization");
+      window.location.reload();
+      return;
+    }
   }
   // if (re !== undefined) {
   //   console.log("asd");

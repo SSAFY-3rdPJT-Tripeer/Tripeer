@@ -29,6 +29,7 @@
     justify-content: center;
     align-items: center;
 }
+
 .p {
     font-size: 18px;
 }
@@ -42,6 +43,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 }
 
 .selectBtnLeft {
@@ -54,6 +56,7 @@
     justify-content: center;
     align-items: center;
     background-color: #04ACB5;
+    cursor: pointer;
 }
 
 .btnLeft:hover {
@@ -70,6 +73,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 }
 
 .selectBtnRight {
@@ -83,6 +87,7 @@
     justify-content: center;
     align-items: center;
     background-color: #04ACB5;
+    cursor: pointer;
 }
 
 .btnRight:hover {
@@ -110,12 +115,12 @@
     height: auto;
 }
 
-.p1{
+.p1 {
     color: #545454;
     font-size: 22px;
 }
 
-.p2{
+.p2 {
     color: #04ACB5;
     font-size: 12px;
     margin-top: 25px;
@@ -138,6 +143,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 }
 
 .postBtn:hover {
