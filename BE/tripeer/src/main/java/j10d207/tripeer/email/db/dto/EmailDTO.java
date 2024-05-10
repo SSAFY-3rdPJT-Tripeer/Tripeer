@@ -9,5 +9,5 @@ public class EmailDTO {
 
     private String title;
     private String content;
-    private String emailAddr;
+    private Long userId;
 }
