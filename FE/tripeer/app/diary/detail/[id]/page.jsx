@@ -7,35 +7,50 @@ import Image from "next/image";
 // 내부 모듈
 import styles from "./page.module.css";
 import { cardDetail } from "@/components/diary/diaryDummy";
-import defaultImg from "@/components/diary/assets/defaultImg.png";
 import DiaryDetailCard from "@/components/diary/DiaryDetailCard";
 
 const DiaryDetail = () => {
   const [detailData, setDetailData] = useState(null);
+
+  function getDayOfWeek(inputDate) {
+    const week = ["일", "월", "화", "수", "목", "금", "토"];
+
+    const dayOfWeek = week[new Date(inputDate).getDay()];
+
+    return `${inputDate.replace(/-/g, ".")} (${dayOfWeek})`;
+  }
+
   useEffect(() => {
     setDetailData(cardDetail[0]);
-  }, [detailData]);
+  }, []);
+
   return (
     <main className={styles.container}>
       {detailData ? (
         <header className={styles.header}>
           <div style={{ position: "relative" }} className={styles.imageBox}>
             <Image
-              src={detailData ? detailData.Img : defaultImg}
-              // loader={() => detailData.Img}
-              alt=""
-              fill
-              placeholder="blur"
-              blurDataURL={`${defaultImg}`}
-              sizes="(max-width: 768px) 100vw,
-              (max-width: 1200px) 50vw,
-              33vw"
               className={styles.headerImg}
+              src={
+                "https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/default2.png"
+              }
+              alt="이미지"
+              fill
+              unoptimized={false}
+              sizes="(max-width: 768px) 100vw,(max-width: 1200px) 50vw,33vw"
+              loader={() => {
+                if (detailData.diaryDetail) {
+                  return detailData.diaryDetail.img;
+                }
+                return "https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/default2.png";
+              }}
             />
           </div>
           <div className={styles.headerImg}></div>
           <div className={styles.headerContent}>
-            <div className={styles.headerTitle}>{detailData.title}</div>
+            <div className={styles.headerTitle}>
+              {detailData.diaryDetail.title}
+            </div>
 
             <div className={styles.placeBox}>
               <div className={styles.iconBox}>
@@ -43,7 +58,9 @@ const DiaryDetail = () => {
               </div>
               <div className={styles.contentBox}>
                 <div className={styles.title}>여행지</div>
-                <div className={styles.subTitle}>{detailData.townList}</div>
+                <div className={styles.subTitle}>
+                  {detailData.diaryDetail.townList}
+                </div>
               </div>
             </div>
 
@@ -54,7 +71,8 @@ const DiaryDetail = () => {
               <div className={styles.contentBox}>
                 <div className={styles.title}>여행 날짜</div>
                 <div className={styles.subTitle}>
-                  {detailData.startDay} - {detailData.endDay}
+                  {getDayOfWeek(detailData.diaryDetail.startDay)} -{" "}
+                  {getDayOfWeek(detailData.diaryDetail.endDay)}
                 </div>
               </div>
             </div>
@@ -66,14 +84,15 @@ const DiaryDetail = () => {
               <div className={styles.contentBox}>
                 <div className={styles.title}>여행 인원</div>
                 <div className={styles.memberList}>
-                  {detailData.member ? (
-                    detailData.member.map((mem, idx) => {
+                  {detailData.diaryDetail.member ? (
+                    detailData.diaryDetail.member.map((mem, idx) => {
                       return (
                         <div key={idx} className={styles.nameBox}>
                           <div
                             className={styles.memberImg}
                             style={{ position: "relative" }}>
                             <Image
+                              style={{ borderRadius: "50px" }}
                               src={mem.profileImage}
                               sizes="(max-width: 768px) 100vw,
                               (max-width: 1200px) 50vw,
@@ -100,7 +119,16 @@ const DiaryDetail = () => {
         <></>
       )}
       <article className={styles.articleBox}>
-        <DiaryDetailCard detailData={detailData} />
+        {detailData?.diaryDayList?.map((item, cardIdx) => {
+          return (
+            <div key={cardIdx}>
+              <DiaryDetailCard
+                diaryDayList={item}
+                getDayOfWeek={getDayOfWeek}
+              />
+            </div>
+          );
+        })}
       </article>
     </main>
   );
