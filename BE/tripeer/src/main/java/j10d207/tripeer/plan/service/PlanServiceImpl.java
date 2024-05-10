@@ -3,7 +3,6 @@ package j10d207.tripeer.plan.service;
 import j10d207.tripeer.exception.CustomException;
 import j10d207.tripeer.exception.ErrorCode;
 import j10d207.tripeer.kakao.service.KakaoService;
-import j10d207.tripeer.odsay.db.dto.CoordinateDTO;
 import j10d207.tripeer.odsay.db.dto.TimeRootInfoDTO;
 import j10d207.tripeer.odsay.service.AlgorithmService;
 import j10d207.tripeer.odsay.service.OdsayService;
@@ -14,6 +13,11 @@ import j10d207.tripeer.place.db.repository.SpotInfoRepository;
 import j10d207.tripeer.plan.db.dto.*;
 import j10d207.tripeer.plan.db.entity.*;
 import j10d207.tripeer.plan.db.repository.*;
+import j10d207.tripeer.tmap.db.dto.CoordinateDTO;
+import j10d207.tripeer.tmap.db.dto.RootInfoDTO;
+import j10d207.tripeer.tmap.service.FindRoot;
+
+import j10d207.tripeer.tmap.service.TMapService;
 import j10d207.tripeer.user.config.JWTUtil;
 import j10d207.tripeer.user.db.dto.UserSearchDTO;
 import j10d207.tripeer.user.db.entity.CoworkerEntity;
@@ -55,6 +59,7 @@ public class PlanServiceImpl implements PlanService {
     private final SpotInfoRepository spotInfoRepository;
     private final PlanDetailRepository planDetailRepository;
 
+    private final TMapService tMapService;
     private final OdsayService odsayService;
     private final AlgorithmService algorithmService;
 
@@ -585,9 +590,8 @@ public class PlanServiceImpl implements PlanService {
                 rootInfoBuilder.append(resultTime/60).append("시간 ");
             }
             rootInfoBuilder.append(resultTime%60).append("분");
-            List<String> timeList = new ArrayList<>();
-            timeList.add(rootInfoBuilder.toString());
-            timeList.add(rootOptimizeDTO.getOption() + "");
+            List<String[]> timeList = new ArrayList<>();
+            timeList.add(new String[] {rootInfoBuilder.toString(), String.valueOf(rootOptimizeDTO.getOption()) } );
             rootOptimizeDTO.setSpotTime(timeList);
             rootInfoBuilder.append("이동 시간은 ").append(rootInfoBuilder).append(" 입니다.");
         } else if (rootOptimizeDTO.getOption() == 1) {
@@ -605,9 +609,8 @@ public class PlanServiceImpl implements PlanService {
                 time.append(result.getTime()/60).append("시간 ");
             }
             time.append(result.getTime()%60).append("분");
-            List<String> timeList = new ArrayList<>();
-            timeList.add(time.toString());
-            timeList.add(rootOptimizeDTO.getOption() + "");
+            List<String[]> timeList = new ArrayList<>();
+            timeList.add(new String[]{time.toString(), String.valueOf(rootOptimizeDTO.getOption()) });
             rootOptimizeDTO.setSpotTime(timeList);
         }
         return rootOptimizeDTO;
@@ -632,20 +635,20 @@ public class PlanServiceImpl implements PlanService {
         RootOptimizeDTO result = new RootOptimizeDTO();
         // 자동차
         if ( rootOptimizeDTO.getOption() == 0 ) {
-            root = kakaoService.getOptimizingTime(coordinateDTOList);
+//            root = kakaoService.getOptimizingTime(coordinateDTOList);
             result.setOption(0);
         }
         // 대중교통
         else if ( rootOptimizeDTO.getOption() == 1 ) {
             result.setOption(1);
-            root = algorithmService.getOptimizingTime(coordinateDTOList);
+//            root = algorithmService.getOptimizingTime(coordinateDTOList);
         } else {
             result.setOption(-1);
         }
 
 
         List<RootOptimizeDTO.place> newPlaceList = new ArrayList<>();
-        List<String> newSpotTimeList = new ArrayList<>();
+        List<String[]> newSpotTimeList = new ArrayList<>();
 
         if (root != null) {
 
@@ -657,7 +660,7 @@ public class PlanServiceImpl implements PlanService {
                 }
                 sb.append(root.getRootTime()[j++]%60).append("분");
 
-                newSpotTimeList.add(sb.toString());
+                newSpotTimeList.add(new String[]{sb.toString(), String.valueOf(rootOptimizeDTO.getOption()) });
                 RootOptimizeDTO.place newPlace = rootOptimizeDTO.getPlaceList().get(i);
                 if (result.getOption() == 1) {
                     newPlace.setMovingRoot(j == root.getResultNumbers().size() ? "null" : root.getTimeTable()[i][root.getResultNumbers().get(j)].getRootInfo().toString());
@@ -673,5 +676,106 @@ public class PlanServiceImpl implements PlanService {
 
         return null;
     }
+
+
+    //머기업 테스트
+    public RootOptimizeDTO getShortTime2(RootOptimizeDTO rootOptimizeDTO) {
+        if (rootOptimizeDTO.getOption() == 0) {
+            int resultTime = kakaoService.getDirections(rootOptimizeDTO.getPlaceList().getFirst().getLongitude(),
+                    rootOptimizeDTO.getPlaceList().getFirst().getLatitude(),
+                    rootOptimizeDTO.getPlaceList().getLast().getLongitude(),
+                    rootOptimizeDTO.getPlaceList().getLast().getLatitude());
+            StringBuilder rootInfoBuilder = new StringBuilder();
+            if(resultTime/60 > 0) {
+                rootInfoBuilder.append(resultTime/60).append("시간 ");
+            }
+            rootInfoBuilder.append(resultTime%60).append("분");
+            List<String[]> timeList = new ArrayList<>();
+            timeList.add(new String[] {rootInfoBuilder.toString(), String.valueOf(rootOptimizeDTO.getOption()) } );
+            rootOptimizeDTO.setSpotTime(timeList);
+            rootInfoBuilder.append("이동 시간은 ").append(rootInfoBuilder).append(" 입니다.");
+        } else if (rootOptimizeDTO.getOption() == 1) {
+            RootInfoDTO baseInfo = RootInfoDTO.builder()
+                    .startTitle(rootOptimizeDTO.getPlaceList().getFirst().getTitle())
+                    .endTitle(rootOptimizeDTO.getPlaceList().getLast().getTitle())
+                    .build();
+
+            RootInfoDTO result = tMapService.getPublicTime(rootOptimizeDTO.getPlaceList().getFirst().getLongitude(),
+                    rootOptimizeDTO.getPlaceList().getFirst().getLatitude(),
+                    rootOptimizeDTO.getPlaceList().getLast().getLongitude(),
+                    rootOptimizeDTO.getPlaceList().getLast().getLatitude(), baseInfo);
+            StringBuilder time = new StringBuilder();
+            if(result.getTime()/60 > 0) {
+                time.append(result.getTime()/60).append("시간 ");
+            }
+            time.append(result.getTime()%60).append("분");
+            List<String[]> timeList = new ArrayList<>();
+            timeList.add(new String[]{time.toString(), String.valueOf(rootOptimizeDTO.getOption()) });
+            rootOptimizeDTO.setSpotTime(timeList);
+        }
+        return rootOptimizeDTO;
+    }
+
+    //머기업 테스트
+    @Override
+    public RootOptimizeDTO getOptimizingTime2(RootOptimizeDTO rootOptimizeDTO) throws IOException {
+        List<CoordinateDTO> coordinateDTOList = new ArrayList<>();
+        // 전달 받은 정보를 기반으로 좌표 리스트 생성
+        List<RootOptimizeDTO.place> placeList = rootOptimizeDTO.getPlaceList();
+        for (RootOptimizeDTO.place place : placeList) {
+            CoordinateDTO coordinateDTO = CoordinateDTO.builder()
+                    .title(place.getTitle())
+                    .latitude(place.getLatitude())
+                    .longitude(place.getLongitude())
+                    .build();
+            coordinateDTOList.add(coordinateDTO);
+        }
+
+        FindRoot root = null;
+        RootOptimizeDTO result = new RootOptimizeDTO();
+        // 자동차
+        if ( rootOptimizeDTO.getOption() == 0 ) {
+            //root = kakaoService.getOptimizingTime(coordinateDTOList);
+            result.setOption(0);
+        }
+        // 대중교통
+        else if ( rootOptimizeDTO.getOption() == 1 ) {
+            result.setOption(1);
+            root = tMapService.getOptimizingTime(coordinateDTOList);
+        } else {
+            result.setOption(-1);
+        }
+
+
+        List<RootOptimizeDTO.place> newPlaceList = new ArrayList<>();
+        List<String[]> newSpotTimeList = new ArrayList<>();
+
+        if (root != null) {
+
+            int j = 0;
+            for(Integer i : root.getResultNumbers()) {
+                StringBuilder sb = new StringBuilder();
+                if( root.getRootTime()[j]/60 != 0 ) {
+                    sb.append(root.getRootTime()[j]/60).append("시간 ");
+                }
+                sb.append(root.getRootTime()[j++]%60).append("분");
+
+                newSpotTimeList.add(new String[]{sb.toString(), String.valueOf(rootOptimizeDTO.getOption()) });
+                RootOptimizeDTO.place newPlace = rootOptimizeDTO.getPlaceList().get(i);
+                if (result.getOption() == 1) {
+                    newPlace.setMovingRoot(j == root.getResultNumbers().size() ? "null" : root.getTimeTable()[i][root.getResultNumbers().get(j)].getRootInfo().toString());
+                }
+                newPlaceList.add(newPlace);
+            }
+            result.setPlaceList(newPlaceList);
+            result.setSpotTime(newSpotTimeList);
+
+            return result;
+        }
+
+
+        return null;
+    }
+
 
 }
