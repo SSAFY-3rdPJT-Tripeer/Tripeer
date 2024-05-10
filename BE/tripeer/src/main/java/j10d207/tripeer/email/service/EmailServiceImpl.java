@@ -4,6 +4,8 @@ package j10d207.tripeer.email.service;
 import j10d207.tripeer.email.db.dto.EmailDTO;
 import j10d207.tripeer.exception.CustomException;
 import j10d207.tripeer.exception.ErrorCode;
+import j10d207.tripeer.user.db.entity.UserEntity;
+import j10d207.tripeer.user.db.repository.UserRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -16,18 +18,24 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService{
 
     private final JavaMailSender javaMailSender;
+    private final UserRepository userRepository;
 
     @Override
     public boolean sendEmail(EmailDTO emailDTO) {
+        UserEntity userEntity = userRepository.findById(emailDTO.getUserId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true);
-            messageHelper.setTo(emailDTO.getEmailAddr());
+            messageHelper.setTo(userEntity.getEmail());
             messageHelper.setSubject("[Tripeer] " + emailDTO.getTitle());
             messageHelper.setFrom("hmy940424@gmail.com");
 
