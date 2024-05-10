@@ -13,7 +13,6 @@ import j10d207.tripeer.user.config.JWTUtil;
 import j10d207.tripeer.user.db.repository.WishListRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;

@@ -2,7 +2,10 @@ package j10d207.tripeer.user.db.entity;
 
 import j10d207.tripeer.place.db.entity.SpotInfoEntity;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 
 @Entity(name = "wishlist")

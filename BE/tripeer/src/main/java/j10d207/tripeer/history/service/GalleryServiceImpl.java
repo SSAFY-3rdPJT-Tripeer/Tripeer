@@ -12,7 +12,6 @@ import j10d207.tripeer.history.db.entity.GalleryEntity;
 import j10d207.tripeer.history.db.repository.GalleryRepository;
 import j10d207.tripeer.plan.db.entity.PlanDayEntity;
 import j10d207.tripeer.plan.db.repository.PlanDayRepository;
-import j10d207.tripeer.plan.db.repository.PlanRepository;
 import j10d207.tripeer.user.config.JWTUtil;
 import j10d207.tripeer.user.db.entity.UserEntity;
 import j10d207.tripeer.user.db.repository.UserRepository;
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;

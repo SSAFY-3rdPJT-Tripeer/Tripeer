@@ -3,8 +3,6 @@ package j10d207.tripeer.place.db.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigDecimal;
-
 @Table(name = "spot_info", indexes = {
         @Index(name = "idx_content_type_city", columnList = "contentTypeId, cityId"),
         @Index(name = "idx_content_type_city_town", columnList = "contentTypeId, cityId, townId")

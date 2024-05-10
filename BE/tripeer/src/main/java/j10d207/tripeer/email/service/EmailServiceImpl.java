@@ -6,19 +6,12 @@ import j10d207.tripeer.exception.CustomException;
 import j10d207.tripeer.exception.ErrorCode;
 import j10d207.tripeer.user.db.entity.UserEntity;
 import j10d207.tripeer.user.db.repository.UserRepository;
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.aws.mail.simplemail.SimpleEmailServiceJavaMailSender;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Slf4j
 @Service

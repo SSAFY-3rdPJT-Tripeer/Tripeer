@@ -1,6 +1,5 @@
 package j10d207.tripeer.plan.service;
 
-import j10d207.tripeer.odsay.db.dto.TimeRootInfoDTO;
 import j10d207.tripeer.plan.db.dto.*;
 
 import java.io.IOException;
@@ -41,14 +40,9 @@ public interface PlanService {
     public Map<Integer, List<PlanDetailResDTO>> getAllPlanDetail(long planId);
     //플랜 나의 정보 조회(기존 내정보 + 나의 coworker에서의 순서)
     public CoworkerReqDTO getPlanMyinfo(long planId, String token);
+
     //목적지간 최단 루트 계산
     public RootOptimizeDTO getShortTime(RootOptimizeDTO rootOptimizeDTO);
     //플랜 최단거리 조정
-    public RootOptimizeDTO getOptimizingTime(RootOptimizeDTO rootOptimizeDTO) throws IOException;
-
-
-    //머기업 테스트
-    public RootOptimizeDTO getShortTime2(RootOptimizeDTO rootOptimizeDTO);
-    //머기업 테스트
-    public RootOptimizeDTO getOptimizingTime2(RootOptimizeDTO rootOptimizeReqDTO) throws IOException;
+    public RootOptimizeDTO getOptimizingTime(RootOptimizeDTO rootOptimizeReqDTO) throws IOException;
 }

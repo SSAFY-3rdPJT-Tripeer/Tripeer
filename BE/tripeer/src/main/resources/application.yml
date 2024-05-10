@@ -85,6 +85,9 @@ odsay:
 tmap:
   apikey: ENC(rq3bzD3hCoL+f1r9F3T1wYmAo6G7Y8UVawUT/x/0oYjUGj8gv8dgBByIo5YNDKOmKxYXlYqdBv8=)
 
+kakao:
+  apikey: ENC(P5ANnJgP83n706xcwZbbxZT5bg5Eypnt5peqQURgUOZoJ1llLhpq/8iJeS4iUF4l)
+
 cloud:
   aws:
     credentials:

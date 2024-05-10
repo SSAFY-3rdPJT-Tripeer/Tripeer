@@ -1,7 +1,9 @@
 package j10d207.tripeer.place.db.dto;
 
 import j10d207.tripeer.place.db.entity.CityEntity;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
 
 @Getter

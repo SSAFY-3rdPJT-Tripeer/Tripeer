@@ -1,8 +1,5 @@
 package j10d207.tripeer.user.controller;
 
-import j10d207.tripeer.exception.CustomException;
-import j10d207.tripeer.exception.ErrorCode;
-import j10d207.tripeer.history.db.dto.GalleryDTO;
 import j10d207.tripeer.response.Response;
 import j10d207.tripeer.user.db.dto.JoinDTO;
 import j10d207.tripeer.user.db.dto.SocialInfoDTO;
@@ -17,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 

@@ -2,8 +2,6 @@ package j10d207.tripeer.tmap.db.dto;
 
 import lombok.*;
 
-import java.time.LocalTime;
-
 @Getter
 @Setter
 @Builder

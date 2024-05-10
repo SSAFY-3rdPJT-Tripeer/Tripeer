@@ -1,9 +1,11 @@
 package j10d207.tripeer.history.controller;
 
-import j10d207.tripeer.history.db.dto.*;
+
+import j10d207.tripeer.history.db.dto.CostReqDTO;
+import j10d207.tripeer.history.db.dto.CostResDTO;
+import j10d207.tripeer.history.db.dto.GalleryDTO;
 import j10d207.tripeer.history.service.GalleryService;
 import j10d207.tripeer.history.service.HistoryService;
-import j10d207.tripeer.plan.db.dto.PlanDetailResDTO;
 import j10d207.tripeer.plan.db.dto.PlanListResDTO;
 import j10d207.tripeer.response.Response;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,7 +1,9 @@
 package j10d207.tripeer.place.controller;
 
 import j10d207.tripeer.place.db.dto.*;
-import j10d207.tripeer.place.service.*;
+import j10d207.tripeer.place.service.CityService;
+import j10d207.tripeer.place.service.SpotService;
+import j10d207.tripeer.place.service.TownService;
 import j10d207.tripeer.plan.service.PlanService;
 import j10d207.tripeer.response.Response;
 import jakarta.servlet.http.HttpServletRequest;
