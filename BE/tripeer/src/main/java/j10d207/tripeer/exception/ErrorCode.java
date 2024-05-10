@@ -44,7 +44,8 @@ public enum ErrorCode {
     NOT_FOUND_ROOT(HttpStatus.BAD_REQUEST, "ROOT-001", "대중교통 수단이 없습니다."),
 
     //Email
-    EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "EMAIL-001", "이메일 전송 중 오류가 발생 했습니다.");
+    EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "EMAIL-001", "이메일 전송 중 오류가 발생 했습니다."),
+    INVALID_EMAIL(HttpStatus.NOT_FOUND, "EMAIL-002", "유효하지 않은 이메일 주소입니다.");
 
     private final HttpStatus httpStatus;	// HttpStatus
     private final String code;				// ACCOUNT-001
