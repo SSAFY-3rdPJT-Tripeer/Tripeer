@@ -1,4 +1,4 @@
-package j10d207.tripeer.odsay.db.dto;
+package j10d207.tripeer.tmap.db.dto;
 
 import lombok.Builder;
 import lombok.Getter;

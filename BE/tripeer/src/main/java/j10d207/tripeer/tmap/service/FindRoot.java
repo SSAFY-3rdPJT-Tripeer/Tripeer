@@ -1,13 +1,13 @@
-package j10d207.tripeer.odsay.service;
+package j10d207.tripeer.tmap.service;
 
-import j10d207.tripeer.odsay.db.dto.TimeRootInfoDTO;
+import j10d207.tripeer.tmap.db.dto.RootInfoDTO;
 import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class RootSolve {
+public class FindRoot {
 
     private final int N;
     private final boolean[] isSelected;
@@ -15,9 +15,9 @@ public class RootSolve {
     private int[] rootTime;
     private List<Integer> resultNumbers;
 
-    TimeRootInfoDTO[][] timeTable;
+    RootInfoDTO[][] timeTable;
 
-    public RootSolve(TimeRootInfoDTO[][] timeTable) {
+    public FindRoot(RootInfoDTO[][] timeTable) {
         N = timeTable.length;
         isSelected = new boolean[N];
         this.minTime = Integer.MAX_VALUE;

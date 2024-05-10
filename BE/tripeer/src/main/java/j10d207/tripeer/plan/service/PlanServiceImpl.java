@@ -5,11 +5,6 @@ import j10d207.tripeer.email.service.EmailService;
 import j10d207.tripeer.exception.CustomException;
 import j10d207.tripeer.exception.ErrorCode;
 import j10d207.tripeer.kakao.service.KakaoService;
-import j10d207.tripeer.odsay.db.dto.CoordinateDTO;
-import j10d207.tripeer.odsay.db.dto.TimeRootInfoDTO;
-import j10d207.tripeer.odsay.service.AlgorithmService;
-import j10d207.tripeer.odsay.service.OdsayService;
-import j10d207.tripeer.odsay.service.RootSolve;
 import j10d207.tripeer.place.db.ContentTypeEnum;
 import j10d207.tripeer.place.db.entity.CityEntity;
 import j10d207.tripeer.place.db.entity.SpotInfoEntity;
@@ -19,6 +14,10 @@ import j10d207.tripeer.place.db.repository.SpotInfoRepository;
 import j10d207.tripeer.plan.db.dto.*;
 import j10d207.tripeer.plan.db.entity.*;
 import j10d207.tripeer.plan.db.repository.*;
+import j10d207.tripeer.tmap.db.dto.CoordinateDTO;
+import j10d207.tripeer.tmap.db.dto.RootInfoDTO;
+import j10d207.tripeer.tmap.service.FindRoot;
+import j10d207.tripeer.tmap.service.TMapService;
 import j10d207.tripeer.user.config.JWTUtil;
 import j10d207.tripeer.user.db.dto.UserSearchDTO;
 import j10d207.tripeer.user.db.entity.CoworkerEntity;
@@ -61,8 +60,7 @@ public class PlanServiceImpl implements PlanService {
     private final SpotInfoRepository spotInfoRepository;
     private final PlanDetailRepository planDetailRepository;
 
-    private final OdsayService odsayService;
-    private final AlgorithmService algorithmService;
+    private final TMapService tMapService;
 
     private final KakaoService kakaoService;
 
@@ -605,8 +603,8 @@ public class PlanServiceImpl implements PlanService {
         throw new CustomException(ErrorCode.NOT_HAS_COWORKER);
     }
 
+
     //목적지간 최단 루트 계산
-    @Override
     public RootOptimizeDTO getShortTime(RootOptimizeDTO rootOptimizeDTO) {
         if (rootOptimizeDTO.getOption() == 0) {
             int resultTime = kakaoService.getDirections(rootOptimizeDTO.getPlaceList().getFirst().getLongitude(),
@@ -618,18 +616,17 @@ public class PlanServiceImpl implements PlanService {
                 rootInfoBuilder.append(resultTime/60).append("시간 ");
             }
             rootInfoBuilder.append(resultTime%60).append("분");
-            List<String> timeList = new ArrayList<>();
-            timeList.add(rootInfoBuilder.toString());
-            timeList.add(rootOptimizeDTO.getOption() + "");
+            List<String[]> timeList = new ArrayList<>();
+            timeList.add(new String[] {rootInfoBuilder.toString(), String.valueOf(rootOptimizeDTO.getOption()) } );
             rootOptimizeDTO.setSpotTime(timeList);
             rootInfoBuilder.append("이동 시간은 ").append(rootInfoBuilder).append(" 입니다.");
         } else if (rootOptimizeDTO.getOption() == 1) {
-            TimeRootInfoDTO baseInfo = TimeRootInfoDTO.builder()
+            RootInfoDTO baseInfo = RootInfoDTO.builder()
                     .startTitle(rootOptimizeDTO.getPlaceList().getFirst().getTitle())
                     .endTitle(rootOptimizeDTO.getPlaceList().getLast().getTitle())
                     .build();
 
-            TimeRootInfoDTO result = odsayService.getPublicTime(rootOptimizeDTO.getPlaceList().getFirst().getLongitude(),
+            RootInfoDTO result = tMapService.getPublicTime(rootOptimizeDTO.getPlaceList().getFirst().getLongitude(),
                     rootOptimizeDTO.getPlaceList().getFirst().getLatitude(),
                     rootOptimizeDTO.getPlaceList().getLast().getLongitude(),
                     rootOptimizeDTO.getPlaceList().getLast().getLatitude(), baseInfo);
@@ -638,19 +635,18 @@ public class PlanServiceImpl implements PlanService {
                 time.append(result.getTime()/60).append("시간 ");
             }
             time.append(result.getTime()%60).append("분");
-            List<String> timeList = new ArrayList<>();
-            timeList.add(time.toString());
-            timeList.add(rootOptimizeDTO.getOption() + "");
+            List<String[]> timeList = new ArrayList<>();
+            timeList.add(new String[]{time.toString(), String.valueOf(rootOptimizeDTO.getOption()) });
             rootOptimizeDTO.setSpotTime(timeList);
         }
         return rootOptimizeDTO;
     }
 
-
+    //플랜 최단거리 조정
     @Override
     public RootOptimizeDTO getOptimizingTime(RootOptimizeDTO rootOptimizeDTO) throws IOException {
         List<CoordinateDTO> coordinateDTOList = new ArrayList<>();
-
+        // 전달 받은 정보를 기반으로 좌표 리스트 생성
         List<RootOptimizeDTO.place> placeList = rootOptimizeDTO.getPlaceList();
         for (RootOptimizeDTO.place place : placeList) {
             CoordinateDTO coordinateDTO = CoordinateDTO.builder()
@@ -661,7 +657,7 @@ public class PlanServiceImpl implements PlanService {
             coordinateDTOList.add(coordinateDTO);
         }
 
-        RootSolve root = null;
+        FindRoot root = null;
         RootOptimizeDTO result = new RootOptimizeDTO();
         // 자동차
         if ( rootOptimizeDTO.getOption() == 0 ) {
@@ -671,14 +667,14 @@ public class PlanServiceImpl implements PlanService {
         // 대중교통
         else if ( rootOptimizeDTO.getOption() == 1 ) {
             result.setOption(1);
-            root = algorithmService.getOptimizingTime(coordinateDTOList);
+            root = tMapService.getOptimizingTime(coordinateDTOList);
         } else {
             result.setOption(-1);
         }
 
 
         List<RootOptimizeDTO.place> newPlaceList = new ArrayList<>();
-        List<String> newSpotTimeList = new ArrayList<>();
+        List<String[]> newSpotTimeList = new ArrayList<>();
 
         if (root != null) {
 
@@ -690,7 +686,7 @@ public class PlanServiceImpl implements PlanService {
                 }
                 sb.append(root.getRootTime()[j++]%60).append("분");
 
-                newSpotTimeList.add(sb.toString());
+                newSpotTimeList.add(new String[]{sb.toString(), String.valueOf(rootOptimizeDTO.getOption()) });
                 RootOptimizeDTO.place newPlace = rootOptimizeDTO.getPlaceList().get(i);
                 if (result.getOption() == 1) {
                     newPlace.setMovingRoot(j == root.getResultNumbers().size() ? "null" : root.getTimeTable()[i][root.getResultNumbers().get(j)].getRootInfo().toString());
@@ -706,5 +702,6 @@ public class PlanServiceImpl implements PlanService {
 
         return null;
     }
+
 
 }

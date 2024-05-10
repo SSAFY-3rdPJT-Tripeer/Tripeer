@@ -186,13 +186,13 @@ public class PlanController {
     //목적지간 최단 루트 계산
     @PostMapping("/optimizing/short")
     public Response<RootOptimizeDTO> getShortTime(@RequestBody RootOptimizeDTO rootOptimizeDTO) {
-        return Response.of(HttpStatus.OK, "목적지 간 대중교통 경로, 자차 소요시간 조회.", planService.getShortTime(rootOptimizeDTO));
+        return Response.of(HttpStatus.OK, "2목적지 간 대중교통 경로, 자차 소요시간 조회.", planService.getShortTime(rootOptimizeDTO));
     }
 
     //플랜 최단거리 조정
     @PostMapping("/optimizing")
     public Response<RootOptimizeDTO> getOptimizedPlan(@RequestBody RootOptimizeDTO rootOptimizeReqDTO) throws IOException {
         RootOptimizeDTO result = planService.getOptimizingTime(rootOptimizeReqDTO);
-        return Response.of(HttpStatus.OK, "목적지 리스트 최적화 완료", result);
+        return Response.of(HttpStatus.OK, "2목적지 리스트 최적화 완료", result);
     }
 }
