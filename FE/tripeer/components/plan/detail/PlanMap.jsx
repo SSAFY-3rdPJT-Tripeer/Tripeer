@@ -238,7 +238,6 @@ const PlanMap = (props) => {
         setAlert(false);
         setTimer(time);
       }, 2000);
-      console.log("너 장난하냐?");
       return;
     }
     try {
@@ -310,18 +309,6 @@ const PlanMap = (props) => {
           return spot;
         });
         setSpotList(tempSpotList);
-        const tempSpotWishList = spotWishList.map((spot) => {
-          if (
-            spots.findIndex((item) => item.spotInfoId === spot.spotInfoId) !==
-            -1
-          ) {
-            spot.spot = true;
-          } else {
-            spot.spot = false;
-          }
-          return spot;
-        });
-        setSpotWishList(tempSpotWishList);
         setSaveSpots(spots);
         setIsTarget(true);
       });
