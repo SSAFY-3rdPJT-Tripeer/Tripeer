@@ -1,7 +1,6 @@
 package j10d207.tripeer.user.config;
 
 import io.jsonwebtoken.ExpiredJwtException;
-import j10d207.tripeer.user.db.dto.CustomOAuth2User;
 import j10d207.tripeer.user.db.entity.UserEntity;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

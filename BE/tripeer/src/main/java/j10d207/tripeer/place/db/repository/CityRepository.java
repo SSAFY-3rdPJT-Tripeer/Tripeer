@@ -2,7 +2,6 @@ package j10d207.tripeer.place.db.repository;
 
 import j10d207.tripeer.place.db.entity.CityEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;

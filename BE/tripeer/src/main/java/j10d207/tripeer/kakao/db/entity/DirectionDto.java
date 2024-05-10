@@ -1,6 +1,9 @@
 package j10d207.tripeer.kakao.db.entity;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.List;
 

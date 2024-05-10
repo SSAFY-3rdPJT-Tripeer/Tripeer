@@ -1,8 +1,5 @@
 package j10d207.tripeer.plan.controller;
 
-import j10d207.tripeer.exception.CustomException;
-import j10d207.tripeer.exception.ErrorCode;
-import j10d207.tripeer.odsay.db.dto.TimeRootInfoDTO;
 import j10d207.tripeer.plan.db.dto.*;
 import j10d207.tripeer.plan.service.PlanService;
 import j10d207.tripeer.response.Response;
@@ -187,28 +184,15 @@ public class PlanController {
     }
 
     //목적지간 최단 루트 계산
-    @PostMapping("/optimizing/odsay/short")
+    @PostMapping("/optimizing/short")
     public Response<RootOptimizeDTO> getShortTime(@RequestBody RootOptimizeDTO rootOptimizeDTO) {
-        return Response.of(HttpStatus.OK, "목적지 간 대중교통 경로, 자차 소요시간 조회.", planService.getShortTime(rootOptimizeDTO));
+        return Response.of(HttpStatus.OK, "2목적지 간 대중교통 경로, 자차 소요시간 조회.", planService.getShortTime(rootOptimizeDTO));
     }
 
     //플랜 최단거리 조정
-    @PostMapping("/optimizing/odsay")
+    @PostMapping("/optimizing")
     public Response<RootOptimizeDTO> getOptimizedPlan(@RequestBody RootOptimizeDTO rootOptimizeReqDTO) throws IOException {
         RootOptimizeDTO result = planService.getOptimizingTime(rootOptimizeReqDTO);
-        return Response.of(HttpStatus.OK, "목적지 리스트 최적화 완료", result);
-    }
-
-    //머기업테스트
-    @PostMapping("/optimizing/short")
-    public Response<RootOptimizeDTO> getShortTime2(@RequestBody RootOptimizeDTO rootOptimizeDTO) {
-        return Response.of(HttpStatus.OK, "2목적지 간 대중교통 경로, 자차 소요시간 조회.", planService.getShortTime2(rootOptimizeDTO));
-    }
-
-    //머기업 테스트
-    @PostMapping("/optimizing/")
-    public Response<RootOptimizeDTO> getOptimizedPlan2(@RequestBody RootOptimizeDTO rootOptimizeReqDTO) throws IOException {
-        RootOptimizeDTO result = planService.getOptimizingTime2(rootOptimizeReqDTO);
         return Response.of(HttpStatus.OK, "2목적지 리스트 최적화 완료", result);
     }
 }

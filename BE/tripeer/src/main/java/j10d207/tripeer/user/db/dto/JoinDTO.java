@@ -1,9 +1,6 @@
 package j10d207.tripeer.user.db.dto;
 
-import lombok.Builder;
 import lombok.Getter;
-
-import java.time.LocalDate;
 
 @Getter
 public class JoinDTO {
