@@ -1,8 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import styles from "./placeItem.module.css";
-import vectorSrc from "@/public/place/vector.png";
 import usePlaceStore from "@/stores/place";
 import cityName from "@/utils/cityName";
 
@@ -27,19 +28,26 @@ export default function PlaceItem({ data, isCity }) {
 
   return (
     <main className={styles.main} onClick={onClick}>
-      <img
-        key={isCity ? data.cityImg : data.townImg}
-        src={isCity ? data.cityImg : data.townImg}
-        className={styles.image}
-        alt={"이미지"}
-      />
-      <section className={styles.section}>
+      <div className={styles.cardImgBox} style={{ position: "relative" }}>
         <Image
-          className={styles.vector}
-          src={vectorSrc}
-          alt={"벡터"}
-          priority
+          className={styles.cardImg}
+          src={
+            "https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/default1.png"
+          }
+          alt={"이미지"}
+          fill
+          loader={() => {
+            if (data) {
+              return data?.cityImg ? data.cityImg : data.townImg;
+            } else {
+              return "https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/default1.png";
+            }
+          }}
         />
+      </div>
+
+      <section className={styles.section}>
+        <div className={styles.mapIcon}></div>
         <p className={styles.p}>
           {`${isCity || cityName[data.cityId] === data.townName ? "" : cityName[data.cityId]} 
           ${isCity ? data.cityName : data.townName}`}

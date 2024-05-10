@@ -1,38 +1,46 @@
 .main {
-  width: 360px;
-  height: 380px;
-  box-shadow: rgb(224, 224, 224) 1px 2px 4px 3px;
+  width: 400px;
+  height: 400px;
+  box-shadow: rgb(224, 224, 224) 0px 0px 20px;
   border: none;
-  border-radius: 20px;
+  border-radius: 5px;
   display: flex;
   justify-content: center;
-  align-items: start;
+  align-items: center;
   flex-direction: column;
   cursor: pointer;
   animation: fade-in 1s ease;
 }
-
-.image {
-  width: 320px;
-  height: 300px;
-  margin: 0 20px 20px 20px;
-  border-radius: 10px;
+.cardImgBox {
+  width: 380px;
+  height: 335px;
   animation: fade-in 1s ease;
+}
+
+.cardImg {
+  border-radius: 5px;
 }
 
 .section {
   display: flex;
   align-items: center;
+  width: 100%;
+  margin-top: 12px;
 }
 
-.vector {
+.mapIcon {
+  background: url(./asset/mapIcon.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
   width: 15px;
-  height: 21px;
-  margin: 0 10px 0 25px;
+  height: 20px;
+  margin-left: 10px;
+  margin-right: 5px;
 }
 
 .p {
-  font-weight: bold;
+  font-weight: 600;
   color: #545454;
   font-size: 18px;
 }
