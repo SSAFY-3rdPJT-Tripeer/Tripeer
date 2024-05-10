@@ -110,7 +110,7 @@ public class PlaceController {
      * 스팟 생성
      * */
     @PostMapping("/spot/create")
-    public Response<SpotInfoDto> createNewSpot(@RequestBody SpotAddReqDto spotAddReqDto, HttpServletRequest request) {
+    public Response<SpotAddResDto> createNewSpot(@RequestBody SpotAddReqDto spotAddReqDto, HttpServletRequest request) {
 
         return Response.of(HttpStatus.OK, "새로운 스팟 생성", spotService.createNewSpot(spotAddReqDto, request));
     }

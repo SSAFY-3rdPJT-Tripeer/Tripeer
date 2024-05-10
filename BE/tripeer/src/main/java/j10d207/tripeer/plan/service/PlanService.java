@@ -21,7 +21,7 @@ public interface PlanService {
     //플랜 날짜 수정
     public void changeDay(CreatePlanDTO createPlanDTO, String token);
     //동행자 추가
-    public void joinPlan(CoworkerReqDTO coworkerReqDTO);
+    public void joinPlan(CoworkerReqDTO coworkerReqDTO, String token);
     //동행자 조회
     public List<CoworkerReqDTO> getCoworker(long planId);
     //관광지 검색

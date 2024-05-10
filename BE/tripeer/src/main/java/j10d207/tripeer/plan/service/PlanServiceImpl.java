@@ -1,5 +1,7 @@
 package j10d207.tripeer.plan.service;
 
+import j10d207.tripeer.email.db.dto.EmailDTO;
+import j10d207.tripeer.email.service.EmailService;
 import j10d207.tripeer.exception.CustomException;
 import j10d207.tripeer.exception.ErrorCode;
 import j10d207.tripeer.kakao.service.KakaoService;
@@ -53,6 +55,7 @@ public class PlanServiceImpl implements PlanService {
     private final PlanTownRepository planTownRepository;
     private final PlanDayRepository planDayRepository;
     private final PlanBucketRepository planBucketRepository;
+    private final PlanSchedulerService planSchedulerService;
 
     private final SpotInfoRepository spotInfoRepository;
     private final PlanDetailRepository planDetailRepository;
@@ -60,6 +63,8 @@ public class PlanServiceImpl implements PlanService {
     private final TMapService tMapService;
 
     private final KakaoService kakaoService;
+
+    private final EmailService emailService;
 
     //플랜 생성
     @Override
@@ -131,6 +136,8 @@ public class PlanServiceImpl implements PlanService {
             planDayRepository.save(planDay);
         }
 
+        // 이메일 전송 스케쥴링
+        planSchedulerService.schedulePlanTasks(plan);
         return planResponseDTO;
     }
 
@@ -292,7 +299,24 @@ public class PlanServiceImpl implements PlanService {
 
     //동행자 추가
     @Override
-    public void joinPlan(CoworkerReqDTO coworkerReqDTO) {
+    public void joinPlan(CoworkerReqDTO coworkerReqDTO, String token) {
+        UserEntity userEntity = userRepository.findById(jwtUtil.getUserId(jwtUtil.splitToken(token)))
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        PlanEntity planEntity = planRepository.findById(coworkerReqDTO.getPlanId())
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_PLAN));
+
+        String title = userEntity.getNickname() + "님의 초대입니다";
+        String content = userEntity.getNickname() + "님이 " + planEntity.getTitle()
+                + " 여행계획에 초대하셨습니다.";
+
+        EmailDTO emailDTO = EmailDTO.builder()
+                .userId(userEntity.getUserId())
+                .content(content)
+                .title(title)
+                .build();
+
+        emailService.sendEmail(emailDTO);
+
         if(!coworkerRepository.existsByPlan_PlanIdAndUser_UserId(coworkerReqDTO.getPlanId(), coworkerReqDTO.getUserId())) {
             CoworkerEntity coworker = CoworkerEntity.builder()
                     .plan(PlanEntity.builder().planId(coworkerReqDTO.getPlanId()).build())
@@ -381,6 +405,12 @@ public class PlanServiceImpl implements PlanService {
         List<SpotSearchResDTO> spotSearchResDTOList = new ArrayList<>();
         for (SpotInfoEntity spotInfoEntity : spotInfoList) {
             SpotSearchResDTO spotSearchResDTO = new SpotSearchResDTO();
+            String img;
+            if (spotInfoEntity.getFirstImage().contains("default")) {
+                img = spotInfoEntity.getFirstImage();
+            } else {
+                img = "https://tripeer207.s3.ap-northeast-2.amazonaws.com/spot/"+spotInfoEntity.getSpotInfoId()+".png";
+            }
 
             spotSearchResDTO.setSpotInfoId(spotInfoEntity.getSpotInfoId());
             spotSearchResDTO.setTitle(spotInfoEntity.getTitle());
@@ -388,7 +418,7 @@ public class PlanServiceImpl implements PlanService {
             spotSearchResDTO.setAddr(spotInfoEntity.getAddr1());
             spotSearchResDTO.setLatitude(spotInfoEntity.getLatitude());
             spotSearchResDTO.setLongitude(spotInfoEntity.getLongitude());
-            spotSearchResDTO.setImg("https://tripeer207.s3.ap-northeast-2.amazonaws.com/spot/"+spotInfoEntity.getSpotInfoId()+".png");
+            spotSearchResDTO.setImg(img);
             spotSearchResDTO.setWishlist(wishListRepository.existsByUser_UserIdAndSpotInfo_SpotInfoId(jwtUtil.getUserId(access), spotInfoEntity.getSpotInfoId()));
             spotSearchResDTO.setSpot(planBucketRepository.existsByPlan_PlanIdAndSpotInfo_SpotInfoId(planId, spotInfoEntity.getSpotInfoId()));
 
