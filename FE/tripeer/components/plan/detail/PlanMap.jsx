@@ -36,6 +36,9 @@ const PlanMap = (props) => {
   const [saveSpots, setSaveSpots] = useState([]); // y.js의 savespot 객체의 배열을 화면에 보여줄 State
   const [io, setIo] = useState(null);
   const [showSpots, setShowSpots] = useState([]);
+  const [timer, setTimer] = useState(null);
+  const [alert, setAlert] = useState(false);
+  const [init, setInit] = useState(false);
 
   const CATEGORY = ["전체", "숙박", "맛집", "명소", "즐겨찾기"];
   const COLOR = [
@@ -223,6 +226,21 @@ const PlanMap = (props) => {
   };
 
   const removeSaveSpot = async (spot) => {
+    const totalYList = provider.doc.getArray("totalYList").toJSON();
+    console.log(totalYList[0]);
+    const tempList = totalYList[0].filter((item) => {
+      return item.spotInfoId === spot.spotInfoId;
+    });
+    if (tempList.length === 0) {
+      setAlert(true);
+      setInit(true);
+      let time = setTimeout(() => {
+        setAlert(false);
+        setTimer(time);
+      }, 2000);
+      console.log("너 장난하냐?");
+      return;
+    }
     try {
       await api.delete(
         `/plan/bucket?planId=${plan.planId}&spotInfoId=${spot.spotInfoId}`,
@@ -297,6 +315,13 @@ const PlanMap = (props) => {
       });
     }
   }, [myInfo, provider, spotList]);
+
+  useEffect(() => {
+    if (timer) {
+      clearTimeout(timer);
+      setTimer(null);
+    }
+  }, [timer]);
 
   return (
     <div className={styles.container}>
@@ -571,6 +596,13 @@ const PlanMap = (props) => {
       />
       {onModal ? <AddSpot towns={towns} setOnModal={setOnModal} /> : null}
       <OnlineBox members={members} online={online} myInfo={myInfo} />
+      {init ? (
+        <div
+          className={`${styles.warnBox} ${alert ? styles.warnShow : styles.warnNo}`}>
+          <div className={styles.warnIcon}></div>
+          <p>이미 일정에 추가된 여행지입니다.</p>
+        </div>
+      ) : null}
     </div>
   );
 };

@@ -67,6 +67,10 @@
 .modalTitle {
   font-size: 1.2rem;
   font-weight: 500;
+  width: 14rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .address {

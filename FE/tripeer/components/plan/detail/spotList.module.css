@@ -145,6 +145,10 @@
 }
 
 .spotTitle {
+  width: 12rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
   font-weight: 500;
   margin-top: 4px;
 }

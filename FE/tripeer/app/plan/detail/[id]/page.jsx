@@ -14,6 +14,7 @@ import PlanMap from "@/components/plan/detail/PlanMap";
 import PlanSchedule from "@/components/plan/detail/PlanSchedule";
 import api from "@/utils/api";
 import MikeFunction from "@/components/plan/detail/MikeFunction";
+import QRCode from "qrcode.react";
 
 const PageDetail = (props) => {
   const [provider, setProvider] = useState(null);
@@ -29,6 +30,7 @@ const PageDetail = (props) => {
   const [timer, setTimer] = useState(null);
   const router = useRouter();
   const [roomName, setRoomName] = useState(null);
+  const [exit, setExit] = useState(false);
 
   const COLOR = [
     "#A60000",
@@ -107,6 +109,13 @@ const PageDetail = (props) => {
         }
         if (JSON.stringify(result2) !== JSON.stringify(mouseInfo)) {
           setMouseInfo(result2);
+        }
+      });
+      const isExit = provider.doc.getText("exit");
+      isExit.observe(() => {
+        if (isExit.toString() === "exit") {
+          setExit(true);
+          console.log("프로젝트 종료");
         }
       });
     }
@@ -265,6 +274,22 @@ const PageDetail = (props) => {
         <PlanNav current={current} setCurrent={setCurrent}></PlanNav>
         {RENDER[current]}
       </div>
+      {exit ? (
+        <div className={styles.back}>
+          <div className={styles.modalBox}>
+            <QRCode value={`http://localhost:3000/trip/${props.params.id}`} />
+            <div
+              className={styles.exitBtn}
+              onClick={() => {
+                window.location.replace(
+                  `http://localhost:3000/trip/${props.params.id}`,
+                );
+              }}>
+              여행 바로 가기
+            </div>
+          </div>
+        </div>
+      ) : null}
     </>
   );
 };
