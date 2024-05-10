@@ -57,7 +57,9 @@ dependencies {
 	//JAXB Runtime
 	implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.3'
 
-
+	// JUnit Jupiter API 및 엔진 추가
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
 }
 
 tasks.named('test') {
