@@ -1,7 +1,9 @@
 package j10d207.tripeer.place.controller;
 
 import j10d207.tripeer.place.db.dto.*;
-import j10d207.tripeer.place.service.*;
+import j10d207.tripeer.place.service.CityService;
+import j10d207.tripeer.place.service.SpotService;
+import j10d207.tripeer.place.service.TownService;
 import j10d207.tripeer.plan.service.PlanService;
 import j10d207.tripeer.response.Response;
 import jakarta.servlet.http.HttpServletRequest;
@@ -108,7 +110,7 @@ public class PlaceController {
      * 스팟 생성
      * */
     @PostMapping("/spot/create")
-    public Response<SpotInfoDto> createNewSpot(@RequestBody SpotAddReqDto spotAddReqDto, HttpServletRequest request) {
+    public Response<SpotAddResDto> createNewSpot(@RequestBody SpotAddReqDto spotAddReqDto, HttpServletRequest request) {
 
         return Response.of(HttpStatus.OK, "새로운 스팟 생성", spotService.createNewSpot(spotAddReqDto, request));
     }

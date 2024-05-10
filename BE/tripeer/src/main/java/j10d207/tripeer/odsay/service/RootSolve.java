@@ -2,8 +2,6 @@ package j10d207.tripeer.odsay.service;
 
 import j10d207.tripeer.odsay.db.dto.TimeRootInfoDTO;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;

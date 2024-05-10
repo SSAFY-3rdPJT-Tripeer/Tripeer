@@ -1,8 +1,5 @@
 package j10d207.tripeer.plan.controller;
 
-import j10d207.tripeer.exception.CustomException;
-import j10d207.tripeer.exception.ErrorCode;
-import j10d207.tripeer.odsay.db.dto.TimeRootInfoDTO;
 import j10d207.tripeer.plan.db.dto.*;
 import j10d207.tripeer.plan.service.PlanService;
 import j10d207.tripeer.response.Response;
@@ -82,9 +79,9 @@ public class PlanController {
 
     //동행자 추가
     @PostMapping("/member")
-    public Response<?> joinPlan(@RequestBody CoworkerReqDTO coworkerReqDTO) {
+    public Response<?> joinPlan(@RequestBody CoworkerReqDTO coworkerReqDTO, HttpServletRequest request) {
         try {
-            planService.joinPlan(coworkerReqDTO);
+            planService.joinPlan(coworkerReqDTO, request.getHeader("Authorization"));
             return Response.of(HttpStatus.OK, "초대 완료", null);
         } catch (Exception e) {
             throw new RuntimeException(e);

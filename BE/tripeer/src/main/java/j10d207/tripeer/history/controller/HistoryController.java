@@ -2,14 +2,10 @@ package j10d207.tripeer.history.controller;
 
 import j10d207.tripeer.history.db.dto.CostReqDTO;
 import j10d207.tripeer.history.db.dto.CostResDTO;
-import j10d207.tripeer.history.db.dto.GallertIdListDTO;
 import j10d207.tripeer.history.db.dto.GalleryDTO;
-import j10d207.tripeer.history.db.entity.GalleryEntity;
 import j10d207.tripeer.history.service.GalleryService;
 import j10d207.tripeer.history.service.HistoryService;
-import j10d207.tripeer.plan.db.dto.PlanDetailResDTO;
 import j10d207.tripeer.plan.db.dto.PlanListResDTO;
-import j10d207.tripeer.plan.db.entity.PlanDetailEntity;
 import j10d207.tripeer.response.Response;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 

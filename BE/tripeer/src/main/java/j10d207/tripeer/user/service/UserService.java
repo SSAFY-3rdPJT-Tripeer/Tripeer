@@ -5,11 +5,9 @@ import j10d207.tripeer.user.db.dto.SocialInfoDTO;
 import j10d207.tripeer.user.db.dto.UserInfoDTO;
 import j10d207.tripeer.user.db.dto.UserSearchDTO;
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 // access 토큰 재발급

@@ -1,13 +1,15 @@
 package j10d207.tripeer.place.db.dto;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.math.BigDecimal;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class SpotAddReqDto {
 
     private int cityId;

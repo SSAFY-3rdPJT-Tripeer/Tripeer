@@ -1,10 +1,8 @@
 package j10d207.tripeer.history.service;
 
 import j10d207.tripeer.history.db.dto.GalleryDTO;
-import j10d207.tripeer.history.db.entity.GalleryEntity;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 public interface GalleryService {
