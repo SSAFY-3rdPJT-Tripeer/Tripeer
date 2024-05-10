@@ -4,10 +4,7 @@ package j10d207.tripeer.place.db.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-<<<<<<< HEAD
 import lombok.NoArgsConstructor;
-=======
->>>>>>> backend
 
 @Getter
 @Builder

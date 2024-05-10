@@ -3,22 +3,13 @@ package j10d207.tripeer.kakao.service;
 
 import com.google.gson.Gson;
 import j10d207.tripeer.kakao.db.entity.RouteResponse;
-<<<<<<< HEAD
-import j10d207.tripeer.odsay.db.dto.CoordinateDTO;
-import j10d207.tripeer.odsay.db.dto.TimeRootInfoDTO;
-import j10d207.tripeer.odsay.service.RootSolve;
-=======
->>>>>>> backend
 import j10d207.tripeer.plan.db.repository.PlanDetailRepository;
 import j10d207.tripeer.tmap.db.dto.CoordinateDTO;
 import j10d207.tripeer.tmap.db.dto.RootInfoDTO;
 import j10d207.tripeer.tmap.service.FindRoot;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-<<<<<<< HEAD
-=======
 import org.springframework.beans.factory.annotation.Value;
->>>>>>> backend
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;

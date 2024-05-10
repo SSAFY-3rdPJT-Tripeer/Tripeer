@@ -1,13 +1,8 @@
 package j10d207.tripeer.history.controller;
 
-<<<<<<< HEAD
-import j10d207.tripeer.history.db.dto.CostReqDTO;
-import j10d207.tripeer.history.db.dto.CostResDTO;
-import j10d207.tripeer.history.db.dto.GalleryDTO;
-=======
 
 import j10d207.tripeer.history.db.dto.*;
->>>>>>> backend
+
 import j10d207.tripeer.history.service.GalleryService;
 import j10d207.tripeer.history.service.HistoryService;
 import j10d207.tripeer.plan.db.dto.PlanListResDTO;

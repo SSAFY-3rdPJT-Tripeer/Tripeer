@@ -1,18 +1,13 @@
 package j10d207.tripeer.history.service;
 
-<<<<<<< HEAD
 import j10d207.tripeer.history.db.dto.CostReqDTO;
 import j10d207.tripeer.history.db.dto.CostResDTO;
-=======
 import j10d207.tripeer.history.db.dto.*;
 import j10d207.tripeer.history.db.entity.GalleryEntity;
 import j10d207.tripeer.history.db.repository.GalleryRepository;
 import j10d207.tripeer.place.db.ContentTypeEnum;
-import j10d207.tripeer.place.db.dto.SpotInfoDto;
 import j10d207.tripeer.place.db.entity.SpotInfoEntity;
-import j10d207.tripeer.place.db.entity.TownEntity;
 import j10d207.tripeer.place.db.repository.SpotInfoRepository;
->>>>>>> backend
 import j10d207.tripeer.plan.db.dto.PlanListResDTO;
 import j10d207.tripeer.plan.db.entity.PlanDayEntity;
 import j10d207.tripeer.plan.db.entity.PlanDetailEntity;

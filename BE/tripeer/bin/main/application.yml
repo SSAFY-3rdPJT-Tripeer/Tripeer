@@ -45,7 +45,7 @@ spring:
             client-secret: ENC(lQlOiocOvFAtDivr/RySShuAQozGv1F6o1J6tf7uYxTeXxpl9BRgPUbvbDq69cix)
             redirect-uri: https://k10d207.p.ssafy.io/api/login/oauth2/code/kakao
             authorization-grant-type: authorization_code
-            scope: profile_nickname, profile_image
+            scope: profile_nickname, profile_image, account_email
             client-authentication-method: client_secret_post
           naver:
             client-name: naver
@@ -53,7 +53,7 @@ spring:
             client-secret: ENC(bjVify3O4qIWMbRrfzIpbj0P7Zm2uMpw)
             redirect-uri: https://k10d207.p.ssafy.io/api/login/oauth2/code/naver
             authorization-grant-type: authorization_code
-            scope: name
+            scope: name, email
           google:
             client-name: google
             client-id: ENC(sSX1umy4qajs8dX/VNp+Bvujw2PRjPcloD+s9GqSyUn8zRPfAh47doTxN2XPMO0Il+Nr48H280Ysd5Q/9hYpoSH+0ZzLJxXKeBWWNk+WiNlINJyc5SHHmQ==)
@@ -68,9 +68,25 @@ spring:
     refresh: 36000000
     secret: ENC(+TMgIEAtgPTpRvh8SSGMLDPoaEzVbkBA8RFQBsNplM5IAmNxrATCqM9itNRpS5BX)
 
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ENC(uLqb3uehjijt61z7bAolNDjE09x45e3laC0Vk26yIxA=)
+    password: ENC(zhltywasMCbEhvwOVrmZJOXzsrK5B4weLd1RlrmRqQI=)
+    debug: true
+    properties.mail.smtp:
+      auth: true
+      starttls.enable: true
+
 odsay:
-#  apikey: ENC(LATQ/BqKAqGJBePHethXpBKOm0GvpqwICuxB4wZuRBF/AXFjn5VsTeJ7qSO3ejq62h1z8f/ZXJ4=)
-  apikey: ENC(yfzzcAsOP7Yn6JYBzeeVekmNyQQLqTyJ7M3FI1Uf4fs7vVKYzJE0EzZkvE32YT503dwZg1CcyRQRD6jo5fJ/3w==)
+  apikey: ENC(WY4s6rkLclxdcAy0yC5Qzkz5srAwLMT1XChs29iWl59GKBggZbQW4isM/Lx75BVXfvIVkk4poNc=)
+
+tmap:
+  apikey: ENC(rq3bzD3hCoL+f1r9F3T1wYmAo6G7Y8UVawUT/x/0oYjUGj8gv8dgBByIo5YNDKOmKxYXlYqdBv8=)
+
+kakao:
+  apikey: ENC(P5ANnJgP83n706xcwZbbxZT5bg5Eypnt5peqQURgUOZoJ1llLhpq/8iJeS4iUF4l)
 
 cloud:
   aws:
