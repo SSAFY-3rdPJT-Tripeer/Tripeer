@@ -6,7 +6,7 @@ import styles from "./layout.module.css";
 export default function RegisterLayout({ children }) {
   return (
     <main className={styles.main}>
-      <div style={{ position: "relative" }} className={styles.bg}>
+      <div style={{ position: "relative" }} className={styles.imgBox}>
         <Image
           src={
             "https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/lowRegisterBg.png"
