@@ -36,6 +36,7 @@ const PlanSchedule = (props) => {
   const [option, setOption] = useState("0");
   const [isLoading, setIsLoading] = useState(false);
   const [cirIdx, setCirIdx] = useState(0);
+  const [isSaveModal, setIsSaveModal] = useState(false);
 
   const COLOR = [
     "#A60000",
@@ -727,6 +728,22 @@ const PlanSchedule = (props) => {
     }
   }, [plan]);
 
+  const saveData = () => {
+    // const text = provider.doc.getText("exit");
+    // text.insert(0, "exit");
+    const totalYList = provider.doc.getArray("totalYList").toJSON();
+    const timeYList = provider.doc.getArray("timeYList").toJSON();
+    console.log(totalYList);
+    console.log(timeYList);
+    console.log(plan.planId);
+    // setIsSaveModal(false);
+  };
+
+  const cancelData = () => {
+    const text = provider.doc.getText("exit");
+    text.delete(0, text.length);
+  };
+
   return (
     // 화면 전체
     <div className={styles.container}>
@@ -916,6 +933,41 @@ const PlanSchedule = (props) => {
           {/*  ---------------------------------------------------------------------------------*/}
         </main>
       </DragDropContext>
+      <div
+        className={styles.saveBox}
+        onClick={() => {
+          setIsSaveModal(true);
+        }}>
+        <div className={styles.saveIcon} />
+        <p>저장하기</p>
+      </div>
+      {isSaveModal ? (
+        <div
+          className={styles.back}
+          onClick={(e) => {
+            e.currentTarget === e.target ? setIsSaveModal(false) : null;
+          }}>
+          <div className={styles.modalBox}>
+            <p>해당 계획의 여행 일정을 저장하시겠습니까?</p>
+            <div className={styles.modalBtns}>
+              <div
+                className={styles.cancelBtn}
+                onClick={() => {
+                  cancelData();
+                }}>
+                취소
+              </div>
+              <div
+                className={styles.confirmBtn}
+                onClick={() => {
+                  saveData();
+                }}>
+                확인
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 };
