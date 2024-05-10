@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import styles from "./addConfirm.module.css";
+import api from "@/utils/api";
 
 const AddConfirm = (props) => {
-  const { confirm, setConfirm, setOnModal } = props;
+  const { confirm, setConfirm, setOnModal, planId, myInfo, provider } = props;
   const [title, setTitle] = useState("");
   const [place, setPlace] = useState("");
   const [radio, setRadio] = useState(-1);
@@ -12,11 +13,51 @@ const AddConfirm = (props) => {
   const setCategory = (idx) => {
     setRadio(idx);
   };
-
-  const createPlan = () => {
+  const makeContentId = () => {
+    let contentId = 0;
+    switch (radio) {
+      case 0:
+        contentId = 39;
+        break;
+      case 1:
+        contentId = 32;
+        break;
+      case 2:
+        contentId = 1;
+        break;
+    }
+    return contentId;
+  };
+  const createPlan = async () => {
     if (radio === -1) {
       setWarn("장소의 카테고리를 선택해주세요");
       return;
+    } else {
+      const contentTypeId = makeContentId();
+      console.log(contentTypeId, confirm);
+      const request = {
+        planId,
+        contentTypeId,
+        title: confirm["place_name"],
+        addr1: confirm["address_name"],
+        tel: confirm["phone"],
+        firstImage:
+          "https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/default1.png",
+        secondImage:
+          "https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/default1.png",
+        latitude: confirm["y"],
+        longitude: confirm["x"],
+        overview: confirm["category_name"],
+        addPlanCheck: newPlan,
+      };
+      const res = await api.post("/place/spot/create", request);
+      console.log(res.data.data);
+      if (newPlan) {
+        const newSpot = { ...res.data.data, ...myInfo };
+        const spots = provider.doc.getArray("saveSpot");
+        spots.insert(0, [newSpot]);
+      }
+      setOnModal(false);
     }
   };
 

@@ -310,6 +310,18 @@ const PlanMap = (props) => {
           return spot;
         });
         setSpotList(tempSpotList);
+        const tempSpotWishList = spotWishList.map((spot) => {
+          if (
+            spots.findIndex((item) => item.spotInfoId === spot.spotInfoId) !==
+            -1
+          ) {
+            spot.spot = true;
+          } else {
+            spot.spot = false;
+          }
+          return spot;
+        });
+        setSpotWishList(tempSpotWishList);
         setSaveSpots(spots);
         setIsTarget(true);
       });
@@ -594,7 +606,15 @@ const PlanMap = (props) => {
         showSpots={showSpots}
         setShowSpots={setShowSpots}
       />
-      {onModal ? <AddSpot towns={towns} setOnModal={setOnModal} /> : null}
+      {onModal ? (
+        <AddSpot
+          towns={towns}
+          setOnModal={setOnModal}
+          planId={plan.planId}
+          myInfo={myInfo}
+          provider={provider}
+        />
+      ) : null}
       <OnlineBox members={members} online={online} myInfo={myInfo} />
       {init ? (
         <div
