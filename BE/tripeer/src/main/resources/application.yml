@@ -82,6 +82,8 @@ spring:
 odsay:
   apikey: ENC(WY4s6rkLclxdcAy0yC5Qzkz5srAwLMT1XChs29iWl59GKBggZbQW4isM/Lx75BVXfvIVkk4poNc=)
 
+tmap:
+  apikey: ENC(rq3bzD3hCoL+f1r9F3T1wYmAo6G7Y8UVawUT/x/0oYjUGj8gv8dgBByIo5YNDKOmKxYXlYqdBv8=)
 
 cloud:
   aws:

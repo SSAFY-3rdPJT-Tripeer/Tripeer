@@ -13,7 +13,7 @@ import java.util.List;
 public class RootOptimizeDTO {
 
     private int option;
-    private List<String> spotTime;
+    private List<String[]> spotTime;
     private List<place> placeList;
 
     @Getter

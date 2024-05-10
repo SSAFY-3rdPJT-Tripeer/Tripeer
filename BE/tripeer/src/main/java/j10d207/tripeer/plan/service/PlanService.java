@@ -44,5 +44,11 @@ public interface PlanService {
     //목적지간 최단 루트 계산
     public RootOptimizeDTO getShortTime(RootOptimizeDTO rootOptimizeDTO);
     //플랜 최단거리 조정
-    public RootOptimizeDTO getOptimizingTime(RootOptimizeDTO rootOptimizeReqDTO) throws IOException;
+    public RootOptimizeDTO getOptimizingTime(RootOptimizeDTO rootOptimizeDTO) throws IOException;
+
+
+    //머기업 테스트
+    public RootOptimizeDTO getShortTime2(RootOptimizeDTO rootOptimizeDTO);
+    //머기업 테스트
+    public RootOptimizeDTO getOptimizingTime2(RootOptimizeDTO rootOptimizeReqDTO) throws IOException;
 }
