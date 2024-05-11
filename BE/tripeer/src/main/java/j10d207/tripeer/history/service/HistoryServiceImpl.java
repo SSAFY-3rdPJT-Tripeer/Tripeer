@@ -32,6 +32,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -48,6 +49,8 @@ public class HistoryServiceImpl implements HistoryService{
     private final SpotInfoRepository spotInfoRepository;
     private final GalleryRepository galleryRepository;
 
+
+
     public List<PlanListResDTO> historyList (String token) {
         String access = jwtUtil.splitToken(token);
         long userId = jwtUtil.getUserId(access);
@@ -57,7 +60,7 @@ public class HistoryServiceImpl implements HistoryService{
             PlanListResDTO planListResDTO = new PlanListResDTO();
 
             PlanEntity plan = planRepository.findByPlanId(coworker.getPlan().getPlanId());
-            if (plan.getEndDate().isAfter(LocalDate.now(ZoneId.of("Asia/Seoul")))) {
+            if (!plan.getVehicle().equals("history")) {
                 continue;
             }
             planListResDTO.setPlanId(plan.getPlanId());
@@ -100,7 +103,7 @@ public class HistoryServiceImpl implements HistoryService{
             planListResDTOList.add(planListResDTO);
 
         }
-
+        Collections.sort(planListResDTOList, (o1, o2) -> o2.getStartDay().compareTo(o1.getStartDay()));
         return planListResDTOList;
     }
 
@@ -117,9 +120,12 @@ public class HistoryServiceImpl implements HistoryService{
 
     public String savePlanDetail (@RequestBody PlanSaveReqDTO planSaveReqDTO){
         List<List<Map<String, String>>> totalYList = planSaveReqDTO.getTotalYList();
-        List<List<List<String>>> timeYList = planSaveReqDTO.getTimeYList();
+        List<List<List<Object>>> timeYList = planSaveReqDTO.getTimeYList();
         long planId = planSaveReqDTO.getPlanId();
         List<PlanDayEntity> planDayEntityList = planDayRepository.findAllByPlan_PlanIdOrderByDayAsc(planId);
+        PlanEntity planEntity = planRepository.findByPlanId(planId);
+        planEntity.setVehicle("history");
+        planRepository.save(planEntity);
         for (int day = 1; day < totalYList.size(); day++) {
             for (int step = 0; step < totalYList.get(day).size(); step++) {
                 SpotInfoEntity spotInfo = spotInfoRepository.findBySpotInfoId(Integer.parseInt(totalYList.get(day).get(step).get("spotInfoId")));
@@ -128,12 +134,12 @@ public class HistoryServiceImpl implements HistoryService{
                 int min = 0;
                 if (step != totalYList.get(day).size()-1) {            //
                     String time;
-                    List<String> timeList = timeYList.get(day).get(step);
+                    List<Object> timeList = timeYList.get(day).get(step);
                     if (timeList.getFirst().equals("0")){
-                        time = timeList.getLast();
+                        time = timeList.getLast().toString();
                         howTo = "대중교통";
                     } else {
-                        time = timeList.getFirst();
+                        time = timeList.getFirst().toString();
                     }
                     String[] hourMin = time.split(" ");
                     if (hourMin.length == 1) {

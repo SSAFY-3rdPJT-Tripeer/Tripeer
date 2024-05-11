@@ -79,12 +79,12 @@ public class HistoryController {
 
     @PostMapping("/save")
     public Response<String> savePlanDetail(@RequestBody PlanSaveReqDTO planSaveReqDTO) {
-        try {
-            String res = historyService.savePlanDetail(planSaveReqDTO);
-            return Response.of(HttpStatus.OK, "플랜 저장 성공", res);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        String res = historyService.savePlanDetail(planSaveReqDTO);
+        return Response.of(HttpStatus.OK, "플랜 저장 성공", res);
+//        try {
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
     }
 
     @GetMapping("/{planId}")
