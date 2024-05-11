@@ -910,7 +910,7 @@ const PlanSchedule = (props) => {
               return arrIdx === 0 ? null : (
                 // 일차별 일정 컴포넌트
                 <section key={arrIdx} className={styles.scheduleSection}>
-                  {blockList[arrIdx] && <Block />}
+                  {/*{blockList[arrIdx] && <Block />}*/}
                   {/*일차 및 계산 버튼  */}
                   <header className={styles.scHeader}>
                     <div className={styles.scHeaderBox}>
@@ -933,6 +933,7 @@ const PlanSchedule = (props) => {
                         ref={provided.innerRef}
                         {...provided.droppableProps}
                         className={styles.divBox}>
+                        {blockList[arrIdx] && <Block />}
                         {totalList[arrIdx].map((el, idx) => (
                           <Draggable
                             key={idx}
