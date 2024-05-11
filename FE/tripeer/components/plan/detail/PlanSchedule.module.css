@@ -120,9 +120,10 @@
 .scheduleSection {
   min-width: 363px;
   width: 363px;
-  height: auto;
+  height: 100%;
   margin: 30px;
   padding-bottom: 20px;
+  position: relative;
 }
 
 .scHeader {
@@ -161,7 +162,10 @@
 }
 
 .divBox {
-  height: 100%;
+  min-height: 100%;
+  height: auto;
+  padding-bottom: 20px;
+  /*background-color: #04ACB5;*/
 }
 
 .draggingItem {

@@ -1,8 +1,8 @@
 .container {
   position: fixed;
   top: 0;
-  right: 100px;
-  height: 70px;
+  right: 30px;
+  height: 63px;
   display: flex;
   justify-content: flex-end;
   align-items: center;

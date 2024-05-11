@@ -16,6 +16,7 @@ export default function ScheduleModal({
   cirIdx,
   day,
   totalList,
+  blockY,
 }) {
   const [hoverLeft, setHoverLeft] = useState(false);
   const [hoverRight, setHoverRight] = useState(false);
@@ -24,6 +25,9 @@ export default function ScheduleModal({
   const [isOk, setIsOk] = useState(true);
 
   const onClickBg = () => {
+    console.log("adsadsadasdasd");
+    blockY.delete(cirIdx, 1);
+    blockY.insert(cirIdx, [false]);
     setIsModal(false);
   };
 
