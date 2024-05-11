@@ -6,9 +6,9 @@ import cookies from "js-cookie";
 
 const apiLocal = axios.create({
   // 기본 주소
-  baseURL: `http://localhost:3001`,
+  baseURL: `https://k10d207.p.ssafy.io`,
   withCredentials: true,
-  timeout: 20000,
+  timeout: 123000,
 });
 apiLocal.interceptors.request.use(async (config) => {
   // 액세스 토큰 로컬에서 가져오기

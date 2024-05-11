@@ -7,7 +7,6 @@ import * as Y from "yjs";
 import styles from "./PlanSchedule.module.css";
 import flagSrc from "@/public/plan/flag.png";
 import scheduleIcon from "@/public/plan/scheduleIcon.png";
-import updateIcon from "@/public/plan/update.png";
 
 import ScheduleItem from "@/components/plan/detail/schedule/scheduleItem";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
@@ -15,9 +14,11 @@ import CalculateBtn from "@/components/plan/detail/schedule/calculateBtn";
 import ScheduleItem2 from "@/components/plan/detail/schedule/scheduleItem2";
 import Time from "@/components/plan/detail/schedule/time";
 import api from "@/utils/api";
+import apiLocal from "@/utils/apiLocal";
 import OnlineBox from "./OnlineBox";
 import ScheduleModal from "@/components/plan/detail/schedule/scheduleModal";
 import LoadComponent from "@/components/loading/LoadComponent";
+import Block from "@/components/plan/detail/schedule/block";
 
 const PlanSchedule = (props) => {
   const { myInfo, provider, plan, online } = props;
@@ -32,6 +33,8 @@ const PlanSchedule = (props) => {
   const [members, setMembers] = useState([]);
   const [timeList, setTimeList] = useState(null);
   const [timeY, setTimeY] = useState(null);
+  const [blockList, setBlockList] = useState([]);
+  const [blockY, setBlockY] = useState(null);
   const [isModal, setIsModal] = useState(false);
   const [option, setOption] = useState("0");
   const [isLoading, setIsLoading] = useState(false);
@@ -59,7 +62,7 @@ const PlanSchedule = (props) => {
 
     // 100ms 후에 내부 코드 실행
     timeoutId = setTimeout(() => {
-      console.log("내가 인덱스", arrIdx, idx);
+      console.log("내가 인덱스", arrIdx, idx, opt);
       // let opt = 0;
       if (opt === "0") {
         opt = "1";
@@ -84,24 +87,38 @@ const PlanSchedule = (props) => {
     console.log("로딩중");
     console.log("option : ", option);
     setIsLoading(true);
-    try {
-      const res = await api.post("/plan/optimizing", {
-        placeList: totalList[cirIdx],
-        option: option,
-      });
-      console.log("넘겨준거", res.data.data);
-      const arr = totalY.get(cirIdx);
-      arr.delete(0, arr.length);
-      arr.insert(0, [...res.data.data.placeList]);
-      const time = timeY.get(cirIdx);
-      time.delete(0, time.length);
-      time.insert(0, [...res.data.data.spotTime]);
 
-      setIsLoading(false);
-      setIsModal(false);
-      console.log("로딩끝");
+    const data = {
+      day: cirIdx,
+      planId: plan.planId,
+      option: option,
+    };
+
+    try {
+      const res = await apiLocal.post("/node/opt", data);
+      // console.log("넘겨준거", res.data.data);
+      // const arr = totalY.get(cirIdx);
+      // arr.delete(0, arr.length);
+      // arr.insert(0, [...res.data.data.placeList]);
+      // const time = timeY.get(cirIdx);
+      // time.delete(0, time.length);
+      // time.insert(0, [...res.data.data.spotTime]);
+
+      console.log("완료응답: ", res);
+
+      if (res) {
+        setIsLoading(false);
+        setIsModal(false);
+        console.log("로딩끝");
+      }
     } catch (e) {
-      console.log("최단거리 오류 ", e);
+      if (e.response.status === 500) {
+        setIsLoading(false);
+        setIsModal(false);
+        console.log("타임아웃");
+      } else {
+        console.log("최단거리 오류 ", e);
+      }
     }
     // setTimeout(() => {
     //   setIsLoading(false);
@@ -111,6 +128,10 @@ const PlanSchedule = (props) => {
   };
 
   const onClickCalculate = (arrIdx) => {
+    console.log("딸깍", blockList);
+    blockY.delete(arrIdx, 1);
+    blockY.insert(arrIdx, [true]);
+
     setCirIdx(arrIdx);
     setIsModal(!isModal);
   };
@@ -131,7 +152,10 @@ const PlanSchedule = (props) => {
         console.log("인덱스 여기다 ", index);
         arr.delete(index, 1);
       }
-      arr.insert(index, [res.data.data.spotTime]);
+      const tmp = [...res.data.data.spotTime];
+      tmp[0].push(res.data.data.publicRootList);
+      arr.insert(index, [...tmp]);
+      console.log("에이투비: ", res.data);
       console.log(option);
       console.log(arr.toJSON());
     } catch (e) {
@@ -590,7 +614,7 @@ const PlanSchedule = (props) => {
     });
   };
 
-  const getDay = async (saveYSpot, totalYList, timeYList) => {
+  const getDay = async (saveYSpot, totalYList, timeYList, blockYList) => {
     try {
       const res = await api.get("/plan");
       const planIdArr = res.data.data.filter((e) => e.planId === plan.planId);
@@ -631,6 +655,7 @@ const PlanSchedule = (props) => {
           }
           yTime.insert(0, []);
           timeYList.insert(0, [yTime]);
+          blockYList.insert(0, [false]);
 
           for (let i = 0; i < result.length; i++) {
             const yItems = new Y.Array();
@@ -639,6 +664,7 @@ const PlanSchedule = (props) => {
             const yTime = new Y.Array();
             yTime.insert(0, []);
             timeYList.insert(i + 1, [yTime]);
+            blockYList.insert(0, [false]);
           }
         }
       });
@@ -666,11 +692,13 @@ const PlanSchedule = (props) => {
       const saveYSpot = provider.doc.getArray("saveSpot");
       const totalYList = provider.doc.getArray("totalYList");
       const timeYList = provider.doc.getArray("timeYList");
+      const blockYList = provider.doc.getArray("blockYList");
 
       // totalYList.delete(0, totalYList.length);
       // timeYList.delete(0, timeYList.length);
+      // saveYSpot.delete(0, saveYSpot.length)
 
-      getDay(saveYSpot, totalYList, timeYList);
+      getDay(saveYSpot, totalYList, timeYList, blockYList);
 
       update(saveYSpot, totalYList, timeYList);
 
@@ -679,10 +707,22 @@ const PlanSchedule = (props) => {
         setTimeY(timeYList);
       }
 
+      if (blockYList.length > 0) {
+        setBlockList(blockYList.toJSON());
+        setBlockY(blockYList);
+      }
+
       timeYList.observeDeep(() => {
         const data = timeYList.toJSON();
         setTimeList(data);
         setTimeY(timeYList);
+      });
+
+      blockYList.observe(() => {
+        console.log("블락리스트 감지", blockYList.toJSON());
+        const data = blockYList.toJSON();
+        setBlockList(data);
+        setBlockY(blockYList);
       });
 
       saveYSpot.observe(() => {
@@ -693,6 +733,7 @@ const PlanSchedule = (props) => {
       let timeoutId = null;
 
       totalYList.observeDeep(() => {
+        console.log("토탈와이리스트 ", totalYList.toJSON());
         // 이전 타임아웃이 있다면 취소
         if (timeoutId) {
           clearTimeout(timeoutId);
@@ -710,8 +751,15 @@ const PlanSchedule = (props) => {
   useEffect(() => {
     if (timeList) {
       console.log("유즈이펙트 타임리스트", timeList);
+      console.log("유즈이펙트  블락리스트", blockList);
     }
   }, [timeList]);
+
+  useEffect(() => {
+    if (blockList) {
+      console.log("유즈이펙트  블락리스트", blockList);
+    }
+  }, [blockList]);
 
   useEffect(() => {
     setUserList(plan.coworkerList);
@@ -728,15 +776,22 @@ const PlanSchedule = (props) => {
     }
   }, [plan]);
 
-  const saveData = () => {
-    // const text = provider.doc.getText("exit");
-    // text.insert(0, "exit");
-    const totalYList = provider.doc.getArray("totalYList").toJSON();
-    const timeYList = provider.doc.getArray("timeYList").toJSON();
-    console.log(totalYList);
-    console.log(timeYList);
-    console.log(plan.planId);
-    // setIsSaveModal(false);
+  const saveData = async () => {
+    try {
+      const res = await api.post("/history/save", {
+        totalYList: totalY.toJSON(),
+        timeYList: timeY.toJSON(),
+        planId: plan.planId,
+      });
+
+      if (res) {
+        setIsSaveModal(false);
+      }
+    } catch (e) {
+      console.log("세이브 오류 ", e);
+    }
+
+    setIsSaveModal(false);
   };
 
   const cancelData = () => {
@@ -756,6 +811,7 @@ const PlanSchedule = (props) => {
           cirIdx={cirIdx}
           day={day}
           totalList={totalList}
+          blockY={blockY}
         />
       ) : null}
       {isLoading ? (
@@ -840,13 +896,6 @@ const PlanSchedule = (props) => {
                 {day[0]}({dayOfWeek[0]}) - {day[day.length - 1]}(
                 {dayOfWeek[dayOfWeek.length - 1]})
               </p>
-              <Image
-                className={styles.update}
-                src={updateIcon}
-                alt={""}
-                width={18}
-                height={18}
-              />
               <OnlineBox members={members} online={online} myInfo={myInfo} />
             </section>
             {/*  헤더의 오른쪽 부분  */}
@@ -861,6 +910,7 @@ const PlanSchedule = (props) => {
               return arrIdx === 0 ? null : (
                 // 일차별 일정 컴포넌트
                 <section key={arrIdx} className={styles.scheduleSection}>
+                  {blockList[arrIdx] && <Block />}
                   {/*일차 및 계산 버튼  */}
                   <header className={styles.scHeader}>
                     <div className={styles.scHeaderBox}>
@@ -875,7 +925,9 @@ const PlanSchedule = (props) => {
                       arrIdx={arrIdx}
                     />
                   </header>
-                  <Droppable droppableId={`${arrIdx}`}>
+                  <Droppable
+                    droppableId={`${arrIdx}`}
+                    isDropDisabled={blockList[arrIdx]}>
                     {(provided) => (
                       <div
                         ref={provided.innerRef}

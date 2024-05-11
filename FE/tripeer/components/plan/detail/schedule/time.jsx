@@ -14,14 +14,14 @@ export default function Time({ arrIdx, idx, timeList, onClickTime }) {
     <main
       className={styles.container}
       onClick={() => {
-        onClickTime(arrIdx, idx, timeList[arrIdx][idx][0][1]);
+        onClickTime(arrIdx, idx, timeList[arrIdx][idx][1]);
       }}>
       <div className={styles.line} />
       <div className={styles.box}>
         {timeList[arrIdx] !== undefined &&
         timeList[arrIdx][idx] !== undefined ? (
           <Image
-            src={timeList[arrIdx][idx][0][1] === "0" ? left : right}
+            src={timeList[arrIdx][idx][1] === "0" ? left : right}
             alt={""}
             width={20}
             height={15}
@@ -32,7 +32,7 @@ export default function Time({ arrIdx, idx, timeList, onClickTime }) {
         ) : null}
         <p className={styles.time}>
           {timeList[arrIdx][idx] !== undefined
-            ? `${timeList[arrIdx][idx][0][0]}`
+            ? `${timeList[arrIdx][idx][0]}`
             : "계산중"}
         </p>
       </div>
