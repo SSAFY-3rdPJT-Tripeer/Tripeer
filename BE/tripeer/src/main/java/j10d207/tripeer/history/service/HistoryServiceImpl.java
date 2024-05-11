@@ -135,12 +135,10 @@ public class HistoryServiceImpl implements HistoryService{
                 if (step != totalYList.get(day).size()-1) {            //
                     String time;
                     List<Object> timeList = timeYList.get(day).get(step);
-                    if (timeList.getFirst().equals("0")){
-                        time = timeList.getLast().toString();
+                    if (timeList.get(1).equals("1")){
                         howTo = "대중교통";
-                    } else {
-                        time = timeList.getFirst().toString();
                     }
+                    time = timeList.getFirst().toString();
                     String[] hourMin = time.split(" ");
                     if (hourMin.length == 1) {
                         min = Integer.parseInt(hourMin[0].substring(0,hourMin[0].length()-1));
