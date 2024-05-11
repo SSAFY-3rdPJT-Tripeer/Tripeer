@@ -227,7 +227,14 @@ const PlanMap = (props) => {
 
   const removeSaveSpot = async (spot) => {
     const totalYList = provider.doc.getArray("totalYList").toJSON();
-    if (totalYList.length > 0) {
+    let isVisit = false;
+    for (let item of totalYList) {
+      if (item.length > 0) {
+        isVisit = true;
+        break;
+      }
+    }
+    if (totalYList.length > 0 && isVisit) {
       const findTotal = totalYList[0].filter((item) => {
         return item.spotInfoId === spot.spotInfoId;
       });
