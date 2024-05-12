@@ -1,14 +1,18 @@
 package j10d207.tripeer.user.db.dto;
 
+import java.util.List;
 import java.util.Map;
 
 public class NaverResponse implements OAuth2Response {
 
+
     private final Map<String, Object> attribute;
 
     public NaverResponse(Map<String, Object> attribute) {
+        System.out.println("확인용 attribute = " + attribute);
 
-        this.attribute = (Map<String, Object>) attribute.get("Name");
+        List<Map<String, Object>> nameList = (List<Map<String, Object>>) attribute.get("Name");
+        this.attribute = nameList.getFirst();
     }
 
     @Override
