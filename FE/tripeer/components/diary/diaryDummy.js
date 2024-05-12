@@ -1,12 +1,6 @@
 import sample1 from "./assets/sampleImg1.png";
 import sample2 from "./assets/sampleImg2.png";
 import sample3 from "./assets/sampleImg3.png";
-import user1 from "./assets/sampleUser1.png";
-import user2 from "./assets/sampleUser2.png";
-import user3 from "./assets/sampleUser3.png";
-import user4 from "./assets/sampleUser4.png";
-import user5 from "./assets/sampleUser5.png";
-import user6 from "./assets/sampleUser6.png";
 
 const card = [
   {

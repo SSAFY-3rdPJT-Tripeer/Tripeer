@@ -3,16 +3,27 @@
 import { useRouter } from "next/navigation";
 import styles from "./diaryDetailCard.module.css";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 const DiaryDetailCard = (props) => {
   const { diaryDayList, getDayOfWeek } = props;
-  const planList = [1, 2, 3, 4, 5];
-  const clickDay = 1;
   const router = useRouter();
-  const [diartDay, setDiaryDay] = useState(null);
+  const [diaryDay, setDiaryDay] = useState(null);
 
-  const goAlbum = (diartDay) => {
-    router.push(`/diary/detail/${diaryDayList.planDayId}/${diartDay}`);
+  const goAlbum = (diaryDay) => {
+    router.push(`/diary/detail/${diaryDayList.planDayId}/${diaryDay}`);
+  };
+
+  const getContentType = (type) => {
+    if (!diaryDayList) return 0;
+    switch (type) {
+      case "맛집":
+        return 1;
+      case "숙박":
+        return 2;
+      default:
+        return 0;
+    }
   };
 
   useEffect(() => {
@@ -25,8 +36,10 @@ const DiaryDetailCard = (props) => {
   return (
     <main className={styles.container}>
       <div className={styles.dateBox}>
-        <div className={styles.dateLeft}>{diartDay}일차</div>
-        <div className={styles.dateRight}>2024.05.05(월)</div>
+        <div className={styles.dateLeft}>{diaryDay}일차</div>
+        <div className={styles.dateRight}>
+          {getDayOfWeek(diaryDayList.date)}
+        </div>
       </div>
       <div className={styles.contentBox}>
         <div className={styles.contentLeft}>
@@ -38,7 +51,7 @@ const DiaryDetailCard = (props) => {
                     <div
                       className={styles.moreText}
                       onClick={() => {
-                        goAlbum(diartDay);
+                        goAlbum(diaryDay);
                       }}>
                       사진 더보기
                     </div>
@@ -52,15 +65,15 @@ const DiaryDetailCard = (props) => {
           })}
         </div>
         <div className={styles.contentRight}>
-          {planList.map((item, id) => {
+          {diaryDayList.planDetailList.map((item, id) => {
             return (
               <div key={id} className={styles.planBox}>
                 <div className={styles.orderBox}>
                   <div className={styles.orderNumBox}>
-                    <div className={styles.orderNum}>{item}</div>
+                    <div className={styles.orderNum}>{item.step}</div>
                   </div>
                   <div className={styles.orderBar}>
-                    {id === planList.length - 1 ? (
+                    {id === diaryDayList.planDetailList.length - 1 ? (
                       <div className={styles.orderBarLast}></div>
                     ) : (
                       <></>
@@ -68,21 +81,39 @@ const DiaryDetailCard = (props) => {
                   </div>
                 </div>
                 <div className={styles.planContentBox}>
-                  <div className={styles.planSpot}>부산역</div>
-                  <div className={styles.planTime}>부산 동구 중앙대로 206</div>
-                  <div className={styles.planType}>
-                    <div></div>
-                    <div>명소</div>
-                  </div>
+                  <div className={styles.planSpot}>{item.title}</div>
+                  <div className={styles.planTime}>{item.address}</div>
+
                   <div className={styles.planSpotBox}>
+                    <div
+                      className={`${styles.planType} ${styles["type" + getContentType(item.contentType)]}`}></div>
                     <div className={styles.planCostBox}>
-                      <div className={styles.planCostText}>￦15,600 / 1인</div>
+                      <div className={styles.planCostText}>
+                        ￦{item.cost} / 1인
+                      </div>
                       <div className={styles.planCostEdit}></div>
                     </div>
                   </div>
                 </div>
-                <div className={styles.planImgBox}>
-                  <div className={styles.planImg}></div>
+                <div
+                  className={styles.planImgBox}
+                  style={{ position: "relative" }}>
+                  <Image
+                    className={styles.planImg}
+                    src={
+                      "https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/default1.png"
+                    }
+                    alt="이미지"
+                    fill
+                    unoptimized={false}
+                    sizes="(max-width: 768px) 100vw,(max-width: 1200px) 50vw,33vw"
+                    loader={() => {
+                      if (item.image) {
+                        return item.image;
+                      }
+                      return "https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/default1.png";
+                    }}
+                  />
                 </div>
               </div>
             );

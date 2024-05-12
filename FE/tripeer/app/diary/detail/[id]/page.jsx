@@ -121,7 +121,7 @@ const DiaryDetail = () => {
       <article className={styles.articleBox}>
         {detailData?.diaryDayList?.map((item, cardIdx) => {
           return (
-            <div key={cardIdx}>
+            <div key={cardIdx} style={{ marginBottom: "50px" }}>
               <DiaryDetailCard
                 diaryDayList={item}
                 getDayOfWeek={getDayOfWeek}
