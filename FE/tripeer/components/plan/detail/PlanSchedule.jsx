@@ -787,18 +787,17 @@ const PlanSchedule = (props) => {
       });
 
       if (res) {
-        setIsSaveModal(false);
+        const text = provider.doc.getText("exit");
+        text.insert(0, "exit");
       }
     } catch (e) {
       console.log("세이브 오류 ", e);
     }
-
     setIsSaveModal(false);
   };
 
   const cancelData = () => {
-    const text = provider.doc.getText("exit");
-    text.delete(0, text.length);
+    setIsSaveModal(false);
   };
 
   return (
