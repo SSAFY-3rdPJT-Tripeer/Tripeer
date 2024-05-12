@@ -20,7 +20,6 @@ api.interceptors.request.use(async (config) => {
   const isTokenExpired = decodedToken.exp * 1000 < Date.now();
 
   const re = cookies.get("Authorization-re");
-  console.log("re", re);
 
   if (re !== undefined && isTokenExpired) {
     cookies.remove("Authorization");

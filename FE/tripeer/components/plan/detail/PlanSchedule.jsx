@@ -54,8 +54,10 @@ const PlanSchedule = (props) => {
     "#F96976",
   ];
 
-  const onClickTime = (arrIdx, idx, opt) => {
+  const onClickTime = (arrIdx, idx, opt, setLoaded) => {
+    setLoaded(false);
     let timeoutId = null;
+    console.log("option: ", option);
 
     // 이전 타임아웃이 있다면 취소
     if (timeoutId) {
@@ -64,30 +66,25 @@ const PlanSchedule = (props) => {
 
     // 100ms 후에 내부 코드 실행
     timeoutId = setTimeout(() => {
-      console.log("내가 인덱스", arrIdx, idx, opt);
       // let opt = 0;
       if (opt === "0") {
         opt = "1";
         setOption("1");
-        console.log("0일때", opt, opt.typeof, option);
       } else {
         opt = "0";
         setOption("0");
-        console.log("1일때", opt, opt.typeof);
       }
       const timeIdx = idx;
       const startId = totalList[arrIdx][idx];
       const endId = totalList[arrIdx][idx + 1];
       let timeArr = timeY.get(arrIdx);
 
-      getTime(startId, endId, timeArr, timeIdx, "insert", opt);
+      getTime(startId, endId, timeArr, timeIdx, "insert", opt, setLoaded);
     }, 600);
   };
 
   // 최단거리 계산 온클릭 이벤트
   const postData = async (option) => {
-    console.log("로딩중");
-    console.log("option : ", option);
     setIsLoading(true);
 
     const data = {
@@ -106,12 +103,9 @@ const PlanSchedule = (props) => {
       // time.delete(0, time.length);
       // time.insert(0, [...res.data.data.spotTime]);
 
-      console.log("완료응답: ", res);
-
       if (res) {
         setIsLoading(false);
         setIsModal(false);
-        console.log("로딩끝");
       }
     } catch (e) {
       if (e.response.status === 500) {
@@ -130,7 +124,6 @@ const PlanSchedule = (props) => {
   };
 
   const onClickCalculate = (arrIdx) => {
-    console.log("딸깍", blockList);
     blockY.delete(arrIdx, 1);
     blockY.insert(arrIdx, [true]);
 
@@ -138,28 +131,31 @@ const PlanSchedule = (props) => {
     setIsModal(!isModal);
   };
 
-  const getTime = async (startId, endId, arr, index, type, option = "0") => {
+  const getTime = async (
+    startId,
+    endId,
+    arr,
+    index,
+    type,
+    option = "0",
+    setLoaded = null,
+  ) => {
     const placeList = [startId, endId];
     const data = {
       placeList: placeList,
       option: option,
     };
-    console.log("data", data);
     try {
       const res = await api.post("/plan/optimizing/short", data);
-      console.log("res", res);
-      console.log("몇분? ", res.data.data.time);
       if (type === "insert") {
-        console.log("11");
-        console.log("인덱스 여기다 ", index);
         arr.delete(index, 1);
       }
       const tmp = [...res.data.data.spotTime];
       tmp[0].push(res.data.data.publicRootList);
       arr.insert(index, [...tmp]);
-      console.log("에이투비: ", res.data);
-      console.log(option);
-      console.log(arr.toJSON());
+      if (setLoaded != null) {
+        setLoaded(true);
+      }
     } catch (e) {
       console.log("시간 계산 GET 요청 실패: ", e);
       console.log("시간 계산 GET 요청 실패 타입: ", type);
@@ -195,17 +191,13 @@ const PlanSchedule = (props) => {
           if (timeArr.length !== 0) {
             // 원래 있던 곳이 맨앞(i == 0)인 경우
             if (i === 0) {
-              console.log("인덱스 ", i);
               //// 타임배열 i번을 지우고 앞으로 한칸씩 떙긴다
-              console.log("55");
-
               timeArr.delete(i, 1);
               timeArr.insert(i, [0]);
             }
 
             // 원래 있던 곳이 끝(i == 장소배열.length-1)인 경`우
             else if (i === sourceItems.length - 1) {
-              console.log("66");
               //// 타임배열에서 i-1번을 지운다
               timeArr.delete(i - 1, 1);
               timeArr.insert(i - 1, [0]);
@@ -213,13 +205,11 @@ const PlanSchedule = (props) => {
 
             // 원래 있던 곳이 중간(i)인 경우
             else {
-              console.log("77");
               //// 타임배열에서 i번을 지우고, 앞으로 한칸씩 떙기고, 장소배열에서 i-1번과 i+1번 사이의 시간을 요청하고, 타임배열에서 i-1을 수정
               let arr1 = sourceItems.get(i - 1);
               let arr2 = sourceItems.get(i + 1);
               const startId = arr1;
               const endtId = arr2;
-              console.log("중간에서 이동");
               if (isToBottom) {
                 if (
                   destination.index - source.index > 1 &&
@@ -231,7 +221,6 @@ const PlanSchedule = (props) => {
                   source.index === destinationItems.length - 2 &&
                   destination.index === destinationItems.length - 1
                 ) {
-                  console.log("난가");
                   getTime(startId, endtId, timeArr, source.index - 1, "insert");
                 } else {
                   timeArr.delete(i, 1);
@@ -278,7 +267,6 @@ const PlanSchedule = (props) => {
         if (dIdx !== 0) {
           let timeArr = timeY.get(dIdx); // 타임 배열
           // 이동한곳에 하나 이상 있을때
-          console.log("destination", destinationItems.length);
           if (destinationItems.length > 0) {
             let i = destination.index;
 
@@ -293,7 +281,6 @@ const PlanSchedule = (props) => {
               let arr2 = destinationItems.get(i);
               const startId = arr1;
               const endId = arr2;
-              console.log("앞에 추가");
 
               if (source.index === 1 && destination.index === 0) {
                 let arr4 = sourceItems.get(source.index - 1);
@@ -329,10 +316,10 @@ const PlanSchedule = (props) => {
                 ////// 추가한 장소와 장소배열의 i-1번 장소의 시간을 계산하고, 타임배열의 i-1번에 추가
                 let arr1 = sourceItems.get(source.index);
                 let arr2 = destinationItems.get(i - 1);
-                console.log("아아", arr2);
+
                 const startId = arr2;
                 const endId = arr1;
-                console.log("끝에 추가");
+
                 getTime(startId, endId, timeArr, i - 1, "add");
                 if (isToBottom) {
                   timeArr.delete(0, 1);
@@ -348,7 +335,6 @@ const PlanSchedule = (props) => {
               let arr1 = sourceItems.get(source.index);
               let arr2 = null;
 
-              console.log("중간에 추가");
               if (isToBottom) {
                 arr2 = destinationItems.get(destination.index);
               } else {
@@ -418,8 +404,6 @@ const PlanSchedule = (props) => {
                 if (source.index === 0) {
                   timeArr.delete(0, 1);
                 }
-
-                console.log("nnnnnnnnn");
               } else {
                 if (
                   source.index !== sourceItems.length - 1 &&
@@ -435,7 +419,6 @@ const PlanSchedule = (props) => {
                   endId2 = arr3;
                   getTime(startId, endId2, timeArr, i, "add");
                   timeArr.delete(timeArr.length - 1, 1);
-                  console.log("hhhhh");
                 }
               }
             }
@@ -470,22 +453,18 @@ const PlanSchedule = (props) => {
         if (timeArr.length !== 0) {
           // 원래 있던 곳이 맨앞(i == 0)인 경우
           if (i === 0) {
-            console.log("인덱스 ", i);
             //// 타임배열 i번을 지우고 앞으로 한칸씩 떙긴다
-            console.log("55");
             timeArr.delete(i, 1);
           }
 
           // 원래 있던 곳이 끝(i == 장소배열.length-1)인 경`우
           else if (i === sourceItems.length - 1) {
-            console.log("66");
             //// 타임배열에서 i-1번을 지운다
             timeArr.delete(i - 1, 1);
           }
 
           // 원래 있던 곳이 중간(i)인 경우
           else {
-            console.log("77");
             //// 타임배열에서 i번을 지우고, 앞으로 한칸씩 떙기고, 장소배열에서 i-1번과 i+1번 사이의 시간을 요청하고, 타임배열에서 i-1을 수정
             timeArr.delete(i, 1);
             let arr1 = sourceItems.get(i - 1);
@@ -510,7 +489,6 @@ const PlanSchedule = (props) => {
             let arr2 = destinationItems.get(i);
             const startId = arr1;
             const endId = arr2;
-            console.log("앞에 추가");
             getTime(startId, endId, timeArr, i, "create");
           }
           //// 끝에 추가하는 경우 (i == 장소배열.length)
@@ -518,10 +496,10 @@ const PlanSchedule = (props) => {
             ////// 추가한 장소와 장소배열의 i-1번 장소의 시간을 계산하고, 타임배열의 i-1번에 추가
             let arr1 = sourceItems.get(source.index);
             let arr2 = destinationItems.get(i - 1);
-            console.log("아아", arr2);
+
             const startId = arr2;
             const endId = arr1;
-            console.log("끝에 추가");
+
             getTime(startId, endId, timeArr, i - 1, "add");
           }
           //// 중간에 추가하는 경우
@@ -531,7 +509,7 @@ const PlanSchedule = (props) => {
             let arr2 = destinationItems.get(i - 1);
             const startId = arr2;
             const endId = arr1;
-            console.log("중간에 추가");
+
             getTime(startId, endId, timeArr, i - 1, "insert");
             ////// 추가한 장소와 장소배열의 i번 장소의 시간을 계산하고, 타임배열 i번에 삽입
             let arr3 = destinationItems.get(i);
@@ -550,7 +528,6 @@ const PlanSchedule = (props) => {
       sourceItems.delete(source.index, 1);
       // 이동한 배열에 추가
       destinationItems.insert(destination.index, [tmp]);
-      console.log("이동한곳 데이터들 ", destinationItems.toJSON());
     }
   };
 
@@ -562,9 +539,7 @@ const PlanSchedule = (props) => {
         .flat()
         .map((e) => e.spotInfoId);
 
-      console.log("체크", arr, tArr);
       const remain = arr.filter((e) => !tArr.includes(e.spotInfoId));
-      console.log("리메인", remain);
 
       if (remain.length !== 0) {
         const yItems = new Y.Array();
@@ -721,7 +696,6 @@ const PlanSchedule = (props) => {
       });
 
       blockYList.observe(() => {
-        console.log("블락리스트 감지", blockYList.toJSON());
         const data = blockYList.toJSON();
         setBlockList(data);
         setBlockY(blockYList);
@@ -735,7 +709,6 @@ const PlanSchedule = (props) => {
       let timeoutId = null;
 
       totalYList.observeDeep(() => {
-        console.log("토탈와이리스트 ", totalYList.toJSON());
         // 이전 타임아웃이 있다면 취소
         if (timeoutId) {
           clearTimeout(timeoutId);
@@ -749,19 +722,6 @@ const PlanSchedule = (props) => {
       });
     }
   }, [myInfo, provider]);
-
-  useEffect(() => {
-    if (timeList) {
-      console.log("유즈이펙트 타임리스트", timeList);
-      console.log("유즈이펙트  블락리스트", blockList);
-    }
-  }, [timeList]);
-
-  useEffect(() => {
-    if (blockList) {
-      console.log("유즈이펙트  블락리스트", blockList);
-    }
-  }, [blockList]);
 
   useEffect(() => {
     setUserList(plan.coworkerList);

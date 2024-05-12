@@ -59,7 +59,7 @@
     height: 40px;
     border-radius: 100%;
     border: #858585 3px solid;
-    background-size: contain;
+    background-size: cover;
     background-repeat: no-repeat;
 }
 
