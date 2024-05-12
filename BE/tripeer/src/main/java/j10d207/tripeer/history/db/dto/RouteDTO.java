@@ -7,10 +7,9 @@ import java.util.List;
 
 @Getter
 @Builder
-public class PublicRootDetailDTO {
+public class RouteDTO {
     private Integer totalFare;
     private String pathType;
-    private Integer totalWalkTime;
-    private List<PublicRootDetailDTO> publicRootDetailList;
-
+    private List<RouteDetailDTO> publicRootDetailList;
 }
+
