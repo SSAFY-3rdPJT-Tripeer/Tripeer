@@ -24,7 +24,7 @@ import MapRoute from "../MapRoute";
 const PlanSchedule = (props) => {
   const { myInfo, provider, plan, online } = props;
   const [userList, setUserList] = useState([]);
-  // dnd를 관리할 전체 배열
+  // dnd 를 관리할 전체 배열
   const [totalY, setTotalY] = useState(null);
   const [totalList, setTotalList] = useState([]);
   // 날짜를 저장

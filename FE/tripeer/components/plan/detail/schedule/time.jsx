@@ -8,7 +8,7 @@ import right from "@/public/plan/right.png";
 import { useState } from "react";
 
 export default function Time({ arrIdx, idx, timeList, onClickTime }) {
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(true);
 
   return (
     <main
@@ -18,8 +18,8 @@ export default function Time({ arrIdx, idx, timeList, onClickTime }) {
       }}>
       <div className={styles.line} />
       <div className={styles.box}>
-        {(timeList[arrIdx] !== undefined &&
-          timeList[arrIdx][idx] !== undefined) ||
+        {timeList[arrIdx] !== undefined &&
+        timeList[arrIdx][idx] !== undefined &&
         loaded ? (
           <Image
             src={timeList[arrIdx][idx][1] === "0" ? left : right}
@@ -27,7 +27,7 @@ export default function Time({ arrIdx, idx, timeList, onClickTime }) {
             width={20}
             height={15}
             style={{ display: loaded ? "flex" : "none" }}
-            onLoad={() => setLoaded(true)}
+            // onLoad={() => setLoaded(true)}
             className={styles.image}
           />
         ) : null}
