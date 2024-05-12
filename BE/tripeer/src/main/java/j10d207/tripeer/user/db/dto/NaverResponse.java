@@ -5,13 +5,13 @@ import java.util.Map;
 
 public class NaverResponse implements OAuth2Response {
 
-    private final List<Object> objectList;
+
     private final Map<String, Object> attribute;
 
     public NaverResponse(Map<String, Object> attribute) {
 
-        this.objectList = (List<Object>) attribute.get("Name");
-        this.attribute = (Map<String, Object>) this.objectList.get(0);
+        List<Map<String, Object>> nameList = (List<Map<String, Object>>) attribute.get("Name");
+        this.attribute = nameList.getFirst();
     }
 
     @Override
