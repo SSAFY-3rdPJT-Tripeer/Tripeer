@@ -137,8 +137,8 @@ public class GalleryServiceImpl implements GalleryService{
         for(Long galleryId : galleryIdList){
             GalleryEntity galleryEntity = galleryRepository.findById(galleryId)
                     .orElseThrow(() -> new CustomException(ErrorCode.GALLERY_NOT_FOUND));
-            amazonS3.deleteObject(bucketName, galleryEntity.getUrl().substring(54));
-            System.out.println(galleryEntity.getUrl().substring(54));
+            amazonS3.deleteObject(bucketName, galleryEntity.getUrl().substring(50));
+            System.out.println(galleryEntity.getUrl().substring(50));
             galleryRepository.delete(galleryEntity);
         }
         return "갤러리 삭제 성공";

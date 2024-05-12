@@ -1,10 +1,19 @@
 package j10d207.tripeer.history.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
+import j10d207.tripeer.exception.CustomException;
+import j10d207.tripeer.exception.ErrorCode;
 import j10d207.tripeer.history.db.dto.CostReqDTO;
 import j10d207.tripeer.history.db.dto.CostResDTO;
 import j10d207.tripeer.history.db.dto.*;
 import j10d207.tripeer.history.db.entity.GalleryEntity;
+import j10d207.tripeer.history.db.entity.RouteDetailEntity;
+import j10d207.tripeer.history.db.entity.RouteEntity;
 import j10d207.tripeer.history.db.repository.GalleryRepository;
+import j10d207.tripeer.history.db.repository.RouteDetailRepository;
+import j10d207.tripeer.history.db.repository.RouteRepository;
 import j10d207.tripeer.place.db.ContentTypeEnum;
 import j10d207.tripeer.place.db.entity.SpotInfoEntity;
 import j10d207.tripeer.place.db.repository.SpotInfoRepository;
@@ -21,17 +30,17 @@ import j10d207.tripeer.user.config.JWTUtil;
 import j10d207.tripeer.user.db.dto.UserSearchDTO;
 import j10d207.tripeer.user.db.entity.CoworkerEntity;
 import j10d207.tripeer.user.db.repository.CoworkerRepository;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.time.LocalDate;
+
 import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -47,6 +56,10 @@ public class HistoryServiceImpl implements HistoryService{
     private final PlanDayRepository planDayRepository;
     private final SpotInfoRepository spotInfoRepository;
     private final GalleryRepository galleryRepository;
+    private final RouteRepository routeRepository;
+    private final RouteDetailRepository routeDetailRepository;
+
+    ObjectMapper objectMapper = new ObjectMapper();
 
     public List<PlanListResDTO> historyList (String token) {
         String access = jwtUtil.splitToken(token);
@@ -57,7 +70,7 @@ public class HistoryServiceImpl implements HistoryService{
             PlanListResDTO planListResDTO = new PlanListResDTO();
 
             PlanEntity plan = planRepository.findByPlanId(coworker.getPlan().getPlanId());
-            if (plan.getEndDate().isAfter(LocalDate.now(ZoneId.of("Asia/Seoul")))) {
+            if (!plan.getVehicle().equals("history")) {
                 continue;
             }
             planListResDTO.setPlanId(plan.getPlanId());
@@ -100,7 +113,7 @@ public class HistoryServiceImpl implements HistoryService{
             planListResDTOList.add(planListResDTO);
 
         }
-
+        Collections.sort(planListResDTOList, (o1, o2) -> o2.getStartDay().compareTo(o1.getStartDay()));
         return planListResDTOList;
     }
 
@@ -117,24 +130,27 @@ public class HistoryServiceImpl implements HistoryService{
 
     public String savePlanDetail (@RequestBody PlanSaveReqDTO planSaveReqDTO){
         List<List<Map<String, String>>> totalYList = planSaveReqDTO.getTotalYList();
-        List<List<List<String>>> timeYList = planSaveReqDTO.getTimeYList();
+        List<List<List<Object>>> timeYList = planSaveReqDTO.getTimeYList();
         long planId = planSaveReqDTO.getPlanId();
         List<PlanDayEntity> planDayEntityList = planDayRepository.findAllByPlan_PlanIdOrderByDayAsc(planId);
+        PlanEntity planEntity = planRepository.findByPlanId(planId);
+        planEntity.setVehicle("history");
+        planRepository.save(planEntity);
+
         for (int day = 1; day < totalYList.size(); day++) {
             for (int step = 0; step < totalYList.get(day).size(); step++) {
                 SpotInfoEntity spotInfo = spotInfoRepository.findBySpotInfoId(Integer.parseInt(totalYList.get(day).get(step).get("spotInfoId")));
                 String howTo = "자동차";     // 자동차 OR 대중교통을 사용하지 않는 description 에 저장
                 int hour = 0;
                 int min = 0;
+                List<Object> timeList = new ArrayList<>();
                 if (step != totalYList.get(day).size()-1) {            //
                     String time;
-                    List<String> timeList = timeYList.get(day).get(step);
-                    if (timeList.getFirst().equals("0")){
-                        time = timeList.getLast();
+                    timeList = timeYList.get(day).get(step);
+                    if (timeList.get(1).equals("1")){
                         howTo = "대중교통";
-                    } else {
-                        time = timeList.getFirst();
                     }
+                    time = timeList.getFirst().toString();
                     String[] hourMin = time.split(" ");
                     if (hourMin.length == 1) {
                         min = Integer.parseInt(hourMin[0].substring(0,hourMin[0].length()-1));
@@ -143,6 +159,7 @@ public class HistoryServiceImpl implements HistoryService{
                         min = Integer.parseInt(hourMin[1].substring(0,hourMin[1].length()-1));
                     }
                 }
+
                 PlanDetailEntity planDetail = PlanDetailEntity.builder()
                             .planDay(planDayEntityList.get(day-1))
                             .spotInfo(spotInfo)
@@ -153,6 +170,39 @@ public class HistoryServiceImpl implements HistoryService{
                             .cost(0)
                             .build();
                 planDetailRepository.save(planDetail);
+                if (step != totalYList.get(day).size()-1 && timeList.get(1).equals("1")) {
+                    try {
+                        String json = objectMapper.writeValueAsString(timeList.get(2));
+                        String subJson = json.substring(1, json.length()-1);
+                        Map<String, Object> timeDetail = objectMapper.readValue(subJson, new TypeReference<Map<String, Object>>(){});
+
+                        RouteEntity route = RouteEntity.builder()
+                                .planDetail(planDetail)
+                                .day(day)
+                                .totalFare(Integer.parseInt(timeDetail.get("totalFare").toString()))
+                                .pathType(timeDetail.get("pathType").toString())
+                                .build();
+                        routeRepository.save(route);
+                        String json2 = objectMapper.writeValueAsString(timeDetail.get("publicRootDetailList"));
+                        List<Map<String, Object>> PublicRootDetailList = objectMapper.readValue(json2, new TypeReference<List<Map<String, Object>>>(){});
+                        for (int detailStep = 0; detailStep < PublicRootDetailList.size(); detailStep++) {
+                            Map<String, Object> rootDetailDTO = PublicRootDetailList.get(detailStep);
+                            int fullMin = Integer.parseInt(rootDetailDTO.get("sectionTime").toString());
+                            int h = fullMin / 60;
+                            int m = fullMin % 60;
+                            RouteDetailEntity routeDetail = RouteDetailEntity.builder()
+                                    .sectionTime(LocalTime.of(h, m))
+                                    .mode(rootDetailDTO.get("mode").toString())
+                                    .route(route)
+                                    .step(detailStep+1)
+                                    .build();
+                            routeDetailRepository.save(routeDetail);
+                        }
+                    } catch (JsonProcessingException e) {
+                        throw  new CustomException(ErrorCode.S3_UPLOAD_ERROR);
+                    }
+//                    List<TimeDetailDTO> timeDetails = (List<TimeDetailDTO>) timeList.get(2);
+                }
             }
         }
         return "ok";
@@ -203,9 +253,11 @@ public class HistoryServiceImpl implements HistoryService{
             List<PlanDetailEntity> planDetailList = planDetailRepository.findByPlanDay_PlanDayId(planDay.getPlanDayId(), Sort.by(Sort.Direction.ASC, "step"));
             List<HistorySpotResDTO> historySpotResDTOList = new ArrayList<>();
             List<List<String>> timeList = new ArrayList<>();
+            List<RouteDTO> routeDTOList = new ArrayList<>();
             for (PlanDetailEntity planDetail : planDetailList) {
                 SpotInfoEntity spotInfo = spotInfoRepository.findBySpotInfoId(planDetail.getSpotInfo().getSpotInfoId());
                 HistorySpotResDTO historySpotResDTO = HistorySpotResDTO.builder()
+                        .planDetailId(planDetail.getPlanDetailId())
                         .image(spotInfo.getFirstImage())
                         .title(spotInfo.getTitle())
                         .address(spotInfo.getAddr1())
@@ -221,8 +273,25 @@ public class HistoryServiceImpl implements HistoryService{
                     time.add(planDetail.getSpotTime().toString());
                     time.add("0");
                 } else {
-                    time.add("0");
                     time.add(planDetail.getSpotTime().toString());
+                    time.add("1");
+                    RouteEntity route = routeRepository.findByPlanDetail(planDetail);
+                    List<RouteDetailEntity> routeDetailList = routeDetailRepository.findAllByRouteOrderByStep(route);
+                    List<RouteDetailDTO> routeDetailDTOList = new ArrayList<>();
+                    for (RouteDetailEntity routeDetail : routeDetailList) {
+                        RouteDetailDTO routeDetailDTO = RouteDetailDTO.builder()
+                                .mode(routeDetail.getMode())
+                                .sectionTime(routeDetail.getSectionTime())
+                                .step(routeDetail.getStep())
+                                .build();
+                        routeDetailDTOList.add(routeDetailDTO);
+                    }
+                    RouteDTO routeDTO = RouteDTO.builder()
+                            .pathType(route.getPathType())
+                            .totalFare(route.getTotalFare())
+                            .publicRootDetailList(routeDetailDTOList)
+                            .build();
+                    routeDTOList.add(routeDTO);
                 }
                 timeList.add(time);
             }
@@ -243,6 +312,7 @@ public class HistoryServiceImpl implements HistoryService{
                     .day(day++)
                     .planDetailList(historySpotResDTOList)
                     .timeList(timeList)
+                    .routeList(routeDTOList)
                     .galleryImgs(galleryResList)
                     .build();
             diaryDayList.add(historyDayDTO);

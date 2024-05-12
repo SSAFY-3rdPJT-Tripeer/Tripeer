@@ -1,14 +1,17 @@
 package j10d207.tripeer.user.db.dto;
 
+import java.util.List;
 import java.util.Map;
 
 public class NaverResponse implements OAuth2Response {
+
 
     private final Map<String, Object> attribute;
 
     public NaverResponse(Map<String, Object> attribute) {
 
-        this.attribute = (Map<String, Object>) attribute.get("response");
+        List<Map<String, Object>> nameList = (List<Map<String, Object>>) attribute.get("Name");
+        this.attribute = nameList.getFirst();
     }
 
     @Override
@@ -28,20 +31,10 @@ public class NaverResponse implements OAuth2Response {
         return attribute.get("email").toString();
     }
 
-    @Override
-    public String getNickname() {
-
-        return attribute.get("nickname").toString();
-    }
 
     @Override
     public String getProfileImage() {
         return attribute.get("profile_image").toString();
-    }
-
-    @Override
-    public String getBirth() {
-        return attribute.get("birthyear").toString() + "-" + attribute.get("birthday").toString();
     }
 
     @Override

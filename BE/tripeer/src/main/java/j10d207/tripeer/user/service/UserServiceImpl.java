@@ -160,7 +160,6 @@ public class UserServiceImpl implements UserService{
         System.out.println(customUserDetails.toString());
         SocialInfoDTO socialInfoDTO = SocialInfoDTO.builder()
                 .nickname(customUserDetails.getName())
-                .birth(customUserDetails.getBrith())
                 .profileImage(customUserDetails.getProfileImage())
                 .build();
 

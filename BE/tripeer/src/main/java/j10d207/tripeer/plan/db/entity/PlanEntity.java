@@ -21,6 +21,7 @@ public class PlanEntity {
     private long planId;
     @Setter
     private String title;
+    @Setter
     private String vehicle;
     private LocalDate startDate;
     private LocalDate endDate;
