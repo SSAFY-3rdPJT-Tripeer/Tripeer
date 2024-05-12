@@ -18,6 +18,7 @@ const DiaryDetail = () => {
     try {
       const res = await api.get(`history/${params.id}`);
       setDetailData(res.data.data);
+      console.log(res.data.data);
     } catch (e) {
       console.log(e);
     }
@@ -99,22 +100,22 @@ const DiaryDetail = () => {
                     detailData.diaryDetail.member.map((mem, idx) => {
                       return (
                         <div key={idx} className={styles.nameBox}>
-                          <div
-                            className={styles.memberImg}
-                            style={{ position: "relative" }}>
-                            <Image
-                              style={{ borderRadius: "50px" }}
-                              src={mem.profileImage}
-                              sizes="(max-width: 768px) 100vw,
-                              (max-width: 1200px) 50vw,
-                              33vw"
-                              fill
-                              alt="memberImg"
-                            />
-                            <div className={styles.nicknameBox}>
-                              {mem.nickname}
-                            </div>
+                          <div className={styles.memberImgBox}>
+                            <div
+                              className={styles.memberImg}
+                              style={{
+                                backgroundImage: `url(${mem.profileImage})`,
+                                backgroundRepeat: "no-repeat",
+                                backgroundPosition: "center",
+                                backgroundSize: "cover",
+                                height: "50px",
+                                width: "50px",
+                                borderRadius: "50px",
+                              }}></div>
                           </div>
+                          <span className={styles.nicknameBox}>
+                            {mem.nickname}
+                          </span>
                         </div>
                       );
                     })
