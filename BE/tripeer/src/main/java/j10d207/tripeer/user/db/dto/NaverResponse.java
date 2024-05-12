@@ -37,8 +37,9 @@ public class NaverResponse implements OAuth2Response {
     public String getProfileImage() {
         if ( attribute.containsKey("profile_image") ) {
             return attribute.get("profile_image").toString();
+        } else {
+            return null;
         }
-        return null;
     }
 
     @Override

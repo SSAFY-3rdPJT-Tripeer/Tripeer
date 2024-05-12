@@ -16,6 +16,7 @@ public class RootInfoDTO {
     private String endTitle;
     private JsonElement rootInfo;
 
+    private int status;
     private StringBuilder tmi;
 
 }

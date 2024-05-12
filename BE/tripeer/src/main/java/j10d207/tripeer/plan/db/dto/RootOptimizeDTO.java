@@ -16,7 +16,7 @@ public class RootOptimizeDTO {
     private List<place> placeList;
     private List<PublicRoot> publicRootList;
     private PrivateRoot privateRoot;
-
+    private String message;
 
     @Getter
     @Setter
@@ -99,6 +99,7 @@ public class RootOptimizeDTO {
             private double endLat;
             private double endLon;
 
+            /*
             //도보 일 경우 이동 루트
             private List<Step> stepList;
             //대중 교통 일 경우
@@ -124,6 +125,7 @@ public class RootOptimizeDTO {
                 private double lat;
                 private double lon;
             }
+             */
         }
 
 

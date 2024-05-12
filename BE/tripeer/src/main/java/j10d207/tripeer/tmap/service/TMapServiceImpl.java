@@ -4,6 +4,8 @@ import com.nimbusds.jose.shaded.gson.JsonArray;
 import com.nimbusds.jose.shaded.gson.JsonElement;
 import com.nimbusds.jose.shaded.gson.JsonObject;
 import com.nimbusds.jose.shaded.gson.JsonParser;
+import j10d207.tripeer.exception.CustomException;
+import j10d207.tripeer.exception.ErrorCode;
 import j10d207.tripeer.kakao.service.KakaoService;
 import j10d207.tripeer.tmap.db.dto.CoordinateDTO;
 import j10d207.tripeer.tmap.db.dto.RootInfoDTO;
@@ -90,32 +92,49 @@ public class TMapServiceImpl implements TMapService {
     @Override
     public RootInfoDTO getPublicTime(double SX, double SY, double EX, double EY, RootInfoDTO rootInfoDTO) {
         // A에서 B로 가는 경로의 정보를 조회
-        JsonObject routeInfo = getResult(SX, SY, EX, EY);
+        JsonObject result = getResult(SX, SY, EX, EY);
 
-        // 출발지와 목적지의 직선거리가 1.0 km 이하로 너무 가까운 경우
-        if (routeInfo == null) {
-            StringBuilder sb = new StringBuilder();
-            sb.append(rootInfoDTO.getStartTitle()).append("에서 ").append(rootInfoDTO.getEndTitle()).append("로 가는 경로는 대중교통 수단이 없거나 너무 가까워 택시(자차)로 이동해야합니다.");
-            rootInfoDTO.setTmi(sb);
-            int carTime = kakaoService.getDirections(SX, SY, EX, EY);
-            rootInfoDTO.setTime(carTime);
+        if (result.getAsJsonObject().has("result")) {
+            int status = result.getAsJsonObject("result").get("status").getAsInt();
+            rootInfoDTO.setStatus(status);
+            switch (status) {
+                case 11:
+                case 12:
+                case 13:
+                case 14:
+                    //11 -출발지/도착지 간 거리가 가까워서 탐색된 경로 없음
+                    //12 -출발지에서 검색된 정류장이 없어서 탐색된 경로 없음
+                    //13 -도착지에서 검색된 정류장이 없어서 탐색된 경로 없음
+                    //14 -출발지/도착지 간 탐색된 대중교통 경로가 없음
+                    int tmp = kakaoService.getDirections(SX, SY, EX, EY);
+                    if ( tmp == 99999 ) {
+                        rootInfoDTO.setStatus(400);
+                        rootInfoDTO.setTime(tmp);
+                    }
+                    else {
+                        rootInfoDTO.setTime(kakaoService.getDirections(SX, SY, EX, EY));
+                    }
+                    break;
+                default:
+                    throw new CustomException(ErrorCode.ROOT_API_ERROR);
+            }
+            return  rootInfoDTO;
+        } else {
+            // result.getAsJsonObject().has("metaData")
+            JsonObject routeInfo = result.getAsJsonObject("metaData");
+
+            //경로 정보중 제일 좋은 경로를 가져옴
+            JsonElement bestRoot = getBestTime(routeInfo.getAsJsonObject("plan").getAsJsonArray("itineraries"));
+
+            //반환 정보 생성
+            int totalTime = bestRoot.getAsJsonObject().get("totalTime").getAsInt();
+            rootInfoDTO.setTime(totalTime/60);
+            rootInfoDTO.setRootInfo(bestRoot);
 
             return rootInfoDTO;
         }
 
-        /*
-        * routeInfo 가 ERROR 인경우 처리
-        */
 
-        //경로 정보중 제일 좋은 경로를 가져옴
-        JsonElement bestRoot = getBestTime(routeInfo.getAsJsonObject("plan").getAsJsonArray("itineraries"));
-
-        //반환 정보 생성
-        int totalTime = bestRoot.getAsJsonObject().get("totalTime").getAsInt();
-        rootInfoDTO.setTime(totalTime/60);
-        rootInfoDTO.setRootInfo(bestRoot);
-
-        return rootInfoDTO;
     }
 
     //경로 리스트 중에서 제일 좋은 경로 하나를 선정해서 반환 ( 시간 우선 )
@@ -160,10 +179,7 @@ public class TMapServiceImpl implements TMapService {
         HttpEntity<RouteReqDTO> request = new HttpEntity<>(route, headers);
         String result = restTemplate.postForObject("https://apis.openapi.sk.com/transit/routes", request, String.class);
 
-        if (!JsonParser.parseString(result).getAsJsonObject().has("metaData")) {
-            System.out.println("result = " + result);
-        }
-        return JsonParser.parseString(result).getAsJsonObject().getAsJsonObject("metaData");
+        return JsonParser.parseString(result).getAsJsonObject();
     }
 
     private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {

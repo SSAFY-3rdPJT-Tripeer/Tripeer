@@ -86,7 +86,11 @@ public class KakaoServiceImpl implements KakaoService{
         for (int i = 0; i < coordinates.size(); i++) {
             for (int j = i; j < coordinates.size(); j++) {
                 if(i == j) continue;
-                timeTable[i][j].setTime(getDirections(coordinates.get(i).getLongitude(), coordinates.get(i).getLatitude(), coordinates.get(j).getLongitude(), coordinates.get(j).getLatitude()));
+                int tmp = getDirections(coordinates.get(i).getLongitude(), coordinates.get(i).getLatitude(), coordinates.get(j).getLongitude(), coordinates.get(j).getLatitude());
+                if( tmp == 99999 ) {
+                    timeTable[i][j].setStatus(400);
+                }
+                timeTable[i][j].setTime(tmp);
                 timeTable[j][i] = timeTable[i][j];
             }
         }
@@ -152,7 +156,12 @@ public class KakaoServiceImpl implements KakaoService{
         String result = restTemplate.postForObject("https://apis.openapi.sk.com/transit/routes", request, String.class);
         System.out.println("result = " + result);
 
-        JsonElement bestRoot = getBestTime(JsonParser.parseString(result).getAsJsonObject().getAsJsonObject("metaData").getAsJsonObject("plan").getAsJsonArray("itineraries"));
+        JsonObject resultJson = JsonParser.parseString(result).getAsJsonObject();
+        if(resultJson.has("result")) {
+            return 99999;
+        }
+
+        JsonElement bestRoot = getBestTime(resultJson.getAsJsonObject("metaData").getAsJsonObject("plan").getAsJsonArray("itineraries"));
         //반환 정보 생성
         int totalTime = bestRoot.getAsJsonObject().get("totalTime").getAsInt();
 
