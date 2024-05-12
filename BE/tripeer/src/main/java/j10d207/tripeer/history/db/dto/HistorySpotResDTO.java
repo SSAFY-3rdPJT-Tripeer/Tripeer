@@ -8,6 +8,7 @@ import java.time.LocalTime;
 @Getter
 @Builder
 public class HistorySpotResDTO {
+    private long planDetailId;
     private String title;
     private String contentType;
     private String address;
