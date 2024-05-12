@@ -27,5 +27,14 @@ public class RouteDetailEntity {
     private Integer step;
     private LocalTime sectionTime;
     private String mode;
+    private Integer distance;
+
+    private String startName;
+    private double startLat;
+    private double startLon;
+
+    private String endName;
+    private double endLat;
+    private double endLon;
 
 }
