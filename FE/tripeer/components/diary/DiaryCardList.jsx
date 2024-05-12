@@ -55,7 +55,12 @@ const DiaryCard = () => {
                 <Image
                   src={item.img}
                   fill
-                  // loader={() => detailData.Img}
+                  loader={() => {
+                    if (item.img) {
+                      return item.img;
+                    }
+                    return "https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/default1.png";
+                  }}
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   alt="im"
                   className={styles.cardImg}
