@@ -10,11 +10,7 @@ public interface OAuth2Response {
     String getProviderId();
     //이메일
     String getEmail();
-    // 아이디급 고유 닉네임
-    String getNickname();
     String getProfileImage();
-    String getBirth();
-
     Map<String, Object> getAttribute();
 
 
