@@ -26,7 +26,6 @@ api.interceptors.request.use(async (config) => {
     window.location.reload();
     return;
   } else if (re === undefined) {
-    console.log("local");
   } else {
     const decodedTokenRe = jwtDecode(re);
     const isTokenExpiredRe = decodedTokenRe.exp * 1000 < Date.now();
