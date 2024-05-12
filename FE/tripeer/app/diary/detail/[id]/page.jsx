@@ -2,15 +2,26 @@
 
 // 외부 모듈
 import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import Image from "next/image";
 
 // 내부 모듈
 import styles from "./page.module.css";
-import { cardDetail } from "@/components/diary/diaryDummy";
 import DiaryDetailCard from "@/components/diary/DiaryDetailCard";
+import api from "@/utils/api";
 
 const DiaryDetail = () => {
   const [detailData, setDetailData] = useState(null);
+  const params = useParams();
+
+  const getDiaryDetail = async () => {
+    try {
+      const res = await api.get(`history/${params.id}`);
+      setDetailData(res.data.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   function getDayOfWeek(inputDate) {
     const week = ["일", "월", "화", "수", "목", "금", "토"];
@@ -21,7 +32,7 @@ const DiaryDetail = () => {
   }
 
   useEffect(() => {
-    setDetailData(cardDetail[0]);
+    getDiaryDetail();
   }, []);
 
   return (
