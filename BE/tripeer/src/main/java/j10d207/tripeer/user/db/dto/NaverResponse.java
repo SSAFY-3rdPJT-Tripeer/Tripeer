@@ -28,20 +28,10 @@ public class NaverResponse implements OAuth2Response {
         return attribute.get("email").toString();
     }
 
-    @Override
-    public String getNickname() {
-
-        return attribute.get("nickname").toString();
-    }
 
     @Override
     public String getProfileImage() {
         return attribute.get("profile_image").toString();
-    }
-
-    @Override
-    public String getBirth() {
-        return attribute.get("birthyear").toString() + "-" + attribute.get("birthday").toString();
     }
 
     @Override

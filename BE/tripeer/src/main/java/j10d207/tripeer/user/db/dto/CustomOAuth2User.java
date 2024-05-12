@@ -43,19 +43,15 @@ public class CustomOAuth2User implements OAuth2User {
     public String getEmail() {
         return  oAuth2Response.getEmail();
     }
-
     @Override
     public String getName() {
 
-        return oAuth2Response.getNickname();
+        return null;
     }
-
     public String getUsername() {
 
         return oAuth2Response.getProvider() + " " + oAuth2Response.getProviderId();
     }
-
-    public String getBrith() { return oAuth2Response.getBirth(); }
 
     public String getProfileImage() { return oAuth2Response.getProfileImage(); }
 

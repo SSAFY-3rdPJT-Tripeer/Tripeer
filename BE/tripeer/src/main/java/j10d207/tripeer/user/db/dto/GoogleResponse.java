@@ -30,21 +30,10 @@ public class GoogleResponse implements OAuth2Response {
     }
 
     @Override
-    public String getNickname() {
-
-        return attribute.get("given_name").toString();
-    }
-
-    @Override
     public String getProfileImage() {
         return attribute.get("picture").toString();
     }
 
-
-    @Override
-    public String getBirth() {
-        return attribute.get("birthday").toString();
-    }
 
     @Override
     public Map<String, Object> getAttribute() {
