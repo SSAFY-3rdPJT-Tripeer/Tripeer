@@ -107,34 +107,38 @@
   margin-top: 10px;
 }
 .nameBox {
-  display: inline-flex;
+  display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  /* justify-content: center; */
   border: 1px solid #4fbdb7;
-  border-radius: 50px;
+  border-radius: 60px;
   height: 60px;
   width: 60px;
-  padding: 5px;
   margin-right: 10px;
-  overflow: hidden;
+  /* overflow: hidden; */
   transition: width 0.5s ease; /* 애니메이션 효과 적용 */
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 20%);
 }
 .nameBox:hover {
-  justify-content: flex-start;
+  /* justify-content: flex-start; */
   width: 150px;
 }
 
-.memberImg {
-  border-radius: 50px;
-  height: 50px;
-  width: 50px;
+.memberImgBox {
+  flex: none;
+  border-radius: 60px;
+  height: 60px;
+  width: 60px;
+  justify-content: center;
+  display: flex;
+  align-items: center;
 }
+
 .nicknameBox {
   display: inline-flex;
   align-items: center;
-  margin-left: 55px;
+  margin-left: 10px;
   margin-right: 10px;
   text-overflow: ellipsis;
   visibility: hidden;
@@ -149,5 +153,5 @@
 
 .articleBox {
   width: 100%;
-  height: 500px;
+  /* height: 500px; */
 }

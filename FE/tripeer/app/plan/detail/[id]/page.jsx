@@ -277,6 +277,12 @@ const PageDetail = (props) => {
       {exit ? (
         <div className={styles.back}>
           <div className={styles.modalBox}>
+            <div
+              className={styles.backIcon}
+              onClick={() => {
+                router.back();
+              }}
+            />
             <QRCode value={`http://localhost:3000/trip/${props.params.id}`} />
             <div
               className={styles.exitBtn}
