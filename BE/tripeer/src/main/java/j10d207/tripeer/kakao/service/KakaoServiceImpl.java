@@ -2,11 +2,20 @@ package j10d207.tripeer.kakao.service;
 
 
 import com.google.gson.Gson;
+import com.nimbusds.jose.shaded.gson.JsonArray;
+import com.nimbusds.jose.shaded.gson.JsonElement;
+import com.nimbusds.jose.shaded.gson.JsonObject;
+import com.nimbusds.jose.shaded.gson.JsonParser;
 import j10d207.tripeer.kakao.db.entity.RouteResponse;
 import j10d207.tripeer.plan.db.repository.PlanDetailRepository;
+import j10d207.tripeer.plan.service.PlanService;
 import j10d207.tripeer.tmap.db.dto.CoordinateDTO;
 import j10d207.tripeer.tmap.db.dto.RootInfoDTO;
+import j10d207.tripeer.tmap.db.dto.RouteReqDTO;
 import j10d207.tripeer.tmap.service.FindRoot;
+import j10d207.tripeer.tmap.service.TMapService;
+import j10d207.tripeer.tmap.service.TMapServiceImpl;
+import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +36,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class KakaoServiceImpl implements KakaoService{
 
-    private final PlanDetailRepository planDetailRepository;
+    @Value("${tmap.apikey}")
+    private String apikey;
+
+//    private final PlanService planService;
 
     @Value("${kakao.apikey}")
     private String kakaoApiKey;
@@ -95,31 +107,74 @@ public class KakaoServiceImpl implements KakaoService{
     public int getDirections(double SX, double SY, double EX, double EY) {
         RestTemplate restTemplate = new RestTemplate();
 
-        String baseUrl = "https://apis-navi.kakaomobility.com/v1/directions";
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl)
-                .queryParam("origin", SX + "," + SY)
-                .queryParam("destination", EX + "," + EY)
-                .queryParam("summary", "true");
+        try {
+            String baseUrl = "https://apis-navi.kakaomobility.com/v1/directions";
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl)
+                    .queryParam("origin", SX + "," + SY)
+                    .queryParam("destination", EX + "," + EY)
+                    .queryParam("summary", "true");
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "KakaoAK " + kakaoApiKey);
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "KakaoAK " + kakaoApiKey);
 
-        HttpEntity<?> entity = new HttpEntity<>(headers);
+            HttpEntity<?> entity = new HttpEntity<>(headers);
 
-        ResponseEntity<String> response = restTemplate.exchange(
-                builder.toUriString(),
-                HttpMethod.GET,
-                entity,
-                String.class
-        );
+            ResponseEntity<String> response = restTemplate.exchange(
+                    builder.toUriString(),
+                    HttpMethod.GET,
+                    entity,
+                    String.class
+            );
 
-        Gson gson = new Gson();
-        RouteResponse data = gson.fromJson(response.getBody(), RouteResponse.class);
+            Gson gson = new Gson();
+            RouteResponse data = gson.fromJson(response.getBody(), RouteResponse.class);
 
-        System.out.println("data = " + data);
+            return data.getRoutes().getFirst().getSummary().getDuration() / 60;
+        } catch (Exception e) {
+            return getResult(SX, SY, EX, EY);
+        }
 
-
-        return data.getRoutes().getFirst().getSummary().getDuration() / 60;
     }
 
+    private int getResult(double SX, double SY, double EX, double EY) {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("appKey", apikey);
+        headers.set("Content-Type", "application/json");
+        headers.set("Accept", "*/*");
+        RouteReqDTO route = RouteReqDTO.builder()
+                .startX(String.valueOf(SX))
+                .startY(String.valueOf(SY))
+                .endX(String.valueOf(EX))
+                .endY(String.valueOf(EY))
+                .build();
+        HttpEntity<RouteReqDTO> request = new HttpEntity<>(route, headers);
+        String result = restTemplate.postForObject("https://apis.openapi.sk.com/transit/routes", request, String.class);
+        System.out.println("result = " + result);
+
+        JsonElement bestRoot = getBestTime(JsonParser.parseString(result).getAsJsonObject().getAsJsonObject("metaData").getAsJsonObject("plan").getAsJsonArray("itineraries"));
+        //반환 정보 생성
+        int totalTime = bestRoot.getAsJsonObject().get("totalTime").getAsInt();
+
+        return totalTime / 60;
+    }
+
+    private JsonElement getBestTime(JsonArray itineraries) {
+        int minTime = Integer.MAX_VALUE;
+        JsonElement bestJson = new JsonObject();
+        for (JsonElement itinerary : itineraries) {
+            int tmpTime = itinerary.getAsJsonObject().get("totalTime").getAsInt();
+            int tmpPathType = itinerary.getAsJsonObject().get("pathType").getAsInt();
+            // 이동수단이 6-항공 또는 7-해운일 경우 제외
+            if( tmpPathType == 6 || tmpPathType == 7) {
+                continue;
+            }
+
+            if ( minTime > tmpTime ) {
+                minTime = tmpTime;
+                bestJson = itinerary;
+            }
+        }
+        return  bestJson;
+    }
 }
