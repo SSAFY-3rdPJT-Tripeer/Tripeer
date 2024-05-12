@@ -1,86 +1,158 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import MapRoute from "@/components/plan/MapRoute";
+import { useEffect, useState } from "react";
+
+import styles from "./page.module.css";
+import logo from "@/public/FullLogo.svg";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import altImg from "@/public/altImg.png";
+import axios from "axios";
+import Link from "next/link";
 
 const TripPage = (props) => {
   const { planId } = props.params;
-
-  const totalYList = useMemo(() => {
-    return [
-      [],
-      [
-        {
-          spotInfoId: 130384,
-          title: "대구 남구문화원",
-          contentType: "문화시설",
-          addr: "대구광역시 남구 앞산순환로 478",
-          latitude: 35.83130736,
-          longitude: 128.5768876,
-          img: "https://tripeer207.s3.ap-northeast-2.amazonaws.com/spot/130384.png",
-          wishlist: false,
-          spot: false,
-          order: 0,
-          planId: 77,
-          userId: 1,
-          profileImage:
-            "https://tripeer207.s3.ap-northeast-2.amazonaws.com/ProfileImage/1.png",
-          nickname: "admin",
-        },
-        {
-          spotInfoId: 129837,
-          title: "대구교육대학교 교육박물관",
-          contentType: "문화시설",
-          addr: "대구광역시 남구 중앙대로 219",
-          latitude: 35.853069,
-          longitude: 128.5889415,
-          img: "https://tripeer207.s3.ap-northeast-2.amazonaws.com/spot/129837.png",
-          wishlist: false,
-          spot: false,
-          order: 0,
-          planId: 77,
-          userId: 1,
-          profileImage:
-            "https://tripeer207.s3.ap-northeast-2.amazonaws.com/ProfileImage/1.png",
-          nickname: "admin",
-        },
-        {
-          spotInfoId: 126132,
-          title: "대구앞산공원",
-          contentType: "관광지",
-          addr: "대구광역시 남구 앞산순환로 574-87",
-          latitude: 35.82901895,
-          longitude: 128.589056,
-          img: "https://tripeer207.s3.ap-northeast-2.amazonaws.com/spot/126132.png",
-          wishlist: false,
-          spot: false,
-          order: 0,
-          planId: 77,
-          userId: 1,
-          profileImage:
-            "https://tripeer207.s3.ap-northeast-2.amazonaws.com/ProfileImage/1.png",
-          nickname: "admin",
-        },
-      ],
-      [],
-      [],
-      [],
-      [],
-    ];
-  }, []);
+  const router = useRouter();
+  const [plan, setPlan] = useState(null);
+  const [planDetail, setPlanDetail] = useState(null);
+  const [planDate, setPlanDate] = useState("");
 
   // 플랜 아이디 받기
   useEffect(() => {
     if (planId) {
       // 해당 planId를 통한 조회 로직 추가하면 됨
       console.log(planId);
+      axios
+        .get(`${process.env.NEXT_PUBLIC_API_URL}/history/${planId}`)
+        .then((res) => {
+          setPlan(res.data.data);
+        })
+        .catch(() => {
+          router.push("/");
+        });
     }
-  }, [planId]);
+  }, [planId, router]);
+
+  useEffect(() => {
+    const date = ["월", "화", "수", "목", "금", "토", "일"];
+
+    if (plan) {
+      setPlanDetail(plan.diaryDetail);
+      const startDate = new Date(plan.diaryDetail.startDay);
+      const endDate = new Date(plan.diaryDetail.endDay);
+      const startYear = startDate.getFullYear().toString().substring(2, 4);
+      const endYear = endDate.getFullYear().toString().substring(2, 4);
+      const startMonth = (startDate.getMonth() + 1).toString().padStart(2, "0");
+      const endMonth = (endDate.getMonth() + 1).toString().padStart(2, "0");
+      const startDay = startDate.getDate().toString().padStart(2, "0");
+      const endDay = endDate.getDate().toString().padStart(2, "0");
+      let startString =
+        startYear +
+        "." +
+        startMonth +
+        "." +
+        startDay +
+        `(${date[startDate.getDay() - 1]})`;
+      let endString =
+        endYear +
+        "." +
+        endMonth +
+        "." +
+        endDay +
+        `(${date[endDate.getDay() - 1]})`;
+      setPlanDate(startString + " - " + endString);
+    }
+  }, [plan]);
 
   return (
     <div>
-      <div>
-        <MapRoute daySpots={totalYList} />
+      <header className={styles.logoHeader}>
+        <Image
+          src={logo}
+          width={100}
+          height={25}
+          alt="Tripeer Full Logo"
+          style={{ objectFit: "cover", cursor: "pointer" }}
+          onClick={() => {
+            router.push("/");
+          }}
+        />
+      </header>
+      <div className={styles.planContainer}>
+        <div className={styles.planCard}>
+          <div className={styles.img} style={{ position: "relative" }}>
+            <Image
+              src={altImg}
+              loader={() => {
+                return planDetail ? planDetail.img : altImg;
+              }}
+              fill
+              alt="디폴트"
+              className={styles.realImg}
+            />
+          </div>
+          <div className={styles.detailBox}>
+            <div className={styles.planTitle}>
+              {planDetail ? planDetail.title : null}
+            </div>
+            <div className={styles.type}>
+              <div className={styles.placePointer} />
+              <p>여행지</p>
+            </div>
+            <p className={styles.font}>
+              {planDetail
+                ? planDetail.townList.map((town, idx) => {
+                    return idx !== planDetail.townList.length - 1 ? (
+                      <span key={idx}>{town} ,</span>
+                    ) : (
+                      <span key={idx}>{town}</span>
+                    );
+                  })
+                : null}
+            </p>
+            <div className={styles.type}>
+              <div className={styles.dayIcon} />
+              <p>여행 날짜</p>
+            </div>
+            <p className={styles.font}>{planDate}</p>
+            <div className={styles.type}>
+              <div className={styles.personIcon} />
+              <p>여행 인원</p>
+            </div>
+            <div className={styles.personBox}>
+              {planDetail
+                ? planDetail.member.map((item, idx) => {
+                    return (
+                      <div className={styles.circle} key={idx}>
+                        <div
+                          className={styles.profile}
+                          style={{
+                            backgroundImage: `url(${item.profileImage})`,
+                          }}
+                        />
+                        <p className={styles.profileName}>{item.nickname}</p>
+                      </div>
+                    );
+                  })
+                : null}
+            </div>
+            <div className={styles.btnBox}>
+              <div className={styles.weatherBtn}>
+                <div className={styles.weatherIcon} />
+              </div>
+              <Link
+                style={{ textDecoration: "none" }}
+                href={{
+                  pathname: `/trip/${planId}/schedule`,
+                }}>
+                <div className={styles.planBtn}>
+                  <p>여행 일정 보러 가기</p>
+                  <div className={styles.directIcon} />
+                </div>
+              </Link>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
