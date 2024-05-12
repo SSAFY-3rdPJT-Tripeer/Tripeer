@@ -27,8 +27,10 @@ public class EmailServiceImpl implements EmailService{
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         String email = userEntity.getEmail();
         if (email == null || !email.contains("@")) { // 간단한 이메일 유효성 검사
-            throw new CustomException(ErrorCode.INVALID_EMAIL);
+//            throw new CustomException(ErrorCode.INVALID_EMAIL);
+            return false;
         }
+
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true);
             messageHelper.setTo(userEntity.getEmail());
@@ -44,7 +46,8 @@ public class EmailServiceImpl implements EmailService{
             javaMailSender.send(messagePreparator);
             return true;
         } catch (Exception e) {
-            throw new CustomException(ErrorCode.EMAIL_NOT_FOUND);
+//            throw new CustomException(ErrorCode.EMAIL_NOT_FOUND);
+            return false;
         }
     }
 
