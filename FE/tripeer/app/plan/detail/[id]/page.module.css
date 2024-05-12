@@ -66,6 +66,7 @@
   justify-content: center;
   align-items: center;
   animation: fadeIn 1.5s ease-in-out forwards;
+  position: relative;
 }
 
 .exitBtn {
@@ -89,4 +90,17 @@
   100% {
     opacity: 1;
   }
+}
+
+.backIcon {
+  position: absolute;
+  top: 20px;
+  left: 10px;
+  width: 18px;
+  height: 18px;
+  background-image: url(../../../../components/plan/asset/leftDirect.svg);
+  transform: rotate(180deg);
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
 }
