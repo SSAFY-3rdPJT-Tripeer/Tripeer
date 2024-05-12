@@ -58,23 +58,6 @@ const DayAlbum = () => {
     window.location.reload();
   };
 
-  useEffect(() => {
-    getGallery(params.id);
-    console.log(params.id);
-    setPlanDayId(params.id);
-  }, []);
-
-  useEffect(() => {
-    console.log("gallery:", gallery);
-  }, [gallery]);
-
-  useEffect(() => {
-    if (!isSelectModal) {
-      // isSelectModal이 false가 되면
-      setSelectedPhotos(new Array(gallery.length).fill(null)); // 모든 사진 선택을 해제
-    }
-  }, [isSelectModal, gallery.length]);
-
   // 사진 선택 토글
   const togglePhotoSelection = (index) => {
     const newSelectedPhotos = [...selectedPhotos];
@@ -105,14 +88,16 @@ const DayAlbum = () => {
       alert("선택된 사진이 없습니다.");
       return;
     }
-
-    await api.post(`/history/gallery/delete`, {
-      galleryIdList: itemsToDelete,
-    });
-    setGallery((prevGallery) =>
-      prevGallery.filter((photo) => !itemsToDelete.includes(photo.galleryId)),
-    );
-    console.log(itemsToDelete);
+    try {
+      await api.post(`/history/gallery/delete`, {
+        galleryIdList: itemsToDelete,
+      });
+      setGallery((prevGallery) =>
+        prevGallery.filter((photo) => !itemsToDelete.includes(photo.galleryId)),
+      );
+    } finally {
+      setSelectedPhotos(new Array(gallery.length).fill(null));
+    }
   };
 
   const saveSelectedPhotos = () => {
@@ -129,6 +114,18 @@ const DayAlbum = () => {
       }
     });
   };
+
+  useEffect(() => {
+    getGallery(params.id);
+    setPlanDayId(params.id);
+  }, []);
+
+  useEffect(() => {
+    if (!isSelectModal) {
+      // isSelectModal이 false가 되면
+      setSelectedPhotos(new Array(gallery.length).fill(null)); // 모든 사진 선택을 해제
+    }
+  }, [isSelectModal, gallery]);
 
   return (
     <main className={styles.container}>
@@ -171,8 +168,12 @@ const DayAlbum = () => {
                 key={idx}
                 className={styles.photo}
                 onClick={() => {
-                  setIsModal(true);
-                  setClickId(photo.galleryId);
+                  if (!isSelectModal) {
+                    setIsModal(true);
+                    setClickId(photo.galleryId);
+                  } else {
+                    togglePhotoSelection(idx);
+                  }
                 }}
                 style={{ position: "relative" }}>
                 <Image

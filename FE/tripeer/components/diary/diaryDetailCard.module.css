@@ -8,7 +8,7 @@
     -4px 4px 30px rgba(0, 0, 0, 10%),
     4px 4px 30px rgba(0, 0, 0, 10%);
   border-radius: 15px;
-  padding: 20px 30px;
+  padding: 20px 40px;
 }
 
 .dateBox {
@@ -20,13 +20,13 @@
   margin-bottom: 20px;
 }
 .dateLeft {
-  font-size: 1.8rem;
+  font-size: 1.3rem;
   color: #242424;
   font-weight: 600;
 }
 
 .dateRight {
-  font-size: 1.8rem;
+  font-size: 1.3rem;
   color: #606060;
   font-weight: 600;
 }

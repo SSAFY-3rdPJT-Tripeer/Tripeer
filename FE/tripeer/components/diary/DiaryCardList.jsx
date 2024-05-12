@@ -20,33 +20,40 @@ const DiaryCard = () => {
   const getDiarys = async () => {
     try {
       const res = await api.get("/history");
-      console.log("diaryList: ", res);
-      // setDiaryList(res.data.data)
+      setDiaryList(res.data.data);
     } catch (e) {
       console.log(e);
     }
   };
+
+  function getDayOfWeek(inputDate) {
+    const week = ["일", "월", "화", "수", "목", "금", "토"];
+
+    const dayOfWeek = week[new Date(inputDate).getDay()];
+
+    return `${inputDate.replace(/-/g, ".")}(${dayOfWeek})`;
+  }
 
   useEffect(() => {
     setDummy(card);
     getDiarys();
   }, []);
 
-  const goDiary = (id) => {
-    router.push(`/diary/detail/${id}`);
+  const goDiary = (planId) => {
+    router.push(`/diary/detail/${planId}`);
   };
 
   return (
     <main className={styles.container}>
       <div className={styles.cardBox}>
-        {dummy.map((item, idx) => {
+        {diaryList.map((item, idx) => {
           return (
             <div className={styles.card} key={idx}>
               <div
                 className={styles.cardImgBox}
                 style={{ position: "relative" }}>
                 <Image
-                  src={item.Img}
+                  src={item.img}
                   fill
                   // loader={() => detailData.Img}
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -74,7 +81,7 @@ const DiaryCard = () => {
                 </div>
                 <div className={styles.bottomBox}>
                   <p className={styles.dateText}>
-                    {item.startDay} - {item.endDay}
+                    {getDayOfWeek(item.startDay)} - {getDayOfWeek(item.endDay)}
                   </p>
                   <div className={styles.memberBox}>
                     <div className={styles.memberIcon}></div>
