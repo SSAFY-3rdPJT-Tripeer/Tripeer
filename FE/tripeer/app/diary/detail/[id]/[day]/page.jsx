@@ -1,7 +1,7 @@
 "use client";
 
 // 외부 모듈
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 
@@ -14,11 +14,13 @@ import { downloadFile } from "@/utils/downloadFile";
 
 const DayAlbum = () => {
   const router = useRouter();
+  const params = useParams();
   const [gallery, setGallery] = useState({});
   const [clickId, setClickId] = useState(null);
   const [isModal, setIsModal] = useState(false);
   const [isSelectModal, setIsSelectModal] = useState(false);
   const [selectedPhotos, setSelectedPhotos] = useState([]);
+  const [planDayId, setPlanDayId] = useState(null);
 
   const getGallery = async (planDayId) => {
     const res = await api.get(`/history/gallery/${planDayId}`);
@@ -57,8 +59,14 @@ const DayAlbum = () => {
   };
 
   useEffect(() => {
-    getGallery(8);
+    getGallery(params.id);
+    console.log(params.id);
+    setPlanDayId(params.id);
   }, []);
+
+  useEffect(() => {
+    console.log("gallery:", gallery);
+  }, [gallery]);
 
   useEffect(() => {
     if (!isSelectModal) {
@@ -99,11 +107,12 @@ const DayAlbum = () => {
     }
 
     await api.post(`/history/gallery/delete`, {
-      gallertIdList: itemsToDelete,
+      galleryIdList: itemsToDelete,
     });
     setGallery((prevGallery) =>
       prevGallery.filter((photo) => !itemsToDelete.includes(photo.galleryId)),
     );
+    console.log(itemsToDelete);
   };
 
   const saveSelectedPhotos = () => {
@@ -146,7 +155,7 @@ const DayAlbum = () => {
             multiple
             accept="image/*"
             onChange={(e) => {
-              postGallery(e, 8);
+              postGallery(e, planDayId);
             }}
           />
           <label className={styles.uploadBtn} htmlFor="file">
@@ -163,7 +172,7 @@ const DayAlbum = () => {
                 className={styles.photo}
                 onClick={() => {
                   setIsModal(true);
-                  setClickId(idx);
+                  setClickId(photo.galleryId);
                 }}
                 style={{ position: "relative" }}>
                 <Image
@@ -171,8 +180,9 @@ const DayAlbum = () => {
                   loader={() => photo.img}
                   sizes="(max-width: 768px) 100vw,(max-width: 1200px) 50vw, 33vw"
                   fill
-                  priority="false"
+                  priority={false}
                   alt="memberImg"
+                  unoptimized={false}
                 />
                 <div
                   className={styles.userImgBox}
@@ -183,8 +193,9 @@ const DayAlbum = () => {
                     loader={() => photo.userImg}
                     sizes="(max-width: 768px) 100vw,(max-width: 1200px) 50vw, 33vw"
                     fill
-                    priority="false"
+                    priority={false}
                     alt="memberImg"
+                    unoptimized={false}
                   />
                 </div>
                 {isSelectModal && (
