@@ -7,7 +7,7 @@ import Cards from "./Cards";
 
 const MapRoute = (props) => {
   // daySpots = totalYList로 전해주면 됨
-  const { daySpots } = props;
+  const { daySpots, setIsRouteModal } = props;
   const mapRef = useRef(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [step, setStep] = useState(1);
@@ -109,7 +109,7 @@ const MapRoute = (props) => {
       });
     }
     if (range > 0) {
-      step < daySpots.length ? setStep(step + 1) : setStep(1);
+      step < daySpots.length - 1 ? setStep(step + 1) : setStep(1);
     } else {
       step > 1 ? setStep(step - 1) : setStep(daySpots.length - 1);
     }
@@ -141,6 +141,8 @@ const MapRoute = (props) => {
   }, [isLoaded]);
 
   useEffect(() => {
+    console.log("데이스팟", daySpots);
+    console.log("스탭", step);
     if (map && daySpots && daySpots[step].length > 0) {
       moveTo(daySpots[step][0]["latitude"], daySpots[step][0]["longitude"]);
       let paths = [];
@@ -164,7 +166,11 @@ const MapRoute = (props) => {
           "https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=us08e13nh8"
         }
       />
-      <div className={styles.routeContainer}>
+      <div
+        className={styles.routeContainer}
+        onClick={(e) => {
+          if (e.currentTarget === e.target) setIsRouteModal(false);
+        }}>
         <div className={styles.routeMapBox}>
           <div>
             <div className={styles.title}>

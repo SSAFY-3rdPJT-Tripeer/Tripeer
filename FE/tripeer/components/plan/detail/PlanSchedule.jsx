@@ -19,6 +19,7 @@ import OnlineBox from "./OnlineBox";
 import ScheduleModal from "@/components/plan/detail/schedule/scheduleModal";
 import LoadComponent from "@/components/loading/LoadComponent";
 import Block from "@/components/plan/detail/schedule/block";
+import MapRoute from "../MapRoute";
 
 const PlanSchedule = (props) => {
   const { myInfo, provider, plan, online } = props;
@@ -40,6 +41,7 @@ const PlanSchedule = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [cirIdx, setCirIdx] = useState(0);
   const [isSaveModal, setIsSaveModal] = useState(false);
+  const [isRouteModal, setIsRouteModal] = useState(false);
 
   const COLOR = [
     "#A60000",
@@ -923,6 +925,7 @@ const PlanSchedule = (props) => {
                     <CalculateBtn
                       onClickCalculate={onClickCalculate}
                       arrIdx={arrIdx}
+                      blockList={blockList}
                     />
                   </header>
                   <Droppable
@@ -987,6 +990,14 @@ const PlanSchedule = (props) => {
         </main>
       </DragDropContext>
       <div
+        className={styles.routeBox}
+        onClick={() => {
+          setIsRouteModal(true);
+        }}>
+        <div className={styles.routeIcon} />
+        <p>경로보기</p>
+      </div>
+      <div
         className={styles.saveBox}
         onClick={() => {
           setIsSaveModal(true);
@@ -1020,6 +1031,10 @@ const PlanSchedule = (props) => {
             </div>
           </div>
         </div>
+      ) : null}
+
+      {isRouteModal ? (
+        <MapRoute daySpots={totalList} setIsRouteModal={setIsRouteModal} />
       ) : null}
     </div>
   );
