@@ -210,6 +210,7 @@ public class HistoryServiceImpl implements HistoryService{
             for (PlanDetailEntity planDetail : planDetailList) {
                 SpotInfoEntity spotInfo = spotInfoRepository.findBySpotInfoId(planDetail.getSpotInfo().getSpotInfoId());
                 HistorySpotResDTO historySpotResDTO = HistorySpotResDTO.builder()
+                        .planDetailId(planDetail.getPlanDetailId())
                         .image(spotInfo.getFirstImage())
                         .title(spotInfo.getTitle())
                         .address(spotInfo.getAddr1())
