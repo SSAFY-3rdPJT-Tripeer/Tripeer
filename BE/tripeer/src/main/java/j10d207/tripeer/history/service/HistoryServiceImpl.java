@@ -193,6 +193,13 @@ public class HistoryServiceImpl implements HistoryService{
                             RouteDetailEntity routeDetail = RouteDetailEntity.builder()
                                     .sectionTime(LocalTime.of(h, m))
                                     .mode(rootDetailDTO.get("mode").toString())
+                                    .distance(Integer.parseInt(rootDetailDTO.get("distance").toString()))
+                                    .startName(rootDetailDTO.get("startName").toString())
+                                    .startLat(Double.parseDouble(rootDetailDTO.get("startLat").toString()))
+                                    .startLon(Double.parseDouble(rootDetailDTO.get("startLon").toString()))
+                                    .endName(rootDetailDTO.get("endName").toString())
+                                    .endLat(Double.parseDouble(rootDetailDTO.get("endLat").toString()))
+                                    .endLon(Double.parseDouble(rootDetailDTO.get("endLon").toString()))
                                     .route(route)
                                     .step(detailStep+1)
                                     .build();
@@ -283,6 +290,13 @@ public class HistoryServiceImpl implements HistoryService{
                                 .mode(routeDetail.getMode())
                                 .sectionTime(routeDetail.getSectionTime())
                                 .step(routeDetail.getStep())
+                                .distance(routeDetail.getDistance())
+                                .startName(routeDetail.getStartName())
+                                .startLat(routeDetail.getStartLat())
+                                .startLon(routeDetail.getStartLon())
+                                .endName(routeDetail.getEndName())
+                                .endLat(routeDetail.getEndLat())
+                                .endLon(routeDetail.getEndLon())
                                 .build();
                         routeDetailDTOList.add(routeDetailDTO);
                     }
@@ -304,8 +318,6 @@ public class HistoryServiceImpl implements HistoryService{
                     break;
                 }
             }
-
-
             HistoryDayDTO historyDayDTO = HistoryDayDTO.builder()
                     .planDayId(planDay.getPlanDayId())
                     .date(planDay.getDay().toString())
