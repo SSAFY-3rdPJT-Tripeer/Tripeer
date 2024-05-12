@@ -16,4 +16,5 @@ public class HistoryDayDTO {
     private List<String> galleryImgs;
     private List<HistorySpotResDTO> planDetailList;
     private List<List<String>> timeList;
+    private List<RouteDTO> routeList;
 }
