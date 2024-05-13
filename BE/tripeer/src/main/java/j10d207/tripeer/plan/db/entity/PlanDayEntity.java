@@ -28,5 +28,4 @@ public class PlanDayEntity {
     private LocalDate day;
     private LocalTime startTime;
     private String vehicle;
-
 }

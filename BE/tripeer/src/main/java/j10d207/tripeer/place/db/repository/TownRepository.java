@@ -14,6 +14,8 @@ import java.util.Optional;
 public interface TownRepository extends JpaRepository <TownEntity, TownPK> {
     List<TownEntity> findByTownPK_City(CityEntity city);
     Optional<TownEntity> findByTownName(String townName);
+
+    Optional<TownEntity> findByTownPK_TownIdAndTownPK_City_CityId(Integer townId, int cityId);
     Optional<TownEntity> findByTownNameAndTownPK_City_CityId(String townName, int cityId);
     Optional<TownEntity> findByTownNameContains(String townName);
     @Query("SELECT MAX(t.townPK.townId) FROM town t")
