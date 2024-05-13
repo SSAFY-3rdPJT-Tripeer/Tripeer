@@ -759,7 +759,7 @@ public class PlanServiceImpl implements PlanService {
                         errorPlaceList.add(rootOptimizeDTO.getPlaceList().get(i));
                         errorPlaceList.add(rootOptimizeDTO.getPlaceList().get(root.getResultNumbers().get(j+1)));
                         result.setPlaceList(errorPlaceList);
-                        rootOptimizeDTO.setOption(tmp.getStatus());
+                        result.setOption(tmp.getStatus());
                         List<String[]> errorSpotTimeList = new ArrayList<>();
                         StringBuilder errorMsg = new StringBuilder();
                         switch (tmp.getStatus()) {
