@@ -136,55 +136,8 @@ public class KakaoServiceImpl implements KakaoService{
             return data.getRoutes().getFirst().getSummary().getDuration() / 60;
         } catch (Exception e) {
             System.out.println("e.getMessage() = " + e.getMessage());
-            return getResult(SX, SY, EX, EY);
-        }
-
-    }
-
-    private int getResult(double SX, double SY, double EX, double EY) {
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("appKey", apikey);
-        headers.set("Content-Type", "application/json");
-        headers.set("Accept", "*/*");
-        RouteReqDTO route = RouteReqDTO.builder()
-                .startX(String.valueOf(SX))
-                .startY(String.valueOf(SY))
-                .endX(String.valueOf(EX))
-                .endY(String.valueOf(EY))
-                .build();
-        HttpEntity<RouteReqDTO> request = new HttpEntity<>(route, headers);
-        String result = restTemplate.postForObject("https://apis.openapi.sk.com/transit/routes", request, String.class);
-        System.out.println("result = " + result);
-
-        JsonObject resultJson = JsonParser.parseString(result).getAsJsonObject();
-        if(resultJson.has("result")) {
             return 99999;
         }
 
-        JsonElement bestRoot = getBestTime(resultJson.getAsJsonObject("metaData").getAsJsonObject("plan").getAsJsonArray("itineraries"));
-        //반환 정보 생성
-        int totalTime = bestRoot.getAsJsonObject().get("totalTime").getAsInt();
-
-        return totalTime / 60;
-    }
-
-    private JsonElement getBestTime(JsonArray itineraries) {
-        int minTime = Integer.MAX_VALUE;
-        JsonElement bestJson = new JsonObject();
-        for (JsonElement itinerary : itineraries) {
-            int tmpTime = itinerary.getAsJsonObject().get("totalTime").getAsInt();
-            int tmpPathType = itinerary.getAsJsonObject().get("pathType").getAsInt();
-            // 이동수단이 6-항공일 경우 제외
-            if( tmpPathType == 6 ) {
-                continue;
-            }
-
-            if ( minTime > tmpTime ) {
-                minTime = tmpTime;
-                bestJson = itinerary;
-            }
-        }
-        return  bestJson;
     }
 }
