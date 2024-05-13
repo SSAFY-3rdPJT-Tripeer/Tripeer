@@ -135,7 +135,10 @@ public class HistoryServiceImpl implements HistoryService{
         List<PlanDayEntity> planDayEntityList = planDayRepository.findAllByPlan_PlanIdOrderByDayAsc(planId);
         PlanEntity planEntity = planRepository.findByPlanId(planId);
         planEntity.setVehicle("history");
-        planRepository.save(planEntity);
+
+        List<PlanDetailEntity> planDetailRevokeList = new ArrayList<>();
+        List<RouteEntity> routeRevokeList = new ArrayList<>();
+        List<RouteDetailEntity> routeDetailRevokeList = new ArrayList<>();
 
         for (int day = 1; day < totalYList.size(); day++) {
             for (int step = 0; step < totalYList.get(day).size(); step++) {
@@ -170,6 +173,7 @@ public class HistoryServiceImpl implements HistoryService{
                             .cost(0)
                             .build();
                 planDetailRepository.save(planDetail);
+                planDetailRevokeList.add(planDetail);
                 if (step != totalYList.get(day).size()-1 && timeList.get(1).equals("1")) {
                     try {
                         String json = objectMapper.writeValueAsString(timeList.get(2));
@@ -183,6 +187,7 @@ public class HistoryServiceImpl implements HistoryService{
                                 .pathType(timeDetail.get("pathType").toString())
                                 .build();
                         routeRepository.save(route);
+                        routeRevokeList.add(route);
                         String json2 = objectMapper.writeValueAsString(timeDetail.get("publicRootDetailList"));
                         List<Map<String, Object>> PublicRootDetailList = objectMapper.readValue(json2, new TypeReference<List<Map<String, Object>>>(){});
                         for (int detailStep = 0; detailStep < PublicRootDetailList.size(); detailStep++) {
@@ -204,14 +209,20 @@ public class HistoryServiceImpl implements HistoryService{
                                     .step(detailStep+1)
                                     .build();
                             routeDetailRepository.save(routeDetail);
+                            routeDetailRevokeList.add(routeDetail);
                         }
                     } catch (JsonProcessingException e) {
+                        planDetailRepository.deleteAll(planDetailRevokeList);
+                        routeRepository.deleteAll(routeRevokeList);
+                        routeDetailRepository.deleteAll(routeDetailRevokeList);
                         throw  new CustomException(ErrorCode.S3_UPLOAD_ERROR);
                     }
 //                    List<TimeDetailDTO> timeDetails = (List<TimeDetailDTO>) timeList.get(2);
                 }
             }
         }
+
+        planRepository.save(planEntity);
         return "ok";
     }
 
@@ -279,6 +290,8 @@ public class HistoryServiceImpl implements HistoryService{
                 if (planDetail.getDescription().equals("자동차")) {
                     time.add(planDetail.getSpotTime().toString());
                     time.add("0");
+                    RouteDTO routeDTO = RouteDTO.builder().build();
+                    routeDTOList.add(routeDTO);
                 } else {
                     time.add(planDetail.getSpotTime().toString());
                     time.add("1");
