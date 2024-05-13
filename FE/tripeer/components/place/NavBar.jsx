@@ -2,7 +2,7 @@
 
 // 외부 모듈
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import cookies from "js-cookie";
@@ -15,9 +15,11 @@ import toggleIcon from "@/components/nav/assets/toggle.svg";
 import useRegisterStore from "@/stores/register";
 
 const NavBar = () => {
+  const path = usePathname();
   const [toggle, setToggle] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
-  const [myinfo, setMyinfo] = useState(null);
+  const [myname, setMyname] = useState("");
+  const [myImg, setMyImg] = useState("");
   const router = useRouter();
   const store = useRegisterStore();
   const LOGO_WIDTH = 130;
@@ -32,52 +34,63 @@ const NavBar = () => {
   };
 
   useEffect(() => {
-    const getUserData = async () => {
-      try {
-        // const res = await api.get("user/social/info");
-        const data = await store.myInfo;
-        setMyinfo(data);
-      } catch (e) {
-        console.log("유저 정보 GET 에러 : ", e);
-      }
+    const getName = async () => {
+      const data = await store.myInfo;
+      setMyname(data?.nickname);
+      setMyImg(data?.profileImage);
     };
     const token = cookies.get("Authorization");
-
     if (token) {
       setIsLogin(true);
-      getUserData();
+      getName();
+      // const data = store.myInfo;
     }
-  }, []);
+  }, [path, store]);
 
   return (
-    <>
-      <header className={style.container}>
-        <Link href="/">
-          <Image
-            src={Logo}
-            width={LOGO_WIDTH}
-            height={LOGO_HEIGHT}
-            alt="logo"
-            priority
-          />
+    <header className={style.container}>
+      <Link href="/">
+        <Image
+          src={Logo}
+          width={LOGO_WIDTH}
+          height={LOGO_HEIGHT}
+          alt="logo"
+          priority
+        />
+      </Link>
+      <nav className={style.linkBox}>
+        <Link
+          href="/plan"
+          className={
+            path === "/plan"
+              ? `${style.link} ${style.linkClicked}`
+              : `${style.link}`
+          }>
+          일정 계획
         </Link>
-        <nav className={style.linkBox}>
-          <Link href="/plan" className={style.link}>
-            일정 계획
-          </Link>
-          <Link href="/diary" className={style.link}>
-            지난 여행
-          </Link>
-          <Link
-            href="/place/all/all"
-            className={style.link}
-            style={{ color: "#04acb5" }}>
-            여행지
-          </Link>
-          {isLogin ? (
-            <div className={style.profileBox}>
+        <Link
+          href="/diary"
+          className={
+            path === "/diary"
+              ? `${style.link} ${style.linkClicked}`
+              : `${style.link}`
+          }>
+          지난 여행
+        </Link>
+        <Link
+          href="/place/all/all"
+          className={
+            path === "/place/all/all"
+              ? `${style.link} ${style.linkClicked}`
+              : `${style.link}`
+          }>
+          여행지
+        </Link>
+        {isLogin ? (
+          <div className={style.profileBox}>
+            {myImg ? (
               <div
-                className={style.userImg}
+                className={style.userImgBox}
                 style={{
                   width: "40px",
                   height: "40px",
@@ -86,8 +99,8 @@ const NavBar = () => {
                 <Image
                   className={style.userImg}
                   loader={() =>
-                    myinfo
-                      ? `${myinfo.profileImage}`
+                    myImg
+                      ? `${myImg}`
                       : `https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/default1.png`
                   }
                   src={
@@ -100,52 +113,58 @@ const NavBar = () => {
                       (max-width: 1200px) 50vw,
                       33vw"
                   quality={100}
-                  unoptimized={false}
                 />
               </div>
-              <p className={style.userName}>
-                {myinfo ? myinfo.nickname : null}
-              </p>
-              <Image
-                src={toggleIcon}
-                width={TOGGLE_WIDTH}
-                height={TOGGLE_HEIGHT}
-                alt="toggle"
-                unoptimized={true}
-                className={`${style.toggleIcon} ${toggle ? style.onToggle : style.offToggle}`}
-                onClick={() => {
-                  setToggle(!toggle);
-                }}
-              />
-              {toggle ? (
-                <>
-                  <ul className={style.options}>
-                    <li className={style.option}>
-                      <div className={`${style.mypage} ${style.icon}`} />
-                      <span>마이 페이지</span>
-                    </li>
-                    <li className={style.option} onClick={logoutOnClick}>
-                      <div className={`${style.logout} ${style.icon}`} />
-                      <span>로그아웃</span>
-                    </li>
-                  </ul>
-                  <div
-                    className={style.back}
+            ) : (
+              <></>
+            )}
+            <p className={style.userName}>{myname ? myname : ""}</p>
+            <Image
+              src={toggleIcon}
+              width={TOGGLE_WIDTH}
+              height={TOGGLE_HEIGHT}
+              alt="toggle"
+              className={`${style.toggleIcon} ${toggle ? style.onToggle : style.offToggle}`}
+              onClick={() => {
+                setToggle(!toggle);
+              }}
+            />
+            {toggle ? (
+              <>
+                <ul className={style.options}>
+                  <li
+                    className={style.option}
                     onClick={() => {
-                      setToggle(false);
-                    }}
-                  />
-                </>
-              ) : null}
-            </div>
-          ) : (
-            <Link href="/login" style={{ textDecoration: "none" }}>
-              <div className={style.loginBox}>로그인</div>
-            </Link>
-          )}
-        </nav>
-      </header>
-    </>
+                      router.push("/mypage");
+                    }}>
+                    <div className={`${style.mypage} ${style.icon}`} />
+                    <span>마이 페이지</span>
+                  </li>
+                  <li
+                    className={style.option}
+                    onClick={() => {
+                      logoutOnClick();
+                    }}>
+                    <div className={`${style.logout} ${style.icon}`} />
+                    <span>로그아웃</span>
+                  </li>
+                </ul>
+                <div
+                  className={style.back}
+                  onClick={() => {
+                    setToggle(false);
+                  }}
+                />
+              </>
+            ) : null}
+          </div>
+        ) : (
+          <Link href="/login" style={{ textDecoration: "none" }}>
+            <div className={style.loginBox}>로그인</div>
+          </Link>
+        )}
+      </nav>
+    </header>
   );
 };
 export default NavBar;
