@@ -132,9 +132,10 @@ public class KakaoServiceImpl implements KakaoService{
 
             Gson gson = new Gson();
             RouteResponse data = gson.fromJson(response.getBody(), RouteResponse.class);
-
+            
             return data.getRoutes().getFirst().getSummary().getDuration() / 60;
         } catch (Exception e) {
+            System.out.println("e.getMessage() = " + e.getMessage());
             return getResult(SX, SY, EX, EY);
         }
 
@@ -174,8 +175,8 @@ public class KakaoServiceImpl implements KakaoService{
         for (JsonElement itinerary : itineraries) {
             int tmpTime = itinerary.getAsJsonObject().get("totalTime").getAsInt();
             int tmpPathType = itinerary.getAsJsonObject().get("pathType").getAsInt();
-            // 이동수단이 6-항공 또는 7-해운일 경우 제외
-            if( tmpPathType == 6 || tmpPathType == 7) {
+            // 이동수단이 6-항공일 경우 제외
+            if( tmpPathType == 6 ) {
                 continue;
             }
 

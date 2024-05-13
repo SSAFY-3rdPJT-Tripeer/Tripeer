@@ -108,7 +108,7 @@ public class TMapServiceImpl implements TMapService {
                     //14 -출발지/도착지 간 탐색된 대중교통 경로가 없음
                     int tmp = kakaoService.getDirections(SX, SY, EX, EY);
                     if ( tmp == 99999 ) {
-                        rootInfoDTO.setStatus(400);
+                        rootInfoDTO.setStatus(400+status);
                         rootInfoDTO.setTime(tmp);
                     }
                     else {
@@ -144,8 +144,8 @@ public class TMapServiceImpl implements TMapService {
         for (JsonElement itinerary : itineraries) {
             int tmpTime = itinerary.getAsJsonObject().get("totalTime").getAsInt();
             int tmpPathType = itinerary.getAsJsonObject().get("pathType").getAsInt();
-            // 이동수단이 6-항공 또는 7-해운일 경우 제외
-            if( tmpPathType == 6 || tmpPathType == 7) {
+            // 이동수단이 6-항공일 경우 제외
+            if( tmpPathType == 6) {
                 continue;
             }
 

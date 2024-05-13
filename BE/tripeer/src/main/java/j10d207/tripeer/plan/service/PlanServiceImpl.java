@@ -622,14 +622,18 @@ public class PlanServiceImpl implements PlanService {
                     rootOptimizeDTO.getPlaceList().getLast().getLongitude(),
                     rootOptimizeDTO.getPlaceList().getLast().getLatitude());
             StringBuilder rootInfoBuilder = new StringBuilder();
+            List<String[]> timeList = new ArrayList<>();
+            if( resultTime == 99999 ) {
+                rootInfoBuilder.append("경로를 찾을 수 없습니다.");
+                timeList.add(new String[] {rootInfoBuilder.toString(), "2" } );
+                rootOptimizeDTO.setSpotTime(timeList);
+            }
             if(resultTime/60 > 0) {
                 rootInfoBuilder.append(resultTime/60).append("시간 ");
             }
             rootInfoBuilder.append(resultTime%60).append("분");
-            List<String[]> timeList = new ArrayList<>();
             timeList.add(new String[] {rootInfoBuilder.toString(), String.valueOf(rootOptimizeDTO.getOption()) } );
             rootOptimizeDTO.setSpotTime(timeList);
-            rootInfoBuilder.append("이동 시간은 ").append(rootInfoBuilder).append(" 입니다.");
         } else if (rootOptimizeDTO.getOption() == 1) {
             RootInfoDTO baseInfo = RootInfoDTO.builder()
                     .startTitle(rootOptimizeDTO.getPlaceList().getFirst().getTitle())
@@ -644,7 +648,17 @@ public class PlanServiceImpl implements PlanService {
             StringBuilder time = new StringBuilder();
             switch (result.getStatus()) {
                 case 0:
-                    break;
+                    if(result.getTime()/60 > 0) {
+                        time.append(result.getTime()/60).append("시간 ");
+                    }
+                    time.append(result.getTime()%60).append("분");
+
+                    timeList.add(new String[]{time.toString(), String.valueOf(rootOptimizeDTO.getOption()) });
+                    rootOptimizeDTO.setSpotTime(timeList);
+
+                    JsonElement rootInfo = result.getRootInfo();
+
+                    return MakeRootInfo(rootOptimizeDTO, rootInfo);
                 case 11:
                 case 12:
                 case 13:
@@ -661,22 +675,28 @@ public class PlanServiceImpl implements PlanService {
                     rootOptimizeDTO.setSpotTime(timeList);
                     rootOptimizeDTO.setOption(result.getStatus());
                     return rootOptimizeDTO;
-                case 400:
-                    rootOptimizeDTO.setOption(result.getStatus());
+                case 411:
+                    time.append("출발지/도착지 간 거리가 가까워서 탐색된 경로가 없습니다.");
+                    timeList.add(new String[]{time.toString(), "2" });
+                    break;
+                case 412:
+                    time.append("출발지에서 검색된 정류장이 없고 자동차 경로도 탐색된 경로가 없습니다.");
+                    timeList.add(new String[]{time.toString(), "2" });
+                    break;
+                case 413:
+                    time.append("도착지에서 검색된 정류장이 없고 자동차 경로도 탐색된 경로가 없습니다.");
+                    timeList.add(new String[]{time.toString(), "2" });
+                    break;
+                case 414:
+                    time.append("출발지/도착지 간 탐색된 대중교통 경로가 없고 자동차 경로도 탐색된 경로가 없습니다.");
+                    timeList.add(new String[]{time.toString(), "2" });
+                    break;
                 default:
                     throw new CustomException(ErrorCode.ROOT_API_ERROR);
             }
-            if(result.getTime()/60 > 0) {
-                time.append(result.getTime()/60).append("시간 ");
-            }
-            time.append(result.getTime()%60).append("분");
-
-            timeList.add(new String[]{time.toString(), String.valueOf(rootOptimizeDTO.getOption()) });
             rootOptimizeDTO.setSpotTime(timeList);
+            rootOptimizeDTO.setOption(result.getStatus());
 
-            JsonElement rootInfo = result.getRootInfo();
-
-            return MakeRootInfo(rootOptimizeDTO, rootInfo);
         }
         return rootOptimizeDTO;
     }
@@ -725,8 +745,40 @@ public class PlanServiceImpl implements PlanService {
                 StringBuilder sb = new StringBuilder();
                 if ( j != root.getResultNumbers().size()-1 ) {
                     RootInfoDTO tmp = root.getTimeTable()[i][root.getResultNumbers().get(j+1)];
-                    if (tmp.getStatus() == 400 ) {
-                        rootOptimizeDTO.setOption(400);
+                    if ( tmp.getStatus() > 399 ) {
+                        List<RootOptimizeDTO.place> errorPlaceList = new ArrayList<>();
+                        errorPlaceList.add(rootOptimizeDTO.getPlaceList().get(i));
+                        errorPlaceList.add(rootOptimizeDTO.getPlaceList().get(root.getResultNumbers().get(j+1)));
+                        result.setPlaceList(errorPlaceList);
+                        rootOptimizeDTO.setOption(tmp.getStatus());
+                        List<String[]> errorSpotTimeList = new ArrayList<>();
+                        StringBuilder errorMsg = new StringBuilder();
+                        switch (tmp.getStatus()) {
+                            case 400:
+                                errorMsg.append("자동차로 이동 불가능한 경로입니다.");
+                                errorSpotTimeList.add(new String[]{errorMsg.toString(), "2" });
+                                break;
+                            case 411:
+                                errorMsg.append("출발지/도착지 간 거리가 가까워서 탐색된 경로가 없습니다.");
+                                errorSpotTimeList.add(new String[]{errorMsg.toString(), "2" });
+                                break;
+                            case 412:
+                                errorMsg.append("출발지에서 검색된 정류장이 없고 자동차 경로도 탐색된 경로가 없습니다.");
+                                errorSpotTimeList.add(new String[]{errorMsg.toString(), "2" });
+                                break;
+                            case 413:
+                                errorMsg.append("도착지에서 검색된 정류장이 없고 자동차 경로도 탐색된 경로가 없습니다.");
+                                errorSpotTimeList.add(new String[]{errorMsg.toString(), "2" });
+                                break;
+                            case 414:
+                                errorMsg.append("출발지/도착지 간 탐색된 대중교통 경로가 없고 자동차 경로도 탐색된 경로가 없습니다.");
+                                errorSpotTimeList.add(new String[]{errorMsg.toString(), "2" });
+                                break;
+                            default:
+                                throw new CustomException(ErrorCode.ROOT_API_ERROR);
+                        }
+                        result.setSpotTime(errorSpotTimeList);
+                        return result;
                     }
                 }
 
