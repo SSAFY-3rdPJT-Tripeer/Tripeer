@@ -42,6 +42,8 @@ const PlanSchedule = (props) => {
   const [cirIdx, setCirIdx] = useState(0);
   const [isSaveModal, setIsSaveModal] = useState(false);
   const [isRouteModal, setIsRouteModal] = useState(false);
+  const [alert, setAlert] = useState(false);
+  const [init, setInit] = useState(false);
 
   const COLOR = [
     "#A60000",
@@ -124,11 +126,21 @@ const PlanSchedule = (props) => {
   };
 
   const onClickCalculate = (arrIdx) => {
-    blockY.delete(arrIdx, 1);
-    blockY.insert(arrIdx, [true]);
+    const err = timeList[arrIdx].filter((e) => e[1] === "2");
+    if (err.length) {
+      console.log("err");
+      setAlert(true);
+      setInit(true);
+      setTimeout(() => {
+        setAlert(false);
+      }, 2000);
+    } else {
+      blockY.delete(arrIdx, 1);
+      blockY.insert(arrIdx, [true]);
 
-    setCirIdx(arrIdx);
-    setIsModal(!isModal);
+      setCirIdx(arrIdx);
+      setIsModal(!isModal);
+    }
   };
 
   const getTime = async (
@@ -254,6 +266,7 @@ const PlanSchedule = (props) => {
                     "insert",
                   );
                 } else {
+                  console.log("asd");
                   timeArr.delete(i, 1);
                   timeArr.insert(i, [0]);
                   getTime(startId, endtId, timeArr, i, "insert");
@@ -283,11 +296,17 @@ const PlanSchedule = (props) => {
               const endId = arr2;
 
               if (source.index === 1 && destination.index === 0) {
-                let arr4 = sourceItems.get(source.index - 1);
+                let arr4 = sourceItems.get(source.index);
                 const startId2 = arr4;
-                let arr5 = sourceItems.get(source.index + 1);
+                let arr5 = sourceItems.get(destination.index);
                 const startId3 = arr5;
-                getTime(startId2, startId3, timeArr, source.index, "insert");
+                getTime(
+                  startId2,
+                  startId3,
+                  timeArr,
+                  source.index - 1,
+                  "insert",
+                );
               } else {
                 getTime(startId, endId, timeArr, i, "create");
                 if (!isToBottom) {
@@ -858,6 +877,13 @@ const PlanSchedule = (props) => {
                 {dayOfWeek[dayOfWeek.length - 1]})
               </p>
               <OnlineBox members={members} online={online} myInfo={myInfo} />
+              {init ? (
+                <div
+                  className={`${styles.warnBox} ${alert ? styles.warnShow : styles.warnNo}`}>
+                  <div className={styles.warnIcon}></div>
+                  <p>경로를 찾을 수 없는 장소가 포함되어 있습니다.</p>
+                </div>
+              ) : null}
             </section>
             {/*  헤더의 오른쪽 부분  */}
           </header>

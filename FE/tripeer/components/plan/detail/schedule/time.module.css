@@ -26,6 +26,9 @@
 .time {
     margin-left: 5px;
     color: #757575;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
     animation: fade-in 1s ease;
 }
 
