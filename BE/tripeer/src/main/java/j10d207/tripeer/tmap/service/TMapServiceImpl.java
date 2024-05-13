@@ -8,6 +8,7 @@ import j10d207.tripeer.exception.CustomException;
 import j10d207.tripeer.exception.ErrorCode;
 import j10d207.tripeer.kakao.service.KakaoService;
 import j10d207.tripeer.plan.db.dto.PublicRootDTO;
+import j10d207.tripeer.plan.db.dto.RootOptimizeDTO;
 import j10d207.tripeer.tmap.db.dto.CoordinateDTO;
 import j10d207.tripeer.tmap.db.dto.RootInfoDTO;
 import j10d207.tripeer.tmap.db.dto.RouteReqDTO;
@@ -105,7 +106,6 @@ public class TMapServiceImpl implements TMapService {
         rootInfoDTO.setEndLatitude(EX);
         rootInfoDTO.setEndLongitude(EY);
         if(optionalPublicRoot.isPresent()){
-            System.out.println("경로 재활용 사용중");
             rootInfoDTO.setPublicRoot(getRootDTO(optionalPublicRoot.get()));
             rootInfoDTO.setTime(rootInfoDTO.getPublicRoot().getTotalTime());
             return rootInfoDTO;
@@ -148,6 +148,8 @@ public class TMapServiceImpl implements TMapService {
                 int totalTime = bestRoot.getAsJsonObject().get("totalTime").getAsInt();
                 rootInfoDTO.setTime(totalTime / 60);
                 rootInfoDTO.setRootInfo(bestRoot);
+
+                saveRootInfo(bestRoot, SX, SY, EX, EY, totalTime/60);
 
                 return rootInfoDTO;
             }
@@ -196,7 +198,6 @@ public class TMapServiceImpl implements TMapService {
                 .build();
         HttpEntity<RouteReqDTO> request = new HttpEntity<>(route, headers);
         String result = restTemplate.postForObject("https://apis.openapi.sk.com/transit/routes", request, String.class);
-        System.out.println("test");
         return JsonParser.parseString(result).getAsJsonObject();
     }
 
@@ -248,5 +249,40 @@ public class TMapServiceImpl implements TMapService {
         return result;
     }
 
+
+    private void saveRootInfo(JsonElement rootInfo, double SX, double SY, double EX, double EY, int time) {
+        JsonObject infoObject = rootInfo.getAsJsonObject();
+        PublicRootEntity publicRootEntity = PublicRootEntity.builder()
+                .startLat(SX)
+                .startLon(SY)
+                .endLat(EX)
+                .endLon(EY)
+                .totalTime(time)
+                .totalDistance(infoObject.get("totalDistance").getAsInt())
+                .totalWalkTime(infoObject.get("totalWalkTime").getAsInt())
+                .totalWalkDistance(infoObject.get("totalWalkDistance").getAsInt())
+                .pathType(infoObject.get("pathType").getAsInt())
+                .totalFare(infoObject.getAsJsonObject("fare").getAsJsonObject("regular").get("totalFare").getAsInt())
+                .build();
+        long rootId = publicRootRepository.save(publicRootEntity).getPublicRootId();
+
+        JsonArray legs = infoObject.getAsJsonArray("legs");
+        for (JsonElement leg : legs) {
+            JsonObject legObject = leg.getAsJsonObject();
+            PublicRootDetailEntity detailEntity = PublicRootDetailEntity.builder()
+                    .publicRoot(PublicRootEntity.builder().publicRootId(rootId).build())
+                    .distance(legObject.get("distance").getAsInt())
+                    .sectionTime(legObject.get("sectionTime").getAsInt()/60)
+                    .mode(legObject.get("mode").getAsString())
+                    .startName(legObject.getAsJsonObject("start").get("name").getAsString())
+                    .startLat(legObject.getAsJsonObject("start").get("lat").getAsDouble())
+                    .startLon(legObject.getAsJsonObject("start").get("lon").getAsDouble())
+                    .endName(legObject.getAsJsonObject("end").get("name").getAsString())
+                    .endLat(legObject.getAsJsonObject("end").get("lat").getAsDouble())
+                    .endLon(legObject.getAsJsonObject("end").get("lon").getAsDouble())
+                    .build();
+            publicRootDetailRepository.save(detailEntity);
+        }
+    }
 
 }
