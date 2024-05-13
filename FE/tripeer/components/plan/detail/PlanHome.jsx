@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./planHome.module.css";
 import api from "@/utils/api";
+import { QuillBinding } from "y-quill";
+import Quill from "quill";
 
 const PlanHome = (props) => {
   const { plan, online, provider, myInfo } = props;
@@ -104,11 +106,18 @@ const PlanHome = (props) => {
   useEffect(() => {
     if (provider) {
       const textArea = provider.doc.getText("textArea");
-      setYNotify(textArea);
-      notifyTextArea.current.value = textArea.toString();
-      textArea.observe(() => {
-        document.querySelector("#textArea").innerHTML = textArea.toString();
+      const editor = new Quill("#textArea", {
+        modules: {
+          toolbar: [],
+        },
+        theme: "snow",
       });
+      const binding = new QuillBinding(textArea, editor);
+      // setYNotify(textArea);
+      // notifyTextArea.current.value = textArea.toString();
+      // textArea.observe(() => {
+      //   document.querySelector("#textArea").innerHTML = textArea.toString();
+      // });
     }
   }, [provider]);
 
@@ -176,13 +185,7 @@ const PlanHome = (props) => {
               <p className={styles.functionTitle}>공지사항</p>
             </div>
             <div className={styles.notifyContent}>
-              <textarea
-                className={styles.notifyText}
-                id="textArea"
-                ref={notifyTextArea}
-                onChange={(e) => {
-                  notifyChange(e);
-                }}></textarea>
+              <div className={styles.notifyText} id="textArea"></div>
             </div>
           </div>
           <div className={styles.memberBox}>
