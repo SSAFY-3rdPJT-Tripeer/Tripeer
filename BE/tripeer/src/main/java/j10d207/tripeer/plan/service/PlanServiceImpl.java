@@ -772,13 +772,15 @@ public class PlanServiceImpl implements PlanService {
 //                    newPlace.setMovingRoot(j == root.getResultNumbers().size() ? "null" : root.getTimeTable()[i][root.getResultNumbers().get(j)].getRootInfo().toString());
 //                }
                 JsonElement info = j == root.getResultNumbers().size() ? null : root.getTimeTable()[i][root.getResultNumbers().get(j)].getRootInfo();
-                if ( root.getTimeTable()[i][root.getResultNumbers().get(j)].getPublicRoot() != null) {
-                    List<PublicRootDTO> publicRootDTOList = new ArrayList<>();
-                    publicRootDTOList.add(root.getTimeTable()[i][root.getResultNumbers().get(j)].getPublicRoot());
-                    rootOptimizeDTO.setPublicRootList(publicRootDTOList);
-                } else {
-                    RootInfoDTO tmp = root.getTimeTable()[i][root.getResultNumbers().get(j)];
-                    rootOptimizeDTO = MakeRootInfo(rootOptimizeDTO, info, tmp.getStartLatitude(), tmp.getStartLongitude(), tmp.getEndLatitude(), tmp.getEndLongitude());
+                if( j != root.getResultNumbers().size() ) {
+                    if (root.getTimeTable()[i][root.getResultNumbers().get(j)].getPublicRoot() != null) {
+                        List<PublicRootDTO> publicRootDTOList = new ArrayList<>();
+                        publicRootDTOList.add(root.getTimeTable()[i][root.getResultNumbers().get(j)].getPublicRoot());
+                        rootOptimizeDTO.setPublicRootList(publicRootDTOList);
+                    } else {
+                        RootInfoDTO tmp = root.getTimeTable()[i][root.getResultNumbers().get(j)];
+                        rootOptimizeDTO = MakeRootInfo(rootOptimizeDTO, info, tmp.getStartLatitude(), tmp.getStartLongitude(), tmp.getEndLatitude(), tmp.getEndLongitude());
+                    }
                 }
                 newPlaceList.add(newPlace);
             }
