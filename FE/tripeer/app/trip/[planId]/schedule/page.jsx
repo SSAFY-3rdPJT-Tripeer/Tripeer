@@ -271,28 +271,30 @@ const Schedule = (props) => {
                             <div>{getMinute(timeList[idx][0]) + "분"}</div>
                           </div>
                           <div className={styles.routeInfo}>
-                            <div
-                              className={styles.route}
-                              style={{
-                                width: "100%",
-                                backgroundColor: "#4FBDB7",
-                              }}>
+                            {getMinute(timeList[idx][0]) == 0 ? null : (
                               <div
-                                className={styles.howTo}
-                                style={{ backgroundColor: "#2D8F8A" }}>
-                                <Image
-                                  src={whiteCar}
-                                  width={10}
-                                  height={10}
-                                  alt="작은 아이콘"
-                                />
+                                className={styles.route}
+                                style={{
+                                  width: "100%",
+                                  backgroundColor: "#4FBDB7",
+                                }}>
+                                <div
+                                  className={styles.howTo}
+                                  style={{ backgroundColor: "#2D8F8A" }}>
+                                  <Image
+                                    src={whiteCar}
+                                    width={10}
+                                    height={10}
+                                    alt="작은 아이콘"
+                                  />
+                                </div>
+                                <div className={styles.longFlex}>
+                                  <p className={styles.howLong}>
+                                    {getMinute(timeList[idx][0]) + "분"}
+                                  </p>
+                                </div>
                               </div>
-                              <div className={styles.longFlex}>
-                                <p className={styles.howLong}>
-                                  {getMinute(timeList[idx][0]) + "분"}
-                                </p>
-                              </div>
-                            </div>
+                            )}
                           </div>
                         </>
                       ) : timeList[idx] ? (
