@@ -663,37 +663,28 @@ public class PlanServiceImpl implements PlanService {
                     JsonElement rootInfo = result.getRootInfo();
 
                     return MakeRootInfo(rootOptimizeDTO, rootInfo);
-                case 11:
-                case 12:
-                case 13:
-                case 14:
                     //11 -출발지/도착지 간 거리가 가까워서 탐색된 경로 없음
                     //12 -출발지에서 검색된 정류장이 없어서 탐색된 경로 없음
                     //13 -도착지에서 검색된 정류장이 없어서 탐색된 경로 없음
                     //14 -출발지/도착지 간 탐색된 대중교통 경로가 없음
-                    rootOptimizeDTO.setOption(result.getStatus());
-                    if(result.getTime()/60 > 0) {
-                        time.append(result.getTime()/60).append("시간 ");
-                    }
-                    time.append(result.getTime()%60).append("분");
-                    timeList.add(new String[]{time.toString(), "0" });
-                    rootOptimizeDTO.setSpotTime(timeList);
-                    rootOptimizeDTO.setOption(result.getStatus());
-                    return rootOptimizeDTO;
+                case 11:
                 case 411:
                     time.append("출발지/도착지 간 거리가 가까워서 탐색된 경로가 없습니다.");
                     timeList.add(new String[]{time.toString(), "2" });
                     break;
+                case 12:
                 case 412:
-                    time.append("출발지에서 검색된 정류장이 없고 자동차 경로도 탐색된 경로가 없습니다.");
+                    time.append("출발지에서 검색된 정류장이 없어 탐색된 경로가 없습니다.");
                     timeList.add(new String[]{time.toString(), "2" });
                     break;
+                case 13:
                 case 413:
-                    time.append("도착지에서 검색된 정류장이 없고 자동차 경로도 탐색된 경로가 없습니다.");
+                    time.append("도착지에서 검색된 정류장이 없어 탐색된 경로가 없습니다.");
                     timeList.add(new String[]{time.toString(), "2" });
                     break;
+                case 14:
                 case 414:
-                    time.append("출발지/도착지 간 탐색된 대중교통 경로가 없고 자동차 경로도 탐색된 경로가 없습니다.");
+                    time.append("출발지/도착지 간 탐색된 대중교통 경로가 없어 탐색된 경로가 없습니다.");
                     timeList.add(new String[]{time.toString(), "2" });
                     break;
                 default:
@@ -752,51 +743,17 @@ public class PlanServiceImpl implements PlanService {
             int j = 0;
             for(Integer i : root.getResultNumbers()) {
                 StringBuilder sb = new StringBuilder();
-                if ( j != root.getResultNumbers().size()-1 ) {
-                    RootInfoDTO tmp = root.getTimeTable()[i][root.getResultNumbers().get(j+1)];
-                    if ( tmp.getStatus() > 399 ) {
-                        List<RootOptimizeDTO.place> errorPlaceList = new ArrayList<>();
-                        errorPlaceList.add(rootOptimizeDTO.getPlaceList().get(i));
-                        errorPlaceList.add(rootOptimizeDTO.getPlaceList().get(root.getResultNumbers().get(j+1)));
-                        result.setPlaceList(errorPlaceList);
-                        result.setOption(tmp.getStatus());
-                        List<String[]> errorSpotTimeList = new ArrayList<>();
-                        StringBuilder errorMsg = new StringBuilder();
-                        switch (tmp.getStatus()) {
-                            case 400:
-                                errorMsg.append("자동차로 이동 불가능한 경로입니다.");
-                                errorSpotTimeList.add(new String[]{errorMsg.toString(), "2" });
-                                break;
-                            case 411:
-                                errorMsg.append("출발지/도착지 간 거리가 가까워서 탐색된 경로가 없습니다.");
-                                errorSpotTimeList.add(new String[]{errorMsg.toString(), "2" });
-                                break;
-                            case 412:
-                                errorMsg.append("출발지에서 검색된 정류장이 없고 자동차 경로도 탐색된 경로가 없습니다.");
-                                errorSpotTimeList.add(new String[]{errorMsg.toString(), "2" });
-                                break;
-                            case 413:
-                                errorMsg.append("도착지에서 검색된 정류장이 없고 자동차 경로도 탐색된 경로가 없습니다.");
-                                errorSpotTimeList.add(new String[]{errorMsg.toString(), "2" });
-                                break;
-                            case 414:
-                                errorMsg.append("출발지/도착지 간 탐색된 대중교통 경로가 없고 자동차 경로도 탐색된 경로가 없습니다.");
-                                errorSpotTimeList.add(new String[]{errorMsg.toString(), "2" });
-                                break;
-                            default:
-                                throw new CustomException(ErrorCode.ROOT_API_ERROR);
-                        }
-                        result.setSpotTime(errorSpotTimeList);
-                        return result;
-                    }
-                }
-
                 if( root.getRootTime()[j]/60 != 0 ) {
                     sb.append(root.getRootTime()[j]/60).append("시간 ");
                 }
                 sb.append(root.getRootTime()[j++]%60).append("분");
 
-                newSpotTimeList.add(new String[]{sb.toString(), String.valueOf(rootOptimizeDTO.getOption()) });
+                int nowStatus = j == root.getResultNumbers().size() ? rootOptimizeDTO.getOption() :root.getTimeTable()[i][root.getResultNumbers().get(j)].getStatus();
+                if( nowStatus > 10 & nowStatus < 15) {
+                    newSpotTimeList.add(new String[]{sb.toString(), "0" });
+                } else {
+                    newSpotTimeList.add(new String[]{sb.toString(), String.valueOf(rootOptimizeDTO.getOption()) });
+                }
                 RootOptimizeDTO.place newPlace = rootOptimizeDTO.getPlaceList().get(i);
 //                if (result.getOption() == 1) {
 //                    newPlace.setMovingRoot(j == root.getResultNumbers().size() ? "null" : root.getTimeTable()[i][root.getResultNumbers().get(j)].getRootInfo().toString());
