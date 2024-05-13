@@ -183,7 +183,8 @@
 
 .routeInfo {
   display: flex;
-  width: 100%;
+  overflow: hidden;
+  width: 330px;
   height: 16px;
   border-radius: 50px;
   background-color: #e2e7ee;
@@ -194,7 +195,7 @@
   display: flex;
   align-items: center;
   border-radius: 50px;
-  min-width: 45px;
+  min-width: 40px;
 }
 
 .howTo {
