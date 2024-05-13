@@ -85,7 +85,7 @@ export default function PlacePage({ params }) {
           <div className={styles.bannerBack}></div>
         </div>
         <div className={styles.searchBarBox}>
-          <p className={styles.searchBarText}>우리 이번엔 어디로 갈까?</p>
+          <p className={styles.searchBarText}>우리 이번에는 어디로 갈까?</p>
           {/* 검색바 */}
           <PlaceSearchBar setList={setList} />
         </div>

@@ -36,6 +36,8 @@ export default function PlaceItem({ data, isCity }) {
           }
           alt={"이미지"}
           fill
+          unoptimized={false}
+          sizes="(max-width: 768px) 100vw,(max-width: 1200px) 50vw,33vw"
           loader={() => {
             if (data) {
               return data?.cityImg ? data.cityImg : data.townImg;

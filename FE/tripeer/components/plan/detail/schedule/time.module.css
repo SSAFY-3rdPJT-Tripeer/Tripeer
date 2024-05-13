@@ -26,6 +26,7 @@
 .time {
     margin-left: 5px;
     color: #757575;
+    animation: fade-in 1s ease;
 }
 
 @keyframes fade-in {

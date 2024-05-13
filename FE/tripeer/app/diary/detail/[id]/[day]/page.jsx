@@ -1,9 +1,11 @@
 "use client";
 
 // 외부 모듈
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import dynamic from "next/dynamic";
+const Lottie = dynamic(() => import("react-lottie-player"), { ssr: false });
 
 // 내부 모듈
 import styles from "./page.module.css";
@@ -11,14 +13,17 @@ import api from "@/utils/api";
 import PhotoModal from "@/components/diary/PhotoModal";
 import SelectPhoto from "@/components/diary/SelectPhoto";
 import { downloadFile } from "@/utils/downloadFile";
+import lottieJson from "@/components/diary/assets/emptyGallery.json";
 
 const DayAlbum = () => {
   const router = useRouter();
+  const params = useParams();
   const [gallery, setGallery] = useState({});
   const [clickId, setClickId] = useState(null);
   const [isModal, setIsModal] = useState(false);
   const [isSelectModal, setIsSelectModal] = useState(false);
   const [selectedPhotos, setSelectedPhotos] = useState([]);
+  const [planDayId, setPlanDayId] = useState(null);
 
   const getGallery = async (planDayId) => {
     const res = await api.get(`/history/gallery/${planDayId}`);
@@ -56,17 +61,6 @@ const DayAlbum = () => {
     window.location.reload();
   };
 
-  useEffect(() => {
-    getGallery(8);
-  }, []);
-
-  useEffect(() => {
-    if (!isSelectModal) {
-      // isSelectModal이 false가 되면
-      setSelectedPhotos(new Array(gallery.length).fill(null)); // 모든 사진 선택을 해제
-    }
-  }, [isSelectModal, gallery.length]);
-
   // 사진 선택 토글
   const togglePhotoSelection = (index) => {
     const newSelectedPhotos = [...selectedPhotos];
@@ -97,13 +91,16 @@ const DayAlbum = () => {
       alert("선택된 사진이 없습니다.");
       return;
     }
-
-    await api.post(`/history/gallery/delete`, {
-      gallertIdList: itemsToDelete,
-    });
-    setGallery((prevGallery) =>
-      prevGallery.filter((photo) => !itemsToDelete.includes(photo.galleryId)),
-    );
+    try {
+      await api.post(`/history/gallery/delete`, {
+        galleryIdList: itemsToDelete,
+      });
+      setGallery((prevGallery) =>
+        prevGallery.filter((photo) => !itemsToDelete.includes(photo.galleryId)),
+      );
+    } finally {
+      setSelectedPhotos(new Array(gallery.length).fill(null));
+    }
   };
 
   const saveSelectedPhotos = () => {
@@ -120,6 +117,18 @@ const DayAlbum = () => {
       }
     });
   };
+
+  useEffect(() => {
+    getGallery(params.id);
+    setPlanDayId(params.id);
+  }, []);
+
+  useEffect(() => {
+    if (!isSelectModal) {
+      // isSelectModal이 false가 되면
+      setSelectedPhotos(new Array(gallery.length).fill(null)); // 모든 사진 선택을 해제
+    }
+  }, [isSelectModal, gallery]);
 
   return (
     <main className={styles.container}>
@@ -146,7 +155,7 @@ const DayAlbum = () => {
             multiple
             accept="image/*"
             onChange={(e) => {
-              postGallery(e, 8);
+              postGallery(e, planDayId);
             }}
           />
           <label className={styles.uploadBtn} htmlFor="file">
@@ -154,58 +163,79 @@ const DayAlbum = () => {
           </label>
         </div>
       </header>
-      <article className={styles.photoBox}>
-        {Array.isArray(gallery) ? (
-          gallery.map((photo, idx) => {
-            return (
-              <div
-                key={idx}
-                className={styles.photo}
-                onClick={() => {
-                  setIsModal(true);
-                  setClickId(idx);
-                }}
-                style={{ position: "relative" }}>
-                <Image
-                  src={photo.img}
-                  loader={() => photo.img}
-                  sizes="(max-width: 768px) 100vw,(max-width: 1200px) 50vw, 33vw"
-                  fill
-                  priority="false"
-                  alt="memberImg"
-                />
+      {gallery.length > 0 ? (
+        <article className={styles.photoBox}>
+          {Array.isArray(gallery) ? (
+            gallery.map((photo, idx) => {
+              return (
                 <div
-                  className={styles.userImgBox}
+                  key={idx}
+                  className={styles.photo}
+                  onClick={() => {
+                    if (!isSelectModal) {
+                      setIsModal(true);
+                      setClickId(photo.galleryId);
+                    } else {
+                      togglePhotoSelection(idx);
+                    }
+                  }}
                   style={{ position: "relative" }}>
                   <Image
-                    className={styles.userImg}
-                    src={photo.userImg}
-                    loader={() => photo.userImg}
+                    src={photo.img}
+                    loader={() => photo.img}
                     sizes="(max-width: 768px) 100vw,(max-width: 1200px) 50vw, 33vw"
                     fill
-                    priority="false"
+                    priority={false}
                     alt="memberImg"
+                    unoptimized={false}
                   />
-                </div>
-                {isSelectModal && (
                   <div
-                    className={styles.checkBox}
-                    onClick={(e) => {
-                      e.stopPropagation(); // 이벤트 버블링 방지
-                      togglePhotoSelection(idx);
-                    }}>
-                    {selectedPhotos[idx] && (
-                      <div className={styles.check}></div>
-                    )}
+                    className={styles.userImgBox}
+                    style={{ position: "relative" }}>
+                    <Image
+                      className={styles.userImg}
+                      src={photo.userImg}
+                      loader={() => photo.userImg}
+                      sizes="(max-width: 768px) 100vw,(max-width: 1200px) 50vw, 33vw"
+                      fill
+                      priority={false}
+                      alt="memberImg"
+                      unoptimized={false}
+                    />
                   </div>
-                )}
-              </div>
-            );
-          })
-        ) : (
-          <></>
-        )}
-      </article>
+                  {isSelectModal && (
+                    <div
+                      className={styles.checkBox}
+                      onClick={(e) => {
+                        e.stopPropagation(); // 이벤트 버블링 방지
+                        togglePhotoSelection(idx);
+                      }}>
+                      {selectedPhotos[idx] && (
+                        <div className={styles.check}></div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })
+          ) : (
+            <></>
+          )}
+        </article>
+      ) : (
+        <div className={styles.emptyBox}>
+          <div className={styles.emptyContent}>
+            <Lottie
+              className={styles.emptyImg}
+              loop
+              animationData={lottieJson}
+              play
+              style={{ width: 200, height: 200 }}
+            />
+            <div className={styles.emptyText}>즐거웠던 추억을 올려보세요.</div>
+          </div>
+        </div>
+      )}
       {isModal && !isSelectModal ? (
         <PhotoModal
           gallery={gallery}
