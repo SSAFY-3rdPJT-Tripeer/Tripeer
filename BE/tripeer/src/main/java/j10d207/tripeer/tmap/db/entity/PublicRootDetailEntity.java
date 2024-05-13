@@ -1,40 +1,35 @@
-package j10d207.tripeer.history.db.entity;
+package j10d207.tripeer.tmap.db.entity;
 
+import j10d207.tripeer.plan.db.entity.PlanEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalTime;
-
-@Entity(name = "route_detail")
+@Entity(name = "public_root_detail")
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RouteDetailEntity {
+public class PublicRootDetailEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     // PK
-    private long routeDetailId;
+    private long publicRootDetailId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ROUTE_ID")
-    private RouteEntity route;
-
-    private Integer step;
-    private LocalTime sectionTime;
-    private String mode;
-    private Integer distance;
+    @JoinColumn(name = "PUBLIC_ROOT_ID")
+    private PublicRootEntity publicRoot;
 
     private String startName;
     private double startLat;
     private double startLon;
-
     private String endName;
     private double endLat;
     private double endLon;
-
+    private int distance;
+    private int sectionTime;
+    private String mode;
 }

@@ -86,7 +86,11 @@ public class KakaoServiceImpl implements KakaoService{
         for (int i = 0; i < coordinates.size(); i++) {
             for (int j = i; j < coordinates.size(); j++) {
                 if(i == j) continue;
-                timeTable[i][j].setTime(getDirections(coordinates.get(i).getLongitude(), coordinates.get(i).getLatitude(), coordinates.get(j).getLongitude(), coordinates.get(j).getLatitude()));
+                int tmp = getDirections(coordinates.get(i).getLongitude(), coordinates.get(i).getLatitude(), coordinates.get(j).getLongitude(), coordinates.get(j).getLatitude());
+                if( tmp == 99999 ) {
+                    timeTable[i][j].setStatus(400);
+                }
+                timeTable[i][j].setTime(tmp);
                 timeTable[j][i] = timeTable[i][j];
             }
         }
@@ -128,53 +132,12 @@ public class KakaoServiceImpl implements KakaoService{
 
             Gson gson = new Gson();
             RouteResponse data = gson.fromJson(response.getBody(), RouteResponse.class);
-
+            
             return data.getRoutes().getFirst().getSummary().getDuration() / 60;
         } catch (Exception e) {
-            return getResult(SX, SY, EX, EY);
+            System.out.println("e.getMessage() = " + e.getMessage());
+            return 99999;
         }
 
-    }
-
-    private int getResult(double SX, double SY, double EX, double EY) {
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("appKey", apikey);
-        headers.set("Content-Type", "application/json");
-        headers.set("Accept", "*/*");
-        RouteReqDTO route = RouteReqDTO.builder()
-                .startX(String.valueOf(SX))
-                .startY(String.valueOf(SY))
-                .endX(String.valueOf(EX))
-                .endY(String.valueOf(EY))
-                .build();
-        HttpEntity<RouteReqDTO> request = new HttpEntity<>(route, headers);
-        String result = restTemplate.postForObject("https://apis.openapi.sk.com/transit/routes", request, String.class);
-        System.out.println("result = " + result);
-
-        JsonElement bestRoot = getBestTime(JsonParser.parseString(result).getAsJsonObject().getAsJsonObject("metaData").getAsJsonObject("plan").getAsJsonArray("itineraries"));
-        //반환 정보 생성
-        int totalTime = bestRoot.getAsJsonObject().get("totalTime").getAsInt();
-
-        return totalTime / 60;
-    }
-
-    private JsonElement getBestTime(JsonArray itineraries) {
-        int minTime = Integer.MAX_VALUE;
-        JsonElement bestJson = new JsonObject();
-        for (JsonElement itinerary : itineraries) {
-            int tmpTime = itinerary.getAsJsonObject().get("totalTime").getAsInt();
-            int tmpPathType = itinerary.getAsJsonObject().get("pathType").getAsInt();
-            // 이동수단이 6-항공 또는 7-해운일 경우 제외
-            if( tmpPathType == 6 || tmpPathType == 7) {
-                continue;
-            }
-
-            if ( minTime > tmpTime ) {
-                minTime = tmpTime;
-                bestJson = itinerary;
-            }
-        }
-        return  bestJson;
     }
 }

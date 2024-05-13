@@ -25,11 +25,13 @@ public enum ErrorCode {
     NOT_FOUND_PLAN(HttpStatus.BAD_REQUEST, "PLAN-002", "존재하지 않는 플랜입니다."),
     NOT_HAS_COWORKER(HttpStatus.BAD_REQUEST, "PLAN-003", "사용자가 소속되지 않은 플랜입니다."),
 
+    // history
+    UNSUPPORTED_JSON_TYPE(HttpStatus.BAD_REQUEST, "HISTORY-001", "저장할 수 없는 데이터가 존재합니다."),
 
     //gallery
-    GALLERY_NOT_FOUND(HttpStatus.NOT_FOUND, "gallery-001", "이미지를 찾을 수 없습니다."),
-    UNSUPPORTED_FILE_TYPE(HttpStatus.BAD_REQUEST, "gallery-002", "지원하지 않는 파일타입"),
-    S3_UPLOAD_ERROR(HttpStatus.BAD_REQUEST, "gallery-003", "지원하지 않는 파일타입"),
+    GALLERY_NOT_FOUND(HttpStatus.NOT_FOUND, "GALLERY-001", "이미지를 찾을 수 없습니다."),
+    UNSUPPORTED_FILE_TYPE(HttpStatus.BAD_REQUEST, "GALLERY-002", "지원하지 않는 파일타입"),
+    S3_UPLOAD_ERROR(HttpStatus.BAD_REQUEST, "GALLERY-003", "지원하지 않는 파일타입"),
 
     //city
     CITY_NOT_FOUND(HttpStatus.NOT_FOUND, "CITY-001", "도시를 찾을 수 없습니다."),
@@ -44,6 +46,7 @@ public enum ErrorCode {
     NOT_FOUND_ROOT(HttpStatus.BAD_REQUEST, "ROOT-001", "대중교통 수단이 없습니다."),
     TOO_MANY_INFO(HttpStatus.BAD_REQUEST, "ROOT-002", "요청된 정보가 너무 많습니다."),
     NOT_ENOUGH_INFO(HttpStatus.BAD_REQUEST, "ROOT-003", "요청된 정보가 너무 적습니다."),
+    ROOT_API_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "ROOT-004", "경로 탐색중 예견되지 않은 오류가 발생하였습니다."),
 
     //Email
     EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "EMAIL-001", "이메일 전송 중 오류가 발생 했습니다."),
