@@ -42,6 +42,14 @@ const TitleModal = (props) => {
     }
   };
 
+  const getDayOfWeek = (inputDate) => {
+    const week = ["일", "월", "화", "수", "목", "금", "토"];
+
+    const dayOfWeek = week[new Date(inputDate).getDay()];
+
+    return `${inputDate.replace(/-/g, ".")}(${dayOfWeek})`;
+  };
+
   useEffect(() => {
     if (inputText.length > 0 && inputText.length <= 10) {
       setCanNext(true);
@@ -90,7 +98,8 @@ const TitleModal = (props) => {
                 <p className={styles.checkAnswer}>{newPlan.title}</p>
                 <p className={styles.checkQuesetion}>여행 일정</p>
                 <p className={styles.checkAnswer}>
-                  {newPlan.startDay} - {newPlan.endDay}
+                  {getDayOfWeek(newPlan.startDay)} -{" "}
+                  {getDayOfWeek(newPlan.endDay)}
                 </p>
 
                 <p className={styles.checkQuesetion}>여행지</p>

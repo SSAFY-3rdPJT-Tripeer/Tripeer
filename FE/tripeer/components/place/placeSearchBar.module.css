@@ -24,4 +24,10 @@
 .image {
   width: 45px;
   height: 42px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.image:hover {
+  transform: scale(1.05);
 }
