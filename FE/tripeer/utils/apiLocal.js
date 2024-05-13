@@ -6,7 +6,7 @@ import cookies from "js-cookie";
 
 const apiLocal = axios.create({
   // 기본 주소
-  baseURL: `https://k10d207.p.ssafy.io`,
+  baseURL: `http://192.168.100.131:3001`,
   withCredentials: true,
   timeout: 123000,
 });
