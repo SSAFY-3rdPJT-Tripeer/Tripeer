@@ -2,7 +2,7 @@
 
 // 외부 모듈
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 
 // 내부 모듈
@@ -12,25 +12,32 @@ import api from "@/utils/api";
 
 const DiaryDetail = () => {
   const [detailData, setDetailData] = useState(null);
+  const [isCostModal, setIsCostModal] = useState(false);
+  const router = useRouter();
   const params = useParams();
 
   const getDiaryDetail = async () => {
     try {
       const res = await api.get(`history/${params.id}`);
       setDetailData(res.data.data);
-      console.log(res.data.data);
     } catch (e) {
       console.log(e);
     }
   };
 
-  function getDayOfWeek(inputDate) {
+  const getDayOfWeek = (inputDate) => {
     const week = ["일", "월", "화", "수", "목", "금", "토"];
 
     const dayOfWeek = week[new Date(inputDate).getDay()];
 
     return `${inputDate.replace(/-/g, ".")} (${dayOfWeek})`;
-  }
+  };
+
+  const focusOut = (e) => {
+    if (e.currentTarget === e.target) {
+      setIsCostModal(false);
+    }
+  };
 
   useEffect(() => {
     getDiaryDetail();
@@ -38,6 +45,24 @@ const DiaryDetail = () => {
 
   return (
     <main className={styles.container}>
+      <div className={styles.backBox}>
+        <div
+          className={styles.backIcon}
+          onClick={(e) => {
+            if (e.currentTarget === e.target) {
+              router.back();
+            }
+          }}></div>
+        <div
+          className={styles.backText}
+          onClick={(e) => {
+            if (e.currentTarget === e.target) {
+              router.back();
+            }
+          }}>
+          뒤로가기
+        </div>
+      </div>
       {detailData ? (
         <header className={styles.header}>
           <div style={{ position: "relative" }} className={styles.imageBox}>
@@ -48,6 +73,7 @@ const DiaryDetail = () => {
               }
               alt="이미지"
               fill
+              quality={100}
               unoptimized={false}
               sizes="(max-width: 768px) 100vw,(max-width: 1200px) 50vw,33vw"
               loader={() => {
@@ -138,11 +164,32 @@ const DiaryDetail = () => {
               <DiaryDetailCard
                 diaryDayList={item}
                 getDayOfWeek={getDayOfWeek}
+                setIsCostModal={setIsCostModal}
               />
             </div>
           );
         })}
       </article>
+      {isCostModal && (
+        <div
+          className={styles.editCostModalBack}
+          onClick={(e) => {
+            focusOut(e);
+          }}>
+          <div className={styles.editCostModalBox}>
+            <div className={styles.editCostModalText}>
+              해당 금액이 저장되었습니다.
+            </div>
+            <div
+              className={styles.editCostModalBtn}
+              onClick={() => {
+                setIsCostModal(false);
+              }}>
+              확인
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 };

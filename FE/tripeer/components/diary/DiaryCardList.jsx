@@ -27,13 +27,13 @@ const DiaryCard = () => {
     }
   };
 
-  function getDayOfWeek(inputDate) {
+  const getDayOfWeek = (inputDate) => {
     const week = ["일", "월", "화", "수", "목", "금", "토"];
 
     const dayOfWeek = week[new Date(inputDate).getDay()];
 
     return `${inputDate.replace(/-/g, ".")}(${dayOfWeek})`;
-  }
+  };
 
   useEffect(() => {
     getDiarys();

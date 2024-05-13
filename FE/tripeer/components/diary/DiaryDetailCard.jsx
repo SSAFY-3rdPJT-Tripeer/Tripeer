@@ -2,7 +2,7 @@
 
 // 외부 모듈
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 
 // 내부 모듈
@@ -11,17 +11,22 @@ import GoodPlaceIcon from "@/components/plan/asset/GoodPlace.svg";
 import styles from "./diaryDetailCard.module.css";
 import SleepIcon from "@/components/plan/asset/Sleep.svg";
 import api from "@/utils/api";
+// import { set } from "lodash";
 
 const DiaryDetailCard = (props) => {
   const router = useRouter();
-  const { diaryDayList, getDayOfWeek } = props;
+  const { diaryDayList, getDayOfWeek, setIsCostModal } = props;
   const [diaryDay, setDiaryDay] = useState(null);
   const [galleryPriviews, setGalleryPreviews] = useState([]);
-  const spotCost = useRef(0);
+  const [totalCost, setTotalCost] = useState(0);
+  const formatCost = (cost) => {
+    return parseInt(cost, 10).toLocaleString();
+  };
   const [costs, setCosts] = useState(
     diaryDayList.planDetailList.map((detail) => ({
       id: detail.planDetailId,
-      cost: detail.cost,
+      cost: parseInt(detail.cost, 10),
+      formattedCost: formatCost(detail.cost),
     })),
   );
   const defaultGalleryURL =
@@ -71,7 +76,7 @@ const DiaryDetailCard = (props) => {
       },
       음식점: {
         name: "맛집",
-        color: "#D25B06",
+        color: "#D37608",
         img: EatIcon,
       },
     };
@@ -103,9 +108,16 @@ const DiaryDetailCard = (props) => {
 
   // 비용을 업데이트하는 함수
   const handleCostChange = (planDetailId, newCost) => {
+    const numericCost = newCost.replace(/,/g, "");
     setCosts((currentCosts) =>
       currentCosts.map((cost) =>
-        cost.id === planDetailId ? { ...cost, cost: newCost } : cost,
+        cost.id === planDetailId
+          ? {
+              ...cost,
+              cost: numericCost,
+              formattedCost: formatCost(numericCost),
+            }
+          : cost,
       ),
     );
   };
@@ -113,15 +125,23 @@ const DiaryDetailCard = (props) => {
   const editCost = async (planDetailId, cost) => {
     console.log(planDetailId);
     try {
-      const res = await api.post("/history/cost", {
+      await api.post("/history/cost", {
         planDetailId: planDetailId,
         cost: cost,
       });
-      console.log(res);
     } catch (e) {
       console.log(e);
     }
   };
+
+  const calculateTotalCost = () => {
+    const total = costs.reduce((acc, curr) => acc + parseInt(curr.cost, 10), 0);
+    setTotalCost(total);
+  };
+
+  useEffect(() => {
+    calculateTotalCost();
+  }, [costs]);
 
   useEffect(() => {
     const scrollValue = window.sessionStorage.getItem("prevScroll");
@@ -135,7 +155,6 @@ const DiaryDetailCard = (props) => {
     if (diaryDayList) {
       setDiaryDay(diaryDayList.day);
       showGallery();
-      console.log(diaryDayList.planDetailList);
     }
   }, [diaryDayList]);
 
@@ -213,36 +232,34 @@ const DiaryDetailCard = (props) => {
                         className={styles.planCostText}
                         value={
                           costs.find((cost) => cost.id === item.planDetailId)
-                            ?.cost || ""
+                            ?.formattedCost || "0"
                         }
                         onChange={(e) =>
                           handleCostChange(item.planDetailId, e.target.value)
-                        }>
-                        {/* ￦ {item.cost} / 1인 */}
-                      </input>
-                      <span>원</span>
+                        }></input>
+                      <span className={styles.planCostSpan}>원</span>
                       <div
                         className={styles.planCostEdit}
-                        onClick={() =>
+                        onClick={() => {
+                          setIsCostModal(true);
                           editCost(
                             item.planDetailId,
                             costs.find((cost) => cost.id === item.planDetailId)
                               ?.cost,
-                          )
-                        }></div>
+                          );
+                        }}></div>
                     </div>
                   </div>
                 </div>
-                <div
-                  className={styles.planImgBox}
-                  style={{ position: "relative" }}>
+                <div className={styles.planImgBox}>
                   <Image
                     className={styles.planImg}
                     src={
                       "https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/default1.png"
                     }
                     alt="이미지"
-                    fill
+                    width={100}
+                    height={100}
                     unoptimized={false}
                     sizes="(max-width: 768px) 100vw,(max-width: 1200px) 50vw,33vw"
                     loader={() => {
@@ -259,8 +276,10 @@ const DiaryDetailCard = (props) => {
         </div>
       </div>
       <div className={styles.totalCostBox}>
-        <div className={styles.totalCostText}>1일차 합계</div>
-        <div className={styles.totalCostOutput}>￦35,600 / 1인</div>
+        <div className={styles.totalCostText}>{diaryDay}일차 합계</div>
+        <div className={styles.totalCostOutput}>
+          {totalCost.toLocaleString()} 원
+        </div>
       </div>
     </main>
   );

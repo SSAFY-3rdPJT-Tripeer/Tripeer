@@ -4,7 +4,31 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 70px 100px;
+  padding: 50px 100px 70px;
+}
+.backBox {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 30px;
+}
+.backIcon {
+  background: url("../../../../components/diary/assets/backIcon.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+.backText {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #545454;
+  margin-left: 10px;
+  cursor: pointer;
 }
 .header {
   display: flex;
@@ -153,4 +177,41 @@
 .articleBox {
   width: 100%;
   /* height: 500px; */
+}
+
+.editCostModalBack {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 30%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.editCostModalBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+  width: 300px;
+  background: #fff;
+  border-radius: 5px;
+}
+.editCostModalText {
+  margin-bottom: 20px;
+}
+
+.editCostModalBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #4fbdb7;
+  border-radius: 5px;
+  width: 100px;
+  height: 30px;
+  color: white;
+  cursor: pointer;
 }
