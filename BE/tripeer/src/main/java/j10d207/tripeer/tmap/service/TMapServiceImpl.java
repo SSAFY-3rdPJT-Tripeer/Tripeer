@@ -96,7 +96,6 @@ public class TMapServiceImpl implements TMapService {
 
         if (result.getAsJsonObject().has("result")) {
             int status = result.getAsJsonObject("result").get("status").getAsInt();
-            rootInfoDTO.setStatus(status);
             switch (status) {
                 case 11:
                 case 12:
@@ -112,6 +111,7 @@ public class TMapServiceImpl implements TMapService {
                         rootInfoDTO.setTime(tmp);
                     }
                     else {
+                        rootInfoDTO.setStatus(status);
                         rootInfoDTO.setTime(kakaoService.getDirections(SX, SY, EX, EY));
                     }
                     break;
