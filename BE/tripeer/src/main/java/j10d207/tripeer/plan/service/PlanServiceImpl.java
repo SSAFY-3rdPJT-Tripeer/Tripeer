@@ -624,9 +624,11 @@ public class PlanServiceImpl implements PlanService {
             StringBuilder rootInfoBuilder = new StringBuilder();
             List<String[]> timeList = new ArrayList<>();
             if( resultTime == 99999 ) {
+                rootOptimizeDTO.setOption(400);
                 rootInfoBuilder.append("경로를 찾을 수 없습니다.");
                 timeList.add(new String[] {rootInfoBuilder.toString(), "2" } );
                 rootOptimizeDTO.setSpotTime(timeList);
+                return rootOptimizeDTO;
             }
             if(resultTime/60 > 0) {
                 rootInfoBuilder.append(resultTime/60).append("시간 ");
@@ -634,7 +636,9 @@ public class PlanServiceImpl implements PlanService {
             rootInfoBuilder.append(resultTime%60).append("분");
             timeList.add(new String[] {rootInfoBuilder.toString(), String.valueOf(rootOptimizeDTO.getOption()) } );
             rootOptimizeDTO.setSpotTime(timeList);
-        } else if (rootOptimizeDTO.getOption() == 1) {
+            return rootOptimizeDTO;
+        }
+        else if (rootOptimizeDTO.getOption() == 1) {
             RootInfoDTO baseInfo = RootInfoDTO.builder()
                     .startTitle(rootOptimizeDTO.getPlaceList().getFirst().getTitle())
                     .endTitle(rootOptimizeDTO.getPlaceList().getLast().getTitle())
@@ -667,6 +671,7 @@ public class PlanServiceImpl implements PlanService {
                     //12 -출발지에서 검색된 정류장이 없어서 탐색된 경로 없음
                     //13 -도착지에서 검색된 정류장이 없어서 탐색된 경로 없음
                     //14 -출발지/도착지 간 탐색된 대중교통 경로가 없음
+                    rootOptimizeDTO.setOption(result.getStatus());
                     if(result.getTime()/60 > 0) {
                         time.append(result.getTime()/60).append("시간 ");
                     }
@@ -694,11 +699,15 @@ public class PlanServiceImpl implements PlanService {
                 default:
                     throw new CustomException(ErrorCode.ROOT_API_ERROR);
             }
+            rootOptimizeDTO.setOption(result.getStatus());
             rootOptimizeDTO.setSpotTime(timeList);
             rootOptimizeDTO.setOption(result.getStatus());
-
+            return rootOptimizeDTO;
         }
-        return rootOptimizeDTO;
+        else {
+            throw new CustomException(ErrorCode.ROOT_API_ERROR);
+        }
+
     }
 
     //플랜 최단거리 조정
