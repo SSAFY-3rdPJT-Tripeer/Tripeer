@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import altImg from "@/public/altImg.png";
 import axios from "axios";
 import Link from "next/link";
+import Weather from "@/components/trip/Weather";
 
 const TripPage = (props) => {
   const { planId } = props.params;
@@ -16,12 +17,11 @@ const TripPage = (props) => {
   const [plan, setPlan] = useState(null);
   const [planDetail, setPlanDetail] = useState(null);
   const [planDate, setPlanDate] = useState("");
+  const [onWeather, setOnWeather] = useState(false);
 
   // 플랜 아이디 받기
   useEffect(() => {
     if (planId) {
-      // 해당 planId를 통한 조회 로직 추가하면 됨
-      console.log(planId);
       axios
         .get(`${process.env.NEXT_PUBLIC_API_URL}/history/${planId}`)
         .then((res) => {
@@ -137,14 +137,17 @@ const TripPage = (props) => {
                 : null}
             </div>
             <div className={styles.btnBox}>
-              <div className={styles.weatherBtn}>
+              <div
+                className={styles.weatherBtn}
+                onClick={() => {
+                  setOnWeather(true);
+                }}>
                 <div className={styles.weatherIcon} />
               </div>
               <Link
-                style={{ textDecoration: "none" }}
-                href={{
-                  pathname: `/trip/${planId}/schedule`,
-                }}>
+                style={{ textDecoration: "none", width: "100%" }}
+                href={{ pathname: `/trip/${planId}/schedule` }}
+                prefetch={false}>
                 <div className={styles.planBtn}>
                   <p>여행 일정 보러 가기</p>
                   <div className={styles.directIcon} />
@@ -154,6 +157,9 @@ const TripPage = (props) => {
           </div>
         </div>
       </div>
+      {onWeather ? (
+        <Weather setOnWeather={setOnWeather} planId={planId} />
+      ) : null}
     </div>
   );
 };
