@@ -94,7 +94,7 @@ const PlanHome = (props) => {
   }, [plan]);
 
   const notifyChange = (e) => {
-    if (yNotify && e.nativeEvent.isComposing === false) {
+    if (yNotify) {
       const temp = e.target.value;
       yNotify.delete(0, yNotify.length);
       yNotify.insert(0, temp);
@@ -107,7 +107,7 @@ const PlanHome = (props) => {
       setYNotify(textArea);
       notifyTextArea.current.value = textArea.toString();
       textArea.observe(() => {
-        notifyTextArea.current.value = textArea.toString();
+        document.querySelector("#textArea").innerHTML = textArea.toString();
       });
     }
   }, [provider]);
@@ -178,6 +178,7 @@ const PlanHome = (props) => {
             <div className={styles.notifyContent}>
               <textarea
                 className={styles.notifyText}
+                id="textArea"
                 ref={notifyTextArea}
                 onChange={(e) => {
                   notifyChange(e);
