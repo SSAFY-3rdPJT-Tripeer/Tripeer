@@ -111,6 +111,7 @@ const DiaryDetail = () => {
                                 height: "50px",
                                 width: "50px",
                                 borderRadius: "50px",
+                                marginRight: "2px",
                               }}></div>
                           </div>
                           <span className={styles.nicknameBox}>

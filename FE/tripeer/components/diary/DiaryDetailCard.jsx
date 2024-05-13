@@ -1,15 +1,29 @@
 "use client";
 
+// 외부 모듈
 import { useRouter } from "next/navigation";
-import styles from "./diaryDetailCard.module.css";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
+
+// 내부 모듈
+import EatIcon from "@/components/plan/asset/Eat.svg";
+import GoodPlaceIcon from "@/components/plan/asset/GoodPlace.svg";
+import styles from "./diaryDetailCard.module.css";
+import SleepIcon from "@/components/plan/asset/Sleep.svg";
+import api from "@/utils/api";
 
 const DiaryDetailCard = (props) => {
   const router = useRouter();
   const { diaryDayList, getDayOfWeek } = props;
   const [diaryDay, setDiaryDay] = useState(null);
   const [galleryPriviews, setGalleryPreviews] = useState([]);
+  const spotCost = useRef(0);
+  const [costs, setCosts] = useState(
+    diaryDayList.planDetailList.map((detail) => ({
+      id: detail.planDetailId,
+      cost: detail.cost,
+    })),
+  );
   const defaultGalleryURL =
     "https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/galleryDefault.png";
 
@@ -17,19 +31,56 @@ const DiaryDetailCard = (props) => {
     window.sessionStorage.setItem("prevScroll", window.scrollY.toString());
     router.push(`/diary/detail/${diaryDayList.planDayId}/${diaryDay}`);
   };
-  useEffect(() => {
-    const scrollValue = window.sessionStorage.getItem("prevScroll");
-    console.log("스크롤", scrollValue);
-    if (scrollValue) {
-      window.scrollTo(0, parseInt(scrollValue));
-      window.sessionStorage.removeItem("prevScroll");
-    }
+
+  const CARD_CATEGORY = useMemo(() => {
+    return {
+      관광지: {
+        name: "명소",
+        color: "#2D8F8A",
+        img: GoodPlaceIcon,
+      },
+      문화시설: {
+        name: "명소",
+        color: "#2D8F8A",
+        img: GoodPlaceIcon,
+      },
+      "축제 공연 행사": {
+        name: "명소",
+        color: "#2D8F8A",
+        img: GoodPlaceIcon,
+      },
+      "여행 코스": {
+        name: "명소",
+        color: "#2D8F8A",
+        img: GoodPlaceIcon,
+      },
+      레포츠: {
+        name: "명소",
+        color: "#2D8F8A",
+        img: GoodPlaceIcon,
+      },
+      숙박: {
+        name: "숙박",
+        color: "#D26D6D",
+        img: SleepIcon,
+      },
+      쇼핑: {
+        name: "명소",
+        color: "#2D8F8A",
+        img: GoodPlaceIcon,
+      },
+      음식점: {
+        name: "맛집",
+        color: "#D25B06",
+        img: EatIcon,
+      },
+    };
   }, []);
 
   const getContentType = (type) => {
     if (!diaryDayList) return 0;
     switch (type) {
-      case "맛집":
+      case "음식점":
         return 1;
       case "숙박":
         return 2;
@@ -50,11 +101,41 @@ const DiaryDetailCard = (props) => {
     }
   };
 
+  // 비용을 업데이트하는 함수
+  const handleCostChange = (planDetailId, newCost) => {
+    setCosts((currentCosts) =>
+      currentCosts.map((cost) =>
+        cost.id === planDetailId ? { ...cost, cost: newCost } : cost,
+      ),
+    );
+  };
+
+  const editCost = async (planDetailId, cost) => {
+    console.log(planDetailId);
+    try {
+      const res = await api.post("/history/cost", {
+        planDetailId: planDetailId,
+        cost: cost,
+      });
+      console.log(res);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    const scrollValue = window.sessionStorage.getItem("prevScroll");
+    if (scrollValue) {
+      window.scrollTo(0, parseInt(scrollValue));
+      window.sessionStorage.removeItem("prevScroll");
+    }
+  }, []);
+
   useEffect(() => {
     if (diaryDayList) {
       setDiaryDay(diaryDayList.day);
       showGallery();
-      console.log(galleryPriviews);
+      console.log(diaryDayList.planDetailList);
     }
   }, [diaryDayList]);
 
@@ -105,7 +186,11 @@ const DiaryDetailCard = (props) => {
             return (
               <div key={id} className={styles.planBox}>
                 <div className={styles.orderBox}>
-                  <div className={styles.orderNumBox}>
+                  <div
+                    className={styles.orderNumBox}
+                    style={{
+                      backgroundColor: `${CARD_CATEGORY[item.contentType].color}`,
+                    }}>
                     <div className={styles.orderNum}>{item.step}</div>
                   </div>
                   <div className={styles.orderBar}>
@@ -124,10 +209,27 @@ const DiaryDetailCard = (props) => {
                     <div
                       className={`${styles.planType} ${styles["type" + getContentType(item.contentType)]}`}></div>
                     <div className={styles.planCostBox}>
-                      <div className={styles.planCostText}>
-                        ￦ {item.cost} / 1인
-                      </div>
-                      <div className={styles.planCostEdit}></div>
+                      <input
+                        className={styles.planCostText}
+                        value={
+                          costs.find((cost) => cost.id === item.planDetailId)
+                            ?.cost || ""
+                        }
+                        onChange={(e) =>
+                          handleCostChange(item.planDetailId, e.target.value)
+                        }>
+                        {/* ￦ {item.cost} / 1인 */}
+                      </input>
+                      <span>원</span>
+                      <div
+                        className={styles.planCostEdit}
+                        onClick={() =>
+                          editCost(
+                            item.planDetailId,
+                            costs.find((cost) => cost.id === item.planDetailId)
+                              ?.cost,
+                          )
+                        }></div>
                     </div>
                   </div>
                 </div>

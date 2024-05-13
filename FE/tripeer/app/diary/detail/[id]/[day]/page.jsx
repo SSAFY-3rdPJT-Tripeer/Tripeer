@@ -4,6 +4,8 @@
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import dynamic from "next/dynamic";
+const Lottie = dynamic(() => import("react-lottie-player"), { ssr: false });
 
 // 내부 모듈
 import styles from "./page.module.css";
@@ -11,6 +13,7 @@ import api from "@/utils/api";
 import PhotoModal from "@/components/diary/PhotoModal";
 import SelectPhoto from "@/components/diary/SelectPhoto";
 import { downloadFile } from "@/utils/downloadFile";
+import lottieJson from "@/components/diary/assets/emptyGallery.json";
 
 const DayAlbum = () => {
   const router = useRouter();
@@ -160,64 +163,79 @@ const DayAlbum = () => {
           </label>
         </div>
       </header>
-      <article className={styles.photoBox}>
-        {Array.isArray(gallery) ? (
-          gallery.map((photo, idx) => {
-            return (
-              <div
-                key={idx}
-                className={styles.photo}
-                onClick={() => {
-                  if (!isSelectModal) {
-                    setIsModal(true);
-                    setClickId(photo.galleryId);
-                  } else {
-                    togglePhotoSelection(idx);
-                  }
-                }}
-                style={{ position: "relative" }}>
-                <Image
-                  src={photo.img}
-                  loader={() => photo.img}
-                  sizes="(max-width: 768px) 100vw,(max-width: 1200px) 50vw, 33vw"
-                  fill
-                  priority={false}
-                  alt="memberImg"
-                  unoptimized={false}
-                />
+      {gallery.length > 0 ? (
+        <article className={styles.photoBox}>
+          {Array.isArray(gallery) ? (
+            gallery.map((photo, idx) => {
+              return (
                 <div
-                  className={styles.userImgBox}
+                  key={idx}
+                  className={styles.photo}
+                  onClick={() => {
+                    if (!isSelectModal) {
+                      setIsModal(true);
+                      setClickId(photo.galleryId);
+                    } else {
+                      togglePhotoSelection(idx);
+                    }
+                  }}
                   style={{ position: "relative" }}>
                   <Image
-                    className={styles.userImg}
-                    src={photo.userImg}
-                    loader={() => photo.userImg}
+                    src={photo.img}
+                    loader={() => photo.img}
                     sizes="(max-width: 768px) 100vw,(max-width: 1200px) 50vw, 33vw"
                     fill
                     priority={false}
                     alt="memberImg"
                     unoptimized={false}
                   />
-                </div>
-                {isSelectModal && (
                   <div
-                    className={styles.checkBox}
-                    onClick={(e) => {
-                      e.stopPropagation(); // 이벤트 버블링 방지
-                      togglePhotoSelection(idx);
-                    }}>
-                    {selectedPhotos[idx] && (
-                      <div className={styles.check}></div>
-                    )}
+                    className={styles.userImgBox}
+                    style={{ position: "relative" }}>
+                    <Image
+                      className={styles.userImg}
+                      src={photo.userImg}
+                      loader={() => photo.userImg}
+                      sizes="(max-width: 768px) 100vw,(max-width: 1200px) 50vw, 33vw"
+                      fill
+                      priority={false}
+                      alt="memberImg"
+                      unoptimized={false}
+                    />
                   </div>
-                )}
-              </div>
-            );
-          })
-        ) : (
-          <></>
-        )}
-      </article>
+                  {isSelectModal && (
+                    <div
+                      className={styles.checkBox}
+                      onClick={(e) => {
+                        e.stopPropagation(); // 이벤트 버블링 방지
+                        togglePhotoSelection(idx);
+                      }}>
+                      {selectedPhotos[idx] && (
+                        <div className={styles.check}></div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })
+          ) : (
+            <></>
+          )}
+        </article>
+      ) : (
+        <div className={styles.emptyBox}>
+          <div className={styles.emptyContent}>
+            <Lottie
+              className={styles.emptyImg}
+              loop
+              animationData={lottieJson}
+              play
+              style={{ width: 200, height: 200 }}
+            />
+            <div className={styles.emptyText}>즐거웠던 추억을 올려보세요.</div>
+          </div>
+        </div>
+      )}
       {isModal && !isSelectModal ? (
         <PhotoModal
           gallery={gallery}
