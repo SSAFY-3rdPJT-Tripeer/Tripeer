@@ -4,10 +4,14 @@
   height: 58px;
   border-bottom: 1px solid #e3e3e3;
   align-items: center;
-  padding-left: 5%;
+  position: relative;
+  justify-content: center;
 }
 
 .directionIcon {
+  position: absolute;
+  top: 20px;
+  left: 5%;
   background-image: url(../../../../public/trip/tripDirection.svg);
   width: 18px;
   height: 18px;
@@ -26,5 +30,203 @@
   flex-direction: column;
   align-items: center;
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - 58px);
+  overflow-y: scroll;
+  animation: fadeIn 1.5s ease forwards;
+  padding-bottom: 50px;
+}
+.container::-webkit-scrollbar {
+  width: 4px;
+}
+.container::-webkit-scrollbar-thumb {
+  height: 10%;
+  background: #cecdcd;
+  border-radius: 10px;
+}
+
+.container::-webkit-scrollbar-track {
+  background: #fff;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 100%;
+  }
+}
+
+.dayInfo {
+  margin-top: 16px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #242424;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.dateInfo {
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #606060;
+  text-align: center;
+}
+
+.dayController {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.dayControllLeft {
+  background-image: url(../../../../components/plan/asset/leftDirect.svg);
+  width: 12px;
+  height: 12px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+  transform: rotate(180deg);
+}
+
+.dayControllRight {
+  background-image: url(../../../../components/plan/asset/leftDirect.svg);
+  width: 12px;
+  height: 12px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+}
+
+.card {
+  flex: none;
+  display: flex;
+  margin-top: 20px;
+  width: 330px;
+  height: 100px;
+  border-radius: 5px;
+  padding: 14px;
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.1);
+  justify-content: space-between;
+}
+.cardInfoFlex {
+  display: flex;
+  gap: 12px;
+}
+
+.categoryCircle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  color: white;
+}
+
+.cardFlex {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cardTitle {
+  color: black;
+  font-weight: 500;
+  font-size: 0.9rem;
+  width: 7rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.cardAddress {
+  font-size: 0.7rem;
+  color: #858585;
+  width: 9rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.cardCategory {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  width: 60px;
+  height: 28px;
+  border: 1px solid #d9d9d9;
+  border-radius: 50px;
+}
+
+.routeBox {
+  width: 100%;
+  padding: 0px 10px;
+  margin-top: 24px;
+  margin-bottom: 12px;
+}
+
+.routeShortInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #858585;
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+}
+
+.routeInfo {
+  display: flex;
+  overflow: hidden;
+  width: 330px;
+  height: 16px;
+  border-radius: 50px;
+  background-color: #e2e7ee;
+}
+
+.route {
+  height: 16px;
+  display: flex;
+  align-items: center;
+  border-radius: 50px;
+  min-width: 40px;
+}
+
+.howTo {
+  flex: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 18px;
+  height: 18px;
+  background-color: #e33e4d;
+  border-radius: 50%;
+}
+
+.longFlex {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.howLong {
+  font-size: 0.6rem;
+  font-weight: 500;
+  color: #fff;
+  text-align: center;
+}
+
+.blackContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
