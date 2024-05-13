@@ -674,7 +674,7 @@ public class PlanServiceImpl implements PlanService {
                         rootOptimizeDTO.setPublicRootList(publicRootDTOList);
                         return rootOptimizeDTO;
                     } else {
-                        return MakeRootInfo(rootOptimizeDTO, rootInfo, result.getStartLatitude(), result.getStartLongitude(), result.getEndLatitude(), result.getEndLongitude(), result.getTime());
+                        return MakeRootInfo(rootOptimizeDTO, rootInfo);
                     }
                     //11 -출발지/도착지 간 거리가 가까워서 탐색된 경로 없음
                     //12 -출발지에서 검색된 정류장이 없어서 탐색된 경로 없음
@@ -778,8 +778,7 @@ public class PlanServiceImpl implements PlanService {
                         publicRootDTOList.add(root.getTimeTable()[i][root.getResultNumbers().get(j)].getPublicRoot());
                         rootOptimizeDTO.setPublicRootList(publicRootDTOList);
                     } else {
-                        RootInfoDTO tmp = root.getTimeTable()[i][root.getResultNumbers().get(j)];
-                        rootOptimizeDTO = MakeRootInfo(rootOptimizeDTO, info, tmp.getStartLatitude(), tmp.getStartLongitude(), tmp.getEndLatitude(), tmp.getEndLongitude(), tmp.getTime());
+                        rootOptimizeDTO = MakeRootInfo(rootOptimizeDTO, info);
                     }
                 }
                 newPlaceList.add(newPlace);
@@ -795,7 +794,7 @@ public class PlanServiceImpl implements PlanService {
         return null;
     }
 
-    private RootOptimizeDTO MakeRootInfo(RootOptimizeDTO rootOptimizeDTO, JsonElement rootInfo, double SX, double SY, double EX, double EY, int time) {
+    private RootOptimizeDTO MakeRootInfo(RootOptimizeDTO rootOptimizeDTO, JsonElement rootInfo) {
         if(rootInfo == null) {
             List<PublicRootDTO> rootList = new ArrayList<>();
             if(rootOptimizeDTO.getPublicRootList() != null) {
@@ -807,20 +806,6 @@ public class PlanServiceImpl implements PlanService {
         }
         JsonObject infoObject = rootInfo.getAsJsonObject();
         PublicRootDTO publicRoot = new PublicRootDTO();
-
-        PublicRootEntity publicRootEntity = PublicRootEntity.builder()
-                .startLat(SX)
-                .startLon(SY)
-                .endLat(EX)
-                .endLon(EY)
-                .totalTime(time)
-                .totalDistance(infoObject.get("totalDistance").getAsInt())
-                .totalWalkTime(infoObject.get("totalWalkTime").getAsInt())
-                .totalWalkDistance(infoObject.get("totalWalkDistance").getAsInt())
-                .pathType(infoObject.get("pathType").getAsInt())
-                .totalFare(infoObject.getAsJsonObject("fare").getAsJsonObject("regular").get("totalFare").getAsInt())
-                .build();
-        long rootId = publicRootRepository.save(publicRootEntity).getPublicRootId();
 
         publicRoot.setPathType(infoObject.get("pathType").getAsInt());
         publicRoot.setTotalFare(infoObject.getAsJsonObject("fare").getAsJsonObject("regular").get("totalFare").getAsInt());
@@ -835,19 +820,6 @@ public class PlanServiceImpl implements PlanService {
         for (JsonElement leg : legs) {
             JsonObject legObject = leg.getAsJsonObject();
             PublicRootDTO.PublicRootDetail detail = new PublicRootDTO.PublicRootDetail();
-            PublicRootDetailEntity detailEntity = PublicRootDetailEntity.builder()
-                    .publicRoot(PublicRootEntity.builder().publicRootId(rootId).build())
-                    .distance(legObject.get("distance").getAsInt())
-                    .sectionTime(legObject.get("sectionTime").getAsInt()/60)
-                    .mode(legObject.get("mode").getAsString())
-                    .startName(legObject.getAsJsonObject("start").get("name").getAsString())
-                    .startLat(legObject.getAsJsonObject("start").get("lat").getAsDouble())
-                    .startLon(legObject.getAsJsonObject("start").get("lon").getAsDouble())
-                    .endName(legObject.getAsJsonObject("end").get("name").getAsString())
-                    .endLat(legObject.getAsJsonObject("end").get("lat").getAsDouble())
-                    .endLon(legObject.getAsJsonObject("end").get("lon").getAsDouble())
-                    .build();
-            publicRootDetailRepository.save(detailEntity);
 
             //구간 이동 거리 (m)
             detail.setDistance(legObject.get("distance").getAsInt());
