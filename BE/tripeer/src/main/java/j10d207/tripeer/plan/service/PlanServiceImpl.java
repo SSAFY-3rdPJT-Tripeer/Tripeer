@@ -674,7 +674,7 @@ public class PlanServiceImpl implements PlanService {
                         rootOptimizeDTO.setPublicRootList(publicRootDTOList);
                         return rootOptimizeDTO;
                     } else {
-                        return MakeRootInfo(rootOptimizeDTO, rootInfo, result.getStartLatitude(), result.getStartLongitude(), result.getEndLatitude(), result.getEndLongitude());
+                        return MakeRootInfo(rootOptimizeDTO, rootInfo, result.getStartLatitude(), result.getStartLongitude(), result.getEndLatitude(), result.getEndLongitude(), result.getTime());
                     }
                     //11 -출발지/도착지 간 거리가 가까워서 탐색된 경로 없음
                     //12 -출발지에서 검색된 정류장이 없어서 탐색된 경로 없음
@@ -779,7 +779,7 @@ public class PlanServiceImpl implements PlanService {
                         rootOptimizeDTO.setPublicRootList(publicRootDTOList);
                     } else {
                         RootInfoDTO tmp = root.getTimeTable()[i][root.getResultNumbers().get(j)];
-                        rootOptimizeDTO = MakeRootInfo(rootOptimizeDTO, info, tmp.getStartLatitude(), tmp.getStartLongitude(), tmp.getEndLatitude(), tmp.getEndLongitude());
+                        rootOptimizeDTO = MakeRootInfo(rootOptimizeDTO, info, tmp.getStartLatitude(), tmp.getStartLongitude(), tmp.getEndLatitude(), tmp.getEndLongitude(), tmp.getTime());
                     }
                 }
                 newPlaceList.add(newPlace);
@@ -795,7 +795,7 @@ public class PlanServiceImpl implements PlanService {
         return null;
     }
 
-    private RootOptimizeDTO MakeRootInfo(RootOptimizeDTO rootOptimizeDTO, JsonElement rootInfo, double SX, double SY, double EX, double EY) {
+    private RootOptimizeDTO MakeRootInfo(RootOptimizeDTO rootOptimizeDTO, JsonElement rootInfo, double SX, double SY, double EX, double EY, int time) {
         if(rootInfo == null) {
             List<PublicRootDTO> rootList = new ArrayList<>();
             if(rootOptimizeDTO.getPublicRootList() != null) {
@@ -813,6 +813,7 @@ public class PlanServiceImpl implements PlanService {
                 .startLon(SY)
                 .endLat(EX)
                 .endLon(EY)
+                .totalTime(time)
                 .totalDistance(infoObject.get("totalDistance").getAsInt())
                 .totalWalkTime(infoObject.get("totalWalkTime").getAsInt())
                 .totalWalkDistance(infoObject.get("totalWalkDistance").getAsInt())

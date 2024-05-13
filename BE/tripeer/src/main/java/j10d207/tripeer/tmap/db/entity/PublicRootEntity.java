@@ -31,6 +31,7 @@ public class PublicRootEntity {
     private int totalWalkDistance;
     private int pathType;
     private int totalFare;
+    private int totalTime;
 
 
 }

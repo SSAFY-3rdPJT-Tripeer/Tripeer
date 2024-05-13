@@ -196,7 +196,7 @@ public class TMapServiceImpl implements TMapService {
                 .build();
         HttpEntity<RouteReqDTO> request = new HttpEntity<>(route, headers);
         String result = restTemplate.postForObject("https://apis.openapi.sk.com/transit/routes", request, String.class);
-
+        System.out.println("test");
         return JsonParser.parseString(result).getAsJsonObject();
     }
 
@@ -224,6 +224,7 @@ public class TMapServiceImpl implements TMapService {
         result.setTotalWalkDistance(publicRootEntity.getTotalWalkDistance());
         result.setPathType(publicRootEntity.getPathType());
         result.setTotalFare(publicRootEntity.getTotalFare());
+        result.setTotalTime(publicRootEntity.getTotalTime());
 
         List<PublicRootDTO.PublicRootDetail> detailList = new ArrayList<>();
         List<PublicRootDetailEntity> publicRootDetailEntityList = publicRootDetailRepository.findByPublicRoot_PublicRootId(publicRootEntity.getPublicRootId());
