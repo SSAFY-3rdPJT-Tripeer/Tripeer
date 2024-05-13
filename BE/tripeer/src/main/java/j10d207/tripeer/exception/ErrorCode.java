@@ -44,6 +44,7 @@ public enum ErrorCode {
     NOT_FOUND_ROOT(HttpStatus.BAD_REQUEST, "ROOT-001", "대중교통 수단이 없습니다."),
     TOO_MANY_INFO(HttpStatus.BAD_REQUEST, "ROOT-002", "요청된 정보가 너무 많습니다."),
     NOT_ENOUGH_INFO(HttpStatus.BAD_REQUEST, "ROOT-003", "요청된 정보가 너무 적습니다."),
+    ROOT_API_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "ROOT-004", "경로 탐색중 예견되지 않은 오류가 발생하였습니다."),
 
     //Email
     EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "EMAIL-001", "이메일 전송 중 오류가 발생 했습니다."),
