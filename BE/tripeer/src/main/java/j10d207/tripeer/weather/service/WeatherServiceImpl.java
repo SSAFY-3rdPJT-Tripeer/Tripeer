@@ -309,11 +309,11 @@ public class WeatherServiceImpl implements WeatherService{
             ResponseDTO.ItemDTO tmpData = (ResponseDTO.ItemDTO) tmpArray.get(idx);
 
 
-            weatherDataDTO.setPrecip_prob(popData.getFcstValue() + "%");
+            weatherDataDTO.setPrecip_prob(popData.getFcstValue());
             weatherDataDTO.setPrecip_type(ptyData.getFcstValue());
             weatherDataDTO.setSky_cond(skyData.getFcstValue());
-            weatherDataDTO.setHourly_temp(tmpData.getFcstValue() + "°");
-            weatherDataDTO.setTime(popData.getFcstTime().substring(0, 2) + "시");
+            weatherDataDTO.setHourly_temp(tmpData.getFcstValue());
+            weatherDataDTO.setTime(popData.getFcstTime().substring(0, 2));
             weatherDataDTO.setCityName(cityName);
             weatherDataDTO.setTownName(townName);
 
@@ -325,8 +325,8 @@ public class WeatherServiceImpl implements WeatherService{
         ResponseDTO.ItemDTO tmxData = (ResponseDTO.ItemDTO) tmxArray.getFirst();
 
         for (WeatherDataDTO weatherDataDto : weatherDataDtos) {
-            weatherDataDto.setMax_temp(tmxData.getFcstValue().substring(0,2) + "°");
-            weatherDataDto.setMin_temp(tmnData.getFcstValue().substring(0,2) + "°");
+            weatherDataDto.setMax_temp(tmxData.getFcstValue().substring(0,2));
+            weatherDataDto.setMin_temp(tmnData.getFcstValue().substring(0,2));
         }
 
         return weatherDataDtos;
