@@ -237,7 +237,8 @@ const DateModal = (props) => {
                           return (
                             <td
                               key={id}
-                              className={`${styles.dayTable} ${styles[day.style]} ${new Date(startYear, startMonth - 1, startDay).getTime() <= new Date(year, month, day["날짜"]).getTime() && new Date(endYear, endMonth - 1, endDay).getTime() >= new Date(year, month, day["날짜"]).getTime() && day.style !== "prevDay" ? styles.clicked : ""}`}
+                              className={`${styles.dayTable} ${styles[day.style]} ${new Date(startYear, startMonth - 1, startDay).getTime() <= new Date(year, month, day["날짜"]).getTime() && new Date(endYear, endMonth - 1, endDay).getTime() >= new Date(year, month, day["날짜"]).getTime() && day.style !== "prevDay" ? styles.clicked : ""} 
+                              ${((startYear === year && startDay === day["날짜"] && startMonth === MONTHS[month]) || (endYear === year && endDay === day["날짜"] && endMonth === MONTHS[month])) && day.style !== "prevDay" ? styles.realClick : ""}`}
                               onClick={() => {
                                 setDay(day);
                               }}>
