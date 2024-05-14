@@ -93,9 +93,10 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers(HttpMethod.GET, "/user/error", "/swagger-ui/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/user/signup").hasAnyRole("VALIDATE")
                         //배포시 test 삭제 필요
                         .requestMatchers(HttpMethod.GET, "/user/test/**", "/user/social/info", "/user/name/duplicatecheck/*", "/weather", "/history/*").hasAnyRole("NONE", "USER", "ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/user/signup", "/user/reissue").hasAnyRole("NONE", "USER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/user/reissue").hasAnyRole("NONE", "USER", "ADMIN")
 
                         .requestMatchers(HttpMethod.GET, "/place/**", "/plan/**", "/user/**", "/history/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/place/**", "/plan/**", "/user/**", "/history/**").hasAnyRole("USER", "ADMIN")

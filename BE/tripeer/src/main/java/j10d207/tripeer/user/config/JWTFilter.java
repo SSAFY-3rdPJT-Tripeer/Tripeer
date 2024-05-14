@@ -33,7 +33,9 @@ public class JWTFilter extends OncePerRequestFilter {
         String access = request.getHeader("Authorization");
         //access 헤더 검증
         if ( access == null ) {
-            setContext(null, "ROLE_NONE");
+            if (SecurityContextHolder.getContext().getAuthentication() == null) {
+                setContext(null, "ROLE_NONE");
+            }
             filterChain.doFilter(request, response);
             //조건이 해당되면 메소드 종료 (필수)
             return;
