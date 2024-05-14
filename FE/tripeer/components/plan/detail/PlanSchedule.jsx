@@ -45,6 +45,7 @@ const PlanSchedule = (props) => {
   const [isRouteModal, setIsRouteModal] = useState(false);
   const [alert, setAlert] = useState(false);
   const [init, setInit] = useState(false);
+  const [init2, setInit2] = useState(false);
 
   const COLOR = [
     "#A60000",
@@ -136,8 +137,14 @@ const PlanSchedule = (props) => {
 
   const onClickCalculate = (arrIdx) => {
     const err = timeList[arrIdx].filter((e) => e[1] === "2");
-    if (err.length) {
-      console.log("err");
+
+    if (timeList[arrIdx].length < 2) {
+      setAlert(true);
+      setInit2(true);
+      setTimeout(() => {
+        setAlert(false);
+      }, 2000);
+    } else if (err.length) {
       setAlert(true);
       setInit(true);
       setTimeout(() => {
@@ -168,15 +175,17 @@ const PlanSchedule = (props) => {
     };
     try {
       const res = await api.post("/plan/optimizing/short", data);
-      if (type === "insert") {
-        arr.delete(index, 1);
-      }
-      const tmp = [...res.data.data.spotTime];
-      tmp[0].push(res.data.data.publicRootList);
-      arr.insert(index, [...tmp]);
-      if (setLoaded != null) {
-        setLoaded(true);
-      }
+      provider.doc.transact(() => {
+        if (type === "insert") {
+          arr.delete(index, 1);
+        }
+        const tmp = [...res.data.data.spotTime];
+        tmp[0].push(res.data.data.publicRootList);
+        arr.insert(index, [...tmp]);
+        if (setLoaded != null) {
+          setLoaded(true);
+        }
+      });
     } catch (e) {
       console.log("시간 계산 GET 요청 실패: ", e);
       console.log("시간 계산 GET 요청 실패 타입: ", type);
@@ -891,6 +900,13 @@ const PlanSchedule = (props) => {
                   className={`${styles.warnBox} ${alert ? styles.warnShow : styles.warnNo}`}>
                   <div className={styles.warnIcon}></div>
                   <p>경로를 찾을 수 없는 장소가 포함되어 있습니다.</p>
+                </div>
+              ) : null}
+              {init2 ? (
+                <div
+                  className={`${styles.warnBox} ${alert ? styles.warnShow : styles.warnNo}`}>
+                  <div className={styles.warnIcon}></div>
+                  <p>3개 이상의 장소를 넣어주세요.</p>
                 </div>
               ) : null}
             </section>
