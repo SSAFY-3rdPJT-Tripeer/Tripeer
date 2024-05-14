@@ -142,3 +142,9 @@
   border: 2px solid #4fbdb7;
   border-radius: 5px;
 }
+
+.realClick {
+  background-color: #4fbdb7;
+  border-radius: 5px;
+  color: #fff;
+}

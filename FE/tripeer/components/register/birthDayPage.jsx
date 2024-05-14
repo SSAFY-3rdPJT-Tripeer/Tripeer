@@ -107,6 +107,7 @@ export default function BirthdayPage({ pageNum, setPageNum }) {
           onChange={onChangeDay}
         />
       </div>
+      <p className={styles.example}>ex) 2000년 1월 1일</p>
       {isPos ? null : (
         <p className={styles.err}>생년월일을 정확히 입력해주세요 !</p>
       )}
