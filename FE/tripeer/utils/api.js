@@ -67,7 +67,7 @@ api.interceptors.request.use(async (config) => {
       // localStorage.setItem("accessToken", accessToken);
       cookies.set("Authorization", accessToken);
       // 기본 헤더 고정값
-      config.headers["Authorization"] = `Bearer ${accessToken}`;
+      config.headers["AuthorizationOff"] = `Bearer ${accessToken}`;
     } catch (err) {
       console.log("토큰 재발급 에러: ", err);
     }
