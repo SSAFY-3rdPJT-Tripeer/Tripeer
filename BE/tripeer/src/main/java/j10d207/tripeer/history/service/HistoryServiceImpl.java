@@ -352,4 +352,16 @@ public class HistoryServiceImpl implements HistoryService{
                 .build();
         return historyDetailResDTO;
     }
+
+    public String revokeHistoryDetail(long planId){
+        PlanEntity plan = planRepository.findByPlanId(planId);
+        List<PlanDayEntity> planDayEntityList = planDayRepository.findAllByPlan_PlanIdOrderByDayAsc(planId);
+        for (PlanDayEntity planDayEntity : planDayEntityList) {
+            List<PlanDetailEntity> planDetailEntityList = planDetailRepository.findByPlanDay_PlanDayId(planDayEntity.getPlanDayId(), Sort.by(Sort.Direction.ASC, "step"));
+            planDetailRepository.deleteAll(planDetailEntityList);
+        }
+        plan.setVehicle("private");
+        planRepository.save(plan);
+        return "성공";
+    }
 }

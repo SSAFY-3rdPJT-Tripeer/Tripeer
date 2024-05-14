@@ -96,4 +96,15 @@ public class HistoryController {
             throw new RuntimeException(e);
         }
     }
+
+
+    @PutMapping("/revoke/{planId}")
+    public Response<String> revokePlanDetail(@PathVariable("planId") long planId) {
+        try {
+            String res = historyService.revokeHistoryDetail(planId);
+            return Response.of(HttpStatus.OK, "플랜 복원 성공", res);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

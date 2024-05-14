@@ -18,4 +18,6 @@ public interface HistoryService {
     public String savePlanDetail(PlanSaveReqDTO planSaveReqDTO);
 
     public HistoryDetailResDTO getHistoryDetail(long planId);
+
+    public String revokeHistoryDetail(long planId);
 }
