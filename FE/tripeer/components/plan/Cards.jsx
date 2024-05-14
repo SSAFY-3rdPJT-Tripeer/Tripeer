@@ -5,6 +5,7 @@
 // 외부 모듈
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
+import cookies from "js-cookie";
 
 // 내부 모듈
 import styles from "./cards.module.css";
@@ -50,6 +51,9 @@ const Cards = () => {
       setPlans(res.data.data);
     } catch (err) {
       alert("데이터를 불러오는데 오류가 발생했습니다.");
+      cookies.remove("Authorization");
+      router.push("/");
+      window.location.reload();
     }
   };
 
