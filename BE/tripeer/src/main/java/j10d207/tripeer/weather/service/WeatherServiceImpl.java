@@ -1,19 +1,14 @@
 package j10d207.tripeer.weather.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import io.swagger.v3.core.util.Json;
 import j10d207.tripeer.exception.CustomException;
 import j10d207.tripeer.exception.ErrorCode;
-import j10d207.tripeer.kakao.db.entity.RouteResponse;
 import j10d207.tripeer.place.db.entity.CityEntity;
 import j10d207.tripeer.place.db.entity.TownEntity;
 import j10d207.tripeer.place.db.repository.CityRepository;
 import j10d207.tripeer.place.db.repository.TownRepository;
-import j10d207.tripeer.plan.db.entity.PlanDayEntity;
 import j10d207.tripeer.plan.db.repository.PlanDayRepository;
 import j10d207.tripeer.plan.service.PlanService;
-import j10d207.tripeer.plan.service.PlanServiceImpl;
 import j10d207.tripeer.weather.db.CategoryCode;
 import j10d207.tripeer.weather.db.dto.ResponseDTO;
 import j10d207.tripeer.weather.db.dto.WeatherDataDTO;
@@ -23,17 +18,10 @@ import j10d207.tripeer.weather.repository.WeatherDataRepository;
 import j10d207.tripeer.weather.repository.WeatherRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -56,69 +44,128 @@ public class WeatherServiceImpl implements WeatherService{
     private final WeatherRepository weatherRepository;
     private final WeatherDataRepository weatherDataRepository;
     private final CityRepository cityRepository;
+    private final GridService gridService;
 
 
-//    1. post요청 -> plan관련 entity에서 날짜와 town을 조회
-//    2. 날씨 table에 없다면 api신청해서 등록, 있으면 날짜 확인해서 전날이면 업데이트
-//    3. 조회 -> 알아서 위의 모든 내용을 수행 후 return은 해당 날짜의 모든 날씨 데이터 전달
-//
-//
-//    1) getPlanData -> plan에서 데이타를 타고가서 날짜와 townId조회
-//    2) api신청 함수 만들기
-//    3) return Data DTO만들기.
-//    4) table 만들기. -> entity
 
-    public List<WeatherDataDTO> createWeather(LocalDate day, int townId, int cityId, String townName) throws IOException {
+//    db에 한번도 없었던 위치의 날씨를 조회하면 db에 생성하며 api신청
+    public List<WeatherDataDTO> createWeather(int cityId, int townId, List<WeatherDataDTO> weatherDataDTOS, String formattedDate) {
+        String maxTemp = weatherDataDTOS.getFirst().getMax_temp();
+        String minTemp = weatherDataDTOS.getFirst().getMin_temp();
 
-//        List<WeatherDataDTO> weatherJsonData = getWeatherJsonAPIAndData(townName, cityId);
+        WeatherEntity weather = new WeatherEntity();
+        weather.setCityId(cityId);
+        weather.setTownId(townId);
+        weather.setDay(formattedDate);
+        weather.setMax_tmp(maxTemp);
+        weather.setMin_temp(minTemp);
 
-//        WeatherEntity weatherEntity = new WeatherEntity();
-//        weatherEntity.setDay(day);
-//        weatherEntity.setTownId(townId);
-//        weatherEntity.setCityId(cityId);
-//
-//        weatherEntity.setMax_tmp(weatherJsonData.getFirst().getMax_temp());
-//        weatherEntity.setMin_temp(weatherJsonData.getFirst().getMin_temp());
-//        weatherRepository.save(weatherEntity);
-//
-//        List<WeatherDataDTO> weatherDataDTOS = new ArrayList<>();
-//        for (WeatherDataDTO weatherJsonDatum : weatherJsonData) {
-//            WeatherDataEntity weatherDataEntity = new WeatherDataEntity();
-//            weatherDataEntity.setWeather(weatherEntity);
-//            weatherDataEntity.setPrecip_prob(weatherJsonDatum.getPrecip_prob());
-//            weatherDataEntity.setPrecip_type(weatherJsonDatum.getPrecip_type());
-//            weatherDataEntity.setHourly_temp(weatherJsonDatum.getHourly_temp());
-//            weatherDataEntity.setSky_cond(weatherDataEntity.getSky_cond());
-//            weatherDataRepository.save(weatherDataEntity);
-//            weatherDataDTOS.add(weatherJsonDatum);
-//        }
-//
-//        return weatherDataDTOS;
-        return null;
+        List<WeatherDataEntity> weatherDataEntities = new ArrayList<>();
+
+        for (WeatherDataDTO weatherDataDTO : weatherDataDTOS) {
+            WeatherDataEntity weatherDataEntity = new WeatherDataEntity();
+            weatherDataEntity.setPrecip_prob(weatherDataDTO.getPrecip_prob());
+            weatherDataEntity.setPrecip_type(weatherDataDTO.getPrecip_type());
+            weatherDataEntity.setSky_cond(weatherDataDTO.getSky_cond());
+            weatherDataEntity.setHourly_temp(weatherDataDTO.getHourly_temp());
+            weatherDataEntity.setTime(weatherDataDTO.getTime());
+            weatherDataEntity.setWeather(weather);
+            weatherDataEntities.add(weatherDataEntity);
+
+        }
+        weather.setWeatherData(weatherDataEntities);
+        weatherRepository.save(weather);
+
+        return weatherDataDTOS;
     }
 
-    public void checkIsUpdate(int planDayId, String townName, int cityId) throws IOException {
-        TownEntity townEntity = townRepository
-                .findByTownNameAndTownPK_City_CityId(townName, cityId)
+
+
+    //    db에 있고, 조회 날짜도 같다면 db에 있는 데이터 조회
+    public List<WeatherDataDTO> getWeatherInDB(int cityId, int townId) {
+        WeatherEntity weatherEntity = weatherRepository.findByCityIdAndTownId(cityId, townId)
+                .orElseThrow(() -> new CustomException(ErrorCode.WEATHER_NOT_FOUND));
+
+        CityEntity cityEntity = cityRepository.findByCityId(cityId)
+                .orElseThrow(() -> new CustomException(ErrorCode.CITY_NOT_FOUND));
+        TownEntity townEntity = townRepository.findByTownPK_TownIdAndTownPK_City_CityId(townId, cityId)
                 .orElseThrow(() -> new CustomException(ErrorCode.TOWN_NOT_FOUND));
 
-        PlanDayEntity planDayEntity = planDayRepository.findByPlanDayId(planDayId);
-        LocalDate day = planDayEntity.getDay();
+        String cityName = cityEntity.getCityName();
+        String townName = townEntity.getTownName();
+        String maxTmp = weatherEntity.getMax_tmp();
+        String minTmp = weatherEntity.getMin_temp();
 
-        int originalCityId = townEntity.getTownPK().getCity().getCityId();
-        Integer originalTownId = townEntity.getTownPK().getTownId();
 
-        Optional<WeatherEntity> optionalWeatherEntity = weatherRepository.findByCityIdAndTownId(originalCityId, originalTownId);
+        List<WeatherDataEntity> weatherDatas = weatherEntity.getWeatherData();
 
-        if (optionalWeatherEntity.isPresent()) {
-//          기존 weather entity update
-//            updateWeather(optionalWeatherEntity.get(), planDayId);
-        } else {
-//          새로운 weather entity 생성
-            createWeather(day, originalTownId, cityId, townName);
+        List<WeatherDataDTO> weatherDataDTOS = new ArrayList<>();
+        for (WeatherDataEntity weatherData : weatherDatas) {
+            WeatherDataDTO weatherDataDTO = new WeatherDataDTO();
+            weatherDataDTO.setCityName(cityName);
+            weatherDataDTO.setTownName(townName);
+            weatherDataDTO.setMax_temp(maxTmp);
+            weatherDataDTO.setMin_temp(minTmp);
+            weatherDataDTO.setHourly_temp(weatherData.getHourly_temp());
+            weatherDataDTO.setPrecip_type(weatherData.getPrecip_type());
+            weatherDataDTO.setPrecip_prob(weatherData.getPrecip_prob());
+            weatherDataDTO.setSky_cond(weatherData.getSky_cond());
+            weatherDataDTO.setTime(weatherData.getTime());
+            weatherDataDTOS.add(weatherDataDTO);
         }
 
+        return weatherDataDTOS;
     }
+
+
+//    db에 정보는 존재하지만 날짜가 다르다면 API신청, db업데이트 후 반환
+    public List<WeatherDataDTO> updateWeather(WeatherEntity weatherEntity, List<WeatherDataDTO> weatherDataDTOS, String formattedDate) {
+
+        weatherEntity.setMin_temp(weatherDataDTOS.getFirst().getMax_temp());
+        weatherEntity.setMax_tmp(weatherDataDTOS.getFirst().getMin_temp());
+        weatherEntity.setDay(formattedDate);
+
+        int i = 0;
+        for (WeatherDataEntity weatherDatum : weatherEntity.getWeatherData()) {
+            WeatherDataDTO weatherDataDTO = weatherDataDTOS.get(i);
+            weatherDatum.setPrecip_prob(weatherDataDTO.getPrecip_prob());
+            weatherDatum.setPrecip_type(weatherDataDTO.getPrecip_type());
+            weatherDatum.setSky_cond(weatherDataDTO.getSky_cond());
+            weatherDatum.setHourly_temp(weatherDataDTO.getHourly_temp());
+            i++;
+        }
+
+        weatherRepository.save(weatherEntity);
+
+        return weatherDataDTOS;
+    }
+
+
+
+//    db에 새로 만들지, 업데이트할지, db단순 조회할지 분기처리
+    public List<WeatherDataDTO> checkIsUpdateOrCreate(int cityId, int townId) throws IOException {
+
+        Optional<WeatherEntity> optionalWeatherEntity = weatherRepository.findByCityIdAndTownId(cityId, townId);
+
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String formattedDate = currentDate.format(formatter);
+
+        if (optionalWeatherEntity.isPresent() && townId != -1) {
+            if (!Objects.equals(optionalWeatherEntity.get().getDay(), formattedDate)) {
+                List<WeatherDataDTO> weatherDataDTOS = getWeatherJsonAPIAndData(cityId, townId);
+//                오늘 날짜랑 db에 있는 해당지역 날짜랑 같지 않다면
+                return updateWeather(optionalWeatherEntity.get(), weatherDataDTOS, formattedDate);
+            }
+        } else if (optionalWeatherEntity.isEmpty() && townId != -1) {
+            List<WeatherDataDTO> weatherDataDTOS = getWeatherJsonAPIAndData(cityId, townId);
+//               DB에 새로 추가
+            return createWeather(cityId, townId, weatherDataDTOS, formattedDate);
+        }
+
+        return getWeatherInDB(cityId, townId);//db에서 꺼내서 반환해주기;;
+    }
+
 
     public List<ResponseDTO.ItemDTO> parseWeatherData(String jsonData) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
@@ -128,7 +175,7 @@ public class WeatherServiceImpl implements WeatherService{
     }
 
 
-
+//    API요청
     public List<WeatherDataDTO> getWeatherJsonAPIAndData(int cityId, Integer townId) throws IOException {
         int latitude;
         int longitude;
@@ -136,14 +183,18 @@ public class WeatherServiceImpl implements WeatherService{
                 .orElseThrow(() -> new CustomException(ErrorCode.CITY_NOT_FOUND));
         String cityName = cityEntity.getCityName();
         String townName = cityName;
+
+        int[] grid = gridService.toGrid(cityEntity.getLatitude(), cityEntity.getLongitude());
+
         if (townId == -1) {
-            latitude = (int) cityEntity.getLatitude();
-            longitude = (int) cityEntity.getLongitude();
+            latitude = grid[0];
+            longitude = grid[1];
         } else {
             TownEntity townEntity = townRepository.findByTownPK_TownIdAndTownPK_City_CityId(townId, cityId)
                     .orElseThrow(() -> new CustomException(ErrorCode.TOWN_NOT_FOUND));
-            latitude = (int) townEntity.getLatitude();
-            longitude = (int) townEntity.getLongitude();
+            grid = gridService.toGrid(townEntity.getLatitude(), townEntity.getLongitude());
+            latitude = grid[0];
+            longitude = grid[1];
             townName = townEntity.getTownName();
         }
 
@@ -194,6 +245,8 @@ public class WeatherServiceImpl implements WeatherService{
         return getParseWeatherDataDTO(weatherDatas, formattedDate, cityName, townName);
     }
 
+
+//    Json데이터를 DTO형태로 파싱 및 매핑
     public List<WeatherDataDTO> getParseWeatherDataDTO(List<ResponseDTO.ItemDTO> weatherDatas, String formattedDate, String cityName, String townName) {
 //        POP("강수확률", "%"),
 //        PTY("강수형태", ""),
