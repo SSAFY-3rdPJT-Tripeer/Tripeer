@@ -24,7 +24,6 @@ import Block2 from "@/components/plan/detail/schedule/block2";
 
 const PlanSchedule = (props) => {
   const { myInfo, provider, plan, online } = props;
-  const [userList, setUserList] = useState([]);
   // dnd 를 관리할 전체 배열
   const [totalY, setTotalY] = useState(null);
   const [totalList, setTotalList] = useState([]);
@@ -761,7 +760,7 @@ const PlanSchedule = (props) => {
   }, [myInfo, provider]);
 
   useEffect(() => {
-    setUserList(plan.coworkerList);
+    // setUserList(plan.coworkerList);
     // 날짜 가져오기
     // getDay();
 
@@ -828,7 +827,7 @@ const PlanSchedule = (props) => {
           <div className={styles.line} />
           {/*  유저 프사 박스  */}
           <section className={styles.userBox}>
-            {userList.map((el, idx) => {
+            {members.map((el, idx) => {
               return (
                 <img
                   key={idx}
