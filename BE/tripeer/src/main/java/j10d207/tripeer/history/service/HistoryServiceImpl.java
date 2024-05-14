@@ -133,26 +133,31 @@ public class HistoryServiceImpl implements HistoryService{
 
     public String savePlanDetail (@RequestBody PlanSaveReqDTO planSaveReqDTO){
         List<List<Map<String, String>>> totalYList = planSaveReqDTO.getTotalYList();
-        List<List<List<Object>>> timeYList = planSaveReqDTO.getTimeYList();
+        List<List<Object>> timeYList = planSaveReqDTO.getTimeYList();
         long planId = planSaveReqDTO.getPlanId();
         List<PlanDayEntity> planDayEntityList = planDayRepository.findAllByPlan_PlanIdOrderByDayAsc(planId);
         PlanEntity planEntity = planRepository.findByPlanId(planId);
+        if (planEntity.getVehicle().equals("history")) {
+            throw new CustomException(ErrorCode.HISTORY_ALREADY_EXISTS);
+        }
         planEntity.setVehicle("history");
-
         for (int day = 1; day < totalYList.size(); day++) {
             for (int step = 0; step < totalYList.get(day).size(); step++) {
                 SpotInfoEntity spotInfo = spotInfoRepository.findBySpotInfoId(Integer.parseInt(totalYList.get(day).get(step).get("spotInfoId")));
                 String howTo = "자동차";     // 자동차 OR 대중교통을 사용하지 않는 description 에 저장
                 int hour = 0;
                 int min = 0;
-                List<Object> timeList = new ArrayList<>();
-                if (step != totalYList.get(day).size()-1) {            //
+                System.out.println(timeYList.toString());
+
+                if (step != totalYList.get(day).size()-1) {
+                    List<Object> tmp = objectMapper.convertValue(timeYList.get(day).get(step), List.class);
                     String time;
-                    timeList = timeYList.get(day).get(step);
+                    List<Object> timeList = tmp;
                     if (timeList.get(1).equals("1")){
                         howTo = "대중교통";
                     }
-                    time = timeList.getFirst().toString();
+                    time = timeList.getFirst().toString();;
+
                     String[] hourMin = time.split(" ");
                     if (hourMin.length == 1) {
                         min = Integer.parseInt(hourMin[0].substring(0,hourMin[0].length()-1));
