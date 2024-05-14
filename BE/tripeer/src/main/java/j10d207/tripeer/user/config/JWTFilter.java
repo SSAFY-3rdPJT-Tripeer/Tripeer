@@ -1,6 +1,7 @@
 package j10d207.tripeer.user.config;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import j10d207.tripeer.user.db.dto.CustomOAuth2User;
 import j10d207.tripeer.user.db.entity.UserEntity;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -9,11 +10,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collection;
 
 @RequiredArgsConstructor
 public class JWTFilter extends OncePerRequestFilter {
@@ -28,7 +32,8 @@ public class JWTFilter extends OncePerRequestFilter {
         String access = request.getHeader("Authorization");
         //access 헤더 검증
         if ( access == null ) {
-//            setContext(null, null);
+            System.out.println("여기1");
+            setContext(null, null);
             filterChain.doFilter(request, response);
             //조건이 해당되면 메소드 종료 (필수)
             return;
@@ -60,23 +65,33 @@ public class JWTFilter extends OncePerRequestFilter {
             return;
         }
         //토큰에서 email과 role 획득
-//        setContext(jwtUtil.getName(accessToken), jwtUtil.getRole(accessToken));
+        System.out.println("여기2");
+        setContext(jwtUtil.getName(accessToken), jwtUtil.getRole(accessToken));
         filterChain.doFilter(request, response);
     }
 
     private void setContext(String nickname, String role) {
-        UserEntity userEntity = UserEntity.builder()
-                .nickname(nickname)
-                .role(role)
-                .build();
-        //UserDetails에 회원 정보 객체 담기
-//        CustomUserDetails customUserDetails = new CustomUserDetails(userEntity);
-//        CustomOAuth2User customUserDetails = new
-
         //스프링 시큐리티 인증 토큰 생성
-//        Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
-        Authentication authToken = new UsernamePasswordAuthenticationToken(null, null, null);
+        Authentication authToken = new UsernamePasswordAuthenticationToken(null, null, getAuthorities(role));
         //세션에 사용자 등록
         SecurityContextHolder.getContext().setAuthentication(authToken);
     }
+
+    private Collection<? extends GrantedAuthority> getAuthorities(String role) {
+
+        Collection<GrantedAuthority> collection = new ArrayList<>();
+
+        collection.add(new GrantedAuthority() {
+
+            @Override
+            public String getAuthority() {
+
+                return role;
+            }
+        });
+
+        return collection;
+    }
 }
+
+

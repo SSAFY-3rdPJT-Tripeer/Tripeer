@@ -19,8 +19,6 @@ import j10d207.tripeer.plan.db.entity.*;
 import j10d207.tripeer.plan.db.repository.*;
 import j10d207.tripeer.tmap.db.dto.CoordinateDTO;
 import j10d207.tripeer.tmap.db.dto.RootInfoDTO;
-import j10d207.tripeer.tmap.db.entity.PublicRootDetailEntity;
-import j10d207.tripeer.tmap.db.entity.PublicRootEntity;
 import j10d207.tripeer.tmap.db.repository.PublicRootDetailRepository;
 import j10d207.tripeer.tmap.db.repository.PublicRootRepository;
 import j10d207.tripeer.tmap.service.FindRoot;
@@ -73,9 +71,6 @@ public class PlanServiceImpl implements PlanService {
 
     private final EmailService emailService;
 
-    private final PublicRootRepository publicRootRepository;
-    private final PublicRootDetailRepository publicRootDetailRepository;
-
     //플랜 생성
     @Override
     public PlanResDTO createPlan(CreatePlanDTO createPlanDTO, String token) {
@@ -112,7 +107,6 @@ public class PlanServiceImpl implements PlanService {
 
         for (TownDTO townDTO : createPlanDTO.getTownList()) {
             //request 기반으로 townEntity 받아오기
-            System.out.println("TownId 탐색 : " + townDTO.getTownId());
             if(townDTO.getTownId() == -1) {
                 PlanTownEntity planTown = PlanTownEntity.builder()
                         .plan(plan)
@@ -125,18 +119,14 @@ public class PlanServiceImpl implements PlanService {
                         .city(CityEntity.builder().cityId(townDTO.getCityId()).build())
                         .build();
 
-                System.out.println("city_id 확인 : " + townPK.getCity().getCityId());
                 PlanTownEntity planTown = PlanTownEntity.builder()
                         .plan(plan)
                         .town(TownEntity.builder().townPK(townPK).build())
                         .build();
-                System.out.println("PlanTownEntity확인 : " + planTown.toString());
                 planTownRepository.save(planTown);
             }
         }
-
         int day = (int) ChronoUnit.DAYS.between(createPlanDTO.getStartDay(), createPlanDTO.getEndDay()) + 1;
-        System.out.println("플랜생성 시작날짜 끝날짜 간격 : " + day);
         for (int i = 0; i < day; i++) {
             PlanDayEntity planDay = PlanDayEntity.builder()
                     .plan(plan)
@@ -184,8 +174,9 @@ public class PlanServiceImpl implements PlanService {
     @Override
     public List<PlanListResDTO> planList(String token) {
         String access = jwtUtil.splitToken(token);
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
         // 사용자가 소유중인 플랜의 리스트 목록을 가져옴
-        List<CoworkerEntity> coworkerList = coworkerRepository.findByUser_UserId(jwtUtil.getUserId(access));
+        List<CoworkerEntity> coworkerList = coworkerRepository.findByUser_UserIdAndPlan_StartDateAfter(jwtUtil.getUserId(access), today);
 
         // 반환리스트를 담아줄 DTO 생성
         List<PlanListResDTO> planListResDTOList = new ArrayList<>();
@@ -232,8 +223,7 @@ public class PlanServiceImpl implements PlanService {
                 memberList.add(userSearchDTO);
             }
             planListResDTO.setMember(memberList);
-            int day = (int) ChronoUnit.DAYS.between(plan.getCreateDate(), LocalDate.now(ZoneId.of("Asia/Seoul")));
-            System.out.println("플랜조회 오늘 날짜와의 차이 : " + day);
+            int day = (int) ChronoUnit.DAYS.between(plan.getCreateDate(), today);
             // 3일 이내면 true
             planListResDTO.setNewPlan(day < 3);
             planListResDTOList.add(planListResDTO);
@@ -299,12 +289,6 @@ public class PlanServiceImpl implements PlanService {
                 .townList(townDTOList)
                 .coworkerList(memberList)
                 .build();
-    }
-
-    //플랜 날짜 수정
-    @Override
-    public void changeDay(CreatePlanDTO createPlanDTO, String token) {
-
     }
 
     //동행자 추가

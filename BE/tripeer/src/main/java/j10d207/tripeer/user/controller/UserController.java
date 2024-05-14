@@ -28,23 +28,15 @@ public class UserController {
     //회원가입
     @PostMapping("/signup")
     public Response<String> memberSignup(@RequestBody JoinDTO joinDTO, HttpServletResponse response) {
-        try {
-            String jwt = userService.memberSignup(joinDTO, response);
-            return Response.of(HttpStatus.OK, "회원가입, 토큰발급 완료", jwt);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        String jwt = userService.memberSignup(joinDTO, response);
+        return Response.of(HttpStatus.OK, "회원가입, 토큰발급 완료", jwt);
     }
 
     //소셜정보 불러오기
     @GetMapping("/social/info")
     public Response<SocialInfoDTO> socialInfo() {
-        try {
-            SocialInfoDTO socialInfoDTO = userService.getSocialInfo();
-            return Response.of(HttpStatus.OK, "OAuth 제공 정보", socialInfoDTO);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        SocialInfoDTO socialInfoDTO = userService.getSocialInfo();
+        return Response.of(HttpStatus.OK, "OAuth 제공 정보", socialInfoDTO);
     }
 
     //닉네임 중복체크

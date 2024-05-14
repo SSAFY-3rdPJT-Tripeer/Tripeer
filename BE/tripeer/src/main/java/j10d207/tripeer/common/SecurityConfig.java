@@ -50,11 +50,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-//        LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil);
-//        loginFilter.setFilterProcessesUrl("/user/login");
-
-
-        // 04.14작성 - 시큐리티 cors 를 위해 필요한 부분으로 서버연결했을때 부터 주석 해제하여 사용
         http
                 .cors((corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
 
@@ -68,7 +63,6 @@ public class SecurityConfig {
                         config.setAllowCredentials(true);
                         config.setAllowedHeaders(List.of("*"));
                         config.setMaxAge(3600L);
-//                        config.setExposedHeaders(Collections.singletonList("access"));
 
                         return config;
                     }
@@ -96,24 +90,14 @@ public class SecurityConfig {
         //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth) -> auth
-//                        .requestMatchers("/admin").hasRole("ADMIN")
-                        .requestMatchers("/*", "/**").permitAll()
-//                        .requestMatchers("/api/**").permitAll() //개발 용 로그인 안했을때 postman 사용을 위해
+//                        .requestMatchers("/api/user/*","/admin").hasRole("ADMIN")
+//                        .requestMatchers("/*", "/**").permitAll()
+//                        .requestMatchers("/api/**", "/api/*").permitAll() //개발 용 로그인 안했을때 postman 사용을 위해
                         .anyRequest().authenticated());
 
 
         http
-//                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
                 .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
-
-        //필터 추가 LoginFilter()는 인자를 받음 (AuthenticationManager() 메소드에 authenticationConfiguration 객체를 넣어야 함) 따라서 등록 필요
-//        http
-//                .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
-
-        //세션 설정
-//        http
-//                .sessionManagement((session) -> session
-//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
     }
