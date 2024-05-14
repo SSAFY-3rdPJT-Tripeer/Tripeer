@@ -36,7 +36,7 @@ const TripPage = (props) => {
   }, [planId, router]);
 
   useEffect(() => {
-    const date = ["월", "화", "수", "목", "금", "토", "일"];
+    const date = ["일", "월", "화", "수", "목", "금", "토"];
 
     if (plan) {
       setPlanDetail(plan.diaryDetail);
@@ -54,14 +54,9 @@ const TripPage = (props) => {
         startMonth +
         "." +
         startDay +
-        `(${date[startDate.getDay() - 1]})`;
+        `(${date[startDate.getDay()]})`;
       let endString =
-        endYear +
-        "." +
-        endMonth +
-        "." +
-        endDay +
-        `(${date[endDate.getDay() - 1]})`;
+        endYear + "." + endMonth + "." + endDay + `(${date[endDate.getDay()]})`;
       setPlanDate(startString + " - " + endString);
     }
   }, [plan]);
