@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -91,10 +92,16 @@ public class SecurityConfig {
         //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/user/error").permitAll()
-                        //배포시 삭제 필요
-                        .requestMatchers("user/test/**", "/user/signup", "/user/social/info", "/user/name/duplicatecheck/*", "/user/reissue", "/weather", "/history/*").hasAnyRole("NONE", "USER", "ADMIN")
-                        .requestMatchers("/place/**", "/plan/**", "/user/**", "/history/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/user/error", "/swagger-ui/**").permitAll()
+                        //배포시 test 삭제 필요
+                        .requestMatchers(HttpMethod.GET, "/user/test/**", "/user/social/info", "/user/name/duplicatecheck/*", "/weather", "/history/*").hasAnyRole("NONE", "USER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/user/signup", "/user/reissue").hasAnyRole("NONE", "USER", "ADMIN")
+
+                        .requestMatchers(HttpMethod.GET, "/place/**", "/plan/**", "/user/**", "/history/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/place/**", "/plan/**", "/user/**", "/history/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/place/**", "/plan/**", "/user/**", "/history/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/place/**", "/plan/**", "/user/**", "/history/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/place/**", "/plan/**", "/user/**", "/history/**").hasAnyRole("USER", "ADMIN")
 //                        .requestMatchers("/").hasRole("ADMIN")
                         .requestMatchers("/*", "/**").denyAll()
 //                        .requestMatchers("/api/**", "/api/*").permitAll() //개발 용 로그인 안했을때 postman 사용을 위해
