@@ -142,7 +142,6 @@ const Map = (props) => {
 
   useEffect(() => {
     if (isLoaded && mapRef.current) {
-      console.log("hi");
       const { naver } = window;
       if (prevShowSpots.length > 0) {
         prevShowSpots.map((marker) => marker.setMap(null));
