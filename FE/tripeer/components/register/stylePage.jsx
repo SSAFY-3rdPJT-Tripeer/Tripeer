@@ -70,7 +70,7 @@ export default function StylePage({ pageNum, setPageNum }) {
           let accessToken = res.headers.get("Authorization");
           accessToken = accessToken.replace("Bearer ", "");
           // localStorage.setItem("accessToken", accessToken);
-          console.log("토큰: ", accessToken);
+          // console.log("토큰: ", accessToken);
           cookies.set("Authorization", accessToken);
           router.push("/");
         });
