@@ -121,7 +121,7 @@ const DateModal = (props) => {
     const createCurrentMonthDays = (days, lastDay) => {
       for (let day = 1; day <= lastDay; day++) {
         let weekDay = new Date(year, month, day).getDay();
-        if (new Date(year, month, day + 1).getTime() < new Date().getTime()) {
+        if (new Date(year, month, day).getTime() < new Date().getTime()) {
           days.push({
             날짜: day,
             요일: weekDay,
