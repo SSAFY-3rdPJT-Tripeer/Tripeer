@@ -9,7 +9,7 @@ import java.util.List;
 @Builder
 public class RouteDTO {
     private Integer totalFare;
-    private String pathType;
+    private Integer pathType;
     private List<RouteDetailDTO> publicRootDetailList;
 }
 

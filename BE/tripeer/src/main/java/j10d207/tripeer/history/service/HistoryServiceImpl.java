@@ -26,7 +26,9 @@ import j10d207.tripeer.plan.db.repository.PlanDayRepository;
 import j10d207.tripeer.plan.db.repository.PlanDetailRepository;
 import j10d207.tripeer.plan.db.repository.PlanRepository;
 import j10d207.tripeer.plan.db.repository.PlanTownRepository;
+import j10d207.tripeer.tmap.db.entity.PublicRootDetailEntity;
 import j10d207.tripeer.tmap.db.entity.PublicRootEntity;
+import j10d207.tripeer.tmap.db.repository.PublicRootDetailRepository;
 import j10d207.tripeer.tmap.db.repository.PublicRootRepository;
 import j10d207.tripeer.user.config.JWTUtil;
 import j10d207.tripeer.user.db.dto.UserSearchDTO;
@@ -58,6 +60,7 @@ public class HistoryServiceImpl implements HistoryService{
     private final RouteRepository routeRepository;
     private final RouteDetailRepository routeDetailRepository;
     private final PublicRootRepository publicRootRepository;
+    private final PublicRootDetailRepository publicRootDetailRepository;
 
     ObjectMapper objectMapper = new ObjectMapper();
 
@@ -262,14 +265,19 @@ public class HistoryServiceImpl implements HistoryService{
                 } else {
                     time.add(planDetail.getSpotTime().toString());
                     time.add("1");
-                    RouteEntity route = routeRepository.findByPlanDetail(planDetail);
-                    List<RouteDetailEntity> routeDetailList = routeDetailRepository.findAllByRouteOrderByStep(route);
+                    PublicRootEntity publicRoot = planDetail.getPublicRoot();
+                    List<PublicRootDetailEntity> publicRootDetailEntityList = publicRootDetailRepository.findByPublicRoot_PublicRootId(publicRoot.getPublicRootId());
                     List<RouteDetailDTO> routeDetailDTOList = new ArrayList<>();
-                    for (RouteDetailEntity routeDetail : routeDetailList) {
+                    int step = 1;
+                    for (PublicRootDetailEntity routeDetail : publicRootDetailEntityList) {
+                        int hourMin = routeDetail.getSectionTime();
+                        int hour = hourMin / 60;
+                        int min = hourMin % 60;
                         RouteDetailDTO routeDetailDTO = RouteDetailDTO.builder()
                                 .mode(routeDetail.getMode())
-                                .sectionTime(routeDetail.getSectionTime())
-                                .step(routeDetail.getStep())
+                                .sectionTime(LocalTime.of(hour, min))
+                                .route(routeDetail.getRoute())
+                                .step(step++)
                                 .distance(routeDetail.getDistance())
                                 .startName(routeDetail.getStartName())
                                 .startLat(routeDetail.getStartLat())
@@ -281,8 +289,8 @@ public class HistoryServiceImpl implements HistoryService{
                         routeDetailDTOList.add(routeDetailDTO);
                     }
                     RouteDTO routeDTO = RouteDTO.builder()
-                            .pathType(route.getPathType())
-                            .totalFare(route.getTotalFare())
+                            .pathType(publicRoot.getPathType())
+                            .totalFare(publicRoot.getTotalFare())
                             .publicRootDetailList(routeDetailDTOList)
                             .build();
                     routeDTOList.add(routeDTO);
@@ -313,7 +321,16 @@ public class HistoryServiceImpl implements HistoryService{
         List<Map<String,Integer>> cityTownIdList = new ArrayList<>();
         for (PlanTownEntity planTownEntity : planTown) {
             Map<String,Integer> cityTownMap = new HashMap<>();
-            cityTownMap.put("cityId",planTownEntity.getCityOnly().getCityId());
+            if (planTownEntity.getCityOnly() == null) {
+                cityTownMap.put("cityId",planTownEntity.getTown().getTownPK().getCity().getCityId());
+                cityTownMap.put("townId",planTownEntity.getTown().getTownPK().getTownId());
+
+            } else {
+                cityTownMap.put("cityId",planTownEntity.getCityOnly().getCityId());
+                cityTownMap.put("townId",-1);
+            }
+            System.out.println(planTownEntity.toString());
+
             if (planTownEntity.getTown() == null) {
                 cityTownMap.put("townId",-1);
             } else {
