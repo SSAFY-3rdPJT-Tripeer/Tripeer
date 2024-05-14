@@ -26,6 +26,8 @@ import j10d207.tripeer.plan.db.repository.PlanDayRepository;
 import j10d207.tripeer.plan.db.repository.PlanDetailRepository;
 import j10d207.tripeer.plan.db.repository.PlanRepository;
 import j10d207.tripeer.plan.db.repository.PlanTownRepository;
+import j10d207.tripeer.tmap.db.entity.PublicRootEntity;
+import j10d207.tripeer.tmap.db.repository.PublicRootRepository;
 import j10d207.tripeer.user.config.JWTUtil;
 import j10d207.tripeer.user.db.dto.UserSearchDTO;
 import j10d207.tripeer.user.db.entity.CoworkerEntity;
@@ -39,10 +41,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -58,6 +57,7 @@ public class HistoryServiceImpl implements HistoryService{
     private final GalleryRepository galleryRepository;
     private final RouteRepository routeRepository;
     private final RouteDetailRepository routeDetailRepository;
+    private final PublicRootRepository publicRootRepository;
 
     ObjectMapper objectMapper = new ObjectMapper();
 
@@ -136,10 +136,6 @@ public class HistoryServiceImpl implements HistoryService{
         PlanEntity planEntity = planRepository.findByPlanId(planId);
         planEntity.setVehicle("history");
 
-        List<PlanDetailEntity> planDetailRevokeList = new ArrayList<>();
-        List<RouteEntity> routeRevokeList = new ArrayList<>();
-        List<RouteDetailEntity> routeDetailRevokeList = new ArrayList<>();
-
         for (int day = 1; day < totalYList.size(); day++) {
             for (int step = 0; step < totalYList.get(day).size(); step++) {
                 SpotInfoEntity spotInfo = spotInfoRepository.findBySpotInfoId(Integer.parseInt(totalYList.get(day).get(step).get("spotInfoId")));
@@ -162,8 +158,24 @@ public class HistoryServiceImpl implements HistoryService{
                         min = Integer.parseInt(hourMin[1].substring(0,hourMin[1].length()-1));
                     }
                 }
-
-                PlanDetailEntity planDetail = PlanDetailEntity.builder()
+                if (howTo.equals("대중교통")){
+                    SpotInfoEntity nextSpotInfo = spotInfoRepository.findBySpotInfoId(Integer.parseInt(totalYList.get(day).get(step+1).get("spotInfoId")));
+                    Optional<PublicRootEntity> optionalPublicRoot = publicRootRepository.findByStartLatAndStartLonAndEndLatAndEndLon(spotInfo.getLongitude(), spotInfo.getLatitude(), nextSpotInfo.getLongitude(), nextSpotInfo.getLatitude());
+                    if (optionalPublicRoot.isEmpty()) throw new CustomException(ErrorCode.UNSUPPORTED_JSON_TYPE);
+                    PublicRootEntity publicRootEntity = optionalPublicRoot.get();
+                    PlanDetailEntity planDetail = PlanDetailEntity.builder()
+                            .planDay(planDayEntityList.get(day-1))
+                            .spotInfo(spotInfo)
+                            .day(day)
+                            .step(step+1)
+                            .description(howTo)
+                            .spotTime(LocalTime.of(hour, min))
+                            .publicRoot(publicRootEntity)
+                            .cost(0)
+                            .build();
+                    planDetailRepository.save(planDetail);
+                } else {
+                    PlanDetailEntity planDetail = PlanDetailEntity.builder()
                             .planDay(planDayEntityList.get(day-1))
                             .spotInfo(spotInfo)
                             .day(day)
@@ -172,52 +184,7 @@ public class HistoryServiceImpl implements HistoryService{
                             .spotTime(LocalTime.of(hour, min))
                             .cost(0)
                             .build();
-                planDetailRepository.save(planDetail);
-                planDetailRevokeList.add(planDetail);
-                if (step != totalYList.get(day).size()-1 && timeList.get(1).equals("1")) {
-                    try {
-                        String json = objectMapper.writeValueAsString(timeList.get(2));
-                        String subJson = json.substring(1, json.length()-1);
-                        Map<String, Object> timeDetail = objectMapper.readValue(subJson, new TypeReference<Map<String, Object>>(){});
-
-                        RouteEntity route = RouteEntity.builder()
-                                .planDetail(planDetail)
-                                .day(day)
-                                .totalFare(Integer.parseInt(timeDetail.get("totalFare").toString()))
-                                .pathType(timeDetail.get("pathType").toString())
-                                .build();
-                        routeRepository.save(route);
-                        routeRevokeList.add(route);
-                        String json2 = objectMapper.writeValueAsString(timeDetail.get("publicRootDetailList"));
-                        List<Map<String, Object>> PublicRootDetailList = objectMapper.readValue(json2, new TypeReference<List<Map<String, Object>>>(){});
-                        for (int detailStep = 0; detailStep < PublicRootDetailList.size(); detailStep++) {
-                            Map<String, Object> rootDetailDTO = PublicRootDetailList.get(detailStep);
-                            int fullMin = Integer.parseInt(rootDetailDTO.get("sectionTime").toString());
-                            int h = fullMin / 60;
-                            int m = fullMin % 60;
-                            RouteDetailEntity routeDetail = RouteDetailEntity.builder()
-                                    .sectionTime(LocalTime.of(h, m))
-                                    .mode(rootDetailDTO.get("mode").toString())
-                                    .distance(Integer.parseInt(rootDetailDTO.get("distance").toString()))
-                                    .startName(rootDetailDTO.get("startName").toString())
-                                    .startLat(Double.parseDouble(rootDetailDTO.get("startLat").toString()))
-                                    .startLon(Double.parseDouble(rootDetailDTO.get("startLon").toString()))
-                                    .endName(rootDetailDTO.get("endName").toString())
-                                    .endLat(Double.parseDouble(rootDetailDTO.get("endLat").toString()))
-                                    .endLon(Double.parseDouble(rootDetailDTO.get("endLon").toString()))
-                                    .route(route)
-                                    .step(detailStep+1)
-                                    .build();
-                            routeDetailRepository.save(routeDetail);
-                            routeDetailRevokeList.add(routeDetail);
-                        }
-                    } catch (JsonProcessingException e) {
-                        planDetailRepository.deleteAll(planDetailRevokeList);
-                        routeRepository.deleteAll(routeRevokeList);
-                        routeDetailRepository.deleteAll(routeDetailRevokeList);
-                        throw  new CustomException(ErrorCode.S3_UPLOAD_ERROR);
-                    }
-//                    List<TimeDetailDTO> timeDetails = (List<TimeDetailDTO>) timeList.get(2);
+                    planDetailRepository.save(planDetail);
                 }
             }
         }
@@ -342,9 +309,24 @@ public class HistoryServiceImpl implements HistoryService{
                     .build();
             diaryDayList.add(historyDayDTO);
         }
+
+        List<Map<String,Integer>> cityTownIdList = new ArrayList<>();
+        for (PlanTownEntity planTownEntity : planTown) {
+            Map<String,Integer> cityTownMap = new HashMap<>();
+            cityTownMap.put("cityId",planTownEntity.getCityOnly().getCityId());
+            if (planTownEntity.getTown() == null) {
+                cityTownMap.put("townId",-1);
+            } else {
+                cityTownMap.put("townId",planTownEntity.getTown().getTownPK().getTownId());
+            }
+            cityTownIdList.add(cityTownMap);
+        }
+
         HistoryDetailResDTO historyDetailResDTO = HistoryDetailResDTO.builder()
                 .diaryDetail(planListResDTO)
                 .diaryDayList(diaryDayList)
+                .plan_id(planId)
+                .cityIdTownIdList(cityTownIdList)
                 .build();
         return historyDetailResDTO;
     }
