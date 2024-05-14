@@ -39,10 +39,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -162,6 +159,8 @@ public class HistoryServiceImpl implements HistoryService{
                         min = Integer.parseInt(hourMin[1].substring(0,hourMin[1].length()-1));
                     }
                 }
+
+
 
                 PlanDetailEntity planDetail = PlanDetailEntity.builder()
                             .planDay(planDayEntityList.get(day-1))
@@ -342,9 +341,24 @@ public class HistoryServiceImpl implements HistoryService{
                     .build();
             diaryDayList.add(historyDayDTO);
         }
+
+        List<Map<String,Integer>> cityTownIdList = new ArrayList<>();
+        for (PlanTownEntity planTownEntity : planTown) {
+            Map<String,Integer> cityTownMap = new HashMap<>();
+            cityTownMap.put("cityId",planTownEntity.getCityOnly().getCityId());
+            if (planTownEntity.getTown() == null) {
+                cityTownMap.put("townId",-1);
+            } else {
+                cityTownMap.put("townId",planTownEntity.getTown().getTownPK().getTownId());
+            }
+            cityTownIdList.add(cityTownMap);
+        }
+
         HistoryDetailResDTO historyDetailResDTO = HistoryDetailResDTO.builder()
                 .diaryDetail(planListResDTO)
                 .diaryDayList(diaryDayList)
+                .plan_id(planId)
+                .cityIdTownIdList(cityTownIdList)
                 .build();
         return historyDetailResDTO;
     }
