@@ -59,7 +59,6 @@ const PlanSchedule = (props) => {
   const onClickTime = (arrIdx, idx, opt, setLoaded) => {
     setLoaded(false);
     let timeoutId = null;
-    console.log("option: ", option);
 
     // 이전 타임아웃이 있다면 취소
     if (timeoutId) {
@@ -74,7 +73,13 @@ const PlanSchedule = (props) => {
         setOption("1");
       } else {
         opt = "0";
-        setOption("0");
+        if (option === "0") {
+          opt = "1";
+          setOption("1");
+        } else if (option === "1") {
+          opt = "0";
+          setOption("0");
+        }
       }
       const timeIdx = idx;
       const startId = totalList[arrIdx][idx];
