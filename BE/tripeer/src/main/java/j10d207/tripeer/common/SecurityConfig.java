@@ -92,13 +92,15 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/user/error").permitAll()
-                        .requestMatchers("/user/test").hasRole("NONE")
-//                        .requestMatchers("/*", "/**","/admin").hasRole("ADMIN")
-                        .requestMatchers("/*", "/**").permitAll()
+                        //배포시 삭제 필요
+                        .requestMatchers("user/test/**", "/user/signup", "/user/social/info", "/user/name/duplicatecheck", "/user/reissue", "/weather", "/history/*").hasRole("NONE")
+                        .requestMatchers("/place/**", "/plan/**", "/user/**", "/history/**").hasRole("USER")
+//                        .requestMatchers("/").hasRole("ADMIN")
+                        .requestMatchers("/*", "/**").denyAll()
 //                        .requestMatchers("/api/**", "/api/*").permitAll() //개발 용 로그인 안했을때 postman 사용을 위해
                         .anyRequest().authenticated())
                 .exceptionHandling((exceptionConfig) ->
-                        exceptionConfig.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/user/test/error")));
+                        exceptionConfig.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/user/error")));
 
 
 

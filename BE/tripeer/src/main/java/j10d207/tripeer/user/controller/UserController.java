@@ -77,7 +77,7 @@ public class UserController {
     // access 토큰 재발급
     @PostMapping("/reissue")
     public Response<?> reissue(HttpServletRequest request, HttpServletResponse response) {
-        userService.tokenRefresh(request.getHeader("Authorization"), request.getCookies(), response);
+        userService.tokenRefresh(request.getHeader("AuthorizationOff"), request.getCookies(), response);
         return Response.of(HttpStatus.OK, "토큰 재발급 완료", null);
     }
 

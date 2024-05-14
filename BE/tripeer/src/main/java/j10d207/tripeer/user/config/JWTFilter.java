@@ -65,7 +65,6 @@ public class JWTFilter extends OncePerRequestFilter {
             return;
         }
         //토큰에서 email과 role 획득
-        System.out.println("여기2");
         setContext(jwtUtil.getName(accessToken), jwtUtil.getRole(accessToken));
         filterChain.doFilter(request, response);
     }

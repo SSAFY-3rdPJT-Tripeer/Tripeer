@@ -48,11 +48,24 @@ public class UserServiceImpl implements UserService{
         //생일 값 형식변환
         LocalDate birth = LocalDate.parse(joinDTO.getYear() + "-" + joinDTO.getMonth() + "-" + joinDTO.getDay());
 
+
         //소셜정보 가져오기
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
         CustomOAuth2User customUserDetails = (CustomOAuth2User) authentication.getPrincipal();
 
+        String newImg;
+        //프로필 사진 경로 필터
+        if (customUserDetails.getProfileImage() != null) {
+            String[] splitImg = customUserDetails.getProfileImage().split(":");
+            if(splitImg[0].equals("http")) {
+                newImg = splitImg[0] + "s" + ":" + splitImg[1];
+            } else {
+                newImg = customUserDetails.getProfileImage();
+            }
+        } else {
+            newImg = "https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/profileImg.png";
+        }
 
         UserEntity user = UserEntity.builder()
                 .provider(customUserDetails.getProvider())
@@ -60,7 +73,7 @@ public class UserServiceImpl implements UserService{
                 .email(customUserDetails.getEmail())
                 .nickname(joinDTO.getNickname())
                 .birth(birth)
-                .profileImage(customUserDetails.getProfileImage())
+                .profileImage(newImg)
                 .role("ROLE_USER")
                 .style1(joinDTO.getStyle1() == null ? null : TripStyleEnum.getNameByCode(joinDTO.getStyle1()))
                 .style2(joinDTO.getStyle2() == null ? null : TripStyleEnum.getNameByCode(joinDTO.getStyle2()))
@@ -245,7 +258,7 @@ public class UserServiceImpl implements UserService{
     public String getSuper(HttpServletResponse response, long userId) {
         UserEntity user = userRepository.findByUserId(userId);
         String result = jwtUtil.createJwt("Authorization", user.getNickname(), user.getRole(), userId, (long) 60*60*24*1000);
-        String refresh = jwtUtil.createJwt("Authorization-re", user.getNickname(), user.getRole(), userId, refreshTime*100*1000);
+        String refresh = jwtUtil.createJwt("Authorization-re", user.getNickname(), user.getRole(), userId, refreshTime);
 
         response.addCookie(createCookie("Authorization-re", refresh));
         response.setHeader("Authorization", "Bearer " + result);
