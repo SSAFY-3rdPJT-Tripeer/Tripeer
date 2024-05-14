@@ -175,7 +175,7 @@ const PlanSchedule = (props) => {
     try {
       const res = await api.post("/plan/optimizing/short", data);
       provider.doc.transact(() => {
-        if (type === "insert") {
+        if (type === "insert" && arr.length > index) {
           arr.delete(index, 1);
         }
         const tmp = [...res.data.data.spotTime];
@@ -186,6 +186,12 @@ const PlanSchedule = (props) => {
         }
       });
     } catch (e) {
+      const tmp2 = [["요청이 너무 빠릅니다. 다시 시도해주세요.", "2", null]];
+      arr.insert(index - 1, [...tmp2]);
+      if (arr.length === index) {
+        arr.insert(index, [...tmp2]);
+      }
+      console.log(index);
       console.log("시간 계산 GET 요청 실패: ", e);
       console.log("시간 계산 GET 요청 실패 타입: ", type);
     }
@@ -193,25 +199,306 @@ const PlanSchedule = (props) => {
 
   // 아이템을 놓을때 실행
   const onDragEnd = (result) => {
-    const { source, destination } = result;
+    try {
+      const { source, destination } = result;
 
-    // 이상한곳에 드롭되는경우
-    if (!destination) {
-      return;
-    }
+      // 이상한곳에 드롭되는경우
+      if (!destination) {
+        return;
+      }
 
-    // 가져온 영역
-    const sIdx = +source.droppableId;
-    // 옮긴 영역
-    const dIdx = +destination.droppableId;
+      // 가져온 영역
+      const sIdx = +source.droppableId;
+      // 옮긴 영역
+      const dIdx = +destination.droppableId;
 
-    const isToBottom = source.index <= destination.index;
+      const isToBottom = source.index <= destination.index;
 
-    // 같은 영역인 경우
-    if (sIdx === dIdx) {
-      let sourceItems = totalY.get(sIdx); // 장소배열
-      let destinationItems = totalY.get(dIdx);
-      if (source.index !== destination.index) {
+      // 같은 영역인 경우
+      if (sIdx === dIdx) {
+        let sourceItems = totalY.get(sIdx); // 장소배열
+        let destinationItems = totalY.get(dIdx);
+        if (source.index !== destination.index) {
+          // --------------------------------------------------
+
+          if (sIdx !== 0) {
+            let timeArr = timeY.get(sIdx); // 타임 배열
+            const i = source.index;
+            if (timeArr.length !== 0) {
+              // 원래 있던 곳이 맨앞(i == 0)인 경우
+              if (i === 0) {
+                //// 타임배열 i번을 지우고 앞으로 한칸씩 떙긴다
+                timeArr.delete(i, 1);
+                timeArr.insert(i, [0]);
+              }
+
+              // 원래 있던 곳이 끝(i == 장소배열.length-1)인 경`우
+              else if (i === sourceItems.length - 1) {
+                //// 타임배열에서 i-1번을 지운다
+                timeArr.delete(i - 1, 1);
+                timeArr.insert(i - 1, [0]);
+              }
+
+              // 원래 있던 곳이 중간(i)인 경우
+              else {
+                //// 타임배열에서 i번을 지우고, 앞으로 한칸씩 떙기고, 장소배열에서 i-1번과 i+1번 사이의 시간을 요청하고, 타임배열에서 i-1을 수정
+                let arr1 = sourceItems.get(i - 1);
+                let arr2 = sourceItems.get(i + 1);
+                const startId = arr1;
+                const endtId = arr2;
+                if (isToBottom) {
+                  if (
+                    destination.index - source.index > 1 &&
+                    destination.index < destinationItems.length - 1
+                  ) {
+                    timeArr.delete(i, 1);
+                    getTime(startId, endtId, timeArr, i - 1, "insert");
+                  } else if (
+                    source.index === destinationItems.length - 2 &&
+                    destination.index === destinationItems.length - 1
+                  ) {
+                    getTime(
+                      startId,
+                      endtId,
+                      timeArr,
+                      source.index - 1,
+                      "insert",
+                    );
+                  } else {
+                    timeArr.delete(i, 1);
+                    timeArr.insert(i - 1, [0]);
+                    getTime(startId, endtId, timeArr, i - 1, "insert");
+                  }
+                } else {
+                  if (source.index === 1 && destination.index === 0) {
+                    let arr4 = sourceItems.get(source.index);
+                    const startId2 = arr4;
+                    getTime(
+                      startId2,
+                      startId,
+                      timeArr,
+                      source.index - 1,
+                      "insert",
+                    );
+                  } else if (
+                    source.index !== sourceItems.length - 1 &&
+                    source.index - destination.index === 1
+                  ) {
+                    let arr4 = sourceItems.get(destination.index - 1);
+                    const startId2 = arr4;
+                    let arr5 = sourceItems.get(source.index);
+                    const startId3 = arr5;
+                    getTime(
+                      startId2,
+                      startId3,
+                      timeArr,
+                      destination.index - 1,
+                      "insert",
+                    );
+                  } else {
+                    timeArr.delete(i, 1);
+                    timeArr.insert(i, [0]);
+                    getTime(startId, endtId, timeArr, i, "insert");
+                  }
+                }
+              }
+            }
+          }
+
+          //   넣기
+          if (dIdx !== 0) {
+            let timeArr = timeY.get(dIdx); // 타임 배열
+            // 이동한곳에 하나 이상 있을때
+            if (destinationItems.length > 0) {
+              let i = destination.index;
+
+              // if (source.index <= destination.indx) {
+              //   i -= 1;
+              //   k += 1;
+              // }
+              //// 앞에 추가하는 경우 (i == 0)
+              if (destination.index === 0) {
+                ////// 추가한 장소와 장소배열의 i번 장소의 시간을 계산하고, 타임배열의 i번에 삽입
+                let arr1 = sourceItems.get(source.index);
+                let arr2 = destinationItems.get(i);
+                const startId = arr1;
+                const endId = arr2;
+
+                if (source.index === 1 && destination.index === 0) {
+                  let arr4 = sourceItems.get(source.index);
+                  const startId2 = arr4;
+                  let arr5 = sourceItems.get(destination.index);
+                  const startId3 = arr5;
+                  getTime(
+                    startId2,
+                    startId3,
+                    timeArr,
+                    source.index - 1,
+                    "insert",
+                  );
+                } else {
+                  getTime(startId, endId, timeArr, i, "create");
+                  if (!isToBottom) {
+                    timeArr.delete(timeArr.length - 1, 1);
+                  }
+                }
+              }
+              //// 끝에 추가하는 경우 (i == 장소배열.length)
+              else if (destination.index === destinationItems.length - 1) {
+                if (
+                  source.index === destinationItems.length - 2 &&
+                  destination.index === destinationItems.length - 1
+                ) {
+                  let arr1 = sourceItems.get(source.index);
+                  let arr2 = destinationItems.get(destination.index);
+                  const startId = arr2;
+                  const endId = arr1;
+                  getTime(
+                    startId,
+                    endId,
+                    timeArr,
+                    destination.index - 1,
+                    "insert",
+                  );
+                } else {
+                  ////// 추가한 장소와 장소배열의 i-1번 장소의 시간을 계산하고, 타임배열의 i-1번에 추가
+                  let arr1 = sourceItems.get(source.index);
+                  let arr2 = destinationItems.get(i - 1);
+
+                  const startId = arr2;
+                  const endId = arr1;
+
+                  getTime(startId, endId, timeArr, i - 1, "add");
+                  if (isToBottom) {
+                    timeArr.delete(0, 1);
+                  }
+                  if (!isToBottom) {
+                    timeArr.delete(timeArr.length - 1, 1);
+                  }
+                }
+              }
+              //// 중간에 추가하는 경우
+              else {
+                ////// 추가한 장소와 장소배열의 i-1번 장소의 시간을 계산하고 타임배열의 i-1번에 삽입
+                let arr1 = sourceItems.get(source.index);
+                let arr2 = null;
+
+                if (isToBottom) {
+                  arr2 = destinationItems.get(destination.index);
+                } else {
+                  arr2 = destinationItems.get(destination.index - 1);
+                }
+                const startId = arr1;
+                const endId = arr2;
+
+                if (!isToBottom) {
+                  if (
+                    source.index !== sourceItems.length - 1 &&
+                    source.index - destination.index === 1
+                  ) {
+                    let arr4 = sourceItems.get(source.index);
+                    const startId2 = arr4;
+                    let arr5 = sourceItems.get(destination.index);
+                    const startId3 = arr5;
+                    getTime(
+                      startId2,
+                      startId3,
+                      timeArr,
+                      destination.index,
+                      "insert",
+                    );
+                  } else {
+                    getTime(
+                      endId,
+                      startId,
+                      timeArr,
+                      destination.index - 1,
+                      "insert",
+                    );
+                  }
+                } else {
+                  if (
+                    destination.index - source.index > 1 &&
+                    source.index !== 0
+                  ) {
+                    getTime(
+                      endId,
+                      startId,
+                      timeArr,
+                      destination.index - 1,
+                      "add",
+                    );
+                  } else {
+                    getTime(
+                      endId,
+                      startId,
+                      timeArr,
+                      destination.index - 1,
+                      "insert",
+                    );
+                  }
+                }
+                ////// 추가한 장소와 장소배열의 i번 장소의 시간을 계산하고, 타임배열 i번에 삽입
+                let arr3 = null;
+                let endId2 = null;
+                if (isToBottom) {
+                  arr3 = destinationItems.get(destination.index + 1);
+                  endId2 = arr3;
+                  if (source.index === 0) {
+                    getTime(startId, endId2, timeArr, i, "add");
+                  } else {
+                    getTime(startId, endId2, timeArr, i, "insert");
+                  }
+                  if (source.index === 0) {
+                    timeArr.delete(0, 1);
+                  }
+                } else {
+                  if (
+                    source.index !== sourceItems.length - 1 &&
+                    source.index - destination.index === 1
+                  ) {
+                    let arr4 = sourceItems.get(destination.index);
+                    const startId2 = arr4;
+                    let arr5 = sourceItems.get(source.index + 1);
+                    const startId3 = arr5;
+                    getTime(
+                      startId2,
+                      startId3,
+                      timeArr,
+                      source.index,
+                      "insert",
+                    );
+                  } else {
+                    arr3 = destinationItems.get(destination.index);
+                    endId2 = arr3;
+                    getTime(startId, endId2, timeArr, i, "add");
+                    timeArr.delete(timeArr.length - 1, 1);
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        // --------------------------------------------------
+
+        // 삭제할 값 미리 저장
+        const tmp = sourceItems.get(source.index);
+
+        // 아이템이 이동했으니 아이템 삭제
+        sourceItems.delete(source.index, 1);
+
+        // 이동한곳에 아이템 추가
+        sourceItems.insert(destination.index, [tmp]);
+      }
+
+      // 다른 영역인 경우
+      else {
+        // 원래 있던곳의 배열 가져오기
+        let sourceItems = totalY.get(sIdx);
+        // 이동한 곳의 배열 가져오기
+        let destinationItems = totalY.get(dIdx); // 장소 배열
+
         // --------------------------------------------------
 
         if (sIdx !== 0) {
@@ -222,73 +509,23 @@ const PlanSchedule = (props) => {
             if (i === 0) {
               //// 타임배열 i번을 지우고 앞으로 한칸씩 떙긴다
               timeArr.delete(i, 1);
-              timeArr.insert(i, [0]);
             }
 
             // 원래 있던 곳이 끝(i == 장소배열.length-1)인 경`우
             else if (i === sourceItems.length - 1) {
               //// 타임배열에서 i-1번을 지운다
               timeArr.delete(i - 1, 1);
-              timeArr.insert(i - 1, [0]);
             }
 
             // 원래 있던 곳이 중간(i)인 경우
             else {
               //// 타임배열에서 i번을 지우고, 앞으로 한칸씩 떙기고, 장소배열에서 i-1번과 i+1번 사이의 시간을 요청하고, 타임배열에서 i-1을 수정
+              timeArr.delete(i, 1);
               let arr1 = sourceItems.get(i - 1);
               let arr2 = sourceItems.get(i + 1);
               const startId = arr1;
               const endtId = arr2;
-              if (isToBottom) {
-                if (
-                  destination.index - source.index > 1 &&
-                  destination.index < destinationItems.length - 1
-                ) {
-                  timeArr.delete(i, 1);
-                  getTime(startId, endtId, timeArr, i - 1, "insert");
-                } else if (
-                  source.index === destinationItems.length - 2 &&
-                  destination.index === destinationItems.length - 1
-                ) {
-                  getTime(startId, endtId, timeArr, source.index - 1, "insert");
-                } else {
-                  timeArr.delete(i, 1);
-                  timeArr.insert(i - 1, [0]);
-                  getTime(startId, endtId, timeArr, i - 1, "insert");
-                }
-              } else {
-                if (source.index === 1 && destination.index === 0) {
-                  let arr4 = sourceItems.get(source.index);
-                  const startId2 = arr4;
-                  getTime(
-                    startId2,
-                    startId,
-                    timeArr,
-                    source.index - 1,
-                    "insert",
-                  );
-                } else if (
-                  source.index !== sourceItems.length - 1 &&
-                  source.index - destination.index === 1
-                ) {
-                  let arr4 = sourceItems.get(destination.index - 1);
-                  const startId2 = arr4;
-                  let arr5 = sourceItems.get(source.index);
-                  const startId3 = arr5;
-                  getTime(
-                    startId2,
-                    startId3,
-                    timeArr,
-                    destination.index - 1,
-                    "insert",
-                  );
-                } else {
-                  console.log("asd");
-                  timeArr.delete(i, 1);
-                  timeArr.insert(i, [0]);
-                  getTime(startId, endtId, timeArr, i, "insert");
-                }
-              }
+              getTime(startId, endtId, timeArr, i - 1, "insert");
             }
           }
         }
@@ -298,272 +535,56 @@ const PlanSchedule = (props) => {
           let timeArr = timeY.get(dIdx); // 타임 배열
           // 이동한곳에 하나 이상 있을때
           if (destinationItems.length > 0) {
-            let i = destination.index;
-
-            // if (source.index <= destination.indx) {
-            //   i -= 1;
-            //   k += 1;
-            // }
+            const i = destination.index;
             //// 앞에 추가하는 경우 (i == 0)
-            if (destination.index === 0) {
+            if (i === 0) {
               ////// 추가한 장소와 장소배열의 i번 장소의 시간을 계산하고, 타임배열의 i번에 삽입
               let arr1 = sourceItems.get(source.index);
               let arr2 = destinationItems.get(i);
               const startId = arr1;
               const endId = arr2;
-
-              if (source.index === 1 && destination.index === 0) {
-                let arr4 = sourceItems.get(source.index);
-                const startId2 = arr4;
-                let arr5 = sourceItems.get(destination.index);
-                const startId3 = arr5;
-                getTime(
-                  startId2,
-                  startId3,
-                  timeArr,
-                  source.index - 1,
-                  "insert",
-                );
-              } else {
-                getTime(startId, endId, timeArr, i, "create");
-                if (!isToBottom) {
-                  timeArr.delete(timeArr.length - 1, 1);
-                }
-              }
+              getTime(startId, endId, timeArr, i, "create");
             }
             //// 끝에 추가하는 경우 (i == 장소배열.length)
-            else if (destination.index === destinationItems.length - 1) {
-              if (
-                source.index === destinationItems.length - 2 &&
-                destination.index === destinationItems.length - 1
-              ) {
-                let arr1 = sourceItems.get(source.index);
-                let arr2 = destinationItems.get(destination.index);
-                const startId = arr2;
-                const endId = arr1;
-                getTime(
-                  startId,
-                  endId,
-                  timeArr,
-                  destination.index - 1,
-                  "insert",
-                );
-              } else {
-                ////// 추가한 장소와 장소배열의 i-1번 장소의 시간을 계산하고, 타임배열의 i-1번에 추가
-                let arr1 = sourceItems.get(source.index);
-                let arr2 = destinationItems.get(i - 1);
+            else if (i === destinationItems.length) {
+              ////// 추가한 장소와 장소배열의 i-1번 장소의 시간을 계산하고, 타임배열의 i-1번에 추가
+              let arr1 = sourceItems.get(source.index);
+              let arr2 = destinationItems.get(i - 1);
 
-                const startId = arr2;
-                const endId = arr1;
+              const startId = arr2;
+              const endId = arr1;
 
-                getTime(startId, endId, timeArr, i - 1, "add");
-                if (isToBottom) {
-                  timeArr.delete(0, 1);
-                }
-                if (!isToBottom) {
-                  timeArr.delete(timeArr.length - 1, 1);
-                }
-              }
+              getTime(startId, endId, timeArr, i - 1, "add");
             }
             //// 중간에 추가하는 경우
             else {
               ////// 추가한 장소와 장소배열의 i-1번 장소의 시간을 계산하고 타임배열의 i-1번에 삽입
               let arr1 = sourceItems.get(source.index);
-              let arr2 = null;
+              let arr2 = destinationItems.get(i - 1);
+              const startId = arr2;
+              const endId = arr1;
 
-              if (isToBottom) {
-                arr2 = destinationItems.get(destination.index);
-              } else {
-                arr2 = destinationItems.get(destination.index - 1);
-              }
-              const startId = arr1;
-              const endId = arr2;
-
-              if (!isToBottom) {
-                if (
-                  source.index !== sourceItems.length - 1 &&
-                  source.index - destination.index === 1
-                ) {
-                  let arr4 = sourceItems.get(source.index);
-                  const startId2 = arr4;
-                  let arr5 = sourceItems.get(destination.index);
-                  const startId3 = arr5;
-                  getTime(
-                    startId2,
-                    startId3,
-                    timeArr,
-                    destination.index,
-                    "insert",
-                  );
-                } else {
-                  getTime(
-                    endId,
-                    startId,
-                    timeArr,
-                    destination.index - 1,
-                    "insert",
-                  );
-                }
-              } else {
-                if (
-                  destination.index - source.index > 1 &&
-                  source.index !== 0
-                ) {
-                  getTime(
-                    endId,
-                    startId,
-                    timeArr,
-                    destination.index - 1,
-                    "add",
-                  );
-                } else {
-                  getTime(
-                    endId,
-                    startId,
-                    timeArr,
-                    destination.index - 1,
-                    "insert",
-                  );
-                }
-              }
+              getTime(startId, endId, timeArr, i - 1, "insert");
               ////// 추가한 장소와 장소배열의 i번 장소의 시간을 계산하고, 타임배열 i번에 삽입
-              let arr3 = null;
-              let endId2 = null;
-              if (isToBottom) {
-                arr3 = destinationItems.get(destination.index + 1);
-                endId2 = arr3;
-                if (source.index === 0) {
-                  getTime(startId, endId2, timeArr, i, "add");
-                } else {
-                  getTime(startId, endId2, timeArr, i, "insert");
-                }
-                if (source.index === 0) {
-                  timeArr.delete(0, 1);
-                }
-              } else {
-                if (
-                  source.index !== sourceItems.length - 1 &&
-                  source.index - destination.index === 1
-                ) {
-                  let arr4 = sourceItems.get(destination.index);
-                  const startId2 = arr4;
-                  let arr5 = sourceItems.get(source.index + 1);
-                  const startId3 = arr5;
-                  getTime(startId2, startId3, timeArr, source.index, "insert");
-                } else {
-                  arr3 = destinationItems.get(destination.index);
-                  endId2 = arr3;
-                  getTime(startId, endId2, timeArr, i, "add");
-                  timeArr.delete(timeArr.length - 1, 1);
-                }
-              }
+              let arr3 = destinationItems.get(i);
+              const endId2 = arr3;
+              getTime(endId, endId2, timeArr, i, "add");
             }
           }
         }
+
+        // --------------------------------------------------
+
+        // 옮길 데이터 임시 저장
+        const tmp = sourceItems.get(source.index);
+
+        // 원래 있던 배열에서 아이템 삭제
+        sourceItems.delete(source.index, 1);
+        // 이동한 배열에 추가
+        destinationItems.insert(destination.index, [tmp]);
       }
-
-      // --------------------------------------------------
-
-      // 삭제할 값 미리 저장
-      const tmp = sourceItems.get(source.index);
-
-      // 아이템이 이동했으니 아이템 삭제
-      sourceItems.delete(source.index, 1);
-
-      // 이동한곳에 아이템 추가
-      sourceItems.insert(destination.index, [tmp]);
-    }
-
-    // 다른 영역인 경우
-    else {
-      // 원래 있던곳의 배열 가져오기
-      let sourceItems = totalY.get(sIdx);
-      // 이동한 곳의 배열 가져오기
-      let destinationItems = totalY.get(dIdx); // 장소 배열
-
-      // --------------------------------------------------
-
-      if (sIdx !== 0) {
-        let timeArr = timeY.get(sIdx); // 타임 배열
-        const i = source.index;
-        if (timeArr.length !== 0) {
-          // 원래 있던 곳이 맨앞(i == 0)인 경우
-          if (i === 0) {
-            //// 타임배열 i번을 지우고 앞으로 한칸씩 떙긴다
-            timeArr.delete(i, 1);
-          }
-
-          // 원래 있던 곳이 끝(i == 장소배열.length-1)인 경`우
-          else if (i === sourceItems.length - 1) {
-            //// 타임배열에서 i-1번을 지운다
-            timeArr.delete(i - 1, 1);
-          }
-
-          // 원래 있던 곳이 중간(i)인 경우
-          else {
-            //// 타임배열에서 i번을 지우고, 앞으로 한칸씩 떙기고, 장소배열에서 i-1번과 i+1번 사이의 시간을 요청하고, 타임배열에서 i-1을 수정
-            timeArr.delete(i, 1);
-            let arr1 = sourceItems.get(i - 1);
-            let arr2 = sourceItems.get(i + 1);
-            const startId = arr1;
-            const endtId = arr2;
-            getTime(startId, endtId, timeArr, i - 1, "insert");
-          }
-        }
-      }
-
-      //   넣기
-      if (dIdx !== 0) {
-        let timeArr = timeY.get(dIdx); // 타임 배열
-        // 이동한곳에 하나 이상 있을때
-        if (destinationItems.length > 0) {
-          const i = destination.index;
-          //// 앞에 추가하는 경우 (i == 0)
-          if (i === 0) {
-            ////// 추가한 장소와 장소배열의 i번 장소의 시간을 계산하고, 타임배열의 i번에 삽입
-            let arr1 = sourceItems.get(source.index);
-            let arr2 = destinationItems.get(i);
-            const startId = arr1;
-            const endId = arr2;
-            getTime(startId, endId, timeArr, i, "create");
-          }
-          //// 끝에 추가하는 경우 (i == 장소배열.length)
-          else if (i === destinationItems.length) {
-            ////// 추가한 장소와 장소배열의 i-1번 장소의 시간을 계산하고, 타임배열의 i-1번에 추가
-            let arr1 = sourceItems.get(source.index);
-            let arr2 = destinationItems.get(i - 1);
-
-            const startId = arr2;
-            const endId = arr1;
-
-            getTime(startId, endId, timeArr, i - 1, "add");
-          }
-          //// 중간에 추가하는 경우
-          else {
-            ////// 추가한 장소와 장소배열의 i-1번 장소의 시간을 계산하고 타임배열의 i-1번에 삽입
-            let arr1 = sourceItems.get(source.index);
-            let arr2 = destinationItems.get(i - 1);
-            const startId = arr2;
-            const endId = arr1;
-
-            getTime(startId, endId, timeArr, i - 1, "insert");
-            ////// 추가한 장소와 장소배열의 i번 장소의 시간을 계산하고, 타임배열 i번에 삽입
-            let arr3 = destinationItems.get(i);
-            const endId2 = arr3;
-            getTime(endId, endId2, timeArr, i, "add");
-          }
-        }
-      }
-
-      // --------------------------------------------------
-
-      // 옮길 데이터 임시 저장
-      const tmp = sourceItems.get(source.index);
-
-      // 원래 있던 배열에서 아이템 삭제
-      sourceItems.delete(source.index, 1);
-      // 이동한 배열에 추가
-      destinationItems.insert(destination.index, [tmp]);
+    } catch (e) {
+      console.log(e);
     }
   };
 
