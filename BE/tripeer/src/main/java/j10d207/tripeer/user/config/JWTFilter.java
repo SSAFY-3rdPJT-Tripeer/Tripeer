@@ -16,6 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -32,8 +33,7 @@ public class JWTFilter extends OncePerRequestFilter {
         String access = request.getHeader("Authorization");
         //access 헤더 검증
         if ( access == null ) {
-            System.out.println("여기1");
-            setContext(null, null);
+            setContext(null, "ROLE_NONE");
             filterChain.doFilter(request, response);
             //조건이 해당되면 메소드 종료 (필수)
             return;
@@ -71,6 +71,7 @@ public class JWTFilter extends OncePerRequestFilter {
     }
 
     private void setContext(String nickname, String role) {
+
         //스프링 시큐리티 인증 토큰 생성
         Authentication authToken = new UsernamePasswordAuthenticationToken(null, null, getAuthorities(role));
         //세션에 사용자 등록

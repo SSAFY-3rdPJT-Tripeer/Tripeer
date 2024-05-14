@@ -1,5 +1,7 @@
 package j10d207.tripeer.user.controller;
 
+import j10d207.tripeer.exception.CustomException;
+import j10d207.tripeer.exception.ErrorCode;
 import j10d207.tripeer.response.Response;
 import j10d207.tripeer.user.db.dto.JoinDTO;
 import j10d207.tripeer.user.db.dto.SocialInfoDTO;
@@ -82,6 +84,11 @@ public class UserController {
     @GetMapping("/test")
     public String test() {
         return "ok";
+    }
+
+    @GetMapping("/error")
+    public String testError() {
+        throw new CustomException(ErrorCode.REQUEST_AUTHORIZATION);
     }
 
     @GetMapping("/test/getsuper/{userId}")

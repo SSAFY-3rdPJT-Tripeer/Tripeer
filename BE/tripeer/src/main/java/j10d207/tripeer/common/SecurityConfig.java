@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -90,10 +91,15 @@ public class SecurityConfig {
         //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth) -> auth
-//                        .requestMatchers("/api/user/*","/admin").hasRole("ADMIN")
-//                        .requestMatchers("/*", "/**").permitAll()
+                        .requestMatchers("/user/error").permitAll()
+                        .requestMatchers("/user/test").hasRole("NONE")
+//                        .requestMatchers("/*", "/**","/admin").hasRole("ADMIN")
+                        .requestMatchers("/*", "/**").permitAll()
 //                        .requestMatchers("/api/**", "/api/*").permitAll() //개발 용 로그인 안했을때 postman 사용을 위해
-                        .anyRequest().authenticated());
+                        .anyRequest().authenticated())
+                .exceptionHandling((exceptionConfig) ->
+                        exceptionConfig.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/user/test/error")));
+
 
 
         http
