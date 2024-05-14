@@ -93,7 +93,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/user/error").permitAll()
                         //배포시 삭제 필요
-                        .requestMatchers("user/test/**", "/user/signup", "/user/social/info", "/user/name/duplicatecheck/*", "/user/reissue", "/weather", "/history/*").hasRole("NONE")
+                        .requestMatchers("user/test/**", "/user/signup", "/user/social/info", "/user/name/duplicatecheck/*", "/user/reissue", "/weather", "/history/*").hasAnyRole("NONE", "USER", "ADMIN")
                         .requestMatchers("/place/**", "/plan/**", "/user/**", "/history/**").hasAnyRole("USER", "ADMIN")
 //                        .requestMatchers("/").hasRole("ADMIN")
                         .requestMatchers("/*", "/**").denyAll()
