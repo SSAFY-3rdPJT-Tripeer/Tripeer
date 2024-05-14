@@ -27,6 +27,7 @@ public enum ErrorCode {
 
     // history
     UNSUPPORTED_JSON_TYPE(HttpStatus.BAD_REQUEST, "HISTORY-001", "저장할 수 없는 데이터가 존재합니다."),
+    HISTORY_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "HISTORY-002", "이미 존재하는 히스토리입니다."),
 
     //gallery
     GALLERY_NOT_FOUND(HttpStatus.NOT_FOUND, "GALLERY-001", "이미지를 찾을 수 없습니다."),
