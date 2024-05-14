@@ -26,6 +26,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -86,17 +87,19 @@ public class WeatherServiceImpl implements WeatherService{
         WeatherEntity weatherEntity = weatherRepository.findByCityIdAndTownId(cityId, townId)
                 .orElseThrow(() -> new CustomException(ErrorCode.WEATHER_NOT_FOUND));
 
-        CityEntity cityEntity = cityRepository.findByCityId(cityId)
-                .orElseThrow(() -> new CustomException(ErrorCode.CITY_NOT_FOUND));
-        TownEntity townEntity = townRepository.findByTownPK_TownIdAndTownPK_City_CityId(townId, cityId)
-                .orElseThrow(() -> new CustomException(ErrorCode.TOWN_NOT_FOUND));
-
-        String cityName = cityEntity.getCityName();
-        String townName = townEntity.getTownName();
         String maxTmp = weatherEntity.getMax_tmp();
         String minTmp = weatherEntity.getMin_temp();
+        CityEntity cityEntity = cityRepository.findByCityId(cityId)
+                .orElseThrow(() -> new CustomException(ErrorCode.CITY_NOT_FOUND));
+        String cityName = cityEntity.getCityName();
+        String townName = cityName;
 
+        if (townId != -1) {
+            TownEntity townEntity = townRepository.findByTownPK_TownIdAndTownPK_City_CityId(townId, cityId)
+                    .orElseThrow(() -> new CustomException(ErrorCode.TOWN_NOT_FOUND));
 
+            townName = townEntity.getTownName();
+        }
         List<WeatherDataEntity> weatherDatas = weatherEntity.getWeatherData();
 
         List<WeatherDataDTO> weatherDataDTOS = new ArrayList<>();
@@ -151,17 +154,20 @@ public class WeatherServiceImpl implements WeatherService{
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         String formattedDate = currentDate.format(formatter);
 
-        if (optionalWeatherEntity.isPresent() && townId != -1) {
+        if (optionalWeatherEntity.isPresent()) {
             if (!Objects.equals(optionalWeatherEntity.get().getDay(), formattedDate)) {
                 List<WeatherDataDTO> weatherDataDTOS = getWeatherJsonAPIAndData(cityId, townId);
 //                오늘 날짜랑 db에 있는 해당지역 날짜랑 같지 않다면
                 return updateWeather(optionalWeatherEntity.get(), weatherDataDTOS, formattedDate);
             }
-        } else if (optionalWeatherEntity.isEmpty() && townId != -1) {
+        } else {
             List<WeatherDataDTO> weatherDataDTOS = getWeatherJsonAPIAndData(cityId, townId);
 //               DB에 새로 추가
             return createWeather(cityId, townId, weatherDataDTOS, formattedDate);
         }
+//        } else if (optionalWeatherEntity.isEmpty()) {
+//            return getWeatherJsonAPIAndData(cityId, townId);
+//        }
 
         return getWeatherInDB(cityId, townId);//db에서 꺼내서 반환해주기;;
     }
@@ -210,14 +216,14 @@ public class WeatherServiceImpl implements WeatherService{
         String formattedYesterday = yesterday.format(formatter);
 
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst");
-        urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=xLnKfSmbSDLEQJZh5V24D8QWHc7bThu631O7rGX8o1WnCWramGZMFR%2FeKgwYW2SjMiMMJSNu2sTKLcqHHLT8%2FQ%3D%3D"); /*Service Key*/
-        urlBuilder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8"));
-        urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode("350", "UTF-8"));
-        urlBuilder.append("&" + URLEncoder.encode("dataType", "UTF-8") + "=" + URLEncoder.encode("JSON", "UTF-8"));
-        urlBuilder.append("&" + URLEncoder.encode("base_date", "UTF-8") + "=" + URLEncoder.encode(formattedYesterday, "UTF-8"));
-        urlBuilder.append("&" + URLEncoder.encode("base_time", "UTF-8") + "=" + URLEncoder.encode("2300", "UTF-8"));
-        urlBuilder.append("&" + URLEncoder.encode("nx", "UTF-8") + "=" + latitude);
-        urlBuilder.append("&" + URLEncoder.encode("ny", "UTF-8") + "=" + longitude);
+        urlBuilder.append("?").append(URLEncoder.encode("serviceKey", StandardCharsets.UTF_8)).append("=xLnKfSmbSDLEQJZh5V24D8QWHc7bThu631O7rGX8o1WnCWramGZMFR%2FeKgwYW2SjMiMMJSNu2sTKLcqHHLT8%2FQ%3D%3D"); /*Service Key*/
+        urlBuilder.append("&").append(URLEncoder.encode("pageNo", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode("1", StandardCharsets.UTF_8));
+        urlBuilder.append("&").append(URLEncoder.encode("numOfRows", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode("350", StandardCharsets.UTF_8));
+        urlBuilder.append("&").append(URLEncoder.encode("dataType", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode("JSON", StandardCharsets.UTF_8));
+        urlBuilder.append("&").append(URLEncoder.encode("base_date", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode(formattedYesterday, StandardCharsets.UTF_8));
+        urlBuilder.append("&").append(URLEncoder.encode("base_time", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode("2300", StandardCharsets.UTF_8));
+        urlBuilder.append("&").append(URLEncoder.encode("nx", StandardCharsets.UTF_8)).append("=").append(latitude);
+        urlBuilder.append("&").append(URLEncoder.encode("ny", StandardCharsets.UTF_8)).append("=").append(longitude);
 
         URL url = new URL(urlBuilder.toString());
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
