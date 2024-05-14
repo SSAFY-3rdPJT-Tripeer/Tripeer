@@ -231,6 +231,7 @@
   color: #04acb5;
   gap: 6px;
   transition: 0.1s ease;
+  background-color: white;
 }
 
 .routeBox {
@@ -251,6 +252,7 @@
   color: black;
   gap: 6px;
   transition: 0.1s ease;
+  background-color: white;
 }
 .routeIcon {
   background-image: url(../asset/mapRoute.svg);
@@ -269,6 +271,7 @@
 }
 
 .back {
+  z-index: 6;
   position: fixed;
   display: flex;
   justify-content: center;
@@ -289,7 +292,7 @@
 }
 
 .modalBox {
-  width: 350px;
+  width: 500px;
   height: 200px;
   background-color: #fff;
   border-radius: 5px;
@@ -298,13 +301,15 @@
   align-items: center;
   justify-content: center;
   color: #545454;
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
 .modalBtns {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 16px;
+  gap: 50px;
   width: 100%;
   margin-top: 50px;
 }
@@ -314,23 +319,23 @@
   justify-content: center;
   align-items: center;
   width: 150px;
-  height: 30px;
+  height: 50px;
   border-radius: 5px;
   background-color: #f7f7f7;
-  font-size: 0.8rem;
+  font-size: 1.1rem;
   cursor: pointer;
 }
 
 .confirmBtn {
+  font-size: 1.1rem;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 150px;
-  height: 30px;
+  height: 50px;
   border-radius: 5px;
   background-color: #04acb5;
-  font-size: 0.8rem;
   color: #fff;
 }
 

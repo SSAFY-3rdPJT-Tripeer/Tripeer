@@ -1,8 +1,29 @@
+"use client";
+
 import { useEffect, useRef, useState } from "react";
 import styles from "./planHome.module.css";
 import api from "@/utils/api";
-import { QuillBinding } from "y-quill";
-import Quill from "quill";
+import dynamic from "next/dynamic";
+// import { QuillBinding } from "y-quill";
+
+// import Quill from "quill";
+
+// const Quill = dynamic(() => import("quill"), { ssr: false });
+// const QuillBinding = dynamic(
+//   () => import("y-quill").then((mod) => mod.QuillBinding),
+//   { ssr: false },
+// );
+
+// const Quill =
+//   typeof window === "object"
+//     ? dynamic(() => import("quill"), { ssr: false })
+//     : false;
+// const QuillBinding =
+//   typeof window === "object"
+//     ? dynamic(() => import("y-quill").then((i) => i.QuillBinding), {
+//         ssr: false,
+//       })
+//     : false;
 
 const PlanHome = (props) => {
   const { plan, online, provider, myInfo } = props;
@@ -104,20 +125,18 @@ const PlanHome = (props) => {
   };
 
   useEffect(() => {
-    if (provider) {
+    if (provider && notifyTextArea.current) {
+      const Quill = require("quill").default; // Quill을 클라이언트에서만 로드
+      const QuillBinding = require("y-quill").QuillBinding; // QuillBinding을 클라이언트에서만 로드
       const textArea = provider.doc.getText("textArea");
-      const editor = new Quill("#textArea", {
+      const editor = new Quill(notifyTextArea.current, {
         modules: {
           toolbar: [],
         },
         theme: "snow",
       });
-      const binding = new QuillBinding(textArea, editor);
-      // setYNotify(textArea);
-      // notifyTextArea.current.value = textArea.toString();
-      // textArea.observe(() => {
-      //   document.querySelector("#textArea").innerHTML = textArea.toString();
-      // });
+      new QuillBinding(textArea, editor);
+      setYNotify(textArea);
     }
   }, [provider]);
 
@@ -185,7 +204,10 @@ const PlanHome = (props) => {
               <p className={styles.functionTitle}>공지사항</p>
             </div>
             <div className={styles.notifyContent}>
-              <div className={styles.notifyText} id="textArea"></div>
+              <div
+                className={styles.notifyText}
+                id="textArea"
+                ref={notifyTextArea}></div>
             </div>
           </div>
           <div className={styles.memberBox}>
@@ -280,7 +302,7 @@ const PlanHome = (props) => {
             <div className={styles.addSearch}>
               {searchResult.map((member, idx) => {
                 return (
-                  <div key={idx}>
+                  <div key={idx} style={{ width: "390px" }}>
                     <div className={styles.searchUserCard}>
                       <div
                         style={{
