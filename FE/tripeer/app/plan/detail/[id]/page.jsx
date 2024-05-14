@@ -283,12 +283,14 @@ const PageDetail = (props) => {
                 router.back();
               }}
             />
-            <QRCode value={`http://localhost:3000/trip/${props.params.id}`} />
+            <QRCode
+              value={`https://k10d207.p.ssafy.io/trip/${props.params.id}`}
+            />
             <div
               className={styles.exitBtn}
               onClick={() => {
                 window.location.replace(
-                  `http://localhost:3000/trip/${props.params.id}`,
+                  `https://k10d207.p.ssafy.io/trip/${props.params.id}`,
                 );
               }}>
               여행 바로 가기
