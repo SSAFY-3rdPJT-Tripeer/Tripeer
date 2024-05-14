@@ -231,9 +231,9 @@ const PlanHome = (props) => {
                             onClick={() => {
                               turnSpeaker(
                                 member.userId,
-                                document.querySelector(
-                                  `.Tripeer${member.userId}`,
-                                ),
+                                // document.querySelector(
+                                //   `.Tripeer${member.userId}`,
+                                // ),
                               );
                             }}></div>
                         </div>
@@ -280,8 +280,8 @@ const PlanHome = (props) => {
             <div className={styles.addSearch}>
               {searchResult.map((member, idx) => {
                 return (
-                  <>
-                    <div className={styles.searchUserCard} key={idx}>
+                  <div key={idx}>
+                    <div className={styles.searchUserCard}>
                       <div
                         style={{
                           display: "flex",
@@ -310,7 +310,7 @@ const PlanHome = (props) => {
                       </div>
                     </div>
                     <hr className={styles.addLine} key={`line${idx}`} />
-                  </>
+                  </div>
                 );
               })}
               {searchResult.length === 0 ? (

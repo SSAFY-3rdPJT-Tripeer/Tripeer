@@ -82,7 +82,7 @@ const OnlineBox = (props) => {
                     </div>
                     <div
                       className={
-                        online.find((user) => user.id === member.userId)
+                        online.find((user) => user?.id === member.userId)
                           ? styles.online
                           : styles.offline
                       }
