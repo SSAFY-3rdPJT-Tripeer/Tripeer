@@ -55,6 +55,7 @@ public class PublicRootDTO {
          * 7 - 해운 FERRY
          */
         private String mode;
+        private String route;
 
         //시작 지점 정보
         private String startName;
