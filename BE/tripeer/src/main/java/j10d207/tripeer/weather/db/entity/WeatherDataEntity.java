@@ -28,4 +28,5 @@ public class WeatherDataEntity {
     private String precip_type;
     private String sky_cond;
     private String hourly_temp;
+    private String time;
 }

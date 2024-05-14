@@ -1,6 +1,5 @@
 package j10d207.tripeer.tmap.db.entity;
 
-import j10d207.tripeer.plan.db.entity.PlanEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

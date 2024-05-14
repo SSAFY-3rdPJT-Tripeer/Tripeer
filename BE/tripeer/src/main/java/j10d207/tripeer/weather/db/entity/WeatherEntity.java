@@ -19,7 +19,7 @@ public class WeatherEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     // PK
     private int weatherId;
-    private LocalDate day;
+    private String day;
 
     @OneToMany(mappedBy = "weather", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<WeatherDataEntity> weatherData;

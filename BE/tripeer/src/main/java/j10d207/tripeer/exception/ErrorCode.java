@@ -19,6 +19,7 @@ public enum ErrorCode {
     USER_NOT_CORRESPOND(HttpStatus.BAD_REQUEST, "ACCOUNT-004", "사용자가 소유하지 않은 변경입니다."),
     TOKEN_EXPIRED_ERROR(HttpStatus.FORBIDDEN, "ACCOUNT-005", "만료되지 않은 access 또는 만료된 refresh 입니다"),
     DUPLICATE_USER(HttpStatus.BAD_REQUEST, "ACCOUNT-006", "이미 등록된 사용자입니다."),
+    REQUEST_AUTHORIZATION(HttpStatus.FORBIDDEN, "ACCOUNT-007", "권한이 없는 요청입니다."),
 
     // plan
     HAS_BUCKET(HttpStatus.BAD_REQUEST, "PLAN-001", "이미 등록된 장소입니다."),
@@ -51,7 +52,11 @@ public enum ErrorCode {
 
     //Email
     EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "EMAIL-001", "이메일 전송 중 오류가 발생 했습니다."),
-    INVALID_EMAIL(HttpStatus.NOT_FOUND, "EMAIL-002", "유효하지 않은 이메일 주소입니다.");
+    INVALID_EMAIL(HttpStatus.NOT_FOUND, "EMAIL-002", "유효하지 않은 이메일 주소입니다."),
+
+    //Weather
+    WEATHER_NOT_FOUND(HttpStatus.NOT_FOUND, "WEATHER-001", "날씨 정보를 불러 올 수 없습니다.");
+
 
     private final HttpStatus httpStatus;	// HttpStatus
     private final String code;				// ACCOUNT-001

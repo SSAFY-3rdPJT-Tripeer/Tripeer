@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -50,11 +51,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-//        LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil);
-//        loginFilter.setFilterProcessesUrl("/user/login");
-
-
-        // 04.14작성 - 시큐리티 cors 를 위해 필요한 부분으로 서버연결했을때 부터 주석 해제하여 사용
         http
                 .cors((corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
 
@@ -68,7 +64,6 @@ public class SecurityConfig {
                         config.setAllowCredentials(true);
                         config.setAllowedHeaders(List.of("*"));
                         config.setMaxAge(3600L);
-//                        config.setExposedHeaders(Collections.singletonList("access"));
 
                         return config;
                     }
@@ -96,24 +91,21 @@ public class SecurityConfig {
         //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth) -> auth
-//                        .requestMatchers("/admin").hasRole("ADMIN")
-                        .requestMatchers("/*", "/**").permitAll()
-//                        .requestMatchers("/api/**").permitAll() //개발 용 로그인 안했을때 postman 사용을 위해
-                        .anyRequest().authenticated());
+                        .requestMatchers("/user/error").permitAll()
+                        //배포시 삭제 필요
+                        .requestMatchers("user/test/**", "/user/signup", "/user/social/info", "/user/name/duplicatecheck/*", "/user/reissue", "/weather", "/history/*").hasAnyRole("NONE", "USER", "ADMIN")
+                        .requestMatchers("/place/**", "/plan/**", "/user/**", "/history/**").hasAnyRole("USER", "ADMIN")
+//                        .requestMatchers("/").hasRole("ADMIN")
+                        .requestMatchers("/*", "/**").denyAll()
+//                        .requestMatchers("/api/**", "/api/*").permitAll() //개발 용 로그인 안했을때 postman 사용을 위해
+                        .anyRequest().authenticated())
+                .exceptionHandling((exceptionConfig) ->
+                        exceptionConfig.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/user/error")));
+
 
 
         http
-//                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
                 .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
-
-        //필터 추가 LoginFilter()는 인자를 받음 (AuthenticationManager() 메소드에 authenticationConfiguration 객체를 넣어야 함) 따라서 등록 필요
-//        http
-//                .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
-
-        //세션 설정
-//        http
-//                .sessionManagement((session) -> session
-//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
     }
