@@ -15,6 +15,7 @@ import PlanSchedule from "@/components/plan/detail/PlanSchedule";
 import api from "@/utils/api";
 import MikeFunction from "@/components/plan/detail/MikeFunction";
 import QRCode from "qrcode.react";
+import axios from "axios";
 
 const PageDetail = (props) => {
   const [provider, setProvider] = useState(null);
@@ -54,6 +55,12 @@ const PageDetail = (props) => {
         y: y,
       });
     }
+  };
+
+  const backToProject = async () => {
+    const text = provider.doc.getText("exit");
+    text.delete(0, text.length);
+    await api.put(`/history/revoke/${plan.planId}`);
   };
 
   const chat = (e) => {
@@ -116,6 +123,8 @@ const PageDetail = (props) => {
         if (isExit.toString() === "exit") {
           setExit(true);
           console.log("프로젝트 종료");
+        } else {
+          setExit(false);
         }
       });
     }
@@ -286,14 +295,23 @@ const PageDetail = (props) => {
             <QRCode
               value={`https://k10d207.p.ssafy.io/trip/${props.params.id}`}
             />
-            <div
-              className={styles.exitBtn}
-              onClick={() => {
-                window.location.replace(
-                  `https://k10d207.p.ssafy.io/trip/${props.params.id}`,
-                );
-              }}>
-              여행 바로 가기
+            <div className={styles.btnFlex}>
+              <div
+                className={styles.backToBtn}
+                onClick={() => {
+                  backToProject();
+                }}>
+                취소
+              </div>
+              <div
+                className={styles.exitBtn}
+                onClick={() => {
+                  window.location.replace(
+                    `https://k10d207.p.ssafy.io/trip/${props.params.id}`,
+                  );
+                }}>
+                여행 바로 가기
+              </div>
             </div>
           </div>
         </div>

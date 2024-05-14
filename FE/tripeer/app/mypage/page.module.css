@@ -123,6 +123,19 @@
   color: #bbbbbb;
 }
 
+.emailTrueWarn {
+  margin-left: 8px;
+  font-size: 0.7rem;
+  color: rgb(239, 5, 5);
+}
+
+.emailFalseWarn {
+  margin-left: 8px;
+
+  font-size: 0.7rem;
+  color: #bbbbbb;
+}
+
 .styleBox {
   display: flex;
   align-items: center;

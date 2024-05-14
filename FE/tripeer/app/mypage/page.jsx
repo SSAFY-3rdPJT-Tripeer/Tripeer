@@ -17,6 +17,7 @@ export default function MyPage() {
   const [day, setDay] = useState("");
   const [nickname, setNickname] = useState("");
   const [duplicate, setDuplicate] = useState(false);
+  const [emailWarn, setEmailWarn] = useState(false);
   const [email, setEmail] = useState("");
   const [btns, setBtns] = useState([
     {
@@ -52,6 +53,18 @@ export default function MyPage() {
   const inputNick = useRef(null);
   const timer = useRef(null);
   const emailInput = useRef(null);
+
+  const emailCheck = (email) => {
+    const test =
+      /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+    const isValid = test.test(email);
+    if (isValid) {
+      setEmail(email);
+      setEmailWarn(false);
+      return;
+    }
+    setEmailWarn(true);
+  };
 
   const editImage = async (file) => {
     const form = new FormData();
@@ -144,10 +157,12 @@ export default function MyPage() {
       setDay(date.getDate());
       setNickname(res.data.data.nickname);
       if (res.data.data.email) {
+        emailCheck();
         setEmail(res.data.data.email);
       }
       inputNick.current.value = res.data.data.nickname;
       emailInput.current.value = res.data.data.email;
+      setEmailWarn(false);
 
       const arrs = [
         res.data.data.style1,
@@ -250,9 +265,15 @@ export default function MyPage() {
                 style={{ borderRadius: "5px" }}
                 ref={emailInput}
                 onChange={(e) => {
-                  setEmail(e.target.value);
+                  emailCheck(e.target.value);
                 }}
               />
+              <p
+                className={
+                  emailWarn ? styles.emailTrueWarn : styles.emailFalseWarn
+                }>
+                (올바른 이메일을 입력하세요)
+              </p>
             </div>
 
             <div className={styles.inputBox}>
