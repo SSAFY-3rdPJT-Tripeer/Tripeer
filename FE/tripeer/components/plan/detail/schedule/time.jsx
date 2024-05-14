@@ -17,7 +17,7 @@ export default function Time({ arrIdx, idx, timeList, onClickTime }) {
     if (value) {
       const timeoutId = setTimeout(() => {
         setDisplayValue(value);
-      }, 1400);
+      }, 0);
       return () => clearTimeout(timeoutId);
     }
   }, [timeList[arrIdx]?.[idx]]);

@@ -13,3 +13,29 @@
   overflow: hidden;
   border-radius: 10px;
 }
+
+.spinContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 103px;
+  height: 36px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #979797;
+  border-top: 5px solid transparent;
+  border-radius: 50%;
+  animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

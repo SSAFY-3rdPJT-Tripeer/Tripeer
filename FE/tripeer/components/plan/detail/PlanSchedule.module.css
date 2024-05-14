@@ -231,6 +231,7 @@
   color: #04acb5;
   gap: 6px;
   transition: 0.1s ease;
+  background-color: white;
 }
 
 .routeBox {
@@ -251,6 +252,7 @@
   color: black;
   gap: 6px;
   transition: 0.1s ease;
+  background-color: white;
 }
 .routeIcon {
   background-image: url(../asset/mapRoute.svg);
