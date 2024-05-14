@@ -32,4 +32,5 @@ public class PublicRootDetailEntity {
     private int distance;
     private int sectionTime;
     private String mode;
+    private String route;
 }

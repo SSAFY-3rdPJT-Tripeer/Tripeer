@@ -240,6 +240,7 @@ public class TMapServiceImpl implements TMapService {
             detail.setDistance(publicRootDetailEntity.getDistance());
             detail.setSectionTime(publicRootDetailEntity.getSectionTime());
             detail.setMode(publicRootDetailEntity.getMode());
+            detail.setRoute(publicRootDetailEntity.getRoute());
             detailList.add(detail);
         }
         result.setPublicRootDetailList(detailList);
@@ -274,6 +275,7 @@ public class TMapServiceImpl implements TMapService {
                     .distance(legObject.get("distance").getAsInt())
                     .sectionTime(legObject.get("sectionTime").getAsInt()/60)
                     .mode(legObject.get("mode").getAsString())
+                    .route(legObject.has("route") ? legObject.get("route").getAsString() : null)
                     .startName(legObject.getAsJsonObject("start").get("name").getAsString())
                     .startLat(legObject.getAsJsonObject("start").get("lat").getAsDouble())
                     .startLon(legObject.getAsJsonObject("start").get("lon").getAsDouble())
