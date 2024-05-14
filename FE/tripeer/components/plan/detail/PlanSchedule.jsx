@@ -20,6 +20,7 @@ import ScheduleModal from "@/components/plan/detail/schedule/scheduleModal";
 import LoadComponent from "@/components/loading/LoadComponent";
 import Block from "@/components/plan/detail/schedule/block";
 import MapRoute from "../MapRoute";
+import Block2 from "@/components/plan/detail/schedule/block2";
 
 const PlanSchedule = (props) => {
   const { myInfo, provider, plan, online } = props;
@@ -37,7 +38,7 @@ const PlanSchedule = (props) => {
   const [blockList, setBlockList] = useState([]);
   const [blockY, setBlockY] = useState(null);
   const [isModal, setIsModal] = useState(false);
-  const [option, setOption] = useState("0");
+  const [option, setOption] = useState("1");
   const [isLoading, setIsLoading] = useState(false);
   const [cirIdx, setCirIdx] = useState(0);
   const [isSaveModal, setIsSaveModal] = useState(false);
@@ -71,6 +72,9 @@ const PlanSchedule = (props) => {
       if (opt === "0") {
         opt = "1";
         setOption("1");
+      } else if (opt === "1") {
+        opt = "0";
+        setOption("0");
       } else {
         opt = "0";
         if (option === "0") {
@@ -902,7 +906,7 @@ const PlanSchedule = (props) => {
               return arrIdx === 0 ? null : (
                 // 일차별 일정 컴포넌트
                 <section key={arrIdx} className={styles.scheduleSection}>
-                  {/*{blockList[arrIdx] && <Block />}*/}
+                  {blockList[arrIdx] && <Block2 />}
                   {/*일차 및 계산 버튼  */}
                   <header className={styles.scHeader}>
                     <div className={styles.scHeaderBox}>
