@@ -12,6 +12,7 @@ public class RouteDetailDTO {
     private String mode;
     private Integer step;
     private Integer distance;
+    private String route;
 
     private String startName;
     private double startLat;
