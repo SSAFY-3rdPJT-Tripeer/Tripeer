@@ -170,32 +170,30 @@ const DiaryDetailCard = (props) => {
         <div className={styles.contentLeft}>
           {galleryPriviews.map((item, idx) => {
             return (
-              <div
-                key={idx}
-                className={styles.photoBox}
-                style={{ position: "relative" }}>
-                <Image
-                  className={styles.photo}
-                  src={item}
-                  alt="이미지"
-                  fill
-                  unoptimized={false}
-                  sizes="(max-width: 768px) 100vw,(max-width: 1200px) 50vw,33vw"
-                  loader={() => {
-                    return item ? item : defaultGalleryURL;
-                  }}></Image>
-                {idx === 3 ? (
-                  <div
-                    className={styles.moreBox}
-                    onClick={() => {
-                      goAlbum(diaryDay);
-                    }}>
-                    <div className={styles.moreText}>사진 더보기</div>
-                    <div className={styles.moreIcon}></div>
-                  </div>
-                ) : (
-                  <></>
-                )}
+              <div key={idx} className={styles.photoBox}>
+                <div
+                  style={{
+                    backgroundImage: `url(${item ? item : defaultGalleryURL})`,
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "cover",
+                    height: "100%",
+                    width: "100%",
+                    position: "relative",
+                  }}>
+                  {idx === 3 ? (
+                    <div
+                      className={styles.moreBox}
+                      onClick={() => {
+                        goAlbum(diaryDay);
+                      }}>
+                      <div className={styles.moreText}>사진 더보기</div>
+                      <div className={styles.moreIcon}></div>
+                    </div>
+                  ) : (
+                    <></>
+                  )}
+                </div>
               </div>
             );
           })}

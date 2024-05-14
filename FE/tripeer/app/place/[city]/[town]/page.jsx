@@ -7,6 +7,7 @@ import api from "@/utils/api";
 import PlaceSearchBar from "@/components/place/placeSearchBar";
 import PlaceItem from "@/components/place/placeItem";
 import usePlaceStore from "@/stores/place";
+import RecommendCardList from "@/components/place/RecommendCardList";
 
 export default function PlacePage({ params }) {
   // 화면에 보여줄 아이템 정보 리스트
@@ -90,6 +91,7 @@ export default function PlacePage({ params }) {
           <PlaceSearchBar setList={setList} />
         </div>
       </section>
+      <RecommendCardList></RecommendCardList>
       {/* 플레이스 출력 */}
       <section className={styles.sectionBottom}>
         {list.length === 0 ? (

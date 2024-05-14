@@ -47,34 +47,40 @@ const PhotoModal = (props) => {
       }}>
       <div className={styles.modalBox}>
         {gallery.length > 0 && step !== null && (
-          <div className={styles.imageIndex} style={{ position: "relative" }}>
-            <Image
-              src={gallery[step].img || defaultImg}
-              loader={() => gallery[step].img}
-              className={styles.image}
-              sizes="(max-width: 768px) 100vw,(max-width: 1200px) 50vw, 33vw"
-              fill
-              priority={false}
-              alt="Photo"></Image>
-            <div className={styles.userBox}>
-              <div
-                className={styles.userImgBox}
-                style={{ position: "relative" }}>
-                <Image
-                  src={gallery[step].userImg || defaultImg}
-                  loader={() => gallery[step].userImg}
-                  className={styles.userImg}
-                  sizes="(max-width: 768px) 100vw,(max-width: 1200px) 50vw, 33vw"
-                  fill
-                  priority={false}
-                  alt="memberImg"></Image>
-              </div>
-              {gallery.length > 0 && step !== null && (
-                <div className={styles.userName}>
-                  {gallery[step].userNickname}
+          <div className={styles.imageIndex}>
+            <div
+              style={{
+                backgroundImage: `url(${gallery[step].img || defaultImg})`,
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
+                height: "500px",
+                width: "500px",
+                position: "relative",
+              }}>
+              <div className={styles.userBox}>
+                <div
+                  className={styles.userImgBox}
+                  style={{ position: "relative" }}>
+                  <div
+                    style={{
+                      backgroundImage: `url(${gallery[step].userImg || defaultImg})`,
+                      backgroundPosition: "center",
+                      backgroundRepeat: "no-repeat",
+                      backgroundSize: "cover",
+                      borderRadius: "50px",
+                      height: "50px",
+                      width: "50px",
+                    }}></div>
                 </div>
-              )}
+                {gallery.length > 0 && step !== null && (
+                  <div className={styles.userName}>
+                    {gallery[step].userNickname}
+                  </div>
+                )}
+              </div>
             </div>
+
             <div
               className={styles.postArrow}
               onClick={() => {

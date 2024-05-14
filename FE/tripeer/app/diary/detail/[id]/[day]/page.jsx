@@ -178,43 +178,43 @@ const DayAlbum = () => {
                     } else {
                       togglePhotoSelection(idx);
                     }
-                  }}
-                  style={{ position: "relative" }}>
-                  <Image
-                    src={photo.img}
-                    loader={() => photo.img}
-                    sizes="(max-width: 768px) 100vw,(max-width: 1200px) 50vw, 33vw"
-                    fill
-                    priority={false}
-                    alt="memberImg"
-                    unoptimized={false}
-                  />
+                  }}>
                   <div
-                    className={styles.userImgBox}
-                    style={{ position: "relative" }}>
-                    <Image
-                      className={styles.userImg}
-                      src={photo.userImg}
-                      loader={() => photo.userImg}
-                      sizes="(max-width: 768px) 100vw,(max-width: 1200px) 50vw, 33vw"
-                      fill
-                      priority={false}
-                      alt="memberImg"
-                      unoptimized={false}
-                    />
-                  </div>
-                  {isSelectModal && (
-                    <div
-                      className={styles.checkBox}
-                      onClick={(e) => {
-                        e.stopPropagation(); // 이벤트 버블링 방지
-                        togglePhotoSelection(idx);
-                      }}>
-                      {selectedPhotos[idx] && (
-                        <div className={styles.check}></div>
-                      )}
+                    style={{
+                      backgroundImage: `url(${photo.img})`,
+                      backgroundPosition: "center",
+                      backgroundRepeat: "no-repeat",
+                      backgroundSize: "cover",
+                      height: "200px",
+                      width: "100%",
+                      position: "relative",
+                    }}>
+                    <div className={styles.userImgBox}>
+                      <div
+                        style={{
+                          backgroundImage: `url(${photo.userImg})`,
+                          backgroundPosition: "center",
+                          backgroundRepeat: "no-repeat",
+                          backgroundSize: "cover",
+                          height: "40px",
+                          width: "40px",
+                          borderRadius: "40px",
+                        }}></div>
                     </div>
-                  )}
+
+                    {isSelectModal && (
+                      <div
+                        className={styles.checkBox}
+                        onClick={(e) => {
+                          e.stopPropagation(); // 이벤트 버블링 방지
+                          togglePhotoSelection(idx);
+                        }}>
+                        {selectedPhotos[idx] && (
+                          <div className={styles.check}></div>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
               );
             })
