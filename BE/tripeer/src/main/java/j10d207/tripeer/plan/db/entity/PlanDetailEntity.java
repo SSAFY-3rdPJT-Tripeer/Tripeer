@@ -1,6 +1,7 @@
 package j10d207.tripeer.plan.db.entity;
 
 import j10d207.tripeer.place.db.entity.SpotInfoEntity;
+import j10d207.tripeer.tmap.db.entity.PublicRootEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -36,4 +37,8 @@ public class PlanDetailEntity {
     //비용
     @Setter
     private int cost;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PUBLIC_ROOT_ID")
+    private PublicRootEntity publicRoot;
 }
