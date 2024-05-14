@@ -18,6 +18,14 @@ import whiteSubway from "@/public/trip/whiteSubway.svg";
 import whiteTrain from "@/public/trip/whiteTrain.svg";
 import whiteAirplane from "@/public/trip/whiteAirplane.svg";
 import whiteFerry from "@/public/trip/whiteFerry.svg";
+import smallPerson from "@/public/trip/smallPerson.svg";
+import smallBus from "@/public/trip/smallBus.svg";
+import smallExpressBus from "@/public/trip/smallExpressBus.svg";
+import smallFerry from "@/public/trip/smallFerry.svg";
+import smallAirplane from "@/public/trip/smallAirplane.svg";
+import smallSubway from "@/public/trip/smallSubway.svg";
+import smallTrain from "@/public/trip/smallTrain.svg";
+import smallCar from "@/public/trip/smallCar.svg";
 
 const Schedule = (props) => {
   const { planId } = props.params;
@@ -29,6 +37,7 @@ const Schedule = (props) => {
   const [timeList, setTimeList] = useState(null);
   const [routeList, setRouteList] = useState(null);
   const [planDetail, setPlanDetail] = useState([]);
+  const [rootToggles, setRootToggles] = useState([]);
 
   const getMinute = (str) => {
     let arr = str.split(":");
@@ -37,6 +46,16 @@ const Schedule = (props) => {
     minutes = minutes + parseInt(arr[1]);
     return minutes;
   };
+
+  const setToggle = (idx) => {
+    let arr = [...rootToggles];
+    arr[idx] = !arr[idx];
+    setRootToggles([...arr]);
+  };
+
+  useEffect(() => {
+    console.log(rootToggles);
+  }, [rootToggles]);
 
   const getWidth = (mother, son) => {
     return (100 * son) / mother;
@@ -49,48 +68,64 @@ const Schedule = (props) => {
         routeColor: "#F96976",
         circleColor: "#E33E4D",
         fontColor: "#fff",
+        smallIcon: smallBus,
+        info: "버스",
       },
       WALK: {
         Icon: whitePerson,
         routeColor: "#E2E7EE",
         circleColor: "#CBCBCB",
         fontColor: "#858585",
+        smallIcon: smallPerson,
+        info: "도보",
       },
       CAR: {
         Icon: whiteCar,
         routeColor: "#4FBDB7",
         circleColor: "#2D8F8A",
         fontColor: "#fff",
+        smallIcon: smallCar,
+        info: "차",
       },
       SUBWAY: {
         Icon: whiteSubway,
         routeColor: "#FF8E00",
         circleColor: "#D25B06",
         fontColor: "#fff",
+        smallIcon: smallSubway,
+        info: "지하철",
       },
       EXPRESSBUS: {
         Icon: whiteBus,
         routeColor: "#9F63FF",
         circleColor: "#6C06D2",
         fontColor: "#fff",
+        smallIcon: smallExpressBus,
+        info: "시외버스",
       },
       TRAIN: {
         Icon: whiteTrain,
         routeColor: "#3E9F48",
         circleColor: "#246C45",
         fontColor: "#fff",
+        smallIcon: smallTrain,
+        info: "기차",
       },
       AIRPLANE: {
         Icon: whiteAirplane,
         routeColor: "#FFD552",
         circleColor: "#FFC100",
         fontColor: "#3D3C3C",
+        smallIcon: smallAirplane,
+        info: "비행기",
       },
       FERRY: {
         Icon: whiteFerry,
         routeColor: "#4E8DCC",
         circleColor: "#2D8F8A",
         fontColor: "#fff",
+        smallIcon: smallFerry,
+        info: "배",
       },
     };
   }, []);
@@ -167,6 +202,9 @@ const Schedule = (props) => {
   useEffect(() => {
     if ((dayStep, diary)) {
       setTimeList(diary[dayStep]["timeList"]);
+      const arr = new Array(diary[dayStep]["routeList"].length).fill(false);
+      console.log(arr);
+      setRootToggles(arr);
       setRouteList(diary[dayStep]["routeList"]);
       setPlanDetail(diary[dayStep]);
     }
@@ -351,6 +389,64 @@ const Schedule = (props) => {
                               },
                             )}
                           </div>
+                          {rootToggles[idx] ? (
+                            <div className={styles.rootDetailBox}>
+                              {routeList[idx]["publicRootDetailList"].map(
+                                (detail, idx) => {
+                                  return (
+                                    <div key={idx}>
+                                      <div className={styles.tracks}>
+                                        <div className={styles.track}></div>
+                                        <div className={styles.track}></div>
+                                        <div className={styles.track}></div>
+                                      </div>
+                                      <div className={styles.detailInfo}>
+                                        <Image
+                                          src={
+                                            ROUTE_STYLE[detail["mode"]]
+                                              .smallIcon
+                                          }
+                                          width={14}
+                                          height={14}
+                                          alt="아이콘"
+                                        />
+                                        <div className={styles.detailText}>
+                                          {ROUTE_STYLE[detail["mode"]].info +
+                                            "로 " +
+                                            detail.distance.toLocaleString() +
+                                            "m 이동"}
+                                          <p
+                                            className={
+                                              styles.detailTextDestination
+                                            }>
+                                            {` (${detail.startName} -> ${detail.endName})`}
+                                          </p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  );
+                                },
+                              )}
+                              <div className={styles.tracks}>
+                                <div className={styles.track}></div>
+                                <div className={styles.track}></div>
+                                <div className={styles.track}></div>
+                              </div>
+                            </div>
+                          ) : null}
+                          <div className={styles.rootIconBox}>
+                            <div
+                              className={
+                                rootToggles[idx]
+                                  ? styles.rootShowIcon
+                                  : styles.rootNotShowIcon
+                              }
+                              style={{ transition: "0.3s ease-in-out" }}
+                              onClick={() => {
+                                setToggle(idx);
+                              }}
+                            />
+                          </div>
                         </>
                       ) : null}
                     </div>
@@ -359,7 +455,9 @@ const Schedule = (props) => {
               );
             })
           ) : (
-            <div className={styles.blackContainer}>텅</div>
+            <div className={styles.blackContainer}>
+              해당 일자에 계획하신 일정이 없습니다.
+            </div>
           )}
         </div>
       ) : null}

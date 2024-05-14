@@ -18,6 +18,7 @@ const TripPage = (props) => {
   const [planDetail, setPlanDetail] = useState(null);
   const [planDate, setPlanDate] = useState("");
   const [onWeather, setOnWeather] = useState(false);
+  const [citys, setCitys] = useState(null);
 
   // 플랜 아이디 받기
   useEffect(() => {
@@ -26,6 +27,7 @@ const TripPage = (props) => {
         .get(`${process.env.NEXT_PUBLIC_API_URL}/history/${planId}`)
         .then((res) => {
           setPlan(res.data.data);
+          setCitys(res.data.data.cityIdTownIdList);
         })
         .catch(() => {
           router.push("/");
@@ -158,7 +160,7 @@ const TripPage = (props) => {
         </div>
       </div>
       {onWeather ? (
-        <Weather setOnWeather={setOnWeather} planId={planId} />
+        <Weather setOnWeather={setOnWeather} planId={planId} citys={citys} />
       ) : null}
     </div>
   );
