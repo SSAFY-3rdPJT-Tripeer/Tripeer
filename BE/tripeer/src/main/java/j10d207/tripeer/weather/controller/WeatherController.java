@@ -26,4 +26,9 @@ public class WeatherController {
     public Response<List<WeatherDataDTO>> getWeatherData(@RequestParam("cityId") int cityId, @RequestParam("townId") int townId) throws IOException {
         return Response.of(HttpStatus.OK, "날씨 데이터", weatherService.getWeatherJsonAPIAndData(cityId, townId));
     }
+
+    @GetMapping("/test")
+    public Response<List<WeatherDataDTO>> getWeather(@RequestParam("cityId") int cityId, @RequestParam("townId") int townId) throws IOException {
+        return Response.of(HttpStatus.OK, "날씨 데이터", weatherService.checkIsUpdateOrCreate(cityId, townId));
+    }
 }

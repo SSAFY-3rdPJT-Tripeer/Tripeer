@@ -11,5 +11,5 @@ public class PlanSaveReqDTO {
     @Schema(description = "테스트 값", example = "abcd")
     private long planId;
     private List<List<Map<String, String>>> totalYList;
-    private List<List<List<Object>>> timeYList;
+    private List<List<Object>> timeYList;
 }

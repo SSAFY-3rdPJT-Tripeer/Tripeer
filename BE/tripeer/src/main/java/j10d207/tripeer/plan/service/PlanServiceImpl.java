@@ -820,6 +820,10 @@ public class PlanServiceImpl implements PlanService {
              * 7 - 해운 FERRY
              */
             detail.setMode(legObject.get("mode").getAsString());
+
+            //대중교통 노선 명칭
+            detail.setRoute(legObject.has("route") ? legObject.get("route").getAsString() : null);
+
             //시작 지점 정보
             detail.setStartName(legObject.getAsJsonObject("start").get("name").getAsString());
             detail.setStartLat(legObject.getAsJsonObject("start").get("lat").getAsDouble());
