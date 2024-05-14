@@ -7,14 +7,11 @@ import j10d207.tripeer.place.db.entity.CityEntity;
 import j10d207.tripeer.place.db.entity.TownEntity;
 import j10d207.tripeer.place.db.repository.CityRepository;
 import j10d207.tripeer.place.db.repository.TownRepository;
-import j10d207.tripeer.plan.db.repository.PlanDayRepository;
-import j10d207.tripeer.plan.service.PlanService;
 import j10d207.tripeer.weather.db.CategoryCode;
 import j10d207.tripeer.weather.db.dto.ResponseDTO;
 import j10d207.tripeer.weather.db.dto.WeatherDataDTO;
 import j10d207.tripeer.weather.db.entity.WeatherDataEntity;
 import j10d207.tripeer.weather.db.entity.WeatherEntity;
-import j10d207.tripeer.weather.repository.WeatherDataRepository;
 import j10d207.tripeer.weather.repository.WeatherRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,17 +36,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class WeatherServiceImpl implements WeatherService{
 
-    private final PlanService planService;
-    private final PlanDayRepository planDayRepository;
     private final TownRepository townRepository;
     private final WeatherRepository weatherRepository;
-    private final WeatherDataRepository weatherDataRepository;
     private final CityRepository cityRepository;
     private final GridService gridService;
 
 
-
 //    db에 한번도 없었던 위치의 날씨를 조회하면 db에 생성하며 api신청
+    @Override
     public List<WeatherDataDTO> createWeather(int cityId, int townId, List<WeatherDataDTO> weatherDataDTOS, String formattedDate) {
         String maxTemp = weatherDataDTOS.getFirst().getMax_temp();
         String minTemp = weatherDataDTOS.getFirst().getMin_temp();
@@ -72,7 +66,6 @@ public class WeatherServiceImpl implements WeatherService{
             weatherDataEntity.setTime(weatherDataDTO.getTime());
             weatherDataEntity.setWeather(weather);
             weatherDataEntities.add(weatherDataEntity);
-
         }
         weather.setWeatherData(weatherDataEntities);
         weatherRepository.save(weather);
@@ -83,6 +76,7 @@ public class WeatherServiceImpl implements WeatherService{
 
 
     //    db에 있고, 조회 날짜도 같다면 db에 있는 데이터 조회
+    @Override
     public List<WeatherDataDTO> getWeatherInDB(int cityId, int townId) {
         WeatherEntity weatherEntity = weatherRepository.findByCityIdAndTownId(cityId, townId)
                 .orElseThrow(() -> new CustomException(ErrorCode.WEATHER_NOT_FOUND));
@@ -122,8 +116,8 @@ public class WeatherServiceImpl implements WeatherService{
 
 
 //    db에 정보는 존재하지만 날짜가 다르다면 API신청, db업데이트 후 반환
+    @Override
     public List<WeatherDataDTO> updateWeather(WeatherEntity weatherEntity, List<WeatherDataDTO> weatherDataDTOS, String formattedDate) {
-
         weatherEntity.setMin_temp(weatherDataDTOS.getFirst().getMax_temp());
         weatherEntity.setMax_tmp(weatherDataDTOS.getFirst().getMin_temp());
         weatherEntity.setDay(formattedDate);
@@ -137,7 +131,6 @@ public class WeatherServiceImpl implements WeatherService{
             weatherDatum.setHourly_temp(weatherDataDTO.getHourly_temp());
             i++;
         }
-
         weatherRepository.save(weatherEntity);
 
         return weatherDataDTOS;
@@ -146,6 +139,7 @@ public class WeatherServiceImpl implements WeatherService{
 
 
 //    db에 새로 만들지, 업데이트할지, db단순 조회할지 분기처리
+    @Override
     public List<WeatherDataDTO> checkIsUpdateOrCreate(int cityId, int townId) throws IOException {
 
         Optional<WeatherEntity> optionalWeatherEntity = weatherRepository.findByCityIdAndTownId(cityId, townId);
@@ -165,14 +159,12 @@ public class WeatherServiceImpl implements WeatherService{
 //               DB에 새로 추가
             return createWeather(cityId, townId, weatherDataDTOS, formattedDate);
         }
-//        } else if (optionalWeatherEntity.isEmpty()) {
-//            return getWeatherJsonAPIAndData(cityId, townId);
-//        }
 
         return getWeatherInDB(cityId, townId);//db에서 꺼내서 반환해주기;;
     }
 
 
+    @Override
     public List<ResponseDTO.ItemDTO> parseWeatherData(String jsonData) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         ResponseDTO responseDTO = mapper.readValue(jsonData, ResponseDTO.class);
@@ -182,6 +174,7 @@ public class WeatherServiceImpl implements WeatherService{
 
 
 //    API요청
+    @Override
     public List<WeatherDataDTO> getWeatherJsonAPIAndData(int cityId, Integer townId) throws IOException {
         int latitude;
         int longitude;
@@ -252,14 +245,18 @@ public class WeatherServiceImpl implements WeatherService{
     }
 
 
-//    Json데이터를 DTO형태로 파싱 및 매핑
+    /*
+    * Json데이터를 DTO형태로 파싱 및 매핑
+    * POP("강수확률", "%"),
+    * PTY("강수형태", ""),
+    * SKY("하늘상태", ""),
+    * TMP("1시간 기온", "℃"),
+    * TMN("아침 최저기온", "℃"),
+    * TMX("낮 최고기운", "℃");
+    * */
+    @Override
     public List<WeatherDataDTO> getParseWeatherDataDTO(List<ResponseDTO.ItemDTO> weatherDatas, String formattedDate, String cityName, String townName) {
-//        POP("강수확률", "%"),
-//        PTY("강수형태", ""),
-//        SKY("하늘상태", ""),
-//        TMP("1시간 기온", "℃"),
-//        TMN("아침 최저기온", "℃"),
-//        TMX("낮 최고기운", "℃");
+
 
         ArrayList<Object> popArray = new ArrayList<>();
         ArrayList<Object> ptyArray = new ArrayList<>();
@@ -334,7 +331,5 @@ public class WeatherServiceImpl implements WeatherService{
 
         return weatherDataDtos;
     }
-
-
 }
 
