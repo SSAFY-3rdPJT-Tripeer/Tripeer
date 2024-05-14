@@ -94,7 +94,7 @@ public class SecurityConfig {
                         .requestMatchers("/user/error").permitAll()
                         //배포시 삭제 필요
                         .requestMatchers("user/test/**", "/user/signup", "/user/social/info", "/user/name/duplicatecheck/*", "/user/reissue", "/weather", "/history/*").hasRole("NONE")
-                        .requestMatchers("/place/**", "/plan/**", "/user/**", "/history/**").hasRole("USER")
+                        .requestMatchers("/place/**", "/plan/**", "/user/**", "/history/**").hasAnyRole("USER", "ADMIN")
 //                        .requestMatchers("/").hasRole("ADMIN")
                         .requestMatchers("/*", "/**").denyAll()
 //                        .requestMatchers("/api/**", "/api/*").permitAll() //개발 용 로그인 안했을때 postman 사용을 위해
