@@ -217,6 +217,7 @@ public class TMapServiceImpl implements TMapService {
         return earthRadius * c;
     }
 
+    //저장된 결과를 가져와서 DTO로 변환
     private PublicRootDTO getRootDTO (PublicRootEntity publicRootEntity) {
         PublicRootDTO result = new PublicRootDTO();
 
@@ -250,7 +251,7 @@ public class TMapServiceImpl implements TMapService {
         return result;
     }
 
-
+    //최초에 조회된 경로를 저장
     private void saveRootInfo(JsonElement rootInfo, double SX, double SY, double EX, double EY, int time) {
         JsonObject infoObject = rootInfo.getAsJsonObject();
         PublicRootEntity publicRootEntity = PublicRootEntity.builder()

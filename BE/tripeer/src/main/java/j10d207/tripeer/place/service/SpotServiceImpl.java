@@ -158,7 +158,6 @@ public class SpotServiceImpl implements SpotService{
         CityEntity cityEntity = null;
 
         if (CityEntityOptional.isPresent()) {
-            System.out.println("cityEntity.getCityName() = dkdkdkdk " + CityEntityOptional.get().getCityName());
             cityEntity = CityEntityOptional.get();
         } else {
             switch (splitAddr) {
