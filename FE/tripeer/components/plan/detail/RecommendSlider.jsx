@@ -6,6 +6,7 @@ import FullHeart from "@/components/plan/asset/fullheart.svg";
 import Heart from "@/components/plan/asset/heart.svg";
 import Image from "next/image";
 import api from "@/utils/api";
+import alt from "../asset/default1.png";
 
 const RecommendSlider = (props) => {
   const {
@@ -188,6 +189,9 @@ const RecommendSlider = (props) => {
                 return (
                   <div className={styles.realCard} key={idx}>
                     <Image
+                      onLoad={() => {
+                        return spot.img ? spot.img : alt;
+                      }}
                       src={spot.img}
                       width={150}
                       height={150}
