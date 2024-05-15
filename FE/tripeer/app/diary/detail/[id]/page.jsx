@@ -126,21 +126,21 @@ const DiaryDetail = () => {
                     detailData.diaryDetail.member.map((mem, idx) => {
                       return (
                         <div key={idx} className={styles.nameBox}>
-                          <div className={styles.memberImgBox}>
-                            <div
-                              className={styles.memberImg}
-                              style={{
-                                backgroundImage: `url(${mem.profileImage})`,
-                                backgroundRepeat: "no-repeat",
-                                backgroundPosition: "center",
-                                backgroundSize: "cover",
-                                height: "50px",
-                                width: "50px",
-                                borderRadius: "50px",
-                                marginRight: "2px",
-                              }}></div>
-                          </div>
-                          <span className={styles.nicknameBox}>
+                          <div
+                            className={styles.memberImg}
+                            style={{
+                              backgroundImage: `url(${mem.profileImage})`,
+                              backgroundRepeat: "no-repeat",
+                              backgroundPosition: "center",
+                              backgroundSize: "cover",
+                              height: "50px",
+                              width: "50px",
+                              borderRadius: "50px",
+                              marginRight: "3px",
+                              flex: "none",
+                            }}></div>
+
+                          <span className={styles.nickname}>
                             {mem.nickname}
                           </span>
                         </div>

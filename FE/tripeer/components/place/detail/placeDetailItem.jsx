@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 
 import styles from "./placeDetailItem.module.css";
-import src from "@/public/place/vectorGrey.png";
 import api from "@/utils/api";
 import { useRouter } from "next/navigation";
 
@@ -47,37 +46,47 @@ export default function PlaceDetailItem({
     }
   }, [list]);
 
+  useEffect(() => {
+    if (data) {
+      setLoaded(true);
+    }
+  }, []);
+
   return (
     <main className={`${styles.main}`}>
       <div className={`${loaded ? styles.complete : styles.loading}`}>
         <div className={`${!loaded ? styles.waitBox : styles.noWaitBox}`}>
           <p>이미지 로드중...</p>
         </div>
-        <img
-          className={styles.image}
-          style={{ visibility: loaded ? "visible" : "hidden" }}
-          key={data.spotImg}
-          src={data.spotImg}
-          alt=""
-          onLoad={() => setLoaded(true)}
-          onClick={onClick}
-        />
       </div>
-      <Image
-        className={styles.like}
-        src={isLike ? "/place/like.png" : "/place/unlike.png"}
-        alt=""
-        width={50}
-        height={50}
-        onClick={likeOnClick}
-      />
-      <section className={styles.section} onClick={onClick}>
-        <p className={styles.p}>{data.spotName}</p>
-        <article className={styles.article}>
-          <Image className={styles.vector} src={src} alt="" />
-          <p>{data.address}</p>
-        </article>
-      </section>
+      <div
+        className={styles.image}
+        style={{
+          visibility: loaded ? "visible" : "hidden",
+          backgroundImage: `url(${data.spotImg})`,
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          height: "380px",
+          width: "390px",
+          position: "relative",
+        }}>
+        <Image
+          className={styles.like}
+          src={isLike ? "/place/like.png" : "/place/unlike.png"}
+          alt=""
+          width={50}
+          height={50}
+          onClick={likeOnClick}
+        />
+        <section className={styles.section} onClick={onClick}>
+          <p className={styles.p}>{data.spotName}</p>
+          <article className={styles.article}>
+            <div className={styles.vector}></div>
+            <p className={styles.addrText}>{data.address}</p>
+          </article>
+        </section>
+      </div>
     </main>
   );
 }
