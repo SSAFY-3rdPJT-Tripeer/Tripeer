@@ -92,6 +92,8 @@ public class SecurityConfig {
         //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth) -> auth
+                        .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**")
+                        .permitAll()
                         .requestMatchers(HttpMethod.GET, "/user/error", "/swagger-ui/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/user/name/duplicatecheck/*").hasAnyRole("VALIDATE")
                         .requestMatchers(HttpMethod.POST, "/user/signup").hasAnyRole("VALIDATE")
