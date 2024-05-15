@@ -50,9 +50,11 @@
 .sectionBottom {
   width: 85%;
   height: auto;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 50px 3.95%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  /* flex-wrap: wrap; */
+  /* justify-content: space-between; */
+  gap: 50px;
 }
 
 .searchBarText {

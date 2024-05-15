@@ -46,15 +46,14 @@ export default function PlaceItem({ data, isCity }) {
             }
           }}
         />
-      </div>
-
-      <section className={styles.section}>
-        <div className={styles.mapIcon}></div>
-        <p className={styles.p}>
-          {`${isCity || cityName[data.cityId] === data.townName ? "" : cityName[data.cityId]} 
+        <section className={styles.section}>
+          <div className={styles.mapIcon}></div>
+          <p className={styles.p}>
+            {`${isCity || cityName[data.cityId] === data.townName ? "" : cityName[data.cityId]} 
           ${isCity ? data.cityName : data.townName}`}
-        </p>
-      </section>
+          </p>
+        </section>
+      </div>
     </main>
   );
 }
