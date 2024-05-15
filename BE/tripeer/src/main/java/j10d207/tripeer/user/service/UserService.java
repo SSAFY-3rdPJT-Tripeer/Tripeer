@@ -32,4 +32,6 @@ public interface UserService {
 
     //테스트용 JWT 발급
     public String getSuper(HttpServletResponse response, long userId);
+    //테스트용 JWT 발급2
+    public String getSuper2(HttpServletResponse response, long userId);
 }
