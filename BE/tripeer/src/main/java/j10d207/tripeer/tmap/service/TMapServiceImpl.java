@@ -17,7 +17,9 @@ import j10d207.tripeer.tmap.db.entity.PublicRootEntity;
 import j10d207.tripeer.tmap.db.repository.PublicRootDetailRepository;
 import j10d207.tripeer.tmap.db.repository.PublicRootRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TMapServiceImpl implements TMapService {
 
     private final PublicRootDetailRepository publicRootDetailRepository;
@@ -266,25 +269,33 @@ public class TMapServiceImpl implements TMapService {
                 .pathType(infoObject.get("pathType").getAsInt())
                 .totalFare(infoObject.getAsJsonObject("fare").getAsJsonObject("regular").get("totalFare").getAsInt())
                 .build();
-        long rootId = publicRootRepository.save(publicRootEntity).getPublicRootId();
+        long rootId = 0;
+        try {
+            rootId = publicRootRepository.save(publicRootEntity).getPublicRootId();
+        } catch (DataIntegrityViolationException e ) {
+            log.error("DataIntegerityViolationError : " + e.getMessage() );
+            return;
+        }
 
-        JsonArray legs = infoObject.getAsJsonArray("legs");
-        for (JsonElement leg : legs) {
-            JsonObject legObject = leg.getAsJsonObject();
-            PublicRootDetailEntity detailEntity = PublicRootDetailEntity.builder()
-                    .publicRoot(PublicRootEntity.builder().publicRootId(rootId).build())
-                    .distance(legObject.get("distance").getAsInt())
-                    .sectionTime(legObject.get("sectionTime").getAsInt()/60)
-                    .mode(legObject.get("mode").getAsString())
-                    .route(legObject.has("route") ? legObject.get("route").getAsString() : null)
-                    .startName(legObject.getAsJsonObject("start").get("name").getAsString())
-                    .startLat(legObject.getAsJsonObject("start").get("lat").getAsDouble())
-                    .startLon(legObject.getAsJsonObject("start").get("lon").getAsDouble())
-                    .endName(legObject.getAsJsonObject("end").get("name").getAsString())
-                    .endLat(legObject.getAsJsonObject("end").get("lat").getAsDouble())
-                    .endLon(legObject.getAsJsonObject("end").get("lon").getAsDouble())
-                    .build();
-            publicRootDetailRepository.save(detailEntity);
+        if( rootId > 0) {
+            JsonArray legs = infoObject.getAsJsonArray("legs");
+            for (JsonElement leg : legs) {
+                JsonObject legObject = leg.getAsJsonObject();
+                PublicRootDetailEntity detailEntity = PublicRootDetailEntity.builder()
+                        .publicRoot(PublicRootEntity.builder().publicRootId(rootId).build())
+                        .distance(legObject.get("distance").getAsInt())
+                        .sectionTime(legObject.get("sectionTime").getAsInt() / 60)
+                        .mode(legObject.get("mode").getAsString())
+                        .route(legObject.has("route") ? legObject.get("route").getAsString() : null)
+                        .startName(legObject.getAsJsonObject("start").get("name").getAsString())
+                        .startLat(legObject.getAsJsonObject("start").get("lat").getAsDouble())
+                        .startLon(legObject.getAsJsonObject("start").get("lon").getAsDouble())
+                        .endName(legObject.getAsJsonObject("end").get("name").getAsString())
+                        .endLat(legObject.getAsJsonObject("end").get("lat").getAsDouble())
+                        .endLon(legObject.getAsJsonObject("end").get("lon").getAsDouble())
+                        .build();
+                publicRootDetailRepository.save(detailEntity);
+            }
         }
     }
 
