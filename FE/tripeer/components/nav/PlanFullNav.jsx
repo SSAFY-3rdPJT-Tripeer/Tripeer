@@ -19,6 +19,9 @@ const PlanFullNav = (props) => {
     <div className={styles.container}>
       <header className={styles.bannerBox}>
         <Image
+          onClick={() => {
+            router.push("/");
+          }}
           priority
           src={banner}
           width={130}
