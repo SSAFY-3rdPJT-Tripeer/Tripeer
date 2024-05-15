@@ -4,7 +4,6 @@
   border: none;
   border-radius: 5px;
   display: flex;
-  /* justify-content: space-between; */
   justify-content: center;
   align-items: center;
   flex-direction: column;

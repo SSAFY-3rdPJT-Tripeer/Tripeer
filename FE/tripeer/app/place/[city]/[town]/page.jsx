@@ -76,7 +76,6 @@ export default function PlacePage({ params }) {
     } else {
       setIsCity(false);
     }
-    // console.log("플레이스 정보 : ", list);
   }, [list]);
 
   return (
@@ -93,18 +92,20 @@ export default function PlacePage({ params }) {
       </section>
       <RecommendCardList></RecommendCardList>
       {/* 플레이스 출력 */}
-      <section className={styles.sectionBottom}>
-        {list.length === 0 ? (
+      {list.length === 0 ? (
+        <section className={styles.sectionBottomEmpty}>
           <div className={styles.noDataBox}>
             <div className={styles.noDataImg}></div>
             <div className={styles.noData}>검색 결과가 없습니다.</div>
           </div>
-        ) : (
-          list.map((item, idx) => {
+        </section>
+      ) : (
+        <section className={styles.sectionBottom}>
+          {list.map((item, idx) => {
             return <PlaceItem key={idx} data={item} isCity={isCity} />;
-          })
-        )}
-      </section>
+          })}
+        </section>
+      )}
     </main>
   );
 }
