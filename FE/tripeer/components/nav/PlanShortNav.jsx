@@ -17,7 +17,15 @@ const PlanShortNav = (props) => {
   return (
     <div className={styles.container}>
       <header className={styles.bannerBox}>
-        <Image src={logo} width={30} height={30} alt="Tripper-logo" />
+        <Image
+          src={logo}
+          width={30}
+          height={30}
+          alt="Tripper-logo"
+          onClick={() => {
+            router.push("/");
+          }}
+        />
       </header>
       <article className={styles.contentBox}>
         <section className={styles.controller}>

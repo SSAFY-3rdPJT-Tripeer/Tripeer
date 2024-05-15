@@ -172,6 +172,7 @@
 }
 
 .category {
+  text-align: center;
   margin-right: 8px;
   font-size: 0.8rem;
   text-align: center;
@@ -183,6 +184,7 @@
 }
 
 .onCategory {
+  text-align: center;
   margin-right: 8px;
   font-size: 0.8rem;
   color: white;
@@ -436,4 +438,22 @@
   background-image: url(../asset/warn.svg);
   background-repeat: no-repeat;
   background-size: contain;
+}
+
+.recomandFlag {
+  font-size: 0.7rem;
+  margin-right: 2px;
+}
+
+.inputBox {
+  position: relative;
+}
+
+.enter {
+  top: 5%;
+  right: 4.5%;
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
 }

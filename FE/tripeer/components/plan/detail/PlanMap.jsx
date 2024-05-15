@@ -12,6 +12,8 @@ import api from "@/utils/api";
 import Map from "./Map";
 import SpotList from "./SpotList";
 import OnlineBox from "./OnlineBox";
+import RecommendSlider from "./RecommendSlider";
+import axios from "axios";
 
 const PlanMap = (props) => {
   const { plan, online, myInfo, provider } = props;
@@ -39,8 +41,9 @@ const PlanMap = (props) => {
   const [timer, setTimer] = useState(null);
   const [alert, setAlert] = useState(false);
   const [init, setInit] = useState(false);
+  const [recommends, setRecommends] = useState(null);
 
-  const CATEGORY = ["전체", "숙박", "맛집", "명소", "즐겨찾기"];
+  const CATEGORY = ["전체", "숙박", "맛집", "명소", "즐겨찾기", "추천"];
   const COLOR = [
     "#A60000",
     "#DE5000",
@@ -129,7 +132,13 @@ const PlanMap = (props) => {
   };
 
   const searchSpot = async (e) => {
-    if (e.key === "Enter" && onCategory !== 4) {
+    if (e.key === "Enter" && onCategory !== 4 && onCategory !== 5) {
+      searchApi(searchKeyword);
+    }
+  };
+
+  const searchClick = async () => {
+    if (onCategory !== 4 && onCategory !== 5) {
       searchApi(searchKeyword);
     }
   };
@@ -139,23 +148,49 @@ const PlanMap = (props) => {
       const res = await api.get(`/plan/wishlist/${plan.planId}`);
       setSpotWishList(res.data.data);
     };
+    const getRecommendList = async () => {
+      const req = {
+        plan_id: myInfo.planId,
+        user_id: myInfo.userId,
+      };
+      const res = await axios.post(
+        "https://k10d207.p.ssafy.io/recommend/items2",
+        req,
+      );
+      console.log(res.data);
+      setRecommends(res.data);
+    };
     setOnCategory(idx);
     switch (idx) {
       case 0:
         setSortType(0);
+        setRecommends(null);
+
         break;
       case 1:
         setSortType(3);
+        setRecommends(null);
+
         break;
       case 2:
         setSortType(4);
+        setRecommends(null);
+
         break;
       case 3:
         setSortType(2);
+        setRecommends(null);
+
         break;
       case 4:
         getWishList();
         setIsTarget(false);
+        setRecommends(null);
+
+        break;
+      case 5:
+        setIsTarget(false);
+        getRecommendList();
         break;
     }
   };
@@ -336,7 +371,7 @@ const PlanMap = (props) => {
         setIsTarget(true);
       });
     }
-  }, [myInfo, provider, spotList, spotWishList]);
+  }, [myInfo, provider, spotList, spotWishList, onCategory]);
 
   useEffect(() => {
     if (timer) {
@@ -404,199 +439,252 @@ const PlanMap = (props) => {
           </div>
         </header>
         <hr className={styles.sectionLine} />
-        <input
-          type="text"
-          className={styles.searchInput}
-          maxLength={30}
-          onChange={(e) => {
-            changeKeyword(e);
-          }}
-          onKeyDown={(e) => {
-            searchSpot(e);
-          }}
-          placeholder="여행지를 기입하고 엔터를 입력하세요."
-        />
+        <div className={styles.inputBox}>
+          <input
+            type="text"
+            className={styles.searchInput}
+            maxLength={30}
+            onChange={(e) => {
+              changeKeyword(e);
+            }}
+            onKeyDown={(e) => {
+              searchSpot(e);
+            }}
+            placeholder="여행지를 기입하고 엔터를 입력하세요."
+          />
+          <div
+            className={styles.enter}
+            onClick={() => {
+              searchClick();
+            }}></div>
+        </div>
         <section>
-          {CATEGORY.map((category, idx) => (
-            <span
-              key={idx}
-              className={
-                onCategory !== idx ? styles.category : styles.onCategory
-              }
-              onClick={() => {
-                categoryController(idx);
-              }}>
-              {category}
-            </span>
-          ))}
+          {CATEGORY.map((category, idx) =>
+            idx === 5 ? (
+              <span
+                key={idx}
+                className={
+                  onCategory !== idx ? styles.category : styles.onCategory
+                }
+                onClick={() => {
+                  categoryController(idx);
+                }}>
+                <span className={styles.recomandFlag}>🚩</span>
+                {category}
+              </span>
+            ) : (
+              <span
+                key={idx}
+                className={
+                  onCategory !== idx ? styles.category : styles.onCategory
+                }
+                onClick={() => {
+                  categoryController(idx);
+                }}>
+                {category}
+              </span>
+            ),
+          )}
         </section>
         <section className={styles.searchResult}>
-          {onCategory !== 4
-            ? spotList.map((spot, idx) => (
-                <div
-                  key={idx}
-                  className={styles.searchCard}
-                  ref={idx === spotList.length - 1 ? targetRef : null}>
-                  <div
-                    className={styles.cardImg}
-                    onClick={() => {
-                      moveMap(spot);
-                    }}
-                    style={{ position: "relative" }}>
-                    <Image
-                      loader={() => spot.img}
-                      src={spot.img}
-                      fill
-                      alt="사진"
-                      placeholder="blur"
-                      blurDataURL={`${defaultImg}`}
-                      priority="true"
-                      sizes="(max-width: 768px) 100vw,
-                      (max-width: 1200px) 50vw,
-                      33vw"
-                      quality={50}
-                    />
-                  </div>
-                  <div className={styles.cardContent}>
+          {onCategory === 5 ? (
+            <>
+              {recommends
+                ? recommends.map((recommend, idx) => {
+                    return (
+                      <RecommendSlider
+                        key={idx}
+                        recommend={recommend}
+                        recommends={recommends}
+                        setRecommends={setRecommends}
+                        rId={idx}
+                        plan={plan}
+                        provider={provider}
+                        myInfo={myInfo}
+                        setAlert={setAlert}
+                        setInit={setInit}
+                        setTimer={setTimer}
+                      />
+                    );
+                  })
+                : [1, 2].map((_, idx) => {
+                    return <RecommendSlider key={idx} />;
+                  })}
+            </>
+          ) : (
+            <div>
+              {onCategory !== 4
+                ? spotList.map((spot, idx) => (
                     <div
-                      className={styles.cardHeader}
-                      onClick={() => {
-                        moveMap(spot);
-                      }}>
-                      <p className={styles.cardTitle}>{spot.title}</p>
-                      <div className={styles.cardCategoryBox}>
-                        <div
-                          className={styles.cardCategoryIcon}
-                          style={{ position: "relative" }}>
-                          <Image
-                            src={CARD_CATEGORY[spot.contentType].img}
-                            fill
-                            alt="icon"
-                          />
-                        </div>
-                        <p
-                          className={styles.cardCategory}
-                          style={{
-                            color: `${CARD_CATEGORY[spot.contentType].color}`,
-                          }}>
-                          {CARD_CATEGORY[spot.contentType].name}
-                        </p>
-                      </div>
-                    </div>
-                    <div
-                      className={styles.cardPosition}
-                      onClick={() => {
-                        moveMap(spot);
-                      }}>
-                      <div className={styles.positionIcon} />
-                      <p className={styles.positionContent}>{spot.addr}</p>
-                    </div>
-                    <hr className={styles.cardLine} />
-                    <div className={styles.cardBtns}>
+                      key={idx}
+                      className={styles.searchCard}
+                      ref={idx === spotList.length - 1 ? targetRef : null}>
                       <div
-                        className={styles.heartBtn}
+                        className={styles.cardImg}
                         onClick={() => {
-                          changeWishList(spot.spotInfoId, idx, true);
-                        }}>
+                          moveMap(spot);
+                        }}
+                        style={{ position: "relative" }}>
                         <Image
-                          src={spot.wishlist ? HeartIcon[0] : HeartIcon[1]}
-                          width={18}
-                          height={18}
-                          alt="heart"
+                          loader={() => spot.img}
+                          src={spot.img}
+                          fill
+                          alt="사진"
+                          placeholder="blur"
+                          blurDataURL={`${defaultImg}`}
+                          priority="true"
+                          sizes="(max-width: 768px) 100vw,
+                            (max-width: 1200px) 50vw,
+                            33vw"
                           quality={50}
-                          loading="eager"
                         />
                       </div>
-                      {spot.spot ? (
+                      <div className={styles.cardContent}>
                         <div
-                          className={styles.minusBtn}
+                          className={styles.cardHeader}
                           onClick={() => {
-                            removeSaveSpot(spot);
+                            moveMap(spot);
                           }}>
-                          선택취소
+                          <p className={styles.cardTitle}>{spot.title}</p>
+                          <div className={styles.cardCategoryBox}>
+                            <div
+                              className={styles.cardCategoryIcon}
+                              style={{ position: "relative" }}>
+                              <Image
+                                src={CARD_CATEGORY[spot.contentType].img}
+                                fill
+                                alt="icon"
+                              />
+                            </div>
+                            <p
+                              className={styles.cardCategory}
+                              style={{
+                                color: `${CARD_CATEGORY[spot.contentType].color}`,
+                              }}>
+                              {CARD_CATEGORY[spot.contentType].name}
+                            </p>
+                          </div>
                         </div>
-                      ) : (
                         <div
-                          className={styles.addBtn}
+                          className={styles.cardPosition}
                           onClick={() => {
-                            addSaveSpot(spot);
+                            moveMap(spot);
                           }}>
-                          여행지 추가
+                          <div className={styles.positionIcon} />
+                          <p className={styles.positionContent}>{spot.addr}</p>
                         </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))
-            : spotWishList.map((spot, idx) => {
-                return (
-                  <div key={idx} className={styles.searchCard}>
-                    <div
-                      className={styles.cardImg}
-                      style={{ backgroundImage: `url(${spot.img})` }}
-                    />
-                    <div className={styles.cardContent}>
-                      <div className={styles.cardHeader}>
-                        <p className={styles.cardTitle}>{spot.title}</p>
-                        <div className={styles.cardCategoryBox}>
+                        <hr className={styles.cardLine} />
+                        <div className={styles.cardBtns}>
                           <div
-                            className={styles.cardCategoryIcon}
-                            style={{ position: "relative" }}>
+                            className={styles.heartBtn}
+                            onClick={() => {
+                              changeWishList(spot.spotInfoId, idx, true);
+                            }}>
                             <Image
-                              src={CARD_CATEGORY[spot.contentType].img}
-                              fill
-                              alt="icon"
+                              src={spot.wishlist ? HeartIcon[0] : HeartIcon[1]}
+                              width={18}
+                              height={18}
+                              alt="heart"
+                              quality={50}
+                              loading="eager"
                             />
                           </div>
-                          <p
-                            className={styles.cardCategory}
-                            style={{
-                              color: `${CARD_CATEGORY[spot.contentType].color}`,
-                            }}>
-                            {CARD_CATEGORY[spot.contentType].name}
-                          </p>
+                          {spot.spot ? (
+                            <div
+                              className={styles.minusBtn}
+                              onClick={() => {
+                                removeSaveSpot(spot);
+                              }}>
+                              선택취소
+                            </div>
+                          ) : (
+                            <div
+                              className={styles.addBtn}
+                              onClick={() => {
+                                addSaveSpot(spot);
+                              }}>
+                              여행지 추가
+                            </div>
+                          )}
                         </div>
-                      </div>
-                      <div className={styles.cardPosition}>
-                        <div className={styles.positionIcon} />
-                        <p className={styles.positionContent}>{spot.addr}</p>
-                      </div>
-                      <hr className={styles.cardLine} />
-                      <div className={styles.cardBtns}>
-                        <div
-                          className={styles.heartBtn}
-                          onClick={() => {
-                            changeWishList(spot.spotInfoId, idx, false);
-                          }}>
-                          <Image
-                            src={spot.wishlist ? HeartIcon[0] : HeartIcon[1]}
-                            width={18}
-                            height={18}
-                            alt="heart"
-                          />
-                        </div>
-                        {spot.spot ? (
-                          <div
-                            className={styles.minusBtn}
-                            onClick={() => {
-                              removeSaveSpot(spot);
-                            }}>
-                            선택취소
-                          </div>
-                        ) : (
-                          <div
-                            className={styles.addBtn}
-                            onClick={() => {
-                              addSaveSpot(spot);
-                            }}>
-                            여행지 추가
-                          </div>
-                        )}
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  ))
+                : spotWishList.map((spot, idx) => {
+                    return (
+                      <div key={idx} className={styles.searchCard}>
+                        <div
+                          className={styles.cardImg}
+                          style={{ backgroundImage: `url(${spot.img})` }}
+                        />
+                        <div className={styles.cardContent}>
+                          <div className={styles.cardHeader}>
+                            <p className={styles.cardTitle}>{spot.title}</p>
+                            <div className={styles.cardCategoryBox}>
+                              <div
+                                className={styles.cardCategoryIcon}
+                                style={{ position: "relative" }}>
+                                <Image
+                                  src={CARD_CATEGORY[spot.contentType].img}
+                                  fill
+                                  alt="icon"
+                                />
+                              </div>
+                              <p
+                                className={styles.cardCategory}
+                                style={{
+                                  color: `${CARD_CATEGORY[spot.contentType].color}`,
+                                }}>
+                                {CARD_CATEGORY[spot.contentType].name}
+                              </p>
+                            </div>
+                          </div>
+                          <div className={styles.cardPosition}>
+                            <div className={styles.positionIcon} />
+                            <p className={styles.positionContent}>
+                              {spot.addr}
+                            </p>
+                          </div>
+                          <hr className={styles.cardLine} />
+                          <div className={styles.cardBtns}>
+                            <div
+                              className={styles.heartBtn}
+                              onClick={() => {
+                                changeWishList(spot.spotInfoId, idx, false);
+                              }}>
+                              <Image
+                                src={
+                                  spot.wishlist ? HeartIcon[0] : HeartIcon[1]
+                                }
+                                width={18}
+                                height={18}
+                                alt="heart"
+                              />
+                            </div>
+                            {spot.spot ? (
+                              <div
+                                className={styles.minusBtn}
+                                onClick={() => {
+                                  removeSaveSpot(spot);
+                                }}>
+                                선택취소
+                              </div>
+                            ) : (
+                              <div
+                                className={styles.addBtn}
+                                onClick={() => {
+                                  addSaveSpot(spot);
+                                }}>
+                                여행지 추가
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+            </div>
+          )}
           {onCategory !== 4 && spotList.length === 0 ? (
             <div className={styles.emptySearch}>검색 결과가 없습니다.</div>
           ) : null}

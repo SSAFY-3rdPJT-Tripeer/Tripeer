@@ -13,6 +13,7 @@ const nextConfig = {
       "encrypted-tbn1.gstatic.com",
       "tripeerbucket.s3.ap-southeast-2.amazonaws.com",
       "tripeer207.s3.ap-northeast-2.amazonaws.com",
+      "k.kakaocdn.net",
     ],
   },
   reactStrictMode: false,
