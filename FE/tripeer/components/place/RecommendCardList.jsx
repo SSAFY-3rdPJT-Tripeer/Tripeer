@@ -65,16 +65,9 @@ const RecommendCardList = () => {
   }, [myInfo]);
 
   useEffect(() => {
-    console.log("추천리스트: ", recommendData);
-  }, [recommendData]);
-
-  useEffect(() => {
     setMyInfo(store.myInfo);
   }, [store]);
 
-  useEffect(() => {
-    console.log(myInfo);
-  }, [myInfo]);
   return (
     <>
       {myInfo && recommendData && recommendData.length > 0 && (
