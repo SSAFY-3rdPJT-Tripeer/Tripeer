@@ -247,6 +247,9 @@ const PlanMap = (props) => {
       await api.post(
         `/plan/bucket?planId=${plan.planId}&spotInfoId=${spot.spotInfoId}`,
       );
+      const totalY = provider.doc.getArray("totalYList");
+      const totalFirst = totalY.get(0);
+      totalFirst.insert(0, [tempSave]);
       ySpot.insert(0, [tempSave]);
     } finally {
       const tempSpot = spotList.map((item) => {
@@ -262,6 +265,7 @@ const PlanMap = (props) => {
 
   const removeSaveSpot = async (spot) => {
     const totalYList = provider.doc.getArray("totalYList").toJSON();
+    const totalY = provider.doc.getArray("totalYList");
     let isVisit = false;
     for (let item of totalYList) {
       if (item.length > 0) {
@@ -288,8 +292,14 @@ const PlanMap = (props) => {
       await api.delete(
         `/plan/bucket?planId=${plan.planId}&spotInfoId=${spot.spotInfoId}`,
       );
+      const totalFirst = totalY.get(0);
+      const totalArr = totalFirst.toArray();
+      let totalIndex = totalArr.findIndex(
+        (item) => item.spotInfoId === spot.spotInfoId,
+      );
       const arr = ySpot.toArray();
       let index = arr.findIndex((item) => item.spotInfoId === spot.spotInfoId);
+      totalFirst.delete(totalIndex);
       ySpot.delete(index);
     } finally {
       const tempSpot = spotList.map((item) => {

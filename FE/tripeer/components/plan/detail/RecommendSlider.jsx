@@ -47,11 +47,14 @@ const RecommendSlider = (props) => {
 
   const addSaveSpot = async (idx, spot) => {
     const saveSpot = provider.doc.getArray("saveSpot");
+    const totalY = provider.doc.getArray("totalYList");
+    const totalFirst = totalY.get(0);
     try {
       const tempSave = { ...spot, ...myInfo };
       await api.post(
         `/plan/bucket?planId=${plan.planId}&spotInfoId=${spot.spotInfoId}`,
       );
+      totalFirst.insert(0, [tempSave]);
       saveSpot.insert(0, [tempSave]);
     } finally {
       const cloneRecoms = structuredClone(recommends);
@@ -87,9 +90,16 @@ const RecommendSlider = (props) => {
       await api.delete(
         `/plan/bucket?planId=${plan.planId}&spotInfoId=${spot.spotInfoId}`,
       );
+      const totalY = provider.doc.getArray("totalYList");
+      const totalFirst = totalY.get(0);
+      const totalArr = totalFirst.toArray();
+      let totalIndex = totalArr.findIndex(
+        (item) => item.spotInfoId === spot.spotInfoId,
+      );
       const ySpot = provider.doc.getArray("saveSpot");
       const arr = ySpot.toArray();
       let index = arr.findIndex((item) => item.spotInfoId === spot.spotInfoId);
+      totalFirst.delete(totalIndex);
       ySpot.delete(index);
     } finally {
       const cloneRecoms = structuredClone(recommends);
