@@ -188,10 +188,15 @@ const RecommendSlider = (props) => {
                 return (
                   <div className={styles.realCard} key={idx}>
                     <Image
-                      onLoad={() => {
-                        return spot.img;
+                      loader={() => {
+                        if (spot.img) {
+                          return spot.img;
+                        }
+                        return "https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/default1.png";
                       }}
-                      src={spot.img}
+                      src={
+                        "https://tripeer207.s3.ap-northeast-2.amazonaws.com/front/static/default1.png"
+                      }
                       width={150}
                       height={150}
                       style={{ borderRadius: "10px" }}
