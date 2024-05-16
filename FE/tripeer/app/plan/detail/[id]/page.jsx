@@ -242,7 +242,7 @@ const PageDetail = (props) => {
       const timeYList = provider.doc.getArray("timeYList");
       const blockYList = provider.doc.getArray("blockYList");
 
-      getDay(totalYList, timeYList, blockYList);
+      totalYList.length > 0 ? null : getDay(totalYList, timeYList, blockYList);
 
       console.log("time:", timeYList.toJSON());
 
