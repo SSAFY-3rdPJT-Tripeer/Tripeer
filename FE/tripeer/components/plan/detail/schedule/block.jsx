@@ -13,6 +13,7 @@ export default function Block() {
       {/*  play*/}
       {/*  style={{ width: 150, height: 150 }}*/}
       {/*/>*/}
+      <p className={styles.p}>최단거리 계산중</p>
       <div className={styles.spinContainer}>
         <div className={styles.spinner}></div>
       </div>
