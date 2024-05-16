@@ -42,6 +42,8 @@ const PlanMap = (props) => {
   const [alert, setAlert] = useState(false);
   const [init, setInit] = useState(false);
   const [recommends, setRecommends] = useState(null);
+  const [tempKeyword, setTempKeyword] = useState("");
+  const spotRef = useRef(null);
 
   const CATEGORY = ["전체", "숙박", "맛집", "명소", "즐겨찾기", "추천"];
   const COLOR = [
@@ -106,7 +108,7 @@ const PlanMap = (props) => {
         entris.forEach((entry) => {
           if (entry.isIntersecting && isTarget) {
             tempIo.unobserve(entry.target);
-            updateList();
+            setPage((prev) => prev + 1);
           }
         });
       },
@@ -115,31 +117,109 @@ const PlanMap = (props) => {
     setIo(tempIo);
   }, [isTarget]);
 
-  const updateList = async () => {
+  const getPages = useCallback(async () => {
     setIsTarget(false);
     try {
       const res = await api.get(
-        `/plan/spot?planId=${plan.planId}&keyword=${searchKeyword}&page=${page}&sortType=${sortType}`,
+        `/plan/spot?planId=${plan.planId}&keyword=${searchKeyword}&sortType=${sortType}&page=${page}`,
       );
+      if (res.status === 204) {
+        setSpotList([]);
+        setIsTarget(false);
+        return;
+      }
       if (res.status === 200) {
         setSpotList((prev) => [...prev, ...res.data.data]);
-        setPage(page + 1);
         setIsTarget(true);
       }
-    } catch (err) {
+    } catch {
       setIsTarget(false);
     }
-  };
+  }, [plan, sortType, page]);
+
+  useEffect(() => {
+    if (page > 0) {
+      getPages();
+    }
+  }, [page, getPages]);
+
+  const getData = useCallback(async () => {
+    setIsTarget(false);
+    try {
+      const res = await api.get(
+        `/plan/spot?planId=${plan.planId}&keyword=${searchKeyword}&sortType=${sortType}&page=0`,
+      );
+      if (res.status === 204) {
+        setSpotList([]);
+        setIsTarget(false);
+        return;
+      }
+      if (res.status === 200) {
+        setSpotList(res.data.data);
+        setIsTarget(true);
+      }
+    } catch {
+      setIsTarget(false);
+    }
+  }, [sortType, searchKeyword, plan]);
+
+  useEffect(() => {
+    if (
+      plan &&
+      (sortType === 0 || sortType === 3 || sortType === 4 || sortType === 2)
+    ) {
+      getData();
+    }
+  }, [sortType, plan, getData]);
+
+  // useEffect(() => {
+  //   const tempIo = new IntersectionObserver(
+  //     (entris) => {
+  //       entris.forEach((entry) => {
+  //         if (entry.isIntersecting && isTarget) {
+  //           tempIo.unobserve(entry.target);
+  //           updateList();
+  //         }
+  //       });
+  //     },
+  //     { threshold: 0.9 },
+  //   );
+  //   setIo(tempIo);
+  // }, [isTarget]);
+
+  // const updateList = async () => {
+  //   setIsTarget(false);
+  //   try {
+  //     const res = await api.get(
+  //       `/plan/spot?planId=${plan.planId}&keyword=${searchKeyword}&page=${page}&sortType=${sortType}`,
+  //     );
+  //     if (res.status === 200) {
+  //       setSpotList((prev) => [...prev, ...res.data.data]);
+  //       setPage(page + 1);
+  //       setIsTarget(true);
+  //     }
+  //   } catch (err) {
+  //     setIsTarget(false);
+  //   }
+  // };
 
   const searchSpot = async (e) => {
     if (e.key === "Enter" && onCategory !== 4 && onCategory !== 5) {
-      searchApi(searchKeyword);
+      setPage(0);
+      spotRef.current.scrollTop = 0;
+      setSearchKeyword(tempKeyword);
+      // getData();
     }
   };
 
   const searchClick = async () => {
     if (onCategory !== 4 && onCategory !== 5) {
-      searchApi(searchKeyword);
+      setPage(0);
+      spotRef.current.scrollTop = 0;
+
+      setSearchKeyword(tempKeyword);
+
+      // getData();
     }
   };
 
@@ -161,6 +241,8 @@ const PlanMap = (props) => {
       setRecommends(res.data);
     };
     setOnCategory(idx);
+    setPage(0);
+    spotRef.current.scrollTop = 0;
     switch (idx) {
       case 0:
         setSortType(0);
@@ -180,7 +262,6 @@ const PlanMap = (props) => {
       case 3:
         setSortType(2);
         setRecommends(null);
-
         break;
       case 4:
         getWishList();
@@ -195,27 +276,27 @@ const PlanMap = (props) => {
     }
   };
 
-  const searchApi = useCallback(
-    async (keyword) => {
-      const res = await api.get(
-        `/plan/spot?planId=${plan.planId}&keyword=${keyword}&page=0&sortType=${sortType}`,
-      );
-      if (res.status === 204) {
-        setSpotList([]);
-        setIsTarget(false);
-        return;
-      }
-      if (res.status === 200) {
-        setPage(1);
-        setSpotList(res.data.data);
-        setIsTarget(true);
-      }
-    },
-    [sortType, plan],
-  );
+  // const searchApi = useCallback(
+  //   async (keyword) => {
+  //     const res = await api.get(
+  //       `/plan/spot?planId=${plan.planId}&keyword=${keyword}&page=0&sortType=${sortType}`,
+  //     );
+  //     if (res.status === 204) {
+  //       setSpotList([]);
+  //       setIsTarget(false);
+  //       return;
+  //     }
+  //     if (res.status === 200) {
+  //       setPage(1);
+  //       setSpotList(res.data.data);
+  //       setIsTarget(true);
+  //     }
+  //   },
+  //   [sortType, plan],
+  // );
 
   const changeKeyword = (e) => {
-    setSearchKeyword(e.currentTarget.value);
+    setTempKeyword(e.currentTarget.value);
   };
 
   const changeWishList = async (spotId, idx, isSpot) => {
@@ -326,11 +407,11 @@ const PlanMap = (props) => {
     }
   }, [isTarget, spotList, io]);
 
-  useEffect(() => {
-    if (plan) {
-      searchApi(searchKeyword);
-    }
-  }, [plan, sortType, searchApi]);
+  // useEffect(() => {
+  //   if (plan) {
+  //     searchApi(searchKeyword);
+  //   }
+  // }, [plan, sortType, searchApi]);
 
   useEffect(() => {
     const getMember = async () => {
@@ -496,7 +577,7 @@ const PlanMap = (props) => {
             ),
           )}
         </section>
-        <section className={styles.searchResult}>
+        <section className={styles.searchResult} ref={spotRef}>
           {onCategory === 5 ? (
             <>
               {recommends
