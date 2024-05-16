@@ -3,27 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./planHome.module.css";
 import api from "@/utils/api";
-import dynamic from "next/dynamic";
-// import { QuillBinding } from "y-quill";
-
-// import Quill from "quill";
-
-// const Quill = dynamic(() => import("quill"), { ssr: false });
-// const QuillBinding = dynamic(
-//   () => import("y-quill").then((mod) => mod.QuillBinding),
-//   { ssr: false },
-// );
-
-// const Quill =
-//   typeof window === "object"
-//     ? dynamic(() => import("quill"), { ssr: false })
-//     : false;
-// const QuillBinding =
-//   typeof window === "object"
-//     ? dynamic(() => import("y-quill").then((i) => i.QuillBinding), {
-//         ssr: false,
-//       })
-//     : false;
 
 const PlanHome = (props) => {
   const { plan, online, provider, myInfo } = props;
@@ -253,9 +232,9 @@ const PlanHome = (props) => {
                             onClick={() => {
                               turnSpeaker(
                                 member.userId,
-                                // document.querySelector(
-                                //   `.Tripeer${member.userId}`,
-                                // ),
+                                document.querySelector(
+                                  `.Tripeer${member.userId}`,
+                                ),
                               );
                             }}></div>
                         </div>

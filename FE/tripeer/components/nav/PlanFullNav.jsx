@@ -2,10 +2,12 @@ import styles from "./planFullNav.module.css";
 import Image from "next/image";
 import banner from "@/public/logo.png";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const PlanFullNav = (props) => {
   const { current, setCurrent } = props;
   const router = useRouter();
+  const [isGuide, setIsGuide] = useState(false);
 
   const goTo = (idx) => {
     if (idx === 3) {
@@ -56,6 +58,18 @@ const PlanFullNav = (props) => {
             <div className={`${styles.schedule} ${styles.icon}`} />
             <span className={styles.offText}>일정</span>
           </div>
+          <div
+            className={styles.item}
+            onClick={() => {
+              setIsGuide(!isGuide);
+            }}>
+            <div
+              className={`${isGuide ? styles.onGuide : styles.offGuide} ${styles.icon}`}
+            />
+            <span className={isGuide ? styles.text : styles.offText}>
+              도움말
+            </span>
+          </div>
         </section>
         <footer
           className={`${styles.outPage} ${styles.item}`}
@@ -66,6 +80,15 @@ const PlanFullNav = (props) => {
           <span className={styles.offExit}>방 나가기</span>
         </footer>
       </article>
+      {isGuide ? (
+        <div
+          className={styles.back}
+          onClick={(e) => {
+            if (e.currentTarget === e.target) setIsGuide(false);
+          }}>
+          <div className={styles.modal}></div>
+        </div>
+      ) : null}
     </div>
   );
 };
