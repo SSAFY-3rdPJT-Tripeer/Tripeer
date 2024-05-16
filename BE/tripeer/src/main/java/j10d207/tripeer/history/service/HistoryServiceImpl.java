@@ -147,7 +147,6 @@ public class HistoryServiceImpl implements HistoryService{
                 String howTo = "자동차";     // 자동차 OR 대중교통을 사용하지 않는 description 에 저장
                 int hour = 0;
                 int min = 0;
-                System.out.println(timeYList.toString());
 
                 if (step != totalYList.get(day).size()-1) {
                     List<Object> tmp = objectMapper.convertValue(timeYList.get(day).get(step), List.class);
@@ -334,7 +333,6 @@ public class HistoryServiceImpl implements HistoryService{
                 cityTownMap.put("cityId",planTownEntity.getCityOnly().getCityId());
                 cityTownMap.put("townId",-1);
             }
-            System.out.println(planTownEntity.toString());
 
             if (planTownEntity.getTown() == null) {
                 cityTownMap.put("townId",-1);
