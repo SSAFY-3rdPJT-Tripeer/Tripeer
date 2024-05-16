@@ -1,6 +1,6 @@
 
 <div align="center">
-      <img src='readmeImage/title.png'>
+      <img src='readmeImage/title.png' width="70%">
 
  <h1>Tripeer</h1>
 
@@ -11,14 +11,14 @@
 
 ## 목차
 
-- 서비스 개요
-- 팀원 소개
-- 기술 스택
-- 주요 기능
-- 명세서
-- ERD
-- 시스템 아키텍쳐
-- 서비스 실사용 화면
+- [서비스 개요](#서비스-개요)
+- [팀원소개](#팀원소개)
+- [기술 스택](#기술스택)
+- [주요 기능](#주요기능)
+- [명세서](#명세서)
+- [ERD](#ERD)
+- [시스템 아키텍쳐](#시스템-아키텍쳐)
+- [서비스 실사용 화면](#서비스-실사용-화면)
 
 ## 서비스 개요
 
@@ -33,7 +33,7 @@
 ```
 
 ## 팀원 소개
-<div>
+<div align="center">
       <img src='readmeImage/position.PNG'>
 </div>
 
@@ -41,7 +41,28 @@
 
 <center>FrontEnd
 
-HTML5, CSS3, NODE.JS, NEXT.JS, Yjs
+<div align="middle">
+<img src="https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white">
+<img src="https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white">
+<img src="https://img.shields.io/badge/JavaScript-FFE249?style=for-the-badge&logo=javascript&logoColor=white">
+<img src="https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white">
+<img src="https://img.shields.io/badge/ESLint-4B3263?style=for-the-badge&logo=eslint&logoColor=white">
+<img src="https://img.shields.io/badge/Prettier-F7B93E?style=for-the-badge&logo=Prettier&logoColor=white">
+<img src="https://img.shields.io/badge/lottie-04d1c1?style=for-the-badge">
+<img src="https://img.shields.io/badge/axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white">
+
+<br>
+
+**Language |** HTML5, CSS3, JavaScript, node.js(v20.10.0)
+
+**Framework |** React.js(v18.2.0), Redux(v9.1.0), Vite(v5.1.4), 
+
+**Library |** eslint(v8.56.0), vite PWA plugin(v9.19.7), prettier(v3.2.5), Lottie(v1.2.4), Axios(v1.6.7),Firebase(v10.10.0)
+
+
+
+ NEXT.JS, Yjs, zustand
+</div>
 <center>BackEnd
 
 JAVA, SpringBoot, SpringWebClient, Gradle, MongoDB, MySql, AMAZON S3, HIBERNATE, fastAPI, express
@@ -127,13 +148,13 @@ JenKins, NginX, Docker
 
 ## ERD
 
-<div>
+<div  width="70%">
       <img src='readmeImage/erd.png'>
 </div>
 
 ## 시스템 아키텍쳐
 
-<div>
+<div  width="70%">
       <img src='readmeImage/system.png'>
 </div>
 
