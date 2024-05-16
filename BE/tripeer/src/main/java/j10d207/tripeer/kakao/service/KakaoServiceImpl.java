@@ -49,9 +49,9 @@ public class KakaoServiceImpl implements KakaoService {
     @Value("${kakao.apikey}")
     private String kakaoApiKey;
 
-    private TMapService tMapService;
+    private final TMapService tMapService;
 
-    private PublicRootRepository publicRootRepository;
+    private final PublicRootRepository publicRootRepository;
 
 
     @Override
