@@ -18,6 +18,8 @@
 - [ERD](#erd)
 - [시스템 아키텍쳐](#시스템-아키텍쳐)
 - [서비스 실사용 화면](#서비스-실사용-화면)
+  - [메인 페이지](#메인-페이지)
+  - [일정 계획 페이지](#일정-계획-페이지)
 
 ## 서비스 개요
 
@@ -39,8 +41,7 @@
 
 ## 기술 스택
 
-<center>FrontEnd
-
+<div align="middle">FrontEnd</div>
 <div align="middle">
 <img src="https://img.shields.io/badge/nextjs-000000?style=for-the-badge&logo=nextdotjs&logoColor=white">
 <img src="https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white">
@@ -56,14 +57,17 @@
 
 <br>
 
-**Language |** HTML5, CSS3, JavaScript, node.js(v20.10.0)
+**Language |** HTML5, CSS3, JavaScript, node.js(v20.12.2)
 
-**Framework |** React.js(v18.2.0), Redux(v9.1.0), Vite(v5.1.4),
+**Framework |** Next.js(v14.2.2), Zustand(v4.5.2)
 
-**Library |** eslint(v8.56.0), vite PWA plugin(v9.19.7), prettier(v3.2.5), Lottie(v1.2.4), Axios(v1.6.7),Firebase(v10.10.0)
+**Library |** eslint(v8.57.0), Yjs(v13.6.14), prettier(v3.2.5), Lottie(v2.0.0), Axios(v1.6.7), peer.js(v1.5.2)
 
 </div>
-<center>BackEnd
+
+<br>
+<br>
+<div align="middle">BackEnd</div>
 <div align="middle">
 
 <img src="https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white"> 
@@ -77,9 +81,21 @@
 <img src="https://img.shields.io/badge/fastapi-009688?style=for-the-badge&logo=fastapi&logoColor=white">
 <img src="https://img.shields.io/badge/express-000000?style=for-the-badge&logo=express&logoColor=white">
 
+</br>
+
+**Language |** Java 21
+
+**Framework |** Spring Boot 3.2.3
+
+**DB Connection(ORM) |** Spring Data JPA
+
+**Build Tool |** Gradle 8.5.0
+
 </div>
 
-<center> Infra
+<br>
+<br>
+<div align="middle">Infra</div>
 <div align="middle">
 
 <img src="https://img.shields.io/badge/jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white"> 
@@ -91,64 +107,64 @@
 
 <table>
 <tr>
- <th>분류</th>
+  <th>분류</th>
   <th>기능</th>
-   <th>내용</th>
-   </tr>
-   <tr>
-<td> 플랜 </td>
-<td>플랜 생성</td>
-<td>여러 사용자들과 여행 계획을 세우기 위한 플랜을 생성합니다.</td>
+  <th>내용</th>
 </tr>
-   <tr>
-<td></td>
-<td>공유 문서</td>
-<td>플랜 페이지 내 액션 및 CRUD 현황이 공유됩니다.</td>
+<tr>
+  <td> 플랜 </td>
+  <td>플랜 생성</td>
+  <td>여러 사용자들과 여행 계획을 세우기 위한 플랜을 생성합니다.</td>
 </tr>
-   <tr>
-<td></td>
-<td>음성 채팅</td>
-<td>플랜 진입 시 멤버들과 음성 채팅이 가능합니다.</td>
+<tr>
+  <td></td>
+  <td>공유 문서</td>
+  <td>플랜 페이지 내 액션 및 CRUD 현황이 공유됩니다.</td>
 </tr>
-   <tr>
-<td></td>
-<td>채팅</td>
-<td> ` 키를 눌러 마우스 포인터 창에서 채팅 입력이 가능합니다.</td>
+<tr>
+  <td></td>
+  <td>음성 채팅</td>
+  <td>플랜 진입 시 멤버들과 음성 채팅이 가능합니다.</td>
 </tr>
-<tr> 
-<td> 여행 계획 세부 </td>
-<td> 여행지 추가</td>
-<td> 방문하고자 하는 장소를 추가 합니다. 목적지로 설정한 장소의 여행지 목록을 제공하며, 사용 기록에 따른 추천 여행지 목록도 제공합니다.</td>
+<tr>
+  <td></td>
+  <td>채팅</td>
+  <td> ` 키를 눌러 마우스 포인터 창에서 채팅 입력이 가능합니다.</td>
 </tr>
 <tr> 
-<td> </td>
-<td> 이동 시간 계산</td>
-<td> 두 목적지 간 이동 시간을 이동 수단에 따라 자동으로 계산해줍니다.</td>
+  <td> 여행 계획 세부 </td>
+  <td> 여행지 추가</td>
+  <td> 방문하고자 하는 장소를 추가 합니다. 목적지로 설정한 장소의 여행지 목록을 제공하며, 사용 기록에 따른 추천 여행지 목록도 제공합니다.</td>
 </tr>
 <tr> 
-<td> </td>
-<td> 최적 경로 자동 계산</td>
-<td> 해당 일자에 등록된 목적지들로 이동 시간이 가장 짧은 경유 경로를 계산하여 제공합니다.</td>
+  <td> </td>
+  <td> 이동 시간 계산</td>
+  <td> 두 목적지 간 이동 시간을 이동 수단에 따라 자동으로 계산해줍니다.</td>
 </tr>
 <tr> 
-<td> </td>
-<td> 여행 일정 저장 </td>
-<td> 작성한 여행 일정을 저장하여 공유하고 모바일 화면으로도 볼 수 있게 해줍니다. </td>
+  <td> </td>
+  <td> 최적 경로 자동 계산</td>
+  <td> 해당 일자에 등록된 목적지들로 이동 시간이 가장 짧은 경유 경로를 계산하여 제공합니다.</td>
 </tr>
 <tr> 
-<td> 여행지</td>
-<td> 여행지 검색 </td>
-<td> 가고싶은 여행지를 검색하거나 추천 여행지 정보를 제공 받습니다. </td>
+  <td> </td>
+  <td> 여행 일정 저장 </td>
+  <td> 작성한 여행 일정을 저장하여 공유하고 모바일 화면으로도 볼 수 있게 해줍니다. </td>
 </tr>
 <tr> 
-<td> 여행 기록</td>
-<td> 여행 목록 확인 </td>
-<td> 여행했던 여행들의 목록, 경로들을 확인합니다 .</td>
+  <td> 여행지</td>
+  <td> 여행지 검색 </td>
+  <td> 가고싶은 여행지를 검색하거나 추천 여행지 정보를 제공 받습니다. </td>
 </tr>
 <tr> 
-<td> </td>
-<td> 사진 업로드 </td>
-<td> 일자별로 사진을 업로드 하여 공유할 수 있도록 합니다. </td>
+  <td> 여행 기록</td>
+  <td> 여행 목록 확인 </td>
+  <td> 여행했던 여행들의 목록, 경로들을 확인합니다 .</td>
+</tr>
+<tr> 
+  <td> </td>
+  <td> 사진 업로드 </td>
+  <td> 일자별로 사진을 업로드 하여 공유할 수 있도록 합니다. </td>
 </tr>
 </table>
 
@@ -177,18 +193,90 @@
 
 ## 서비스 실사용 화면
 
-- 계획추가
-  <img src='readmeImage/gif/makeplan.gif'>
-- 멤버초대
-  <img src='readmeImage/gif/memberInvitation.gif'>
-- 장소선택
-  <img src='readmeImage/gif/addPlace.gif'>
-- 추천 여행지 선택
-  <img src='readmeImage/gif/recommendPlace.gif'>
-- 여행 계획 세우기
-  <img src='readmeImage/gif/plandetail.gif'>
-- 최단거리 계산
-  <img src='readmeImage/gif/detailOptimizing.gif'>
+### 메인 페이지
+
+<table>
+    <tr>
+        <th>메인 페이지(서비스 처음 화면)</th>
+    </tr>
+    <tr>
+        <td><img src='readmeImage/gif/landingPage.gif'></td>
+    </tr>
+</table>
+<br>
+
+### 일정 계획 페이지
+
+<table>
+    <tr>
+        <th>계획 생성</th>
+    </tr>
+    <tr>
+        <td><img src='readmeImage/gif/makeplan.gif'></td>
+    </tr>
+</table>
+<br>
+
+<table>
+    <tr>
+        <th>멤버 초대</th>
+    </tr>
+    <tr>
+        <td><img src='readmeImage/gif/memberInvitation.gif'></td>
+    </tr>
+</table>
+<br>
+
+<table>
+    <tr>
+        <th>마우스 커서 공유 및 채팅</th>
+    </tr>
+    <tr>
+        <td><img src='readmeImage/gif/mouseChat.gif'></td>
+    </tr>
+</table>
+<br>
+
+<table>
+    <tr>
+        <th>여행지 선택</th>
+    </tr>
+    <tr>
+        <td><img src='readmeImage/gif/addPlace.gif'></td>
+    </tr>
+</table>
+<br>
+
+<table>
+    <tr>
+        <th>추천 여행지 선택</th>
+    </tr>
+    <tr>
+        <td><img src='readmeImage/gif/recommendPlace.gif'></td>
+    </tr>
+</table>
+<br>
+
+<table>
+    <tr>
+        <th>여행 일정 조율</th>
+    </tr>
+    <tr>
+        <td><img src='readmeImage/gif/plandetail.gif'></td>
+    </tr>
+</table>
+<br>
+
+<table>
+    <tr>
+        <th>최단 거리 계산</th>
+    </tr>
+    <tr>
+        <td><img src='readmeImage/gif/detailOptimizing.gif'></td>
+    </tr>
+</table>
+<br>
+
 - 온라인 유저 확인하기, 메모하기, 공지사항 입력
 - 경로 보기
 - 여행 계획으로 보기
