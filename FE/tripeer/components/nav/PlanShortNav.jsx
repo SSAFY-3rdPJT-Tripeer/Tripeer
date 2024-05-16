@@ -2,9 +2,11 @@ import Image from "next/image";
 import styles from "./planShortNav.module.css";
 import logo from "@/public/shortLogo.svg";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const PlanShortNav = (props) => {
   const { current, setCurrent } = props;
+  const [isGuide, setIsGuide] = useState(false);
   const router = useRouter();
   const goTo = (idx) => {
     if (idx === 3) {
@@ -54,6 +56,15 @@ const PlanShortNav = (props) => {
               className={`${current === 2 ? styles.onSchedule : styles.offSchedule} ${styles.icon}`}
             />
           </div>
+          <div
+            className={styles.item}
+            onClick={() => {
+              setIsGuide(true);
+            }}>
+            <div
+              className={`${isGuide ? styles.onGuide : styles.offGuide} ${styles.icon}`}
+            />
+          </div>
         </section>
         <footer
           className={`${styles.outPage} ${styles.item}`}
@@ -63,6 +74,15 @@ const PlanShortNav = (props) => {
           <div className={`${styles.exit} ${styles.icon}`} />
         </footer>
       </article>
+      {isGuide ? (
+        <div
+          className={styles.back}
+          onClick={(e) => {
+            if (e.currentTarget === e.target) setIsGuide(false);
+          }}>
+          <div className={styles.modal}></div>
+        </div>
+      ) : null}
     </div>
   );
 };

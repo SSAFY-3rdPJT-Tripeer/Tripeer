@@ -138,6 +138,10 @@
   font-size: 0.9rem;
   font-weight: 500;
   margin: 1px;
+  width: 50px;
+  overflow: hidden;
+  white-space: normal;
+  text-overflow: ellipsis;
 }
 .online {
   width: 8px;
