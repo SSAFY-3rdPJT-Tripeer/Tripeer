@@ -23,14 +23,14 @@ import MapRoute from "../MapRoute";
 import Block2 from "@/components/plan/detail/schedule/block2";
 
 const PlanSchedule = (props) => {
-  const { myInfo, provider, plan, online } = props;
+  const { myInfo, provider, plan, online, day, dayOfWeek } = props;
   // dnd 를 관리할 전체 배열
   const [totalY, setTotalY] = useState(null);
   const [totalList, setTotalList] = useState([]);
   // 날짜를 저장
-  const [day, setDay] = useState([]);
+  // const [day, setDay] = useState([]);
   // 위의 day 를 요일로 저장
-  const [dayOfWeek, setDayOfWeek] = useState([]);
+  // const [dayOfWeek, setDayOfWeek] = useState([]);
   const [members, setMembers] = useState([]);
   const [timeList, setTimeList] = useState(null);
   const [timeY, setTimeY] = useState(null);
@@ -716,15 +716,14 @@ const PlanSchedule = (props) => {
       //
       // update(saveYSpot, totalYList);
 
-      if (timeYList.length > 0) {
-        setTimeList(timeYList.toJSON());
-        setTimeY(timeYList);
-      }
+      setTotalList(totalYList.toJSON());
+      setTotalY(totalYList);
 
-      if (blockYList.length > 0) {
-        setBlockList(blockYList.toJSON());
-        setBlockY(blockYList);
-      }
+      setTimeList(timeYList.toJSON());
+      setTimeY(timeYList);
+
+      setBlockList(blockYList.toJSON());
+      setBlockY(blockYList);
 
       timeYList.observeDeep(() => {
         const data = timeYList.toJSON();
@@ -787,6 +786,12 @@ const PlanSchedule = (props) => {
   const cancelData = () => {
     setIsSaveModal(false);
   };
+
+  useEffect(() => {
+    if (totalList) {
+      console.log("t", totalList);
+    }
+  }, [totalList]);
 
   return (
     // 화면 전체

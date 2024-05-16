@@ -32,6 +32,10 @@ const PageDetail = (props) => {
   const router = useRouter();
   const [roomName, setRoomName] = useState(null);
   const [exit, setExit] = useState(false);
+  // 날짜를 저장
+  const [day, setDay] = useState([]);
+  // 위의 day 를 요일로 저장
+  const [dayOfWeek, setDayOfWeek] = useState([]);
 
   const COLOR = [
     "#A60000",
@@ -74,6 +78,71 @@ const PageDetail = (props) => {
       setMode(false);
     }, 3000);
     setTimer(tempTimer);
+  };
+
+  const getDay = async (totalYList, timeYList, blockYList) => {
+    try {
+      const res = await api.get("/plan");
+      const planIdArr = res.data.data.filter((e) => e.planId === plan.planId);
+
+      const start = planIdArr[0].startDay;
+      const end = planIdArr[0].endDay;
+      const arr = [];
+      const dt = new Date(start);
+
+      while (dt <= new Date(end)) {
+        arr.push(new Date(dt).toISOString().slice(0, 10));
+        dt.setDate(dt.getDate() + 1);
+      }
+
+      const result = arr.map(function (date) {
+        return date.replace(/-/g, ".");
+      });
+
+      setDay(result);
+
+      provider.doc.transact(() => {
+        const yTime = new Y.Array();
+        const yTime2 = new Y.Array();
+
+        //처음 들어와서 내용이 없을때
+        if (totalYList.length === 0) {
+          yTime.insert(0, []);
+          yTime2.insert(0, []);
+          totalYList.insert(0, [yTime2]);
+          timeYList.insert(0, [yTime]);
+          blockYList.insert(0, [false]);
+
+          for (let i = 0; i < result.length; i++) {
+            console.log("반복", i);
+            const yTime = new Y.Array();
+            const yTime2 = new Y.Array();
+            yTime.insert(0, []);
+            yTime2.insert(0, []);
+            totalYList.insert(0, [yTime2]);
+            timeYList.insert(i + 1, [yTime]);
+            blockYList.insert(0, [false]);
+          }
+
+          console.log("dd", timeYList.toJSON());
+        }
+      });
+
+      const getKoreanDayOfWeek = (dateString) => {
+        const days = ["일", "월", "화", "수", "목", "금", "토"];
+        const date = new Date(dateString.replace(/\./g, "-"));
+        const dayOfWeek = days[date.getDay()];
+        return dayOfWeek;
+      };
+
+      const resultWeek = result.map(function (date) {
+        return getKoreanDayOfWeek(date);
+      });
+
+      setDayOfWeek(resultWeek);
+    } catch (e) {
+      // console.log(e)
+    }
   };
 
   useEffect(() => {
@@ -168,11 +237,21 @@ const PageDetail = (props) => {
   }, [props, router]);
 
   useEffect(() => {
-    return () => {
-      if (provider) {
-        provider.destroy();
-      }
-    };
+    if (provider) {
+      const totalYList = provider.doc.getArray("totalYList");
+      const timeYList = provider.doc.getArray("timeYList");
+      const blockYList = provider.doc.getArray("blockYList");
+
+      getDay(totalYList, timeYList, blockYList);
+
+      console.log("time:", timeYList.toJSON());
+
+      return () => {
+        if (provider) {
+          provider.destroy();
+        }
+      };
+    }
   }, [provider]);
 
   useEffect(() => {
@@ -215,6 +294,8 @@ const PageDetail = (props) => {
         myInfo={myInfo}
         provider={provider}
         mouseInfo={mouseInfo}
+        day={day}
+        dayOfWeek={dayOfWeek}
       />,
     ];
   }, [props, plan, online, myInfo, provider, mouseInfo]);
