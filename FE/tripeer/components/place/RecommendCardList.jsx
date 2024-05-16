@@ -15,10 +15,9 @@ const RecommendCardList = ({ city }) => {
   const [myInfo, setMyInfo] = useState(null);
   const [isLike, setIsLike] = useState([]);
   const [recommendData, setRecommendData] = useState([]);
-  const router = useRouter();
 
   const onClick = (item) => {
-    router.push(
+    window.open(
       `https://map.naver.com/p/search/${`${item.addr} ${item.title}`}`,
     );
   };
@@ -47,9 +46,7 @@ const RecommendCardList = ({ city }) => {
 
   const postWish = async (spotInfoId) => {
     try {
-      const res = await api.post(`/place/wishList/${spotInfoId}`);
-      console.log(res.data);
-      console.log(spotInfoId);
+      await api.post(`/place/wishList/${spotInfoId}`);
     } catch (e) {
       console.log("찜 에러 : ", e);
     }
@@ -119,7 +116,8 @@ const RecommendCardList = ({ city }) => {
                             ? `${styles.iconFull}`
                             : `${styles.iconEmpty}`
                         }
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.stopPropagation();
                           likeOnClick(item.spotInfoId, idx);
                         }}></div>
                       <div className={styles.recoIcon}>추천</div>
