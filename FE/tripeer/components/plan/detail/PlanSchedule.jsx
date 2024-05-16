@@ -599,30 +599,10 @@ const PlanSchedule = (props) => {
       const remain = arr.filter((e) => !tArr.includes(e.spotInfoId));
 
       if (remain.length !== 0) {
-        const yItems = new Y.Array();
-        const yTime = new Y.Array();
-
-        // 만약에 스케쥴에 없는 장소가 있다 ?! >> 없는것 왼쪽 리스트에 추가해주기
-        if (totalYList.length === 0) {
-          yItems.insert(0, [...remain]);
-          totalYList.insert(0, [yItems]);
-          yTime.insert(0, []);
-          timeYList.insert(0, [yTime]);
-
-          for (let i = 0; i < day.length; i++) {
-            const yItems = new Y.Array();
-            yItems.insert(0, []);
-            totalYList.insert(i + 1, [yItems]);
-            const yTime = new Y.Array();
-            yTime.insert(0, []);
-            timeYList.insert(i + 1, [yTime]);
-          }
-        } else {
-          let leftArr = totalYList.get(0);
-          if (remain.length !== 0) {
-            // leftArr.push([...remain]);
-            leftArr.insert(leftArr.length, [...remain]);
-          }
+        let leftArr = totalYList.get(0);
+        if (remain.length !== 0) {
+          // leftArr.push([...remain]);
+          leftArr.insert(leftArr.length, [...remain]);
         }
 
         const result = totalYList.toJSON();
@@ -766,16 +746,9 @@ const PlanSchedule = (props) => {
       let timeoutId = null;
 
       totalYList.observeDeep(() => {
-        // 이전 타임아웃이 있다면 취소
-        if (timeoutId) {
-          clearTimeout(timeoutId);
-        }
-
-        // 100ms 후에 내부 코드 실행
-        timeoutId = setTimeout(() => {
-          setTotalList(totalYList.toJSON());
-          setTotalY(totalYList);
-        }, 10);
+        setTotalList(totalYList.toJSON());
+        setTotalY(totalYList);
+        console.log(totalYList.toJSON());
       });
     }
   }, [myInfo, provider]);
