@@ -464,7 +464,7 @@ const PlanMap = (props) => {
               <span
                 key={idx}
                 className={
-                  onCategory !== idx ? styles.category : styles.onCategory
+                  onCategory !== idx ? styles.flagCategory : styles.onCategory
                 }
                 onClick={() => {
                   categoryController(idx);

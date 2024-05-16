@@ -48,13 +48,13 @@
 }
 .weatherBox {
   position: relative;
-  padding-top: 30px;
+  padding-top: 25px;
   width: 100%;
   height: calc(40% - 58px);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 40px;
+  gap: 5px;
 }
 
 .weatherInfoBox {

@@ -162,9 +162,10 @@ const Weather = (props) => {
                   ? WEATHER_CODE[weathers[nowHour]["sky_cond"]].dayIcon
                   : WEATHER_CODE[weathers[nowHour]["sky_cond"]].nightIcon
               }
-              width={100}
-              height={100}
+              width={170}
+              height={170}
               alt="weatherIcon"
+              sizes="contain"
             />
           </div>
           <div className={styles.weatherInfoBox}>
