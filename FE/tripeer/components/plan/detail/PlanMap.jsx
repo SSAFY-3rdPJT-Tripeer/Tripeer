@@ -288,8 +288,14 @@ const PlanMap = (props) => {
       await api.delete(
         `/plan/bucket?planId=${plan.planId}&spotInfoId=${spot.spotInfoId}`,
       );
+      const totalFirst = totalYList.get(0);
+      const totalArr = totalFirst.toArray();
+      let totalIndex = totalArr.findIndex(
+        (item) => item.spotInfoId === spot.spotInfoId,
+      );
       const arr = ySpot.toArray();
       let index = arr.findIndex((item) => item.spotInfoId === spot.spotInfoId);
+      totalArr.delete(totalIndex);
       ySpot.delete(index);
     } finally {
       const tempSpot = spotList.map((item) => {
