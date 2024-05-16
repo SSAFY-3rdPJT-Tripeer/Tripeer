@@ -225,6 +225,7 @@ const DiaryDetailCard = (props) => {
                   <div className={styles.planSpotBox}>
                     <div
                       className={`${styles.planType} ${styles["type" + getContentType(item.contentType)]}`}></div>
+
                     <div className={styles.planCostBox}>
                       <input
                         className={styles.planCostText}
@@ -245,7 +246,9 @@ const DiaryDetailCard = (props) => {
                             costs.find((cost) => cost.id === item.planDetailId)
                               ?.cost,
                           );
-                        }}></div>
+                        }}>
+                        수정
+                      </div>
                     </div>
                   </div>
                 </div>

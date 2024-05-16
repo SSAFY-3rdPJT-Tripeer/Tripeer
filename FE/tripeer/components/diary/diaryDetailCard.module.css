@@ -206,29 +206,43 @@
   width: 100px;
   height: 25px;
   text-align: end;
-  padding-right: 10px;
+  padding-right: 5px;
   font-weight: 500;
   font-size: 1.05rem;
   color: #858585;
-  margin-right: 5px;
-  outline: #4fbdb7;
-  border: #4fbdb7 1px solid;
+  /* margin-right: 5px; */
+  outline: hidden;
+  border: hidden;
   border-radius: 5px;
 }
 .planCostSpan {
-  color: #4fbdb7;
+  color: #545454;
   font-weight: 600;
 }
 .planCostEdit {
-  background: url("./assets/editIcon.png");
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background: url("./assets/editIcon.png");
   background-position: center;
   background-size: contain;
-  background-repeat: no-repeat;
+  background-repeat: no-repeat; */
   height: 20px;
-  width: 20px;
+  width: 40px;
   margin-left: 10px;
   cursor: pointer;
+  color: #fff;
+  background: #4fbdb7;
+  border-radius: 5px;
+  text-align: center;
+  visibility: hidden;
+  font-size: 0.8rem;
 }
+
+.planCostBox:hover .planCostEdit {
+  visibility: visible;
+}
+
 .totalCostBox {
   display: flex;
   flex-direction: row;
