@@ -25,6 +25,7 @@ public enum ErrorCode {
     HAS_BUCKET(HttpStatus.BAD_REQUEST, "PLAN-001", "이미 등록된 장소입니다."),
     NOT_FOUND_PLAN(HttpStatus.BAD_REQUEST, "PLAN-002", "존재하지 않는 플랜입니다."),
     NOT_HAS_COWORKER(HttpStatus.BAD_REQUEST, "PLAN-003", "사용자가 소속되지 않은 플랜입니다."),
+    TOO_MANY_PLAN(HttpStatus.FORBIDDEN, "PLAN-004", "초대된 사용자가 너무 많은 플랜을 가지고 있습니다."),
 
     // history
     UNSUPPORTED_JSON_TYPE(HttpStatus.BAD_REQUEST, "HISTORY-001", "저장할 수 없는 데이터가 존재합니다."),
