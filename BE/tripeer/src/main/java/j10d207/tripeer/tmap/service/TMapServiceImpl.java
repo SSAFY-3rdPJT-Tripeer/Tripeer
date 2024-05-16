@@ -34,10 +34,10 @@ import java.util.Optional;
 @Slf4j
 public class TMapServiceImpl implements TMapService {
 
-    private final PublicRootDetailRepository publicRootDetailRepository;
     @Value("${tmap.apikey}")
     private String apikey;
 
+    private final ApiRequestService apiRequestService;
     private final KakaoService kakaoService;
     private final PublicRootRepository publicRootRepository;
 
@@ -109,12 +109,12 @@ public class TMapServiceImpl implements TMapService {
         rootInfoDTO.setEndLatitude(EX);
         rootInfoDTO.setEndLongitude(EY);
         if(optionalPublicRoot.isPresent()){
-            rootInfoDTO.setPublicRoot(getRootDTO(optionalPublicRoot.get()));
+            rootInfoDTO.setPublicRoot(apiRequestService.getRootDTO(optionalPublicRoot.get()));
             rootInfoDTO.setTime(rootInfoDTO.getPublicRoot().getTotalTime());
             return rootInfoDTO;
         } else {
             // A에서 B로 가는 경로의 정보를 조회
-            JsonObject result = getResult(SX, SY, EX, EY);
+            JsonObject result = apiRequestService.getResult(SX, SY, EX, EY);
 
             if (result.getAsJsonObject().has("result")) {
                 int status = result.getAsJsonObject("result").get("status").getAsInt();
@@ -145,161 +145,18 @@ public class TMapServiceImpl implements TMapService {
                 JsonObject routeInfo = result.getAsJsonObject("metaData");
 
                 //경로 정보중 제일 좋은 경로를 가져옴
-                JsonElement bestRoot = getBestTime(routeInfo.getAsJsonObject("plan").getAsJsonArray("itineraries"));
+                JsonElement bestRoot = apiRequestService.getBestTime(routeInfo.getAsJsonObject("plan").getAsJsonArray("itineraries"));
 
                 //반환 정보 생성
                 int totalTime = bestRoot.getAsJsonObject().get("totalTime").getAsInt();
                 rootInfoDTO.setTime(totalTime / 60);
                 rootInfoDTO.setRootInfo(bestRoot);
 
-                saveRootInfo(bestRoot, SX, SY, EX, EY, totalTime/60);
+                apiRequestService.saveRootInfo(bestRoot, SX, SY, EX, EY, totalTime/60);
 
                 return rootInfoDTO;
             }
 
-        }
-    }
-
-    //경로 리스트 중에서 제일 좋은 경로 하나를 선정해서 반환 ( 시간 우선 )
-    @Override
-    public JsonElement getBestTime(JsonArray itineraries) {
-        int minTime = Integer.MAX_VALUE;
-        JsonElement bestJson = new JsonObject();
-        for (JsonElement itinerary : itineraries) {
-            int tmpTime = itinerary.getAsJsonObject().get("totalTime").getAsInt();
-            int tmpPathType = itinerary.getAsJsonObject().get("pathType").getAsInt();
-            // 이동수단이 6-항공일 경우 제외
-            if( tmpPathType == 6) {
-                continue;
-            }
-
-            if ( minTime > tmpTime ) {
-                minTime = tmpTime;
-                bestJson = itinerary;
-            }
-        }
-        return  bestJson;
-    }
-
-    // A에서 B로 가는 경로의 정보를 조회 (tMap API 요청)
-    @Override
-    public JsonObject getResult(double SX, double SY, double EX, double EY) {
-//        double distance = calculateDistance(SX, SY, EX, EY);
-//        System.out.println("요청좌표 - SX = " + SX + ", SY = " + SY + ", EX = " + EX + ", EY = " + EY);
-//        if(distance < 1.0) {
-//            System.out.println("측정 직선거리가 1.0km 이내입니다. distance = " + distance);
-//            return null;
-//        }
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("appKey", apikey);
-        headers.set("Content-Type", "application/json");
-        headers.set("Accept", "*/*");
-        RouteReqDTO route = RouteReqDTO.builder()
-                .startX(String.valueOf(SX))
-                .startY(String.valueOf(SY))
-                .endX(String.valueOf(EX))
-                .endY(String.valueOf(EY))
-                .build();
-        HttpEntity<RouteReqDTO> request = new HttpEntity<>(route, headers);
-        String result = restTemplate.postForObject("https://apis.openapi.sk.com/transit/routes", request, String.class);
-        return JsonParser.parseString(result).getAsJsonObject();
-    }
-
-    private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
-        // Haversine 공식을 사용하여 거리 계산
-        double earthRadius = 6371; // 지구 반지름 (단위: 킬로미터)
-
-        double dLat = Math.toRadians(lat2 - lat1);
-        double dLon = Math.toRadians(lon2 - lon1);
-
-        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
-                        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-        return earthRadius * c;
-    }
-
-    //저장된 결과를 가져와서 DTO로 변환
-    @Override
-    public PublicRootDTO getRootDTO (PublicRootEntity publicRootEntity) {
-        PublicRootDTO result = new PublicRootDTO();
-
-        result.setTotalDistance(publicRootEntity.getTotalDistance());
-        result.setTotalWalkTime(publicRootEntity.getTotalWalkTime());
-        result.setTotalWalkDistance(publicRootEntity.getTotalWalkDistance());
-        result.setPathType(publicRootEntity.getPathType());
-        result.setTotalFare(publicRootEntity.getTotalFare());
-        result.setTotalTime(publicRootEntity.getTotalTime());
-
-        List<PublicRootDTO.PublicRootDetail> detailList = new ArrayList<>();
-        List<PublicRootDetailEntity> publicRootDetailEntityList = publicRootDetailRepository.findByPublicRoot_PublicRootId(publicRootEntity.getPublicRootId());
-        for (PublicRootDetailEntity publicRootDetailEntity : publicRootDetailEntityList) {
-            PublicRootDTO.PublicRootDetail detail = new PublicRootDTO.PublicRootDetail();
-            detail.setStartName(publicRootDetailEntity.getStartName());
-            detail.setStartLat(publicRootDetailEntity.getStartLat());
-            detail.setStartLon(publicRootDetailEntity.getStartLon());
-            detail.setEndName(publicRootDetailEntity.getEndName());
-            detail.setEndLat(publicRootDetailEntity.getEndLat());
-            detail.setEndLon(publicRootDetailEntity.getEndLon());
-            detail.setDistance(publicRootDetailEntity.getDistance());
-            detail.setSectionTime(publicRootDetailEntity.getSectionTime());
-            detail.setMode(publicRootDetailEntity.getMode());
-            detail.setRoute(publicRootDetailEntity.getRoute());
-            detailList.add(detail);
-        }
-        result.setPublicRootDetailList(detailList);
-
-
-
-        return result;
-    }
-
-    //최초에 조회된 경로를 저장
-    @Override
-    public void saveRootInfo(JsonElement rootInfo, double SX, double SY, double EX, double EY, int time) {
-        JsonObject infoObject = rootInfo.getAsJsonObject();
-        PublicRootEntity publicRootEntity = PublicRootEntity.builder()
-                .startLat(SX)
-                .startLon(SY)
-                .endLat(EX)
-                .endLon(EY)
-                .totalTime(time)
-                .totalDistance(infoObject.get("totalDistance").getAsInt())
-                .totalWalkTime(infoObject.get("totalWalkTime").getAsInt())
-                .totalWalkDistance(infoObject.get("totalWalkDistance").getAsInt())
-                .pathType(infoObject.get("pathType").getAsInt())
-                .totalFare(infoObject.getAsJsonObject("fare").getAsJsonObject("regular").get("totalFare").getAsInt())
-                .build();
-        long rootId = 0;
-        try {
-            rootId = publicRootRepository.save(publicRootEntity).getPublicRootId();
-        } catch (DataIntegrityViolationException e ) {
-            log.error("DataIntegerityViolationError : " + e.getMessage() );
-            return;
-        }
-
-        if( rootId > 0) {
-            JsonArray legs = infoObject.getAsJsonArray("legs");
-            for (JsonElement leg : legs) {
-                JsonObject legObject = leg.getAsJsonObject();
-                PublicRootDetailEntity detailEntity = PublicRootDetailEntity.builder()
-                        .publicRoot(PublicRootEntity.builder().publicRootId(rootId).build())
-                        .distance(legObject.get("distance").getAsInt())
-                        .sectionTime(legObject.get("sectionTime").getAsInt() / 60)
-                        .mode(legObject.get("mode").getAsString())
-                        .route(legObject.has("route") ? legObject.get("route").getAsString() : null)
-                        .startName(legObject.getAsJsonObject("start").get("name").getAsString())
-                        .startLat(legObject.getAsJsonObject("start").get("lat").getAsDouble())
-                        .startLon(legObject.getAsJsonObject("start").get("lon").getAsDouble())
-                        .endName(legObject.getAsJsonObject("end").get("name").getAsString())
-                        .endLat(legObject.getAsJsonObject("end").get("lat").getAsDouble())
-                        .endLon(legObject.getAsJsonObject("end").get("lon").getAsDouble())
-                        .build();
-                publicRootDetailRepository.save(detailEntity);
-            }
         }
     }
 

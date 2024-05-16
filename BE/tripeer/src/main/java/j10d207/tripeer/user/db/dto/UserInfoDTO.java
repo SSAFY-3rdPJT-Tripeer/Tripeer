@@ -1,12 +1,16 @@
 package j10d207.tripeer.user.db.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserInfoDTO {
 
     private long userId;

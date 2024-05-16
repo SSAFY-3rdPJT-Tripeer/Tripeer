@@ -300,6 +300,10 @@ public class PlanServiceImpl implements PlanService {
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_PLAN));
         UserEntity user = UserEntity.builder().userId(coworkerReqDTO.getUserId()).build();
 
+        if(coworkerRepository.findByUser_UserId(coworkerReqDTO.getUserId()).size() > 5) {
+            throw new CustomException(ErrorCode.TOO_MANY_PLAN);
+        }
+
         if(!coworkerRepository.existsByPlan_PlanIdAndUser_UserId(coworkerReqDTO.getPlanId(), coworkerReqDTO.getUserId())) {
             CoworkerEntity coworker = CoworkerEntity.builder()
                     .plan(PlanEntity.builder().planId(coworkerReqDTO.getPlanId()).build())
