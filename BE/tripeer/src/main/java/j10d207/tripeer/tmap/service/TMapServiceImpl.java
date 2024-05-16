@@ -161,7 +161,8 @@ public class TMapServiceImpl implements TMapService {
     }
 
     //경로 리스트 중에서 제일 좋은 경로 하나를 선정해서 반환 ( 시간 우선 )
-    private JsonElement getBestTime(JsonArray itineraries) {
+    @Override
+    public JsonElement getBestTime(JsonArray itineraries) {
         int minTime = Integer.MAX_VALUE;
         JsonElement bestJson = new JsonObject();
         for (JsonElement itinerary : itineraries) {
@@ -181,7 +182,8 @@ public class TMapServiceImpl implements TMapService {
     }
 
     // A에서 B로 가는 경로의 정보를 조회 (tMap API 요청)
-    private JsonObject getResult(double SX, double SY, double EX, double EY) {
+    @Override
+    public JsonObject getResult(double SX, double SY, double EX, double EY) {
 //        double distance = calculateDistance(SX, SY, EX, EY);
 //        System.out.println("요청좌표 - SX = " + SX + ", SY = " + SY + ", EX = " + EX + ", EY = " + EY);
 //        if(distance < 1.0) {
@@ -221,7 +223,8 @@ public class TMapServiceImpl implements TMapService {
     }
 
     //저장된 결과를 가져와서 DTO로 변환
-    private PublicRootDTO getRootDTO (PublicRootEntity publicRootEntity) {
+    @Override
+    public PublicRootDTO getRootDTO (PublicRootEntity publicRootEntity) {
         PublicRootDTO result = new PublicRootDTO();
 
         result.setTotalDistance(publicRootEntity.getTotalDistance());
@@ -255,7 +258,8 @@ public class TMapServiceImpl implements TMapService {
     }
 
     //최초에 조회된 경로를 저장
-    private void saveRootInfo(JsonElement rootInfo, double SX, double SY, double EX, double EY, int time) {
+    @Override
+    public void saveRootInfo(JsonElement rootInfo, double SX, double SY, double EX, double EY, int time) {
         JsonObject infoObject = rootInfo.getAsJsonObject();
         PublicRootEntity publicRootEntity = PublicRootEntity.builder()
                 .startLat(SX)
