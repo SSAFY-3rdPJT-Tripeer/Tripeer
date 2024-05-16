@@ -82,6 +82,7 @@ const PageDetail = (props) => {
 
   const getDay = async (totalYList, timeYList, blockYList) => {
     try {
+      console.log("ase");
       const res = await api.get("/plan");
       const planIdArr = res.data.data.filter((e) => e.planId === plan.planId);
 
@@ -101,32 +102,34 @@ const PageDetail = (props) => {
 
       setDay(result);
 
-      provider.doc.transact(() => {
-        const yTime = new Y.Array();
-        const yTime2 = new Y.Array();
+      setTimeout(() => {
+        provider.doc.transact(() => {
+          const yTime = new Y.Array();
+          const yTime2 = new Y.Array();
 
-        //처음 들어와서 내용이 없을때
-        if (totalYList.length === 0) {
-          yTime.insert(0, []);
-          yTime2.insert(0, []);
-          totalYList.insert(0, [yTime2]);
-          timeYList.insert(0, [yTime]);
-          blockYList.insert(0, [false]);
-
-          for (let i = 0; i < result.length; i++) {
-            console.log("반복", i);
-            const yTime = new Y.Array();
-            const yTime2 = new Y.Array();
+          //처음 들어와서 내용이 없을때
+          if (totalYList.length === 0) {
             yTime.insert(0, []);
             yTime2.insert(0, []);
             totalYList.insert(0, [yTime2]);
-            timeYList.insert(i + 1, [yTime]);
+            timeYList.insert(0, [yTime]);
             blockYList.insert(0, [false]);
-          }
 
-          console.log("dd", timeYList.toJSON());
-        }
-      });
+            for (let i = 0; i < result.length; i++) {
+              console.log("반복", i);
+              const yTime = new Y.Array();
+              const yTime2 = new Y.Array();
+              yTime.insert(0, []);
+              yTime2.insert(0, []);
+              totalYList.insert(0, [yTime2]);
+              timeYList.insert(i + 1, [yTime]);
+              blockYList.insert(0, [false]);
+            }
+
+            console.log("dd", timeYList.toJSON());
+          }
+        });
+      }, 500);
 
       const getKoreanDayOfWeek = (dateString) => {
         const days = ["일", "월", "화", "수", "목", "금", "토"];
@@ -227,6 +230,9 @@ const PageDetail = (props) => {
             `room-${props.params.id}`,
             doc,
           );
+
+          // getDay(totalYList,timeYList,blockYList)
+
           setProvider(ws);
         } catch (err) {
           router.push("/");
@@ -242,9 +248,7 @@ const PageDetail = (props) => {
       const timeYList = provider.doc.getArray("timeYList");
       const blockYList = provider.doc.getArray("blockYList");
 
-      totalYList.length > 0 ? null : getDay(totalYList, timeYList, blockYList);
-
-      console.log("time:", timeYList.toJSON());
+      getDay(totalYList, timeYList, blockYList);
 
       return () => {
         if (provider) {
