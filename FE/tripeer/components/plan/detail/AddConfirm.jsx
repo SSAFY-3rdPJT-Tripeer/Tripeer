@@ -55,6 +55,9 @@ const AddConfirm = (props) => {
       if (newPlan) {
         const newSpot = { ...res.data.data, ...myInfo };
         const spots = provider.doc.getArray("saveSpot");
+        const totalY = provider.doc.getArray("totalYList");
+        const totalFirst = totalY.get(0);
+        totalFirst.insert(0, [newSpot]);
         spots.insert(0, [newSpot]);
       }
       setOnModal(false);
