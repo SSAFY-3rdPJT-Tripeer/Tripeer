@@ -1,22 +1,21 @@
-
 <div align="center">
       <img src='readmeImage/title.png' width="70%">
 
  <h1>Tripeer</h1>
 
- <h3>편리한 의견공유 기능을 탑재한 여행 플래너</h3>
+ <h3>실시간 일정 조율 가능한 여행 협업 플래너</h3>
 <p>2024.04.08 ~ 2024.05.20</p>
 </div>
 
-
 ## 목차
 
+- [목차](#목차)
 - [서비스 개요](#서비스-개요)
-- [팀원소개](#팀원소개)
-- [기술 스택](#기술스택)
-- [주요 기능](#주요기능)
+- [팀원 소개](#팀원-소개)
+- [기술 스택](#기술-스택)
+- [주요 기능](#주요-기능)
 - [명세서](#명세서)
-- [ERD](#ERD)
+- [ERD](#erd)
 - [시스템 아키텍쳐](#시스템-아키텍쳐)
 - [서비스 실사용 화면](#서비스-실사용-화면)
 
@@ -33,6 +32,7 @@
 ```
 
 ## 팀원 소개
+
 <div align="center">
       <img src='readmeImage/position.PNG'>
 </div>
@@ -42,12 +42,15 @@
 <center>FrontEnd
 
 <div align="middle">
+<img src="https://img.shields.io/badge/nextjs-000000?style=for-the-badge&logo=nextdotjs&logoColor=white">
 <img src="https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white">
 <img src="https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white">
-<img src="https://img.shields.io/badge/JavaScript-FFE249?style=for-the-badge&logo=javascript&logoColor=white">
+<img src="https://img.shields.io/badge/JavaScript-FFE249?style=for-the-badge&logo=javascript&logoColor=black">
 <img src="https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white">
 <img src="https://img.shields.io/badge/ESLint-4B3263?style=for-the-badge&logo=eslint&logoColor=white">
+<img src="https://img.shields.io/badge/Yjs-30BCED?style=for-the-badge&logo=Yjs&logoColor=white">
 <img src="https://img.shields.io/badge/Prettier-F7B93E?style=for-the-badge&logo=Prettier&logoColor=white">
+<img src="https://img.shields.io/badge/zustand-1F4ECF?style=for-the-badge&logo=zustand&logoColor=white">
 <img src="https://img.shields.io/badge/lottie-04d1c1?style=for-the-badge">
 <img src="https://img.shields.io/badge/axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white">
 
@@ -55,23 +58,36 @@
 
 **Language |** HTML5, CSS3, JavaScript, node.js(v20.10.0)
 
-**Framework |** React.js(v18.2.0), Redux(v9.1.0), Vite(v5.1.4), 
+**Framework |** React.js(v18.2.0), Redux(v9.1.0), Vite(v5.1.4),
 
 **Library |** eslint(v8.56.0), vite PWA plugin(v9.19.7), prettier(v3.2.5), Lottie(v1.2.4), Axios(v1.6.7),Firebase(v10.10.0)
 
-
-
- NEXT.JS, Yjs, zustand
 </div>
 <center>BackEnd
+<div align="middle">
 
-JAVA, SpringBoot, SpringWebClient, Gradle, MongoDB, MySql, AMAZON S3, HIBERNATE, fastAPI, express
+<img src="https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white"> 
+<img src="https://img.shields.io/badge/spring boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
+<img src="https://img.shields.io/badge/SpringWebClient-6DB33F?style=for-the-badge&logo=SpringWebClient&logoColor=white">
+<img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white">
+<img src="https://img.shields.io/badge/mongodb-47A248?style=for-the-badge&logo=mongodb&logoColor=white">
+<img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
+<img src="https://img.shields.io/badge/Amazon%20S3-569A31?style=for-the-badge&logo=Amazon%20S3&logoColor=white">
+<img src="https://img.shields.io/badge/JPA Hibernate-59666C?style=for-the-badge&logo=Hibernate&logoColor=white">
+<img src="https://img.shields.io/badge/fastapi-009688?style=for-the-badge&logo=fastapi&logoColor=white">
+<img src="https://img.shields.io/badge/express-000000?style=for-the-badge&logo=express&logoColor=white">
+
+</div>
 
 <center> Infra
-JenKins, NginX, Docker
+<div align="middle">
 
+<img src="https://img.shields.io/badge/jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white"> 
+<img src="https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white"> 
+<img src="https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white"> 
+</div>
 
-##  주요 기능
+## 주요 기능
 
 <table>
 <tr>
@@ -136,15 +152,16 @@ JenKins, NginX, Docker
 </tr>
 </table>
 
+## 명세서
 
-##  명세서
+<div align="start">
 
 - <a href='https://tested-roquefort-da8.notion.site/e0ed30ab70594efe87bcc2bd7dd66f1b?pvs=4'>기능 명세서</a>
 
 - <a href='https://tested-roquefort-da8.notion.site/API-f79c44d8a0fd4db2873364bddbed4ba0?pvs=4'>API 명세서</a>
 
 - <a href='https://www.figma.com/design/qweyp746luFDLaeygU22h3/D207?node-id=0%3A1&t=JYlzOiCRaGomhiGR-1'>Figma</a>
-
+</div>
 
 ## ERD
 
@@ -155,26 +172,26 @@ JenKins, NginX, Docker
 ## 시스템 아키텍쳐
 
 <div  width="70%">
-      <img src='readmeImage/system.png'>
+      <img src='readmeImage/System Architecture.png'>
 </div>
 
 ## 서비스 실사용 화면
 
 - 계획추가
-      <img src='readmeImage/gif/makeplan.gif'>
+  <img src='readmeImage/gif/makeplan.gif'>
 - 멤버초대
-      <img src='readmeImage/gif/memberInvitation.gif'>
+  <img src='readmeImage/gif/memberInvitation.gif'>
 - 장소선택
-      <img src='readmeImage/gif/addPlace.gif'>
+  <img src='readmeImage/gif/addPlace.gif'>
 - 추천 여행지 선택
-      <img src='readmeImage/gif/recommendPlace.gif'>
+  <img src='readmeImage/gif/recommendPlace.gif'>
 - 여행 계획 세우기
-      <img src='readmeImage/gif/plandetail.gif'>
+  <img src='readmeImage/gif/plandetail.gif'>
 - 최단거리 계산
-      <img src='readmeImage/gif/detailOptimizing.gif'>
+  <img src='readmeImage/gif/detailOptimizing.gif'>
 - 온라인 유저 확인하기, 메모하기, 공지사항 입력
 - 경로 보기
 - 여행 계획으로 보기
-      <img src='readmeImage/gif/plansave.gif'>
+  <img src='readmeImage/gif/plansave.gif'>
 - 지난 여행 보기
 - 사진 업로드
