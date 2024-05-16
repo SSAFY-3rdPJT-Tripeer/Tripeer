@@ -23,14 +23,14 @@ import MapRoute from "../MapRoute";
 import Block2 from "@/components/plan/detail/schedule/block2";
 
 const PlanSchedule = (props) => {
-  const { myInfo, provider, plan, online } = props;
+  const { myInfo, provider, plan, online, day, dayOfWeek } = props;
   // dnd 를 관리할 전체 배열
   const [totalY, setTotalY] = useState(null);
   const [totalList, setTotalList] = useState([]);
   // 날짜를 저장
-  const [day, setDay] = useState([]);
+  // const [day, setDay] = useState([]);
   // 위의 day 를 요일로 저장
-  const [dayOfWeek, setDayOfWeek] = useState([]);
+  // const [dayOfWeek, setDayOfWeek] = useState([]);
   const [members, setMembers] = useState([]);
   const [timeList, setTimeList] = useState(null);
   const [timeY, setTimeY] = useState(null);
@@ -588,122 +588,122 @@ const PlanSchedule = (props) => {
     }
   };
 
-  const update = (saveYSpot, totalYList, timeYList) => {
-    provider.doc.transact(() => {
-      const arr = saveYSpot.toArray();
-      const tArr = totalYList
-        .toJSON()
-        .flat()
-        .map((e) => e.spotInfoId);
+  // const update = (saveYSpot, totalYList) => {
+  //   provider.doc.transact(() => {
+  //     const arr = saveYSpot.toArray();
+  //     const tArr = totalYList
+  //       .toJSON()
+  //       .flat()
+  //       .map((e) => e.spotInfoId);
+  //
+  //     const remain = arr.filter((e) => !tArr.includes(e.spotInfoId));
+  //
+  //     if (remain.length !== 0) {
+  //       let leftArr = totalYList.get(0);
+  //       if (remain.length !== 0) {
+  //         // leftArr.push([...remain]);
+  //         leftArr.insert(leftArr.length, [...remain]);
+  //       }
+  //
+  //       const result = totalYList.toJSON();
+  //       setTotalList(result);
+  //       setTotalY(totalYList);
+  //     } else if (totalYList.length !== 0) {
+  //       const arr = saveYSpot.toJSON().map((e) => e.spotInfoId);
+  //       const leftArr = totalYList.toJSON()[0];
+  //
+  //       const result = leftArr.filter((e) => arr.includes(e.spotInfoId));
+  //
+  //       const yItems = new Y.Array();
+  //
+  //       yItems.insert(0, [...result]);
+  //
+  //       totalYList.delete(0, 1);
+  //       totalYList.insert(0, [yItems]);
+  //
+  //       const result2 = totalYList.toJSON();
+  //       setTotalList(result2);
+  //       setTotalY(totalYList);
+  //     }
+  //   });
+  // };
 
-      const remain = arr.filter((e) => !tArr.includes(e.spotInfoId));
+  // const getDay = async (saveYSpot, totalYList, timeYList, blockYList) => {
+  //   try {
+  //     const res = await api.get("/plan");
+  //     const planIdArr = res.data.data.filter((e) => e.planId === plan.planId);
+  //
+  //     const start = planIdArr[0].startDay;
+  //     const end = planIdArr[0].endDay;
+  //     const arr = [];
+  //     const dt = new Date(start);
+  //
+  //     while (dt <= new Date(end)) {
+  //       arr.push(new Date(dt).toISOString().slice(0, 10));
+  //       dt.setDate(dt.getDate() + 1);
+  //     }
+  //
+  //     const result = arr.map(function (date) {
+  //       return date.replace(/-/g, ".");
+  //     });
+  //
+  //     setDay(result);
+  //
+  //     // const sArr = saveYSpot.toArray();
+  //     // const tArr = totalYList
+  //     //   .toJSON()
+  //     //   .flat()
+  //     //   .map((e) => e.spotInfoId);
+  //     //
+  //     // const remain = sArr.filter((e) => !tArr.includes(e.spotInfoId));
+  //
+  //     provider.doc.transact(() => {
+  //       const yItems = new Y.Array();
+  //       const yTime = new Y.Array();
+  //
+  //       // 만약에 스케쥴에 없는 장소가 있다 ?! >> 없는것 왼쪽 리스트에 추가해주기
+  //       if (totalYList.length <= 1) {
+  //         //   if (totalYList.length === 0) {
+  //         //     yItems.insert(0, [...remain]);
+  //         //     totalYList.insert(0, [yItems]);
+  //         //   }
+  //         yTime.insert(0, []);
+  //         timeYList.insert(0, [yTime]);
+  //         blockYList.insert(0, [false]);
+  //
+  //         for (let i = 0; i < result.length; i++) {
+  //           // const yItems = new Y.Array();
+  //           // yItems.insert(0, []);
+  //           // totalYList.insert(i + 1, [yItems]);
+  //           const yTime = new Y.Array();
+  //           yTime.insert(0, []);
+  //           timeYList.insert(i + 1, [yTime]);
+  //           blockYList.insert(0, [false]);
+  //         }
+  //       }
+  //     });
 
-      if (remain.length !== 0) {
-        let leftArr = totalYList.get(0);
-        if (remain.length !== 0) {
-          // leftArr.push([...remain]);
-          leftArr.insert(leftArr.length, [...remain]);
-        }
-
-        const result = totalYList.toJSON();
-        setTotalList(result);
-        setTotalY(totalYList);
-      } else if (totalYList.length !== 0) {
-        const arr = saveYSpot.toJSON().map((e) => e.spotInfoId);
-        const leftArr = totalYList.toJSON()[0];
-
-        const result = leftArr.filter((e) => arr.includes(e.spotInfoId));
-
-        const yItems = new Y.Array();
-
-        yItems.insert(0, [...result]);
-
-        totalYList.delete(0, 1);
-        totalYList.insert(0, [yItems]);
-
-        const result2 = totalYList.toJSON();
-        setTotalList(result2);
-        setTotalY(totalYList);
-      }
-    });
-  };
-
-  const getDay = async (saveYSpot, totalYList, timeYList, blockYList) => {
-    try {
-      const res = await api.get("/plan");
-      const planIdArr = res.data.data.filter((e) => e.planId === plan.planId);
-
-      const start = planIdArr[0].startDay;
-      const end = planIdArr[0].endDay;
-      const arr = [];
-      const dt = new Date(start);
-
-      while (dt <= new Date(end)) {
-        arr.push(new Date(dt).toISOString().slice(0, 10));
-        dt.setDate(dt.getDate() + 1);
-      }
-
-      const result = arr.map(function (date) {
-        return date.replace(/-/g, ".");
-      });
-
-      setDay(result);
-
-      const sArr = saveYSpot.toArray();
-      const tArr = totalYList
-        .toJSON()
-        .flat()
-        .map((e) => e.spotInfoId);
-
-      const remain = sArr.filter((e) => !tArr.includes(e.spotInfoId));
-
-      provider.doc.transact(() => {
-        const yItems = new Y.Array();
-        const yTime = new Y.Array();
-
-        // 만약에 스케쥴에 없는 장소가 있다 ?! >> 없는것 왼쪽 리스트에 추가해주기
-        if (totalYList.length <= 1) {
-          if (totalYList.length === 0) {
-            yItems.insert(0, [...remain]);
-            totalYList.insert(0, [yItems]);
-          }
-          yTime.insert(0, []);
-          timeYList.insert(0, [yTime]);
-          blockYList.insert(0, [false]);
-
-          for (let i = 0; i < result.length; i++) {
-            const yItems = new Y.Array();
-            yItems.insert(0, []);
-            totalYList.insert(i + 1, [yItems]);
-            const yTime = new Y.Array();
-            yTime.insert(0, []);
-            timeYList.insert(i + 1, [yTime]);
-            blockYList.insert(0, [false]);
-          }
-        }
-      });
-
-      const getKoreanDayOfWeek = (dateString) => {
-        const days = ["일", "월", "화", "수", "목", "금", "토"];
-        const date = new Date(dateString.replace(/\./g, "-"));
-        const dayOfWeek = days[date.getDay()];
-        return dayOfWeek;
-      };
-
-      const resultWeek = result.map(function (date) {
-        return getKoreanDayOfWeek(date);
-      });
-
-      setDayOfWeek(resultWeek);
-    } catch (e) {
-      // console.log(e)
-    }
-  };
+  //   const getKoreanDayOfWeek = (dateString) => {
+  //     const days = ["일", "월", "화", "수", "목", "금", "토"];
+  //     const date = new Date(dateString.replace(/\./g, "-"));
+  //     const dayOfWeek = days[date.getDay()];
+  //     return dayOfWeek;
+  //   };
+  //
+  //   const resultWeek = result.map(function (date) {
+  //     return getKoreanDayOfWeek(date);
+  //   });
+  //
+  //   setDayOfWeek(resultWeek);
+  // } catch (e) {
+  //   // console.log(e)
+  // }
+  // };
 
   useEffect(() => {
     if (myInfo && provider) {
       // yjs 에서 장소 데이터를 가져와서
-      const saveYSpot = provider.doc.getArray("saveSpot");
+      // const saveYSpot = provider.doc.getArray("saveSpot");
       const totalYList = provider.doc.getArray("totalYList");
       const timeYList = provider.doc.getArray("timeYList");
       const blockYList = provider.doc.getArray("blockYList");
@@ -712,19 +712,18 @@ const PlanSchedule = (props) => {
       // timeYList.delete(0, timeYList.length);
       // saveYSpot.delete(0, saveYSpot.length)
 
-      getDay(saveYSpot, totalYList, timeYList, blockYList);
+      // getDay(saveYSpot, totalYList, timeYList, blockYList);
+      //
+      // update(saveYSpot, totalYList);
 
-      update(saveYSpot, totalYList, timeYList);
+      setTotalList(totalYList.toJSON());
+      setTotalY(totalYList);
 
-      if (timeYList.length > 0) {
-        setTimeList(timeYList.toJSON());
-        setTimeY(timeYList);
-      }
+      setTimeList(timeYList.toJSON());
+      setTimeY(timeYList);
 
-      if (blockYList.length > 0) {
-        setBlockList(blockYList.toJSON());
-        setBlockY(blockYList);
-      }
+      setBlockList(blockYList.toJSON());
+      setBlockY(blockYList);
 
       timeYList.observeDeep(() => {
         const data = timeYList.toJSON();
@@ -738,12 +737,10 @@ const PlanSchedule = (props) => {
         setBlockY(blockYList);
       });
 
-      saveYSpot.observe(() => {
-        // 추가했을때
-        update(saveYSpot, totalYList, timeYList);
-      });
-
-      let timeoutId = null;
+      // saveYSpot.observe(() => {
+      //   // 추가했을때
+      //   update(saveYSpot, totalYList, timeYList);
+      // });
 
       totalYList.observeDeep(() => {
         setTotalList(totalYList.toJSON());
@@ -789,6 +786,12 @@ const PlanSchedule = (props) => {
   const cancelData = () => {
     setIsSaveModal(false);
   };
+
+  useEffect(() => {
+    if (totalList) {
+      console.log("t", totalList);
+    }
+  }, [totalList]);
 
   return (
     // 화면 전체
