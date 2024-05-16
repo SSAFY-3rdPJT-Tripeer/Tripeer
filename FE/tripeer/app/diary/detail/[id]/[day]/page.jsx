@@ -202,15 +202,20 @@ const DayAlbum = () => {
                     </div>
 
                     {isSelectModal && (
-                      <div
-                        className={styles.checkBox}
-                        onClick={(e) => {
-                          e.stopPropagation(); // 이벤트 버블링 방지
-                          togglePhotoSelection(idx);
-                        }}>
-                        {selectedPhotos[idx] && (
-                          <div className={styles.check}></div>
-                        )}
+                      <div>
+                        <div
+                          className={styles.checkBox}
+                          onClick={(e) => {
+                            e.stopPropagation(); // 이벤트 버블링 방지
+                            togglePhotoSelection(idx);
+                          }}>
+                          {selectedPhotos[idx] && (
+                            <>
+                              <div className={styles.check}></div>
+                              <div className={styles.selectedBox}></div>
+                            </>
+                          )}
+                        </div>
                       </div>
                     )}
                   </div>
