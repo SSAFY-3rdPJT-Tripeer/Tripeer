@@ -1,9 +1,12 @@
 
-
+<div align="center">
       <img src='readmeImage/title.png'>
-# <center> Tripeer
-<center> 편리한 의견공유 기능을 탑재한 여행 플래너
-<center>2024.04.08 ~ 2024.05.20
+
+ <h1>Tripeer</h1>
+
+ <h3>편리한 의견공유 기능을 탑재한 여행 플래너</h3>
+<p>2024.04.08 ~ 2024.05.20</p>
+</div>
 
 
 ## 목차
@@ -14,6 +17,7 @@
 - 주요 기능
 - 명세서
 - ERD
+- 시스템 아키텍쳐
 - 서비스 실사용 화면
 
 ## 서비스 개요
@@ -29,7 +33,9 @@
 ```
 
 ## 팀원 소개
-      <img src='readmeImage/position.png'>
+<div>
+      <img src='readmeImage/position.PNG'>
+</div>
 
 ## 기술 스택
 
@@ -121,7 +127,15 @@ JenKins, NginX, Docker
 
 ## ERD
 
+<div>
       <img src='readmeImage/erd.png'>
+</div>
+
+## 시스템 아키텍쳐
+
+<div>
+      <img src='readmeImage/system.png'>
+</div>
 
 ## 서비스 실사용 화면
 
