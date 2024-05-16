@@ -14,7 +14,7 @@ export default function PlacePage({ params }) {
   const [list, setList] = useState([]);
   // 씨티인지 타운인지 체크
   const [isCity, setIsCity] = useState(true);
-
+  const [isSearch, setIsSearch] = useState(false);
   const store = usePlaceStore();
 
   // 검색을 위해 모든 도시 타운 정보 스토어 저장
@@ -67,6 +67,7 @@ export default function PlacePage({ params }) {
     // 검색을 위해 모든 정보를  GET해서 로컬에 저장, 단 로컬에 있으면 수행 x
     initData();
     getData();
+    console.log(params.city);
   }, []);
 
   // 리스트가 갱신될때마다 현재 씨티 페이지인지 타운 페이지인지 체크
@@ -87,10 +88,12 @@ export default function PlacePage({ params }) {
         <div className={styles.searchBarBox}>
           <p className={styles.searchBarText}>우리 이번에는 어디로 갈까?</p>
           {/* 검색바 */}
-          <PlaceSearchBar setList={setList} />
+          <PlaceSearchBar setList={setList} setIsSearch={setIsSearch} />
         </div>
       </section>
-      <RecommendCardList></RecommendCardList>
+      {isSearch ? null : (
+        <RecommendCardList city={params.city}></RecommendCardList>
+      )}
       {/* 플레이스 출력 */}
       {list.length === 0 ? (
         <section className={styles.sectionBottomEmpty}>

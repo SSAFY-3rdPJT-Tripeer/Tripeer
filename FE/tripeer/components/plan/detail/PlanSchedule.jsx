@@ -188,10 +188,10 @@ const PlanSchedule = (props) => {
     } catch (e) {
       const tmp2 = [["요청이 너무 빠릅니다. 다시 시도해주세요.", "2", null]];
       arr.insert(index - 1, [...tmp2]);
-      if (arr.length === index) {
-        arr.insert(index, [...tmp2]);
-      }
-      console.log(index);
+      // if (arr.length === index) {
+      //   arr.insert(index, [...tmp2]);
+      // }
+      console.log(index, arr.length);
       console.log("시간 계산 GET 요청 실패: ", e);
       console.log("시간 계산 GET 요청 실패 타입: ", type);
     }
@@ -584,7 +584,7 @@ const PlanSchedule = (props) => {
         destinationItems.insert(destination.index, [tmp]);
       }
     } catch (e) {
-      console.log(e);
+      console.log("dnd에러: ", e);
     }
   };
 

@@ -50,12 +50,16 @@
 }
 
 .section{
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px 10px;
-    justify-content: center;
-    padding-top: 50px;
-    margin: 0 auto;
+    /*display: grid;*/
+    /*grid-template-columns: repeat(4, 1fr);*/
+    /*gap: 20px 10px;*/
+    /*justify-content: center;*/
+    /*padding-top: 50px;*/
+    /*margin: 0 auto;*/
+    margin-top: 40px;
+    display: flex;
+    width: 400px;
+    flex-wrap: wrap;
 }
 
 .div {

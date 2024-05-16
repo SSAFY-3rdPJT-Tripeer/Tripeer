@@ -16,6 +16,9 @@ export default function BottomSection() {
   const [rPage, setRPage] = useState(0);
   const [mPage, setMPage] = useState(0);
   const [likeSpotId, setLikeSpotId] = useState([]);
+  const [isStayLast, setIsStayLast] = useState(false);
+  const [isResLast, setIsResLast] = useState(false);
+  const [ismeccaLast, setIsmeccaLast] = useState(false);
 
   const initData = async () => {
     const cId = store.townData.cityId;
@@ -40,7 +43,9 @@ export default function BottomSection() {
       const res = await api.get(`/place/stay`, {
         params: { cityId, townId, page },
       });
-      // store.setStayList(res.data.data.spotInfoDtos);
+      if (res.data.data.last) {
+        setIsStayLast(true);
+      }
       return res.data.data.spotInfoDtos;
     } catch (e) {
       console.log("플레이스 디테일 숙박 정보 요청 에러 : ", e);
@@ -54,24 +59,35 @@ export default function BottomSection() {
       const res = await api.get(`/place/restaurant`, {
         params: { cityId, townId, page },
       });
-      // store.setRestaurantList(res.data.data.spotInfoDtos);
+      if (res.data.data.last) {
+        setIsResLast(true);
+      }
       return res.data.data.spotInfoDtos;
     } catch (e) {
       console.log("플레이스 디테일 식당 정보 요청 에러 : ", e);
     }
   };
 
-  // 숙박 정보 GET
+  // 관광지 정보 GET
   const getMeccaList = async (cityId, townId, page) => {
     try {
       const res = await api.get(`/place/mecca`, {
         params: { cityId, townId, page },
       });
-      // store.setMeccaList(res.data.data.spotInfoDtos);
+      if (res.data.data.last) {
+        setIsmeccaLast(true);
+      }
       return res.data.data.spotInfoDtos;
     } catch (e) {
       console.log("플레이스 디테일 명소 정보 요청 에러 : ", e);
     }
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth", // 부드럽게 스크롤
+    });
   };
 
   useEffect(() => {
@@ -87,7 +103,7 @@ export default function BottomSection() {
           let newPage = 0;
           let newList = [];
 
-          if (store.category === "stay") {
+          if (store.category === "stay" && !isStayLast) {
             newPage = sPage + 1;
             newList = await getStayList(
               store.townData.cityId,
@@ -96,7 +112,7 @@ export default function BottomSection() {
             );
             store.setStayList([...store.stayList, ...newList]);
             setSPage(newPage);
-          } else if (store.category === "mecca") {
+          } else if (store.category === "mecca" && !ismeccaLast) {
             newPage = mPage + 1;
             newList = await getMeccaList(
               store.townData.cityId,
@@ -105,7 +121,7 @@ export default function BottomSection() {
             );
             store.setMeccaList([...store.meccaList, ...newList]);
             setMPage(newPage);
-          } else if (store.category === "restaurant") {
+          } else if (store.category === "restaurant" && !isResLast) {
             newPage = rPage + 1;
             newList = await getRestaurantList(
               store.townData.cityId,
@@ -171,6 +187,9 @@ export default function BottomSection() {
           })}
           <div ref={observerRef} />
         </section>
+      </div>
+      <div className={styles.toTop} onClick={scrollToTop}>
+        TOP
       </div>
     </main>
   );
