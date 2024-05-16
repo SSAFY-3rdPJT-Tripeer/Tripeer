@@ -6,6 +6,96 @@
     "name": "서울특별시"
   },
   {
+    "idx": 236,
+    "cityId": 2,
+    "townId": -1,
+    "name": "인천"
+  },
+  {
+    "idx": 237,
+    "cityId": 3,
+    "townId": -1,
+    "name": "대전"
+  },
+  {
+    "idx": 238,
+    "cityId": 4,
+    "townId": -1,
+    "name": "대구"
+  },
+  {
+    "idx": 239,
+    "cityId": 5,
+    "townId": -1,
+    "name": "광주"
+  },
+  {
+    "idx": 242,
+    "cityId": 8,
+    "townId": -1,
+    "name": "세종특별자치시"
+  },
+  {
+    "idx": 241,
+    "cityId": 7,
+    "townId": -1,
+    "name": "울산"
+  },
+  {
+    "idx": 240,
+    "cityId": 6,
+    "townId": -1,
+    "name": "부산"
+  },
+  {
+    "idx": 244,
+    "cityId": 32,
+    "townId": -1,
+    "name": "강원도"
+  },
+  {
+    "idx": 245,
+    "cityId": 33,
+    "townId": -1,
+    "name": "충청북도"
+  },
+  {
+    "idx": 246,
+    "cityId": 34,
+    "townId": -1,
+    "name": "충청남도"
+  },
+  {
+    "idx": 247,
+    "cityId": 35,
+    "townId": -1,
+    "name": "경상북도"
+  },
+  {
+    "idx": 248,
+    "cityId": 36,
+    "townId": -1,
+    "name": "경상남도"
+  },
+  {
+    "idx": 249,
+    "cityId": 37,
+    "townId": -1,
+    "name": "전라북도"
+  },
+  {
+    "idx": 250,
+    "cityId": 38,
+    "townId": -1,
+    "name": "전라남도"
+  },
+  {
+    "idx": 251,
+    "cityId": 39,
+    "townId": -1,
+    "name": "제주도"
+  },
+  {
     "idx": 2,
     "cityId": 1,
     "townId": 1,
@@ -155,6 +245,7 @@
     "townId": 25,
     "name": "서울특별시 중랑구"
   },
+
   {
     "idx": 27,
     "cityId": 2,
@@ -215,6 +306,7 @@
     "townId": 10,
     "name": "인천 중구"
   },
+
   {
     "idx": 37,
     "cityId": 3,
@@ -245,6 +337,7 @@
     "townId": 5,
     "name": "대전 중구"
   },
+
   {
     "idx": 42,
     "cityId": 4,
@@ -293,6 +386,7 @@
     "townId": 8,
     "name": "대구 중구"
   },
+
   {
     "idx": 50,
     "cityId": 5,
@@ -323,6 +417,7 @@
     "townId": 5,
     "name": "광주 서구"
   },
+
   {
     "idx": 55,
     "cityId": 6,
@@ -419,6 +514,7 @@
     "townId": 16,
     "name": "부산 해운대구"
   },
+
   {
     "idx": 71,
     "cityId": 7,
@@ -449,11 +545,18 @@
     "townId": 5,
     "name": "울산 울주군"
   },
+
   {
     "idx": 76,
     "cityId": 8,
     "townId": 1,
     "name": "세종특별자치시 세종특별자치시"
+  },
+  {
+    "idx": 243,
+    "cityId": 31,
+    "townId": -1,
+    "name": "경기도"
   },
   {
     "idx": 77,
@@ -641,6 +744,7 @@
     "townId": 31,
     "name": "경기도 화성시"
   },
+
   {
     "idx": 108,
     "cityId": 32,
@@ -1397,101 +1501,5 @@
     "cityId": 39,
     "townId": 4,
     "name": "제주도 제주시"
-  },
-  {
-    "idx": 236,
-    "cityId": 2,
-    "townId": -1,
-    "name": "인천"
-  },
-  {
-    "idx": 237,
-    "cityId": 3,
-    "townId": -1,
-    "name": "대전"
-  },
-  {
-    "idx": 238,
-    "cityId": 4,
-    "townId": -1,
-    "name": "대구"
-  },
-  {
-    "idx": 239,
-    "cityId": 5,
-    "townId": -1,
-    "name": "광주"
-  },
-  {
-    "idx": 240,
-    "cityId": 6,
-    "townId": -1,
-    "name": "부산"
-  },
-  {
-    "idx": 241,
-    "cityId": 7,
-    "townId": -1,
-    "name": "울산"
-  },
-  {
-    "idx": 242,
-    "cityId": 8,
-    "townId": -1,
-    "name": "세종특별자치시"
-  },
-  {
-    "idx": 243,
-    "cityId": 31,
-    "townId": -1,
-    "name": "경기도"
-  },
-  {
-    "idx": 244,
-    "cityId": 32,
-    "townId": -1,
-    "name": "강원도"
-  },
-  {
-    "idx": 245,
-    "cityId": 33,
-    "townId": -1,
-    "name": "충청북도"
-  },
-  {
-    "idx": 246,
-    "cityId": 34,
-    "townId": -1,
-    "name": "충청남도"
-  },
-  {
-    "idx": 247,
-    "cityId": 35,
-    "townId": -1,
-    "name": "경상북도"
-  },
-  {
-    "idx": 248,
-    "cityId": 36,
-    "townId": -1,
-    "name": "경상남도"
-  },
-  {
-    "idx": 249,
-    "cityId": 37,
-    "townId": -1,
-    "name": "전라북도"
-  },
-  {
-    "idx": 250,
-    "cityId": 38,
-    "townId": -1,
-    "name": "전라남도"
-  },
-  {
-    "idx": 251,
-    "cityId": 39,
-    "townId": -1,
-    "name": "제주도"
   }
 ]

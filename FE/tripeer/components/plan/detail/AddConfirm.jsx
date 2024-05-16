@@ -23,7 +23,7 @@ const AddConfirm = (props) => {
         contentId = 32;
         break;
       case 2:
-        contentId = 1;
+        contentId = 12;
         break;
     }
     return contentId;
