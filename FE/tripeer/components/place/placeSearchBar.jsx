@@ -5,13 +5,19 @@ import styles from "./placeSearchBar.module.css";
 import searchImg from "@/public/place/searchBtn.png";
 import usePlaceStore from "@/stores/place";
 
-export default function PlaceSearchBar({ setList }) {
+export default function PlaceSearchBar({ setList, setIsSearch }) {
   const store = usePlaceStore();
   // 입력한 내용
   const [words, setWords] = useState("");
   const onChange = (e) => {
     const value = e.target.value;
     const data = store.allData;
+
+    if (value.length) {
+      setIsSearch(true);
+    } else {
+      setIsSearch(false);
+    }
 
     setWords(value);
 

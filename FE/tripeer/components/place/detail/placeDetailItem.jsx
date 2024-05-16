@@ -54,8 +54,8 @@ export default function PlaceDetailItem({
 
   return (
     <main className={`${styles.main}`}>
-      <div className={`${loaded ? styles.complete : styles.loading}`}>
-        <div className={`${!loaded ? styles.waitBox : styles.noWaitBox}`}>
+      <div className={`${!loaded ? styles.complete : styles.loading}`}>
+        <div className={`${loaded ? styles.waitBox : styles.noWaitBox}`}>
           <p>이미지 로드중...</p>
         </div>
       </div>

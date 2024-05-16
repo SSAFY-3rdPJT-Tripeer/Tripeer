@@ -8,12 +8,20 @@ import styles from "./recommendCardList.module.css";
 import useRegisterStore from "@/stores/register";
 import axios from "axios";
 import api from "@/utils/api";
+import { useRouter } from "next/navigation";
 
-const RecommendCardList = () => {
+const RecommendCardList = ({ city }) => {
   const store = useRegisterStore();
   const [myInfo, setMyInfo] = useState(null);
   const [isLike, setIsLike] = useState([]);
   const [recommendData, setRecommendData] = useState([]);
+  const router = useRouter();
+
+  const onClick = (item) => {
+    router.push(
+      `https://map.naver.com/p/search/${`${item.addr} ${item.title}`}`,
+    );
+  };
 
   const getData = async () => {
     // if (myInfo) {
@@ -21,10 +29,8 @@ const RecommendCardList = () => {
       const res = await axios.post(
         "https://k10d207.p.ssafy.io/recommend/items",
         {
-          plan_id: 212,
           user_id: `${myInfo.userId}`,
-          city_id: 37,
-          town_id: 12,
+          city_id: city === "all" ? -1 : city,
         },
       );
 
@@ -83,7 +89,12 @@ const RecommendCardList = () => {
             {recommendData &&
               recommendData.map((item, idx) => {
                 return (
-                  <div key={idx} className={styles.cardBox}>
+                  <div
+                    key={idx}
+                    className={styles.cardBox}
+                    onClick={() => {
+                      onClick(item);
+                    }}>
                     <div
                       className={styles.card}
                       style={{
