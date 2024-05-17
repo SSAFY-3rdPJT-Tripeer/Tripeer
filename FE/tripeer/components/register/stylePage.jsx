@@ -70,7 +70,7 @@ export default function StylePage({ pageNum, setPageNum }) {
         accessToken = accessToken.replace("Bearer ", "");
         // localStorage.setItem("accessToken", accessToken);
         cookies.set("Authorization", accessToken);
-        router.push("/");
+        router.push("/redirect");
       });
   };
 
