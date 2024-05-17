@@ -60,7 +60,10 @@ const PlanSchedule = (props) => {
     "#F96976",
   ];
 
-  const onClickDelete = (spot) => {
+  const onClickDelete = async (spot) => {
+    await api.delete(
+      `/plan/bucket?planId=${plan.planId}&spotInfoId=${spot.spotInfoId}`,
+    );
     const firstY = totalY.get(0);
     const totalArr = firstY.toJSON();
     const totalIdx = totalArr.findIndex(

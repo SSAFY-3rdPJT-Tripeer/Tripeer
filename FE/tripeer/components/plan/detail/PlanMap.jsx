@@ -543,24 +543,25 @@ const PlanMap = (props) => {
           setSpotWishList(tempWishSpotList);
         }
         if (onCategory === 0) {
-          const cloneRecoms = structuredClone(recommends);
-
-          const tempRecommends = cloneRecoms.map((recoms) => {
-            for (let i = 0; i < recoms["spotItemList"].length; i++) {
-              if (
-                spots.findIndex(
-                  (item) =>
-                    item.spotInfoId === recoms["spotItemList"][i]["spotInfoId"],
-                ) !== -1
-              ) {
-                recoms["spotItemList"][i]["spot"] = true;
-              } else {
-                recoms["spotItemList"][i]["spot"] = false;
+          if (recommends) {
+            const tempRecommends = recommends.map((recoms) => {
+              for (let i = 0; i < recoms["spotItemList"].length; i++) {
+                if (
+                  spots.findIndex(
+                    (item) =>
+                      item.spotInfoId ===
+                      recoms["spotItemList"][i]["spotInfoId"],
+                  ) !== -1
+                ) {
+                  recoms["spotItemList"][i]["spot"] = true;
+                } else {
+                  recoms["spotItemList"][i]["spot"] = false;
+                }
               }
-            }
-            return recoms;
-          });
-          setRecommends(tempRecommends);
+              return recoms;
+            });
+            setRecommends(tempRecommends);
+          }
         }
         setSaveSpots(spots);
         setIsTarget(true);
