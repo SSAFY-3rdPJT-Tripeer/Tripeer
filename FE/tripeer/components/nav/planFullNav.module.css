@@ -105,7 +105,8 @@
 
 .modal {
   width: 70%;
-  height: 76%;
+  height: 86%;
   background-color: #fff;
-  border-radius: 10px;
+  border-radius: 5px;
+  padding: 20px;
 }
