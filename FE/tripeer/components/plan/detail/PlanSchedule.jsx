@@ -60,6 +60,8 @@ const PlanSchedule = (props) => {
     "#F96976",
   ];
 
+  const onClickDelete = () => {};
+
   const onClickTime = (arrIdx, idx, opt, setLoaded) => {
     setLoaded(false);
     let timeoutId = null;
@@ -852,7 +854,10 @@ const PlanSchedule = (props) => {
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                           className={styles.itemBox}>
-                          <ScheduleItem data={el} />
+                          <ScheduleItem
+                            data={el}
+                            onClickDelete={onClickDelete}
+                          />
                         </div>
                       )}
                     </Draggable>
