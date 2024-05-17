@@ -1,11 +1,11 @@
 import Image from "next/image";
 
 import styles from "./scheduleItem.module.css";
-// import exitSrc from "@/public/plan/exit.png";
+import exitSrc from "@/public/plan/exit.png";
 import addressSrc from "@/public/plan/address.png";
 import ScheduleCategoryChip from "@/components/plan/detail/schedule/scheduleCategoryChip";
 
-export default function ScheduleItem({ data }) {
+export default function ScheduleItem({ data, onClickDelete }) {
   const COLOR = [
     "#A60000",
     "#DE5000",
@@ -42,7 +42,12 @@ export default function ScheduleItem({ data }) {
         <ScheduleCategoryChip category={data.contentType} />
       </section>
       <section className={styles.right}>
-        {/*<Image className={styles.exit} src={exitSrc} alt={""} />*/}
+        <Image
+          className={styles.exit}
+          src={exitSrc}
+          alt={""}
+          onClick={onClickDelete}
+        />
         <div></div>
         {/*<div className={styles.profileBox}>*/}
         {/*  <Image*/}
