@@ -113,7 +113,7 @@ export default function ScheduleModal({
         <div
           className={isOk ? styles.postBtn : styles.notOk}
           onClick={onClickPost}>
-          {isOk ? "확인" : "3개 이상의 장소와 교통수단을 선택해주세요"}
+          {isOk ? "확인" : "3 ~ 10개의 장소와 교통수단을 선택해주세요"}
         </div>
       </div>
     </main>
