@@ -25,7 +25,6 @@ export default function ScheduleModal({
   const [isOk, setIsOk] = useState(true);
 
   const onClickBg = () => {
-    console.log("adsadsadasdasd");
     blockY.delete(cirIdx, 1);
     blockY.insert(cirIdx, [false]);
     setIsModal(false);

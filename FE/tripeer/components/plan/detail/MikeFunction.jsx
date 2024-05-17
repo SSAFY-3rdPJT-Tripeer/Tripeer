@@ -66,10 +66,8 @@ const MikeFunction = (props) => {
           socket.current.on("user-connected", (userId) => {
             connectToNewUser(userId, stream);
           });
-        })
-        .catch((err) => {
-          console.log(err);
         });
+
       socket.current.on("user-disconnected", (userId) => {
         if (peers.current[userId]) {
           peers.current[userId].close();

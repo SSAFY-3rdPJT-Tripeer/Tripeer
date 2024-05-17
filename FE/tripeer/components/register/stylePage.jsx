@@ -50,33 +50,28 @@ export default function StylePage({ pageNum, setPageNum }) {
     }
   };
 
-  const postData = async () => {
-    try {
-      await axios
-        .post(
-          `${process.env.NEXT_PUBLIC_API_URL}/user/signup`,
-          {
-            nickname: store.nickName,
-            year: store.year,
-            month: store.month,
-            day: store.day,
-            style1: styleIdx[0],
-            style2: styleIdx[1] ? styleIdx[1] : null,
-            style3: styleIdx[2] ? styleIdx[2] : null,
-          },
-          { withCredentials: true },
-        )
-        .then((res) => {
-          let accessToken = res.headers.get("Authorization");
-          accessToken = accessToken.replace("Bearer ", "");
-          // localStorage.setItem("accessToken", accessToken);
-          // console.log("토큰: ", accessToken);
-          cookies.set("Authorization", accessToken);
-          router.push("/");
-        });
-    } catch (e) {
-      console.log("회원가입 api 실패", e);
-    }
+  const postData = () => {
+    axios
+      .post(
+        `${process.env.NEXT_PUBLIC_API_URL}/user/signup`,
+        {
+          nickname: store.nickName,
+          year: store.year,
+          month: store.month,
+          day: store.day,
+          style1: styleIdx[0],
+          style2: styleIdx[1] ? styleIdx[1] : null,
+          style3: styleIdx[2] ? styleIdx[2] : null,
+        },
+        { withCredentials: true },
+      )
+      .then((res) => {
+        let accessToken = res.headers.get("Authorization");
+        accessToken = accessToken.replace("Bearer ", "");
+        // localStorage.setItem("accessToken", accessToken);
+        cookies.set("Authorization", accessToken);
+        router.push("/");
+      });
   };
 
   useEffect(() => {

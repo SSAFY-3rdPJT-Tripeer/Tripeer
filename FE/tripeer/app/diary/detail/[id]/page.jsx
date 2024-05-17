@@ -19,12 +19,8 @@ const DiaryDetail = () => {
   const params = useParams();
 
   const getDiaryDetail = async () => {
-    try {
-      const res = await api.get(`history/${params.id}`);
-      setDetailData(res.data.data);
-    } catch (e) {
-      console.log(e);
-    }
+    const res = await api.get(`history/${params.id}`);
+    setDetailData(res.data.data);
   };
 
   const getDayOfWeek = (inputDate) => {

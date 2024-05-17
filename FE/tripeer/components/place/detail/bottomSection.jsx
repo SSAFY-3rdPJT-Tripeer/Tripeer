@@ -48,39 +48,30 @@ export default function BottomSection() {
       }
       return res.data.data.spotInfoDtos;
     } catch (e) {
-      console.log("플레이스 디테일 숙박 정보 요청 에러 : ", e);
       return [];
     }
   };
 
   // 식당 정보 GET
   const getRestaurantList = async (cityId, townId, page) => {
-    try {
-      const res = await api.get(`/place/restaurant`, {
-        params: { cityId, townId, page },
-      });
-      if (res.data.data.last) {
-        setIsResLast(true);
-      }
-      return res.data.data.spotInfoDtos;
-    } catch (e) {
-      console.log("플레이스 디테일 식당 정보 요청 에러 : ", e);
+    const res = await api.get(`/place/restaurant`, {
+      params: { cityId, townId, page },
+    });
+    if (res.data.data.last) {
+      setIsResLast(true);
     }
+    return res.data.data.spotInfoDtos;
   };
 
   // 관광지 정보 GET
   const getMeccaList = async (cityId, townId, page) => {
-    try {
-      const res = await api.get(`/place/mecca`, {
-        params: { cityId, townId, page },
-      });
-      if (res.data.data.last) {
-        setIsmeccaLast(true);
-      }
-      return res.data.data.spotInfoDtos;
-    } catch (e) {
-      console.log("플레이스 디테일 명소 정보 요청 에러 : ", e);
+    const res = await api.get(`/place/mecca`, {
+      params: { cityId, townId, page },
+    });
+    if (res.data.data.last) {
+      setIsmeccaLast(true);
     }
+    return res.data.data.spotInfoDtos;
   };
 
   const scrollToTop = () => {

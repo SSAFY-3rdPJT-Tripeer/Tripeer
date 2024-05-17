@@ -93,7 +93,6 @@ const MapRoute = (props) => {
         zIndex: 9999,
         map: map,
       });
-      console.log(polyline);
       line.current = polyline;
     },
     [map],
@@ -141,8 +140,6 @@ const MapRoute = (props) => {
   }, [isLoaded]);
 
   useEffect(() => {
-    console.log("데이스팟", daySpots);
-    console.log("스탭", step);
     if (map && daySpots && daySpots[step].length > 0) {
       moveTo(daySpots[step][0]["latitude"], daySpots[step][0]["longitude"]);
       let paths = [];
@@ -153,10 +150,6 @@ const MapRoute = (props) => {
       makeLine(paths);
     }
   }, [map, daySpots, moveTo, makeMarker, makeLine, step]);
-
-  useEffect(() => {
-    console.log(markers.current);
-  }, [markers]);
 
   return (
     <div>

@@ -19,13 +19,9 @@ export default function PlacePage({ params }) {
 
   // 검색을 위해 모든 도시 타운 정보 스토어 저장
   const inputLocal = async () => {
-    try {
-      // GET 요청
-      const res = await api.get("/place/all");
-      store.setAllData(res.data.data.townListDtos);
-    } catch (e) {
-      console.log("씨티, 타운 전체 정보 GET 오류 : ", e);
-    }
+    // GET 요청
+    const res = await api.get("/place/all");
+    store.setAllData(res.data.data.townListDtos);
   };
 
   const initData = async () => {
@@ -37,29 +33,25 @@ export default function PlacePage({ params }) {
 
   // 데이터 GET 호출
   const getData = async () => {
-    try {
-      const cityId = params.city;
-      const townName = params.town;
+    const cityId = params.city;
+    const townName = params.town;
 
-      // 전체 씨티 정보 GET
-      if (cityId === "all") {
-        const res = await api.get("/place/city/-1");
-        setList(res.data.data);
-      }
-      // 타운 전체 정보라면?
-      else if (townName === "all") {
-        const res = await api.get("/place/town", {
-          params: { cityId: cityId, townName: -1 },
-        });
-        setList(res.data.data);
-      } else {
-        const res = await api.get("/place/town", {
-          params: { cityId: cityId, townName: townName },
-        });
-        setList(res.data.data);
-      }
-    } catch (e) {
-      console.log("여행지 정보 요청 에러 : ", e);
+    // 전체 씨티 정보 GET
+    if (cityId === "all") {
+      const res = await api.get("/place/city/-1");
+      setList(res.data.data);
+    }
+    // 타운 전체 정보라면?
+    else if (townName === "all") {
+      const res = await api.get("/place/town", {
+        params: { cityId: cityId, townName: -1 },
+      });
+      setList(res.data.data);
+    } else {
+      const res = await api.get("/place/town", {
+        params: { cityId: cityId, townName: townName },
+      });
+      setList(res.data.data);
     }
   };
 

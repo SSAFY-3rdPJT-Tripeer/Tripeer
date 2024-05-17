@@ -65,15 +65,7 @@ export default function ScheduleItem2({ data, idx }) {
           style={{ color: categoryList[data.contentType].color }}>
           {categoryList[data.contentType].name}
         </p>
-        <Image
-          src={kebobBtnSrc}
-          alt={""}
-          width={24}
-          height={24}
-          onClick={() => {
-            console.log("click");
-          }}
-        />
+        <Image src={kebobBtnSrc} alt={""} width={24} height={24} />
       </section>
     </div>
   );

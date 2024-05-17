@@ -34,7 +34,6 @@ const AddConfirm = (props) => {
       return;
     } else {
       const contentTypeId = makeContentId();
-      console.log(contentTypeId, confirm);
       const request = {
         planId,
         contentTypeId,
@@ -51,7 +50,6 @@ const AddConfirm = (props) => {
         addPlanCheck: newPlan,
       };
       const res = await api.post("/place/spot/create", request);
-      console.log(res.data.data);
       if (newPlan) {
         const newSpot = { ...res.data.data, ...myInfo };
         const spots = provider.doc.getArray("saveSpot");
@@ -66,7 +64,6 @@ const AddConfirm = (props) => {
 
   useEffect(() => {
     if (confirm) {
-      console.log(confirm);
       setTitle(confirm["place_name"]);
       setPlace(confirm["address_name"]);
     }

@@ -29,25 +29,21 @@ export default function NicknamePage({ pageNum, setPageNum }) {
     }
   };
 
-  const checkData = async () => {
-    try {
-      await axios
-        .get(
-          `${process.env.NEXT_PUBLIC_API_URL}/user/name/duplicatecheck/${text}`,
-        )
-        .then((res) => {
-          const check = res.data.data;
-          if (!check) {
-            setNickName(text);
-            setPageNum(1);
-          } else {
-            setIsPos(false);
-            setErrText("중복된 닉네임입니다.");
-          }
-        });
-    } catch (e) {
-      console.log("닉네임 중복 체크 에러: ", e);
-    }
+  const checkData = () => {
+    axios
+      .get(
+        `${process.env.NEXT_PUBLIC_API_URL}/user/name/duplicatecheck/${text}`,
+      )
+      .then((res) => {
+        const check = res.data.data;
+        if (!check) {
+          setNickName(text);
+          setPageNum(1);
+        } else {
+          setIsPos(false);
+          setErrText("중복된 닉네임입니다.");
+        }
+      });
   };
 
   return (

@@ -90,7 +90,6 @@ const AddSpot = (props) => {
         },
       },
     );
-    console.log(res);
     setSearchResult([...searchResult, ...res.data.documents]);
     res.data.meta.is_end ? setIsTarget(false) : setIsTarget(true);
     setPage(nextPage);

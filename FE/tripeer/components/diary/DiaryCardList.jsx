@@ -19,12 +19,8 @@ const DiaryCard = () => {
   const router = useRouter();
 
   const getDiarys = async () => {
-    try {
-      const res = await api.get("/history");
-      setDiaryList(res.data.data);
-    } catch (e) {
-      console.log(e);
-    }
+    const res = await api.get("/history");
+    setDiaryList(res.data.data);
   };
 
   const getDayOfWeek = (inputDate) => {

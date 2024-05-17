@@ -53,10 +53,6 @@ const Schedule = (props) => {
     setRootToggles([...arr]);
   };
 
-  useEffect(() => {
-    console.log(rootToggles);
-  }, [rootToggles]);
-
   const getWidth = (mother, son) => {
     return (100 * son) / mother;
   };
@@ -190,7 +186,6 @@ const Schedule = (props) => {
         .then((res) => {
           setPlan(res.data.data);
           setDiary(res.data.data.diaryDayList);
-          console.log(res.data.data.diaryDayList);
           MAX_STEP.current = res.data.data.diaryDayList.length - 1;
         })
         .catch(() => {
@@ -203,7 +198,6 @@ const Schedule = (props) => {
     if ((dayStep, diary)) {
       setTimeList(diary[dayStep]["timeList"]);
       const arr = new Array(diary[dayStep]["routeList"].length).fill(false);
-      console.log(arr);
       setRootToggles(arr);
       setRouteList(diary[dayStep]["routeList"]);
       setPlanDetail(diary[dayStep]);

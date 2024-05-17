@@ -23,32 +23,22 @@ const RecommendCardList = ({ city }) => {
 
   const getData = async () => {
     // if (myInfo) {
-    try {
-      const res = await axios.post(
-        "https://k10d207.p.ssafy.io/recommend/items",
-        {
-          user_id: `${myInfo.userId}`,
-          city_id: city === "all" ? -1 : city,
-        },
-      );
+    const res = await axios.post("https://k10d207.p.ssafy.io/recommend/items", {
+      user_id: `${myInfo.userId}`,
+      city_id: city === "all" ? -1 : city,
+    });
 
-      setRecommendData(res.data);
-      const updateData = res.data.map((item) => {
-        return item.isWishlist;
-      });
-      setIsLike(updateData);
-    } catch (e) {
-      console.log("에러:", e);
-    }
+    setRecommendData(res.data);
+    const updateData = res.data.map((item) => {
+      return item.isWishlist;
+    });
+    setIsLike(updateData);
+
     // }
   };
 
   const postWish = async (spotInfoId) => {
-    try {
-      await api.post(`/place/wishList/${spotInfoId}`);
-    } catch (e) {
-      console.log("찜 에러 : ", e);
-    }
+    await api.post(`/place/wishList/${spotInfoId}`);
   };
 
   const likeOnClick = (spotInfoId, index) => {

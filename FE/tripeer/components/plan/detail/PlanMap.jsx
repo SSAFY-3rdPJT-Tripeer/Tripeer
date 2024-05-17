@@ -344,7 +344,6 @@ const PlanMap = (props) => {
       totalFirst.insert(0, [tempSave]);
       ySpot.insert(0, [tempSave]);
     } finally {
-      console.log(spotList);
       const tempSpot = spotList.map((item) => {
         if (spot.spotInfoId !== item.spotInfoId) {
           return item;

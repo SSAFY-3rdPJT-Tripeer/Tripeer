@@ -123,7 +123,6 @@ const Admin = () => {
         },
       ],
     });
-    console.log(res);
   };
 
   const onClick1 = () => {

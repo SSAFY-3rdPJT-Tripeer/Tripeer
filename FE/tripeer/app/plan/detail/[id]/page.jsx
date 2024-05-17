@@ -81,70 +81,63 @@ const PageDetail = (props) => {
   };
 
   const getDay = async (totalYList, timeYList, blockYList) => {
-    try {
-      const res = await api.get("/plan");
-      const planIdArr = res.data.data.filter((e) => e.planId === plan.planId);
+    const res = await api.get("/plan");
+    const planIdArr = res.data.data.filter((e) => e.planId === plan.planId);
 
-      const start = planIdArr[0].startDay;
-      const end = planIdArr[0].endDay;
-      const arr = [];
-      const dt = new Date(start);
+    const start = planIdArr[0].startDay;
+    const end = planIdArr[0].endDay;
+    const arr = [];
+    const dt = new Date(start);
 
-      while (dt <= new Date(end)) {
-        arr.push(new Date(dt).toISOString().slice(0, 10));
-        dt.setDate(dt.getDate() + 1);
-      }
+    while (dt <= new Date(end)) {
+      arr.push(new Date(dt).toISOString().slice(0, 10));
+      dt.setDate(dt.getDate() + 1);
+    }
 
-      const result = arr.map(function (date) {
-        return date.replace(/-/g, ".");
-      });
+    const result = arr.map(function (date) {
+      return date.replace(/-/g, ".");
+    });
 
-      setDay(result);
+    setDay(result);
 
-      setTimeout(() => {
-        provider.doc.transact(() => {
-          const yTime = new Y.Array();
-          const yTime2 = new Y.Array();
+    setTimeout(() => {
+      provider.doc.transact(() => {
+        const yTime = new Y.Array();
+        const yTime2 = new Y.Array();
 
-          //처음 들어와서 내용이 없을때
-          if (totalYList.length === 0) {
+        //처음 들어와서 내용이 없을때
+        if (totalYList.length === 0) {
+          yTime.insert(0, []);
+          yTime2.insert(0, []);
+          totalYList.insert(0, [yTime2]);
+          timeYList.insert(0, [yTime]);
+          blockYList.insert(0, [false]);
+
+          for (let i = 0; i < result.length; i++) {
+            const yTime = new Y.Array();
+            const yTime2 = new Y.Array();
             yTime.insert(0, []);
             yTime2.insert(0, []);
             totalYList.insert(0, [yTime2]);
-            timeYList.insert(0, [yTime]);
+            timeYList.insert(i + 1, [yTime]);
             blockYList.insert(0, [false]);
-
-            for (let i = 0; i < result.length; i++) {
-              console.log("반복", i);
-              const yTime = new Y.Array();
-              const yTime2 = new Y.Array();
-              yTime.insert(0, []);
-              yTime2.insert(0, []);
-              totalYList.insert(0, [yTime2]);
-              timeYList.insert(i + 1, [yTime]);
-              blockYList.insert(0, [false]);
-            }
-
-            console.log("dd", timeYList.toJSON());
           }
-        });
-      }, 500);
-
-      const getKoreanDayOfWeek = (dateString) => {
-        const days = ["일", "월", "화", "수", "목", "금", "토"];
-        const date = new Date(dateString.replace(/\./g, "-"));
-        const dayOfWeek = days[date.getDay()];
-        return dayOfWeek;
-      };
-
-      const resultWeek = result.map(function (date) {
-        return getKoreanDayOfWeek(date);
+        }
       });
+    }, 500);
 
-      setDayOfWeek(resultWeek);
-    } catch (e) {
-      // console.log(e)
-    }
+    const getKoreanDayOfWeek = (dateString) => {
+      const days = ["일", "월", "화", "수", "목", "금", "토"];
+      const date = new Date(dateString.replace(/\./g, "-"));
+      const dayOfWeek = days[date.getDay()];
+      return dayOfWeek;
+    };
+
+    const resultWeek = result.map(function (date) {
+      return getKoreanDayOfWeek(date);
+    });
+
+    setDayOfWeek(resultWeek);
   };
 
   useEffect(() => {
@@ -262,7 +255,6 @@ const PageDetail = (props) => {
 
   useEffect(() => {
     if (mode === true) {
-      console.log(inputBox);
       inputBox.current.focus();
     }
   }, [mode]);

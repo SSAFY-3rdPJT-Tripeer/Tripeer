@@ -123,15 +123,10 @@ const DiaryDetailCard = (props) => {
   };
 
   const editCost = async (planDetailId, cost) => {
-    console.log(planDetailId);
-    try {
-      await api.post("/history/cost", {
-        planDetailId: planDetailId,
-        cost: cost,
-      });
-    } catch (e) {
-      console.log(e);
-    }
+    await api.post("/history/cost", {
+      planDetailId: planDetailId,
+      cost: cost,
+    });
   };
 
   const calculateTotalCost = () => {

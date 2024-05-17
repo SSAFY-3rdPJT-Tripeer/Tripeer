@@ -121,7 +121,6 @@ const Weather = (props) => {
         setNowHour(date.getHours());
         setMaxTemp(maxy);
         setMinTemp(miny);
-        console.log(res.data.data);
       };
       getInfo();
     }
