@@ -560,7 +560,7 @@ const PlanMap = (props) => {
         setIsTarget(true);
       });
     }
-  }, [myInfo, provider, spotList, spotWishList, onCategory]);
+  }, [myInfo, provider, spotList, spotWishList, onCategory, recommends]);
 
   useEffect(() => {
     if (timer) {
