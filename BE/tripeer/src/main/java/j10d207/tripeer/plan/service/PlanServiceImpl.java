@@ -174,9 +174,10 @@ public class PlanServiceImpl implements PlanService {
     @Override
     public List<PlanListResDTO> planList(String token) {
         String access = jwtUtil.splitToken(token);
-        LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul")).minusDays(1);
+        System.out.println("today = " + today);
         // 사용자가 소유중인 플랜의 리스트 목록을 가져옴
-        List<CoworkerEntity> coworkerList = coworkerRepository.findByUser_UserIdAndPlan_StartDateAfter(jwtUtil.getUserId(access), today);
+        List<CoworkerEntity> coworkerList = coworkerRepository.findByUser_UserIdAndPlan_EndDateAfter(jwtUtil.getUserId(access), today);
 
         // 반환리스트를 담아줄 DTO 생성
         List<PlanListResDTO> planListResDTOList = new ArrayList<>();
