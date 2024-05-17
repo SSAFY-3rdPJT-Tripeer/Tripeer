@@ -69,7 +69,7 @@ const RecommendSlider = (props) => {
       const newRecoms = cloneRecoms.map((recoms) => {
         for (let i = 0; i < recoms["spotItemList"].length; i++) {
           if (recoms["spotItemList"][i]["spotInfoId"] === spot.spotInfoId) {
-            recoms["spotItemList"][i]["isWishlist"] = true;
+            recoms["spotItemList"][i]["spot"] = true;
           }
         }
         return recoms;
@@ -122,7 +122,7 @@ const RecommendSlider = (props) => {
       const newRecoms = cloneRecoms.map((recoms) => {
         for (let i = 0; i < recoms["spotItemList"].length; i++) {
           if (recoms["spotItemList"][i]["spotInfoId"] === spot.spotInfoId) {
-            recoms["spotItemList"][i]["isWishlist"] = false;
+            recoms["spotItemList"][i]["spot"] = false;
           }
         }
         return recoms;
