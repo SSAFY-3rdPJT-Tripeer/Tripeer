@@ -6,7 +6,7 @@
 
 .mouse {
   position: fixed;
-  z-index: 999;
+  z-index: 1333;
   width: 20px;
   height: 20px;
   background-repeat: no-repeat;
