@@ -48,7 +48,6 @@ const Cards = () => {
   const getPlans = async () => {
     try {
       const res = await api.get("/plan");
-      console.log(res);
       setPlans(res.data.data);
     } catch (err) {
       alert("데이터를 불러오는데 오류가 발생했습니다.");

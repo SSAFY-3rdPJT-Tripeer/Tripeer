@@ -82,7 +82,6 @@ const PageDetail = (props) => {
 
   const getDay = async (totalYList, timeYList, blockYList) => {
     try {
-      console.log("ase");
       const res = await api.get("/plan");
       const planIdArr = res.data.data.filter((e) => e.planId === plan.planId);
 
@@ -194,7 +193,6 @@ const PageDetail = (props) => {
       isExit.observe(() => {
         if (isExit.toString() === "exit") {
           setExit(true);
-          console.log("프로젝트 종료");
         } else {
           setExit(false);
         }

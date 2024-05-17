@@ -67,7 +67,6 @@ export default function PlacePage({ params }) {
     // 검색을 위해 모든 정보를  GET해서 로컬에 저장, 단 로컬에 있으면 수행 x
     initData();
     getData();
-    console.log(params.city);
   }, []);
 
   // 리스트가 갱신될때마다 현재 씨티 페이지인지 타운 페이지인지 체크

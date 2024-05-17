@@ -41,8 +41,25 @@
   width: 20px;
   margin-right: 5px;
 }
+
+.qrBox:hover {
+  background: #fff;
+  border: #4fbdb7 solid 2px;
+  color: #4fbdb7;
+}
+
+.qrBox:hover .qrImg {
+  background: url(../../../../components/diary/assets/qrCodeHover.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 20px;
+  width: 20px;
+  margin-right: 5px;
+}
+
 .backBox {
-  width: auto;
+  width: 150px;
   height: 40px;
   display: flex;
   flex-direction: row;
@@ -301,19 +318,6 @@
   100% {
     opacity: 1;
   }
-}
-
-.backIcon {
-  position: absolute;
-  top: 20px;
-  left: 10px;
-  width: 18px;
-  height: 18px;
-  background-image: url(../../../../components/plan/asset/leftDirect.svg);
-  transform: rotate(180deg);
-  background-repeat: no-repeat;
-  background-size: contain;
-  cursor: pointer;
 }
 
 .btnFlex {
