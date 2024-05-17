@@ -9,10 +9,12 @@ import Image from "next/image";
 import styles from "./page.module.css";
 import DiaryDetailCard from "@/components/diary/DiaryDetailCard";
 import api from "@/utils/api";
+import QRCode from "qrcode.react";
 
 const DiaryDetail = () => {
   const [detailData, setDetailData] = useState(null);
   const [isCostModal, setIsCostModal] = useState(false);
+  const [isQRModal, setIsQRModal] = useState(false);
   const router = useRouter();
   const params = useParams();
 
@@ -45,22 +47,34 @@ const DiaryDetail = () => {
 
   return (
     <main className={styles.container}>
-      <div className={styles.backBox}>
-        <div
-          className={styles.backIcon}
-          onClick={(e) => {
-            if (e.currentTarget === e.target) {
-              router.back();
-            }
-          }}></div>
-        <div
-          className={styles.backText}
-          onClick={(e) => {
-            if (e.currentTarget === e.target) {
-              router.back();
-            }
-          }}>
-          뒤로가기
+      <div className={styles.topSection}>
+        <div className={styles.backBox}>
+          <div
+            className={styles.backIcon}
+            onClick={(e) => {
+              if (e.currentTarget === e.target) {
+                router.back();
+              }
+            }}></div>
+          <div
+            className={styles.backText}
+            onClick={(e) => {
+              if (e.currentTarget === e.target) {
+                router.back();
+              }
+            }}>
+            뒤로가기
+          </div>
+        </div>
+        <div className={styles.qrBox}>
+          <div className={styles.qrImg}></div>
+          <div
+            className={styles.qrText}
+            onClick={() => {
+              setIsQRModal(true);
+            }}>
+            QR코드
+          </div>
         </div>
       </div>
       {detailData ? (
@@ -190,6 +204,30 @@ const DiaryDetail = () => {
           </div>
         </div>
       )}
+      {isQRModal ? (
+        <div
+          className={styles.back}
+          onClick={(e) => {
+            if (e.currentTarget == e.target) {
+              setIsQRModal(false);
+            }
+          }}>
+          <div className={styles.modalBox}>
+            <QRCode value={`https://k10d207.p.ssafy.io/trip/${params.id}`} />
+            <div className={styles.btnFlex}>
+              <div
+                className={styles.exitBtn}
+                onClick={() => {
+                  window.location.replace(
+                    `https://k10d207.p.ssafy.io/trip/${params.id}`,
+                  );
+                }}>
+                여행 바로 가기
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </main>
   );
 };
