@@ -528,7 +528,7 @@ const PlanMap = (props) => {
           return spot;
         });
         setSpotList(tempSpotList);
-        if (onCategory === 4) {
+        if (onCategory === 5) {
           const tempWishSpotList = spotWishList.map((spot) => {
             if (
               spots.findIndex((item) => item.spotInfoId === spot.spotInfoId) !==
@@ -541,6 +541,20 @@ const PlanMap = (props) => {
             return spot;
           });
           setSpotWishList(tempWishSpotList);
+        }
+        if (onCategory === 0) {
+          const tempRecommends = recommends.map((spot) => {
+            if (
+              spots.findIndex((item) => item.spotInfoId === spot.spotInfoId) !==
+              -1
+            ) {
+              spot.spot = true;
+            } else {
+              spot.spot = false;
+            }
+            return spot;
+          });
+          setRecommends(tempRecommends);
         }
         setSaveSpots(spots);
         setIsTarget(true);
