@@ -71,61 +71,63 @@ const PlanDetailGuide = () => {
         <div className={styles.guideTextBox}>
           <div className={styles.numBtn}>2</div>
           <div className={styles.guideText}>
-            카테고리 : 원하는 카테고리를 눌러 여행지를 확인하세요.
+            카테고리 : 원하는 카테고리를 눌러 여행지를 확인할 수 있습니다.
           </div>
         </div>
         <div className={styles.guideTextBox}>
           <div className={styles.numBtn}>3</div>
           <div className={styles.guideText}>
-            여행지 검색 : 여행하고 싶은 장소를 검색해 보세요.
+            여행지 검색 : 여행하고 싶은 장소를 검색할 수 있습니다..
           </div>
         </div>
         <div className={styles.guideTextBox}>
           <div className={styles.numBtn}>4</div>
           <div className={styles.guideText}>
-            여행지 추가 : 버튼을 눌러 우리의 여행지 목록에 추가해 보세요.
+            여행지 추가 : 버튼을 눌러 우리의 여행지 목록에 추가할 수 있습니다.
           </div>
         </div>
         <div className={styles.guideTextBox}>
           <div className={styles.numBtn}>5</div>
           <div className={styles.guideText}>
-            즐겨찾기 추가 : 버튼을 눌러 즐겨찾기 항목에 추가해 보세요.
+            즐겨찾기 추가 : 버튼을 눌러 즐겨찾기 항목에 추가할 수 있습니다.
           </div>
         </div>
         <div className={styles.guideTextBox}>
           <div className={styles.numBtn}>6</div>
           <div className={styles.guideText}>
-            사이드 창 : 버튼을 눌러 사이드 창을 열고 닫아 보세요.
+            사이드 창 : 버튼을 눌러 사이드 창을 열고 닫기가 가능합니다.
           </div>
         </div>
         <div className={styles.guideTextBox}>
           <div className={styles.numBtn}>7</div>
           <div className={styles.guideText}>
-            사용자 필터 : 사용자 프로필을 클릭하여 검색 결과를 필터링해보세요.
+            사용자 필터 : 사용자 프로필을 클릭하여 검색 결과를 필터링할 수
+            있습니다.
           </div>
         </div>
         <div className={styles.guideTextBox}>
           <div className={styles.numBtn}>8</div>
           <div className={styles.guideText}>
-            여행지 삭제 : 버튼을 눌러 우리의 여행지 목록에서 삭제해 보세요.
+            여행지 삭제 : 버튼을 눌러 우리의 여행지 목록에서 삭제할 수 있습니다.
           </div>
         </div>
         <div className={styles.guideTextBox}>
           <div className={styles.numBtn}>9</div>
           <div className={styles.guideText}>
-            여행지 마커 : 마커를 눌러 여행지 목록에 추가한 여행지를 살펴보세요.
+            여행지 마커 : 마커를 눌러 여행지 목록에 추가한 여행지를 확인할 수
+            있습니다.
           </div>
         </div>
         <div className={styles.guideTextBox}>
           <div className={styles.numBtn}>10</div>
           <div className={styles.guideText}>
-            온라인 유저 창 : 현재 온라인 사용자를 확인해 보세요.
+            온라인 유저 창 : 현재 온라인 사용자를 확인할 수 있습니다.
           </div>
         </div>
         <div className={styles.guideTextBox}>
           <div className={styles.numBtn}>11</div>
           <div className={styles.guideText}>
-            신규 장소 등록 : 검색결과에 없는 여행지를 새로 등록해 보세요.
+            신규 장소 등록 : 검색결과에 없는 여행지를 새로 등록할 수 있습니다.
           </div>
         </div>
       </div>
@@ -142,24 +144,31 @@ const PlanDetailGuide = () => {
           <div className={styles.numBtn}>2</div>
           <div className={styles.guideText}>
             여행지 목록 : 여행지 추가로 넣었던 목록들을 오른쪽 일정에 드롭 앤
-            다운으로 이동해 보세요.
+            다운으로 이동할 수 있습니다.
           </div>
         </div>
         <div className={styles.guideTextBox}>
           <div className={styles.numBtn}>3</div>
           <div className={styles.guideText}>
-            최단거리계산 : 버튼을 눌러 해당 일자의 일정을 최단 거리로 계산된
-            순서로 추천 받아 보세요.
+            최단 거리 계산 : 해당 일자의 첫번째와 마지막 장소를 기준으로,
+            교통수단에 맞게 최단 거리를 계산하여 일정 순서를 변경합니다.
           </div>
         </div>
         <div className={styles.guideTextBox}>
           <div className={styles.numBtn}>4</div>
           <div className={styles.guideText}>
-            경로보기 : 각 일차 별 여행할 장소들의 순서 지도를 보여줍니다.
+            교통 수단 변경 : 버튼을 눌러 자가용 또는 버스로 교통 수단을 변경할
+            수 있습니다.
           </div>
         </div>
         <div className={styles.guideTextBox}>
           <div className={styles.numBtn}>5</div>
+          <div className={styles.guideText}>
+            경로보기 : 각 일차 별 여행할 장소들의 순서 지도를 보여줍니다.
+          </div>
+        </div>
+        <div className={styles.guideTextBox}>
+          <div className={styles.numBtn}>6</div>
           <div className={styles.guideText}>
             저장하기 : 버튼을 눌러 여행을 저장하고, 여행 중 QR코드로 일정을
             확인할 수 있습니다.

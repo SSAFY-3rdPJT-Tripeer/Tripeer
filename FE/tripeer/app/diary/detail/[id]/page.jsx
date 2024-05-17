@@ -45,22 +45,28 @@ const DiaryDetail = () => {
 
   return (
     <main className={styles.container}>
-      <div className={styles.backBox}>
-        <div
-          className={styles.backIcon}
-          onClick={(e) => {
-            if (e.currentTarget === e.target) {
-              router.back();
-            }
-          }}></div>
-        <div
-          className={styles.backText}
-          onClick={(e) => {
-            if (e.currentTarget === e.target) {
-              router.back();
-            }
-          }}>
-          뒤로가기
+      <div className={styles.topSection}>
+        <div className={styles.backBox}>
+          <div
+            className={styles.backIcon}
+            onClick={(e) => {
+              if (e.currentTarget === e.target) {
+                router.back();
+              }
+            }}></div>
+          <div
+            className={styles.backText}
+            onClick={(e) => {
+              if (e.currentTarget === e.target) {
+                router.back();
+              }
+            }}>
+            뒤로가기
+          </div>
+        </div>
+        <div className={styles.qrBox}>
+          <div className={styles.qrImg}></div>
+          <div className={styles.qrText}>QR코드</div>
         </div>
       </div>
       {detailData ? (

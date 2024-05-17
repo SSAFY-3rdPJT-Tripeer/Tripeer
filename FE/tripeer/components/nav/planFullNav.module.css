@@ -109,4 +109,14 @@
   background-color: #fff;
   border-radius: 5px;
   padding: 20px;
+  animation: fadeIn 1s ease forwards;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0%;
+  }
+  100% {
+    opacity: 100%;
+  }
 }
