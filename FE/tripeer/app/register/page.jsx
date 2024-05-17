@@ -32,7 +32,7 @@ export default function RegisterPage() {
       ) : pageNum === 2 ? (
         <StylePage pageNum={pageNum} setPageNum={setPageNum} />
       ) : (
-        router.push("/")
+        router.push("/redirect")
       )}
     </>
   );

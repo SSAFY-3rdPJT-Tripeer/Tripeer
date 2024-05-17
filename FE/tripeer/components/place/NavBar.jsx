@@ -30,6 +30,7 @@ const NavBar = () => {
   const logoutOnClick = () => {
     cookies.remove("Authorization");
     router.push("/");
+    localStorage.removeItem("registerStore");
     window.location.reload();
   };
 
@@ -44,6 +45,8 @@ const NavBar = () => {
       setIsLogin(true);
       getName();
       // const data = store.myInfo;
+    } else {
+      setIsLogin(false);
     }
   }, [path, store]);
 
