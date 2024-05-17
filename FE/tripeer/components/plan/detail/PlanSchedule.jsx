@@ -60,7 +60,9 @@ const PlanSchedule = (props) => {
     "#F96976",
   ];
 
-  const onClickDelete = () => {};
+  const onClickDelete = () => {
+    console.log("hi");
+  };
 
   const onClickTime = (arrIdx, idx, opt, setLoaded) => {
     setLoaded(false);
