@@ -344,6 +344,7 @@ const PlanMap = (props) => {
       totalFirst.insert(0, [tempSave]);
       ySpot.insert(0, [tempSave]);
     } finally {
+      console.log(spotList);
       const tempSpot = spotList.map((item) => {
         if (spot.spotInfoId !== item.spotInfoId) {
           return item;
@@ -352,6 +353,28 @@ const PlanMap = (props) => {
         return item;
       });
       setSpotList(tempSpot);
+    }
+  };
+
+  const addWishSaveSpot = async (spot) => {
+    try {
+      const tempSave = { ...spot, ...myInfo };
+      await api.post(
+        `/plan/bucket?planId=${plan.planId}&spotInfoId=${spot.spotInfoId}`,
+      );
+      const totalY = provider.doc.getArray("totalYList");
+      const totalFirst = totalY.get(0);
+      totalFirst.insert(0, [tempSave]);
+      ySpot.insert(0, [tempSave]);
+    } finally {
+      const tempSpot = spotWishList.map((item) => {
+        if (spot.spotInfoId !== item.spotInfoId) {
+          return item;
+        }
+        item.spot = true;
+        return item;
+      });
+      setSpotWishList(tempSpot);
     }
   };
 
@@ -405,6 +428,56 @@ const PlanMap = (props) => {
     }
   };
 
+  const removeWishSaveSpot = async (spot) => {
+    const totalYList = provider.doc.getArray("totalYList").toJSON();
+    const totalY = provider.doc.getArray("totalYList");
+    let isVisit = false;
+    for (let item of totalYList) {
+      if (item.length > 0) {
+        isVisit = true;
+        break;
+      }
+    }
+    if (totalYList.length > 0 && isVisit) {
+      const findTotal = totalYList[0].filter((item) => {
+        return item.spotInfoId === spot.spotInfoId;
+      });
+
+      if (findTotal.length === 0) {
+        setAlert(true);
+        setInit(true);
+        let time = setTimeout(() => {
+          setAlert(false);
+          setTimer(time);
+        }, 2000);
+        return;
+      }
+    }
+    try {
+      await api.delete(
+        `/plan/bucket?planId=${plan.planId}&spotInfoId=${spot.spotInfoId}`,
+      );
+      const totalFirst = totalY.get(0);
+      const totalArr = totalFirst.toArray();
+      let totalIndex = totalArr.findIndex(
+        (item) => item.spotInfoId === spot.spotInfoId,
+      );
+      const arr = ySpot.toArray();
+      let index = arr.findIndex((item) => item.spotInfoId === spot.spotInfoId);
+      totalFirst.delete(totalIndex);
+      ySpot.delete(index);
+    } finally {
+      const tempSpot = spotWishList.map((item) => {
+        if (item.spotInfoId !== spot.spotInfoId) {
+          return item;
+        }
+        item.spot = false;
+        return item;
+      });
+      setSpotWishList(tempSpot);
+    }
+  };
+
   useEffect(() => {
     if (towns.length > 0) {
       setMapLatitude(towns[targetStep]["latitude"]);
@@ -436,9 +509,10 @@ const PlanMap = (props) => {
   }, [plan]);
 
   useEffect(() => {
-    if (myInfo && provider && spotList.length > 0) {
+    if (myInfo && provider) {
       const saveSpot = provider.doc.getArray("saveSpot");
       setYSpot(saveSpot);
+
       setSaveSpots(saveSpot.toArray());
       saveSpot.observe(() => {
         setIsTarget(false);
@@ -767,7 +841,7 @@ const PlanMap = (props) => {
                               <div
                                 className={styles.minusBtn}
                                 onClick={() => {
-                                  removeSaveSpot(spot);
+                                  removeWishSaveSpot(spot);
                                 }}>
                                 선택취소
                               </div>
@@ -775,7 +849,7 @@ const PlanMap = (props) => {
                               <div
                                 className={styles.addBtn}
                                 onClick={() => {
-                                  addSaveSpot(spot);
+                                  addWishSaveSpot(spot);
                                 }}>
                                 여행지 추가
                               </div>
