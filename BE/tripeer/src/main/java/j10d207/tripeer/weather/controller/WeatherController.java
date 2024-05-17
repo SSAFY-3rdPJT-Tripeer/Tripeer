@@ -1,11 +1,9 @@
 package j10d207.tripeer.weather.controller;
 
 import j10d207.tripeer.response.Response;
-import j10d207.tripeer.weather.db.dto.ResponseDTO;
 import j10d207.tripeer.weather.db.dto.WeatherDataDTO;
 import j10d207.tripeer.weather.service.WeatherServiceImpl;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,16 +1,10 @@
 package j10d207.tripeer.history.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.type.TypeReference;
 import j10d207.tripeer.exception.CustomException;
 import j10d207.tripeer.exception.ErrorCode;
-import j10d207.tripeer.history.db.dto.CostReqDTO;
-import j10d207.tripeer.history.db.dto.CostResDTO;
 import j10d207.tripeer.history.db.dto.*;
 import j10d207.tripeer.history.db.entity.GalleryEntity;
-import j10d207.tripeer.history.db.entity.RouteDetailEntity;
-import j10d207.tripeer.history.db.entity.RouteEntity;
 import j10d207.tripeer.history.db.repository.GalleryRepository;
 import j10d207.tripeer.history.db.repository.RouteDetailRepository;
 import j10d207.tripeer.history.db.repository.RouteRepository;
@@ -34,13 +28,11 @@ import j10d207.tripeer.user.config.JWTUtil;
 import j10d207.tripeer.user.db.dto.UserSearchDTO;
 import j10d207.tripeer.user.db.entity.CoworkerEntity;
 import j10d207.tripeer.user.db.repository.CoworkerRepository;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
-
 
 import java.time.LocalTime;
 import java.util.*;
@@ -147,7 +139,6 @@ public class HistoryServiceImpl implements HistoryService{
                 String howTo = "자동차";     // 자동차 OR 대중교통을 사용하지 않는 description 에 저장
                 int hour = 0;
                 int min = 0;
-                System.out.println(timeYList.toString());
 
                 if (step != totalYList.get(day).size()-1) {
                     List<Object> tmp = objectMapper.convertValue(timeYList.get(day).get(step), List.class);
@@ -334,7 +325,6 @@ public class HistoryServiceImpl implements HistoryService{
                 cityTownMap.put("cityId",planTownEntity.getCityOnly().getCityId());
                 cityTownMap.put("townId",-1);
             }
-            System.out.println(planTownEntity.toString());
 
             if (planTownEntity.getTown() == null) {
                 cityTownMap.put("townId",-1);

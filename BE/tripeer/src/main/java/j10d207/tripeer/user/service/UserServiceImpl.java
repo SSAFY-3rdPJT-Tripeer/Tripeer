@@ -170,13 +170,10 @@ public class UserServiceImpl implements UserService{
         Authentication authentication = context.getAuthentication();
         CustomOAuth2User customUserDetails = (CustomOAuth2User) authentication.getPrincipal();
 
-        System.out.println(customUserDetails.toString());
-        SocialInfoDTO socialInfoDTO = SocialInfoDTO.builder()
+        return SocialInfoDTO.builder()
                 .nickname(customUserDetails.getName())
                 .profileImage(customUserDetails.getProfileImage())
                 .build();
-
-        return socialInfoDTO;
     }
 
     //닉네임 중복체크

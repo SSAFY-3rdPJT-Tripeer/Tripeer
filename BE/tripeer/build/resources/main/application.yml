@@ -88,6 +88,9 @@ tmap:
 kakao:
   apikey: ENC(P5ANnJgP83n706xcwZbbxZT5bg5Eypnt5peqQURgUOZoJ1llLhpq/8iJeS4iUF4l)
 
+weather:
+  apikey: ENC(/KMRGTnKpN+JVY7DwV8+Dt2GryLXkyd7j8gbTgWCl5p8p0P253PUobcm+s2BV6+jyzkxMPEjzzucQgCZiijtALp6aTHD/PeOhWbLkPmJkRrb9qVAotLJuSUvL+RuFqzWBleCf5gCtnJ8psbLhnwBsg==)
+
 cloud:
   aws:
     credentials:

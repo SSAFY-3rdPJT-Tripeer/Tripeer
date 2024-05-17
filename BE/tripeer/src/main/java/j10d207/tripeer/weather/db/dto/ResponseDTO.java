@@ -1,6 +1,7 @@
 package j10d207.tripeer.weather.db.dto;
 
 import lombok.Data;
+
 import java.util.List;
 
 @Data

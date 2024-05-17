@@ -2,20 +2,10 @@ package j10d207.tripeer.kakao.service;
 
 
 import com.google.gson.Gson;
-import com.nimbusds.jose.shaded.gson.JsonArray;
-import com.nimbusds.jose.shaded.gson.JsonElement;
-import com.nimbusds.jose.shaded.gson.JsonObject;
-import com.nimbusds.jose.shaded.gson.JsonParser;
 import j10d207.tripeer.kakao.db.entity.RouteResponse;
-import j10d207.tripeer.plan.db.repository.PlanDetailRepository;
-import j10d207.tripeer.plan.service.PlanService;
 import j10d207.tripeer.tmap.db.dto.CoordinateDTO;
 import j10d207.tripeer.tmap.db.dto.RootInfoDTO;
-import j10d207.tripeer.tmap.db.dto.RouteReqDTO;
 import j10d207.tripeer.tmap.service.FindRoot;
-import j10d207.tripeer.tmap.service.TMapService;
-import j10d207.tripeer.tmap.service.TMapServiceImpl;
-import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,11 +26,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class KakaoServiceImpl implements KakaoService{
 
-    @Value("${tmap.apikey}")
-    private String apikey;
-
-//    private final PlanService planService;
-
     @Value("${kakao.apikey}")
     private String kakaoApiKey;
 
@@ -48,28 +33,10 @@ public class KakaoServiceImpl implements KakaoService{
     public FindRoot getOptimizingTime(List<CoordinateDTO> coordinates) throws IOException {
 
         RootInfoDTO[][] timeTable = getTimeTable(coordinates);
-        for (int i = 0; i < timeTable.length; i++) {
-            for (int j = 0; j < timeTable.length; j++) {
-                System.out.print(timeTable[i][j].getTime() + " ");
-            }
-            System.out.println();
-        }
-
         ArrayList<Integer> startLocation  = new ArrayList<>();
         startLocation.add(0);
         FindRoot root = new FindRoot(timeTable);
         root.solve(0, 0, 0, new ArrayList<>(), startLocation);
-
-        for (int s : root.getResultNumbers()) {
-            System.out.print(s + " -> ");
-        }
-        System.out.println();
-        for (int value : root.getRootTime()) {
-            System.out.print(value + " -> ");
-        }
-
-        System.out.println();
-        System.out.println("최종 : " + root.getMinTime());
 
         return root;
     }
@@ -86,20 +53,14 @@ public class KakaoServiceImpl implements KakaoService{
         for (int i = 0; i < coordinates.size(); i++) {
             for (int j = i; j < coordinates.size(); j++) {
                 if(i == j) continue;
-                int tmp = getDirections(coordinates.get(i).getLongitude(), coordinates.get(i).getLatitude(), coordinates.get(j).getLongitude(), coordinates.get(j).getLatitude());
+                int tmp = getDirections(coordinates.get(i).getLongitude(), coordinates.get(i).getLatitude(),
+                        coordinates.get(j).getLongitude(), coordinates.get(j).getLatitude());
                 if( tmp == 99999 ) {
                     timeTable[i][j].setStatus(400);
                 }
                 timeTable[i][j].setTime(tmp);
                 timeTable[j][i] = timeTable[i][j];
             }
-        }
-
-        for (int i = 0; i < coordinates.size(); i++) {
-            for (int j = i; j < coordinates.size(); j++) {
-                System.out.println(timeTable[i][j] + " ");
-            }
-            System.out.println();
         }
 
         return timeTable;
@@ -110,7 +71,6 @@ public class KakaoServiceImpl implements KakaoService{
     @Override
     public int getDirections(double SX, double SY, double EX, double EY) {
         RestTemplate restTemplate = new RestTemplate();
-
         try {
             String baseUrl = "https://apis-navi.kakaomobility.com/v1/directions";
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl)
@@ -129,15 +89,12 @@ public class KakaoServiceImpl implements KakaoService{
                     entity,
                     String.class
             );
-
             Gson gson = new Gson();
             RouteResponse data = gson.fromJson(response.getBody(), RouteResponse.class);
             
             return data.getRoutes().getFirst().getSummary().getDuration() / 60;
         } catch (Exception e) {
-            System.out.println("e.getMessage() = " + e.getMessage());
             return 99999;
         }
-
     }
 }

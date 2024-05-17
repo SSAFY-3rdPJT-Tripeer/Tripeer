@@ -35,7 +35,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             oAuth2Response = new NaverResponse(oAuth2User.getAttributes());
             user = loginAndJoin(oAuth2Response);
         } else {
-            System.out.println("비상");
             return null;
         }
 
@@ -53,14 +52,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             UserEntity newUser = UserEntity.builder()
                     .role("ROLE_VALIDATE")
                     .build();
-            System.out.println("미가입 상태");
-//            UserEntity newUser = UserEntity.builder()
-//                    .provider(oAuth2Response.getProvider())
-//                    .providerId(oAuth2Response.getProviderId())
-//                    .nickname(oAuth2Response.getNickname())
-//                    .profileImage(oAuth2Response.getProfileImage())
-//                    .role("ROLE_USER")
-//                    .build();
             return newUser;
         }
 

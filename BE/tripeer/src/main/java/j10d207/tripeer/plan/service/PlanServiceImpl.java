@@ -19,8 +19,6 @@ import j10d207.tripeer.plan.db.entity.*;
 import j10d207.tripeer.plan.db.repository.*;
 import j10d207.tripeer.tmap.db.dto.CoordinateDTO;
 import j10d207.tripeer.tmap.db.dto.RootInfoDTO;
-import j10d207.tripeer.tmap.db.repository.PublicRootDetailRepository;
-import j10d207.tripeer.tmap.db.repository.PublicRootRepository;
 import j10d207.tripeer.tmap.service.FindRoot;
 import j10d207.tripeer.tmap.service.TMapService;
 import j10d207.tripeer.user.config.JWTUtil;

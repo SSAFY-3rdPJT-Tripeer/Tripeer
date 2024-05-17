@@ -1,8 +1,6 @@
 package j10d207.tripeer.user.config;
 
 import io.jsonwebtoken.ExpiredJwtException;
-import j10d207.tripeer.user.db.dto.CustomOAuth2User;
-import j10d207.tripeer.user.db.entity.UserEntity;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,7 +14,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
 

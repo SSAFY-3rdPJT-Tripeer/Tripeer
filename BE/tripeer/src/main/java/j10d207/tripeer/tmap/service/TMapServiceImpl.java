@@ -8,7 +8,6 @@ import j10d207.tripeer.exception.CustomException;
 import j10d207.tripeer.exception.ErrorCode;
 import j10d207.tripeer.kakao.service.KakaoService;
 import j10d207.tripeer.plan.db.dto.PublicRootDTO;
-import j10d207.tripeer.plan.db.dto.RootOptimizeDTO;
 import j10d207.tripeer.tmap.db.dto.CoordinateDTO;
 import j10d207.tripeer.tmap.db.dto.RootInfoDTO;
 import j10d207.tripeer.tmap.db.dto.RouteReqDTO;
@@ -40,32 +39,11 @@ public class TMapServiceImpl implements TMapService {
 
     @Override
     public FindRoot getOptimizingTime(List<CoordinateDTO> coordinates) {
-
         RootInfoDTO[][] timeTable = getTimeTable(coordinates);
-
-        //확인용 출력
-        for (int i = 0; i < timeTable.length; i++) {
-            for (int j = 0; j < timeTable.length; j++) {
-                System.out.print(timeTable[i][j].getTime() + " ");
-            }
-            System.out.println();
-        }
-
         ArrayList<Integer> startLocation  = new ArrayList<>();
         startLocation.add(0);
         FindRoot root = new FindRoot(timeTable);
         root.solve(0, 0, 0, new ArrayList<>(), startLocation);
-
-        for (int s : root.getResultNumbers()) {
-            System.out.print(s + " -> ");
-        }
-        System.out.println();
-        for (int value : root.getRootTime()) {
-            System.out.print(value + " -> ");
-        }
-
-        System.out.println();
-        System.out.println("최종 : " + root.getMinTime());
 
         return root;
     }
@@ -179,12 +157,6 @@ public class TMapServiceImpl implements TMapService {
 
     // A에서 B로 가는 경로의 정보를 조회 (tMap API 요청)
     private JsonObject getResult(double SX, double SY, double EX, double EY) {
-//        double distance = calculateDistance(SX, SY, EX, EY);
-//        System.out.println("요청좌표 - SX = " + SX + ", SY = " + SY + ", EX = " + EX + ", EY = " + EY);
-//        if(distance < 1.0) {
-//            System.out.println("측정 직선거리가 1.0km 이내입니다. distance = " + distance);
-//            return null;
-//        }
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.set("appKey", apikey);
@@ -199,22 +171,6 @@ public class TMapServiceImpl implements TMapService {
         HttpEntity<RouteReqDTO> request = new HttpEntity<>(route, headers);
         String result = restTemplate.postForObject("https://apis.openapi.sk.com/transit/routes", request, String.class);
         return JsonParser.parseString(result).getAsJsonObject();
-    }
-
-    private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
-        // Haversine 공식을 사용하여 거리 계산
-        double earthRadius = 6371; // 지구 반지름 (단위: 킬로미터)
-
-        double dLat = Math.toRadians(lat2 - lat1);
-        double dLon = Math.toRadians(lon2 - lon1);
-
-        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
-                        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-        return earthRadius * c;
     }
 
     //저장된 결과를 가져와서 DTO로 변환

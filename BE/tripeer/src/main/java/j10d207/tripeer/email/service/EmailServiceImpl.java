@@ -39,7 +39,7 @@ public class EmailServiceImpl implements EmailService{
 
             // HTML 컨텐츠 구성
             String content = buildEmailContent(emailDTO.getContent());
-            messageHelper.setText(content, true); // true는 HTML 메일을 보내겠다는 의미입니다.
+            messageHelper.setText(content, true); // true는 HTML 메일을 보내겠다는 의미.
         };
 
         try {
