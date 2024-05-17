@@ -3,6 +3,7 @@ import styles from "./planShortNav.module.css";
 import logo from "@/public/shortLogo.svg";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import PlanDetailGuide from "./PlanDetailGuide";
 
 const PlanShortNav = (props) => {
   const { current, setCurrent } = props;
@@ -80,7 +81,9 @@ const PlanShortNav = (props) => {
           onClick={(e) => {
             if (e.currentTarget === e.target) setIsGuide(false);
           }}>
-          <div className={styles.modal}></div>
+          <div className={styles.modal}>
+            <PlanDetailGuide />
+          </div>
         </div>
       ) : null}
     </div>

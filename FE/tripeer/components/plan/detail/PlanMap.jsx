@@ -24,7 +24,7 @@ const PlanMap = (props) => {
   const [targetStep, setTargetStep] = useState(0);
   const [onToggle, setOnToggle] = useState(false);
   const [onCategory, setOnCategory] = useState(0);
-  const [sortType, setSortType] = useState(0);
+  const [sortType, setSortType] = useState(5);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [spotList, setSpotList] = useState([]);
   const [spotWishList, setSpotWishList] = useState([]);
@@ -45,7 +45,7 @@ const PlanMap = (props) => {
   const [tempKeyword, setTempKeyword] = useState("");
   const spotRef = useRef(null);
 
-  const CATEGORY = ["전체", "숙박", "맛집", "명소", "즐겨찾기", "추천"];
+  const CATEGORY = ["추천", "전체", "숙박", "맛집", "명소", "즐겨찾기"];
   const COLOR = [
     "#A60000",
     "#DE5000",
@@ -163,6 +163,18 @@ const PlanMap = (props) => {
     }
   }, [sortType, searchKeyword, plan]);
 
+  const getRecommendList = useCallback(async () => {
+    const req = {
+      plan_id: myInfo.planId,
+      user_id: myInfo.userId,
+    };
+    const res = await axios.post(
+      "https://k10d207.p.ssafy.io/recommend/items2",
+      req,
+    );
+    setRecommends(res.data);
+  }, [myInfo]);
+
   useEffect(() => {
     if (
       plan &&
@@ -170,7 +182,17 @@ const PlanMap = (props) => {
     ) {
       getData();
     }
-  }, [sortType, plan, getData]);
+    if (plan && sortType === 5) {
+      getRecommendList();
+    }
+    if (plan && sortType === 6) {
+      const getWishList = async () => {
+        const res = await api.get(`/plan/wishlist/${plan.planId}`);
+        setSpotWishList(res.data.data);
+      };
+      getWishList();
+    }
+  }, [sortType, plan, getData, getRecommendList]);
 
   // useEffect(() => {
   //   const tempIo = new IntersectionObserver(
@@ -204,7 +226,7 @@ const PlanMap = (props) => {
   // };
 
   const searchSpot = async (e) => {
-    if (e.key === "Enter" && onCategory !== 4 && onCategory !== 5) {
+    if (e.key === "Enter" && onCategory !== 0 && onCategory !== 5) {
       setPage(0);
       spotRef.current.scrollTop = 0;
       setSearchKeyword(tempKeyword);
@@ -213,7 +235,7 @@ const PlanMap = (props) => {
   };
 
   const searchClick = async () => {
-    if (onCategory !== 4 && onCategory !== 5) {
+    if (onCategory !== 0 && onCategory !== 5) {
       setPage(0);
       spotRef.current.scrollTop = 0;
 
@@ -224,54 +246,43 @@ const PlanMap = (props) => {
   };
 
   const categoryController = (idx) => {
-    const getWishList = async () => {
-      const res = await api.get(`/plan/wishlist/${plan.planId}`);
-      setSpotWishList(res.data.data);
-    };
-    const getRecommendList = async () => {
-      const req = {
-        plan_id: myInfo.planId,
-        user_id: myInfo.userId,
-      };
-      const res = await axios.post(
-        "https://k10d207.p.ssafy.io/recommend/items2",
-        req,
-      );
-      console.log(res.data);
-      setRecommends(res.data);
-    };
     setOnCategory(idx);
     setPage(0);
     spotRef.current.scrollTop = 0;
     switch (idx) {
       case 0:
+        setSortType(5);
+        setIsTarget(false);
+        break;
+
+      case 1:
         setSortType(0);
         setRecommends(null);
 
         break;
-      case 1:
+
+      case 2:
         setSortType(3);
         setRecommends(null);
 
         break;
-      case 2:
+
+      case 3:
         setSortType(4);
         setRecommends(null);
 
         break;
-      case 3:
+
+      case 4:
         setSortType(2);
         setRecommends(null);
         break;
-      case 4:
-        getWishList();
+
+      case 5:
+        setSortType(6);
         setIsTarget(false);
         setRecommends(null);
 
-        break;
-      case 5:
-        setIsTarget(false);
-        getRecommendList();
         break;
     }
   };
@@ -551,7 +562,7 @@ const PlanMap = (props) => {
         </div>
         <section>
           {CATEGORY.map((category, idx) =>
-            idx === 5 ? (
+            idx === 0 ? (
               <span
                 key={idx}
                 className={
@@ -578,7 +589,7 @@ const PlanMap = (props) => {
           )}
         </section>
         <section className={styles.searchResult} ref={spotRef}>
-          {onCategory === 5 ? (
+          {onCategory === 0 ? (
             <>
               {recommends
                 ? recommends.map((recommend, idx) => {
@@ -604,7 +615,7 @@ const PlanMap = (props) => {
             </>
           ) : (
             <div>
-              {onCategory !== 4
+              {onCategory !== 5
                 ? spotList.map((spot, idx) => (
                     <div
                       key={idx}
@@ -776,10 +787,10 @@ const PlanMap = (props) => {
                   })}
             </div>
           )}
-          {onCategory !== 4 && spotList.length === 0 ? (
+          {onCategory !== 0 && onCategory !== 5 && spotList.length === 0 ? (
             <div className={styles.emptySearch}>검색 결과가 없습니다.</div>
           ) : null}
-          {onCategory === 4 && spotWishList.length === 0 ? (
+          {onCategory === 5 && spotWishList.length === 0 ? (
             <div className={styles.emptySearch}>찜 목록이 비었습니다.</div>
           ) : null}
         </section>

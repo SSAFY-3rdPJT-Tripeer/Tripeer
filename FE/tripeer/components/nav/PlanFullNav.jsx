@@ -3,6 +3,7 @@ import Image from "next/image";
 import banner from "@/public/logo.png";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import PlanDetailGuide from "./PlanDetailGuide";
 
 const PlanFullNav = (props) => {
   const { current, setCurrent } = props;
@@ -86,7 +87,9 @@ const PlanFullNav = (props) => {
           onClick={(e) => {
             if (e.currentTarget === e.target) setIsGuide(false);
           }}>
-          <div className={styles.modal}></div>
+          <div className={styles.modal}>
+            <PlanDetailGuide />
+          </div>
         </div>
       ) : null}
     </div>

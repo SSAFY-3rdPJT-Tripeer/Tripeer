@@ -110,8 +110,7 @@ export default function MyPage() {
         style3: null,
         email: email,
       };
-      const res = await api.patch(`/user/myinfo`, request);
-      console.log(res);
+      await api.patch(`/user/myinfo`, request);
       store.setMyInfo({ ...store.myInfo, nickname: nickname });
       router.push("/");
     }

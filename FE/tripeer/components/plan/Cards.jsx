@@ -48,6 +48,7 @@ const Cards = () => {
   const getPlans = async () => {
     try {
       const res = await api.get("/plan");
+      console.log(res);
       setPlans(res.data.data);
     } catch (err) {
       alert("데이터를 불러오는데 오류가 발생했습니다.");
@@ -201,9 +202,11 @@ const Cards = () => {
                   </div>
                 </div>
               </div>
-              <div className={styles.newIcon}>
-                <span>New</span>
-              </div>
+              {plan.newPlan ? (
+                <div className={styles.newIcon}>
+                  <span>New</span>
+                </div>
+              ) : null}
               <div
                 className={styles.removeList}
                 style={{ pointerEvents: "fill" }}
