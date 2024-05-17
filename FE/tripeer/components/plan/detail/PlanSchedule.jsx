@@ -45,6 +45,9 @@ const PlanSchedule = (props) => {
   const [alert, setAlert] = useState(false);
   const [init, setInit] = useState(false);
   const [init2, setInit2] = useState(false);
+  const [exitWarn, setExitWarn] = useState(false);
+  const [exitInit, setExitInit] = useState(false);
+  const [exitTimer, setExitTimer] = useState(null);
 
   const COLOR = [
     "#A60000",
@@ -743,6 +746,16 @@ const PlanSchedule = (props) => {
   }, [plan]);
 
   const saveData = async () => {
+    const arr = blockList.filter((item) => item === true);
+    if (arr.length > 0) {
+      setExitWarn(true);
+      setExitInit(true);
+      let time = setTimeout(() => {
+        setAlert(false);
+        setExitTimer(time);
+      }, 2000);
+      return;
+    }
     const res = await api.post("/history/save", {
       totalYList: totalY.toJSON(),
       timeYList: timeY.toJSON(),
@@ -1009,6 +1022,13 @@ const PlanSchedule = (props) => {
 
       {isRouteModal ? (
         <MapRoute daySpots={totalList} setIsRouteModal={setIsRouteModal} />
+      ) : null}
+      {exitInit ? (
+        <div
+          className={`${styles.warnBox} ${exitWarn ? styles.warnShow : styles.warnNo}`}>
+          <div className={styles.warnIcon}></div>
+          <p>이미 일정에 추가된 여행지입니다.</p>
+        </div>
       ) : null}
     </div>
   );
