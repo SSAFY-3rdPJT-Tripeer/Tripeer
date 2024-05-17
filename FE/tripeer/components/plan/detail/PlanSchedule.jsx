@@ -745,13 +745,19 @@ const PlanSchedule = (props) => {
     }
   }, [plan]);
 
+  useEffect(() => {
+    if (exitTimer) {
+      clearTimeout(exitTimer);
+    }
+  }, [exitTimer]);
+
   const saveData = async () => {
     const arr = blockList.filter((item) => item === true);
     if (arr.length > 0) {
       setExitWarn(true);
       setExitInit(true);
       let time = setTimeout(() => {
-        setAlert(false);
+        setExitWarn(false);
         setExitTimer(time);
       }, 2000);
       return;
