@@ -15,7 +15,6 @@ import PlanSchedule from "@/components/plan/detail/PlanSchedule";
 import api from "@/utils/api";
 import MikeFunction from "@/components/plan/detail/MikeFunction";
 import QRCode from "qrcode.react";
-import axios from "axios";
 
 const PageDetail = (props) => {
   const [provider, setProvider] = useState(null);
