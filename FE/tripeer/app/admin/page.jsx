@@ -63,7 +63,6 @@ const Admin = () => {
         },
       ],
     });
-    console.log(res);
   };
 
   const server = async () => {
