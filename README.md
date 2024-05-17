@@ -18,8 +18,14 @@
 - [ERD](#erd)
 - [시스템 아키텍쳐](#시스템-아키텍쳐)
 - [서비스 실사용 화면](#서비스-실사용-화면)
-  - [메인 페이지](#메인-페이지)
-  - [일정 계획 페이지](#일정-계획-페이지)
+  - [1. 메인 페이지](#1-메인-페이지)
+  - [2. 일정 계획 페이지](#2-일정-계획-페이지)
+    - [2-1. 여행 계획 홈 메뉴](#2-1-여행-계획-홈-메뉴)
+    - [2-2. 여행 계획 지도 메뉴](#2-2-여행-계획-지도-메뉴)
+    - [2-3. 여행 계획 일정 메뉴](#2-3-여행-계획-일정-메뉴)
+  - [3. 지난 계획 페이지](#3-지난-계획-페이지)
+  - [4. 여행지 페이지](#4-여행지-페이지)
+    - [5. 공통화면](#5-공통화면)
 
 ## 서비스 개요
 
@@ -41,8 +47,10 @@
 
 ## 기술 스택
 
-<div align="middle">FrontEnd</div>
 <div align="middle">
+
+**| FrontEnd |**
+
 <img src="https://img.shields.io/badge/nextjs-000000?style=for-the-badge&logo=nextdotjs&logoColor=white">
 <img src="https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white">
 <img src="https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white">
@@ -67,8 +75,9 @@
 
 <br>
 <br>
-<div align="middle">BackEnd</div>
 <div align="middle">
+
+**| BackEnd |**
 
 <img src="https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white"> 
 <img src="https://img.shields.io/badge/spring boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
@@ -83,24 +92,32 @@
 
 </br>
 
-**Language |** Java 21
+**Language |** Java 21, Python (v3.9.13)
 
-**Framework |** Spring Boot 3.2.3
+**Framework |** Spring Boot(v3.2.4), express(v4.19.2), fastAPI(v0.111.0)
 
 **DB Connection(ORM) |** Spring Data JPA
 
-**Build Tool |** Gradle 8.5.0
+**Build Tool |** Gradle(v8.5.0)
 
 </div>
 
 <br>
 <br>
-<div align="middle">Infra</div>
 <div align="middle">
+
+**| Infra |**
 
 <img src="https://img.shields.io/badge/jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white"> 
 <img src="https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white"> 
-<img src="https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white"> 
+<img src="https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white">
+
+<br>
+
+**DB |** MySQL(v8.0.22), MongoDB(v7.0.8)
+
+**Server |** GitLab, Jenkins(v2.440.3), Docker(v25.0.2), Nginx(v1.18.0)
+
 </div>
 
 ## 주요 기능
@@ -193,7 +210,7 @@
 
 ## 서비스 실사용 화면
 
-### 메인 페이지
+### 1. 메인 페이지
 
 <table>
     <tr>
@@ -205,7 +222,9 @@
 </table>
 <br>
 
-### 일정 계획 페이지
+### 2. 일정 계획 페이지
+
+#### 2-1. 여행 계획 홈 메뉴
 
 <table>
     <tr>
@@ -229,6 +248,16 @@
 
 <table>
     <tr>
+        <th>공지사항 작성</th>
+    </tr>
+    <tr>
+        <td><img src='readmeImage/gif/announcement.gif'></td>
+    </tr>
+</table>
+<br>
+
+<table>
+    <tr>
         <th>마우스 커서 공유 및 채팅</th>
     </tr>
     <tr>
@@ -236,6 +265,8 @@
     </tr>
 </table>
 <br>
+
+#### 2-2. 여행 계획 지도 메뉴
 
 <table>
     <tr>
@@ -259,6 +290,28 @@
 
 <table>
     <tr>
+        <th>여행지 상세 보기</th>
+    </tr>
+    <tr>
+        <td><img src='readmeImage/gif/spotDetail.gif'></td>
+    </tr>
+</table>
+<br>
+
+<table>
+    <tr>
+        <th>신규 장소 등록</th>
+    </tr>
+    <tr>
+        <td><img src='readmeImage/gif/addNewSpot.gif'></td>
+    </tr>
+</table>
+<br>
+
+#### 2-3. 여행 계획 일정 메뉴
+
+<table>
+    <tr>
         <th>여행 일정 조율</th>
     </tr>
     <tr>
@@ -277,9 +330,44 @@
 </table>
 <br>
 
-- 온라인 유저 확인하기, 메모하기, 공지사항 입력
-- 경로 보기
-- 여행 계획으로 보기
-  <img src='readmeImage/gif/plansave.gif'>
-- 지난 여행 보기
-- 사진 업로드
+<table>
+    <tr>
+        <th>경로 보기</th>
+    </tr>
+    <tr>
+        <td><img src='readmeImage/gif/viewRoute.gif'></td>
+    </tr>
+</table>
+<br>
+
+<table>
+    <tr>
+        <th>도움말</th>
+    </tr>
+    <tr>
+        <td><img src='readmeImage/gif/viewGuide.gif'></td>
+    </tr>
+</table>
+<br>
+
+<table>
+    <tr>
+        <th>완성된 여행 계획(pc버전)</th>
+         <th>완성된 여행 계획(모바일 버전)</th>
+    </tr>
+    <tr>
+        <td><img src='readmeImage/gif/plansave.gif'></td>
+        <td><img src='readmeImage/gif/plansave_mobile.gif' height=40%></td>
+    </tr>
+</table>
+<br>
+
+### 3. 지난 계획 페이지
+
+### 4. 여행지 페이지
+
+#### 5. 공통화면
+
+1. 로그인페이지
+2. 회원정보 수정페이지
+3. 404페이지
