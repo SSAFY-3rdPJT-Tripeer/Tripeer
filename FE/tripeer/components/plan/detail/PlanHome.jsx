@@ -17,6 +17,10 @@ const PlanHome = (props) => {
   const titleInput = useRef(null);
   const notifyTextArea = useRef(null);
   const [mutes, setMutes] = useState({});
+  const [inviteErr, setInviteErr] = useState(false);
+  const [timer, setTimer] = useState(null);
+  const [init, setInit] = useState(false);
+  const [isLoad, setIsLoad] = useState(false);
 
   const COLOR = [
     "#A60000",
@@ -31,15 +35,34 @@ const PlanHome = (props) => {
 
   const invite = async (member) => {
     if (members.length < 8) {
-      const res = await api.post("/plan/member", {
-        planId: plan.planId,
-        userId: member.userId,
-      });
-      if (res.status === 200) {
-        setMembers([...members, member]);
+      setIsLoad(true);
+      try {
+        const res = await api.post("/plan/member", {
+          planId: plan.planId,
+          userId: member.userId,
+        });
+        if (res.status === 200) {
+          setMembers([...members, member]);
+        }
+      } catch {
+        setInviteErr(true);
+        setInit(true);
+        const timer = setTimeout(() => {
+          setInviteErr(false);
+          setTimer(timer);
+        }, 3000);
+      } finally {
+        setIsLoad(false);
       }
     }
   };
+
+  useEffect(() => {
+    if (timer) {
+      clearTimeout(timer);
+      setTimer(null);
+    }
+  }, [timer]);
 
   const search = async (e) => {
     const value = e.currentTarget.value;
@@ -121,6 +144,18 @@ const PlanHome = (props) => {
 
   return (
     <div className={styles.container}>
+      {isLoad ? (
+        <div className={styles.back}>
+          <div className={styles.spinner}></div>
+        </div>
+      ) : null}
+      {init ? (
+        <div
+          className={`${styles.warnBox} ${inviteErr ? styles.warnShow : styles.warnNo}`}>
+          <div className={styles.warnIcon}></div>
+          <p>초대한 회원의 일정이 이미 가득 차있습니다.</p>
+        </div>
+      ) : null}
       <header className={styles.header}>
         <span className={!titleChange ? "" : styles.visible}>{title}</span>
         <input

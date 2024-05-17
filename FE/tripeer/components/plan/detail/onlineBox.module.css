@@ -138,9 +138,9 @@
   font-size: 0.9rem;
   font-weight: 500;
   margin: 1px;
-  width: 50px;
+  width: 4.2rem;
   overflow: hidden;
-  white-space: normal;
+  white-space: nowrap;
   text-overflow: ellipsis;
 }
 .online {
