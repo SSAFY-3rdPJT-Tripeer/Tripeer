@@ -74,7 +74,9 @@ const OnlineBox = (props) => {
                         }}
                       />
                       <div className={styles.memberContent}>
-                        <p className={styles.memberName}>{member.nickname}</p>
+                        <span className={styles.memberName}>
+                          {member.nickname}
+                        </span>
                         <p className={styles.isMe}>
                           {myInfo.userId === member.userId ? "me" : "other"}
                         </p>
