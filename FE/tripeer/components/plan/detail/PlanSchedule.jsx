@@ -787,12 +787,6 @@ const PlanSchedule = (props) => {
     setIsSaveModal(false);
   };
 
-  useEffect(() => {
-    if (totalList) {
-      console.log("t", totalList);
-    }
-  }, [totalList]);
-
   return (
     // 화면 전체
     <div className={styles.container}>

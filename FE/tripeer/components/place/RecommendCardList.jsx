@@ -8,7 +8,6 @@ import styles from "./recommendCardList.module.css";
 import useRegisterStore from "@/stores/register";
 import axios from "axios";
 import api from "@/utils/api";
-import { useRouter } from "next/navigation";
 
 const RecommendCardList = ({ city }) => {
   const store = useRegisterStore();
