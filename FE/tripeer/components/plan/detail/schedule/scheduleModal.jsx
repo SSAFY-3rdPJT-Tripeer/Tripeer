@@ -45,7 +45,11 @@ export default function ScheduleModal({
   };
 
   const onClickPost = () => {
-    if (selectedLeft === null || totalList[cirIdx].length < 3) {
+    if (
+      selectedLeft === null ||
+      totalList[cirIdx].length < 3 ||
+      totalList[cirIdx].length > 10
+    ) {
       setIsOk(false);
       setTimeout(() => {
         setIsOk(true);
