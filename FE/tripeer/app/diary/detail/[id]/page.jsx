@@ -66,15 +66,13 @@ const DiaryDetail = () => {
             뒤로가기
           </div>
         </div>
-        <div className={styles.qrBox}>
+        <div
+          className={styles.qrBox}
+          onClick={() => {
+            setIsQRModal(true);
+          }}>
           <div className={styles.qrImg}></div>
-          <div
-            className={styles.qrText}
-            onClick={() => {
-              setIsQRModal(true);
-            }}>
-            QR코드
-          </div>
+          <div className={styles.qrText}>QR코드</div>
         </div>
       </div>
       {detailData ? (

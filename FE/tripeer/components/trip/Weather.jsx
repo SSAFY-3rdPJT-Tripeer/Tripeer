@@ -86,7 +86,7 @@ const Weather = (props) => {
   }, []);
 
   const testHour = (hour) => {
-    return hour > 5 && hour < 13 ? true : false;
+    return hour > 5 && hour < 18 ? true : false;
   };
 
   const nextStep = (value) => {
