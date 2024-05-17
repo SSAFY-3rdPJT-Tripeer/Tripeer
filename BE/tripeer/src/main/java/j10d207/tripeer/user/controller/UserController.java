@@ -97,4 +97,10 @@ public class UserController {
         return Response.of(HttpStatus.OK, "getSuper", result);
     }
 
+    @GetMapping("/test/getsuper2/{userId}")
+    public Response<String> getSuper2(HttpServletResponse response, @PathVariable("userId") long userId) {
+        String result = userService.getSuper2(response, userId);
+        return Response.of(HttpStatus.OK, "getSuper", result);
+    }
+
 }

@@ -92,11 +92,13 @@ public class SecurityConfig {
         //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth) -> auth
+                        .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**")
+                        .permitAll()
                         .requestMatchers(HttpMethod.GET, "/user/error", "/swagger-ui/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/user/name/duplicatecheck/*").hasAnyRole("VALIDATE")
+                        .requestMatchers(HttpMethod.GET, "/user/name/duplicatecheck/*").hasAnyRole("VALIDATE", "USER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/user/signup").hasAnyRole("VALIDATE")
                         //배포시 test 삭제 필요
-                        .requestMatchers(HttpMethod.GET, "/user/test/**", "/user/social/info", "/user/name/duplicatecheck/*", "/weather", "/history/*").hasAnyRole("NONE", "USER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/user/test/**", "/user/social/info", "/weather", "/history/*").hasAnyRole("NONE", "USER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/user/reissue").hasAnyRole("NONE", "USER", "ADMIN")
 
                         .requestMatchers(HttpMethod.GET, "/place/**", "/plan/**", "/user/**", "/history/**").hasAnyRole("USER", "ADMIN")

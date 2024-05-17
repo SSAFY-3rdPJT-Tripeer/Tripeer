@@ -17,5 +17,5 @@ public interface CoworkerRepository  extends JpaRepository<CoworkerEntity, Long>
     List<CoworkerEntity> findByPlan_PlanId(long planId);
     Optional<CoworkerEntity> findByPlan_PlanIdAndUser_UserId(long planId, long userId);
 
-    List<CoworkerEntity> findByUser_UserIdAndPlan_StartDateAfter(long user_userId, LocalDate startDate);
+    List<CoworkerEntity> findByUser_UserIdAndPlan_EndDateAfter(long user_userId, LocalDate startDate);
 }

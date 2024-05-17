@@ -263,6 +263,18 @@ public class UserServiceImpl implements UserService{
         return "Bearer " + result;
     }
 
+    @Override
+    public String getSuper2(HttpServletResponse response, long userId) {
+        UserEntity user = userRepository.findByUserId(userId);
+        String result = jwtUtil.createJwt("Authorization", user.getNickname(), user.getRole(), userId, (long) 90*1000);
+        String refresh = jwtUtil.createJwt("Authorization-re", user.getNickname(), user.getRole(), userId, (long) 180*1000);
+
+        response.addCookie(createCookie("Authorization-re", refresh));
+        response.setHeader("Authorization", "Bearer " + result);
+
+        return "Bearer " + result;
+    }
+
     private Cookie createCookie(String key, String value) {
 
         Cookie cookie = new Cookie(key, value);
