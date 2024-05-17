@@ -376,7 +376,7 @@ const PageDetail = (props) => {
                 onClick={() => {
                   backToProject();
                 }}>
-                취소
+                수정
               </div>
               <div
                 className={styles.exitBtn}
