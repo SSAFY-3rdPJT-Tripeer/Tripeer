@@ -364,10 +364,76 @@
 
 ### 3. 지난 계획 페이지
 
+<table>
+    <tr>
+        <th>지난 여행 계획</th>
+    </tr>
+    <tr>
+        <td><img src='readmeImage/gif/pastplan.gif'></td>
+    </tr>
+</table>
+<br>
+
 ### 4. 여행지 페이지
+
+<table>
+    <tr>
+        <th>여행지 리스트</th>
+    </tr>
+    <tr>
+        <td><img src='readmeImage/gif/placelist.gif'></td>
+    </tr>
+</table>
+<br>
+
+<table>
+    <tr>
+        <th>여행지 디테일</th>
+    </tr>
+    <tr>
+        <td><img src='readmeImage/gif/placedetail.gif'></td>
+    </tr>
+</table>
+<br>
 
 #### 5. 공통화면
 
-1. 로그인페이지
-2. 회원정보 수정페이지
-3. 404페이지
+<table>
+    <tr>
+        <th>회원가입</th>
+    </tr>
+    <tr>
+        <td><img src='readmeImage/gif/register.gif'></td>
+    </tr>
+</table>
+<br>
+
+<table>
+    <tr>
+        <th>로그인</th>
+    </tr>
+    <tr>
+        <td><img src='readmeImage/gif/login.gif'></td>
+    </tr>
+</table>
+<br>
+
+<table>
+    <tr>
+        <th>회원정보 수정</th>
+    </tr>
+    <tr>
+        <td><img src='readmeImage/gif/editprofile.gif'></td>
+    </tr>
+</table>
+<br>
+
+<table>
+    <tr>
+        <th>404 페이지</th>
+    </tr>
+    <tr>
+        <td><img src='readmeImage/gif/page404.gif'></td>
+    </tr>
+</table>
+<br>
