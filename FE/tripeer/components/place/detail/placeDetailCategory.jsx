@@ -12,12 +12,6 @@ export default function PlaceDetailCategory() {
   return (
     <main className={styles.main}>
       <PlaceDetailCategoryBtn
-        title={"숙박"}
-        src={stay}
-        checkSrc={stayCheck}
-        idx={"stay"}
-      />
-      <PlaceDetailCategoryBtn
         title={"명소"}
         src={place}
         checkSrc={placeCheck}
@@ -28,6 +22,12 @@ export default function PlaceDetailCategory() {
         src={food}
         checkSrc={foodCheck}
         idx={"restaurant"}
+      />
+      <PlaceDetailCategoryBtn
+        title={"숙박"}
+        src={stay}
+        checkSrc={stayCheck}
+        idx={"stay"}
       />
     </main>
   );

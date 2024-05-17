@@ -8,7 +8,6 @@ import styles from "./recommendCardList.module.css";
 import useRegisterStore from "@/stores/register";
 import axios from "axios";
 import api from "@/utils/api";
-import { useRouter } from "next/navigation";
 
 const RecommendCardList = ({ city }) => {
   const store = useRegisterStore();
@@ -63,7 +62,7 @@ const RecommendCardList = ({ city }) => {
 
   useEffect(() => {
     if (myInfo) {
-      getData(); // myInfo가 설정된 후에 getData 호출
+      getData(); // myInfo 가 설정된 후에 getData 호출
     }
   }, [myInfo]);
 
@@ -78,8 +77,9 @@ const RecommendCardList = ({ city }) => {
           <header className={styles.headerBox}>
             <div className={styles.headerIcon}></div>
             <div className={styles.header}>
-              {myInfo.nickname}님의 <span>여행스타일</span>에 어울리는 여행지를
-              추천해드려요.
+              {myInfo.nickname}님의{" "}
+              <span>{`여행스타일(${recommendData[0].contentType})`}</span>에
+              어울리는 여행지를 추천해드려요.
             </div>
           </header>
           <article className={styles.article}>

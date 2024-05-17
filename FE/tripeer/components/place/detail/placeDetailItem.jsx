@@ -24,7 +24,7 @@ export default function PlaceDetailItem({
   };
 
   const onClick = () => {
-    router.push(
+    window.open(
       `https://map.naver.com/p/search/${`${data.address} ${data.spotName}`}`,
     );
   };
@@ -53,7 +53,7 @@ export default function PlaceDetailItem({
   }, []);
 
   return (
-    <main className={`${styles.main}`}>
+    <main className={`${styles.main}`} onClick={onClick}>
       <div className={`${!loaded ? styles.complete : styles.loading}`}>
         <div className={`${loaded ? styles.waitBox : styles.noWaitBox}`}>
           <p>이미지 로드중...</p>
@@ -77,9 +77,12 @@ export default function PlaceDetailItem({
           alt=""
           width={50}
           height={50}
-          onClick={likeOnClick}
+          onClick={(e) => {
+            e.stopPropagation();
+            likeOnClick();
+          }}
         />
-        <section className={styles.section} onClick={onClick}>
+        <section className={styles.section}>
           <p className={styles.p}>{data.spotName}</p>
           <article className={styles.article}>
             <div className={styles.vector}></div>
