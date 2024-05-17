@@ -40,8 +40,16 @@ const RecommendSlider = (props) => {
 
   const changeWishList = async (idx, isLike, spotId) => {
     const cloneRecoms = structuredClone(recommends);
-    cloneRecoms[rId]["spotItemList"][idx].isWishlist = !isLike;
-    setRecommends(cloneRecoms);
+    const newRecoms = cloneRecoms.map((recoms) => {
+      for (let i = 0; i < recoms["spotItemList"].length; i++) {
+        if (recoms["spotItemList"][i]["spotInfoId"] === spotId) {
+          recoms["spotItemList"][i]["isWishlist"] = !isLike;
+        }
+      }
+      return recoms;
+    });
+    // cloneRecoms[rId]["spotItemList"][idx].isWishlist = !isLike;
+    setRecommends(newRecoms);
     await api.post(`/plan/wishlist/${spotId}`);
   };
 
@@ -58,8 +66,16 @@ const RecommendSlider = (props) => {
       saveSpot.insert(0, [tempSave]);
     } finally {
       const cloneRecoms = structuredClone(recommends);
-      cloneRecoms[rId]["spotItemList"][idx].spot = true;
-      setRecommends(cloneRecoms);
+      const newRecoms = cloneRecoms.map((recoms) => {
+        for (let i = 0; i < recoms["spotItemList"].length; i++) {
+          if (recoms["spotItemList"][i]["spotInfoId"] === spot.spotInfoId) {
+            recoms["spotItemList"][i]["isWishlist"] = true;
+          }
+        }
+        return recoms;
+      });
+      // cloneRecoms[rId]["spotItemList"][idx].spot = true;
+      setRecommends(newRecoms);
     }
   };
 
@@ -103,8 +119,16 @@ const RecommendSlider = (props) => {
       ySpot.delete(index);
     } finally {
       const cloneRecoms = structuredClone(recommends);
-      cloneRecoms[rId]["spotItemList"][idx].spot = false;
-      setRecommends(cloneRecoms);
+      const newRecoms = cloneRecoms.map((recoms) => {
+        for (let i = 0; i < recoms["spotItemList"].length; i++) {
+          if (recoms["spotItemList"][i]["spotInfoId"] === spot.spotInfoId) {
+            recoms["spotItemList"][i]["isWishlist"] = false;
+          }
+        }
+        return recoms;
+      });
+      // cloneRecoms[rId]["spotItemList"][idx].spot = false;
+      setRecommends(newRecoms);
     }
   };
 
