@@ -16,7 +16,6 @@ public class GridService {
 
     public int[] toGrid(double lat, double lon) {
         double DEGRAD = Math.PI / 180.0;
-        double RADDEG = 180.0 / Math.PI;
 
         double re = RE / GRID;
         double slat1 = SLAT1 * DEGRAD;

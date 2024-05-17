@@ -95,7 +95,6 @@ public class GalleryServiceImpl implements GalleryService{
             }
             //저장된 Url
             String url = "https://tripeer207.s3.ap-northeast-2.amazonaws.com/" + changedName;
-            System.out.println(changedName);
             //DB에 업로드 정보 저장
             GalleryEntity gallery = GalleryEntity.builder()
                     .url(url)
@@ -138,7 +137,6 @@ public class GalleryServiceImpl implements GalleryService{
             GalleryEntity galleryEntity = galleryRepository.findById(galleryId)
                     .orElseThrow(() -> new CustomException(ErrorCode.GALLERY_NOT_FOUND));
             amazonS3.deleteObject(bucketName, galleryEntity.getUrl().substring(50));
-            System.out.println(galleryEntity.getUrl().substring(50));
             galleryRepository.delete(galleryEntity);
         }
         return "갤러리 삭제 성공";

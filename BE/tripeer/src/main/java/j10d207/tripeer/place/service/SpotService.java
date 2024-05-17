@@ -1,7 +1,7 @@
 package j10d207.tripeer.place.service;
 
-import j10d207.tripeer.place.db.dto.*;
 import j10d207.tripeer.place.db.dto.SpotAddReqDto;
+import j10d207.tripeer.place.db.dto.SpotAddResDto;
 import j10d207.tripeer.place.db.dto.SpotDetailDto;
 import j10d207.tripeer.place.db.dto.SpotListDto;
 import j10d207.tripeer.place.db.entity.SpotInfoEntity;

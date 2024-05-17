@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -168,40 +167,32 @@ public class SpotServiceImpl implements SpotService{
                 case "충북":
                     cityEntity = cityRepository.findByCityNameContains("충청북도")
                             .orElseThrow(() -> new CustomException(ErrorCode.CITY_NOT_FOUND));
-                    System.out.println("cityEntity.getCityName() = " + cityEntity.getCityName());
                     break;
                 case "충남":
                     cityEntity = cityRepository.findByCityNameContains("충청남도")
                             .orElseThrow(() -> new CustomException(ErrorCode.CITY_NOT_FOUND));
-                    System.out.println("cityEntity.getCityName() = " + cityEntity.getCityName());
                     break;
                 case "경북":
                     cityEntity = cityRepository.findByCityNameContains("경상북도")
                             .orElseThrow(() -> new CustomException(ErrorCode.CITY_NOT_FOUND));
-                    System.out.println("cityEntity.getCityName() = " + cityEntity.getCityName());
                     break;
                 case "경남":
                     cityEntity = cityRepository.findByCityNameContains("경상남도")
                             .orElseThrow(() -> new CustomException(ErrorCode.CITY_NOT_FOUND));
-                    System.out.println("cityEntity.getCityName() = " + cityEntity.getCityName());
                     break;
                 case "전북특별자치도":
                     cityEntity = cityRepository.findByCityNameContains("전라북도")
                             .orElseThrow(() -> new CustomException(ErrorCode.CITY_NOT_FOUND));
-                    System.out.println("cityEntity.getCityName() = " + cityEntity.getCityName());
                     break;
                 case "전남":
                     cityEntity = cityRepository.findByCityNameContains("전라남도")
                             .orElseThrow(() -> new CustomException(ErrorCode.CITY_NOT_FOUND));
-                    System.out.println("cityEntity.getCityName() = " + cityEntity.getCityName());
                     break;
                 case "제주특별자치도":
                     cityEntity = cityRepository.findByCityNameContains("제주도")
                             .orElseThrow(() -> new CustomException(ErrorCode.CITY_NOT_FOUND));
-                    System.out.println("cityEntity.getCityName() = " + cityEntity.getCityName());
                     break;
                 default:
-                    System.out.println("Unknown city");
                     break;
             }
         }
@@ -219,14 +210,11 @@ public class SpotServiceImpl implements SpotService{
 
         String[] splitAddr = fullAddr.split(" ");
         CityEntity cityEntity = getCityEntity(splitAddr[0]);
-        System.out.println("cityEntity = " + cityEntity.getCityName());
-
         TownEntity townEntity = null;
 
         Optional<TownEntity> townEntityOptional = townRepository.findByTownNameAndTownPK_City_CityId(splitAddr[1], cityEntity.getCityId());
         if (townEntityOptional.isPresent()) {
             townEntity = townEntityOptional.get();
-            System.out.println("townEntity = 타운 있음 있는곳에 추가함" + townEntity.getTownName());
         } else {
             TownPK townPK = TownPK.builder()
                     .city(cityEntity)
@@ -242,7 +230,6 @@ public class SpotServiceImpl implements SpotService{
                     .townPK(townPK)
                     .build();
             townRepository.save(townEntity);
-            System.out.println("Town 없어서 새로 추가함");
         }
 
         StringBuilder newAddr = new StringBuilder(cityEntity.getCityName() + " " + townEntity.getTownName() + " ");
@@ -289,56 +276,4 @@ public class SpotServiceImpl implements SpotService{
                 .wishlist(false)
                 .build();
     }
-
-
-
-
-
-
-
-
-//    @Override
-//    @Transactional
-//    public Boolean createNewSpot(SpotAddReqDto spotAddReqDTO, HttpServletRequest request) {
-//
-//        CityEntity cityEntity = CityEntity.builder()
-//                .cityId(spotAddReqDTO.getCityId()).build();
-//        cityRepository.save(cityEntity);
-//
-//        TownPK townPK = TownPK.builder()
-//                .townId(spotAddReqDTO.getTownId())
-//                .city(cityEntity)
-//                .build();
-//
-//        TownEntity townEntity = TownEntity.builder()
-//                .townPK(townPK)
-//                .build();
-//        townRepository.save(townEntity);
-//
-//        SpotInfoEntity spotInfo = SpotInfoEntity.builder()
-//                .town(townEntity)
-//                .contentTypeId(spotAddReqDTO.getContentTypeId())
-//                .title(spotAddReqDTO.getTitle())
-//                .addr1(spotAddReqDTO.getAddr1())
-//                .addr2(spotAddReqDTO.getAddr2())
-//                .zipcode(spotAddReqDTO.getZipcode())
-//                .tel(spotAddReqDTO.getTel())
-//                .firstImage(spotAddReqDTO.getFirstImage())
-//                .firstImage2(spotAddReqDTO.getSecondImage())
-//                .latitude(spotAddReqDTO.getLatitude())
-//                .longitude(spotAddReqDTO.getLongitude())
-//                .build();
-//
-//        SpotInfoEntity newSpotInfo = spotInfoRepository.save(spotInfo);
-//
-//        createNewDescrip(newSpotInfo, spotAddReqDTO);
-//
-//        if(spotAddReqDTO.isAddPlanCheck()) {
-//            planService.addPlanSpot(spotAddReqDTO.getPlanId(), newSpotInfo.getSpotInfoId(), request.getHeader("Authorization"));
-//            return true;
-//        }
-//
-//        return false;
-//    }
-
 }

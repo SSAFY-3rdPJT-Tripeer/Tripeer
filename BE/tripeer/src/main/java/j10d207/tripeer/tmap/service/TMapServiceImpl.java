@@ -1,29 +1,18 @@
 package j10d207.tripeer.tmap.service;
 
-import com.nimbusds.jose.shaded.gson.JsonArray;
 import com.nimbusds.jose.shaded.gson.JsonElement;
 import com.nimbusds.jose.shaded.gson.JsonObject;
-import com.nimbusds.jose.shaded.gson.JsonParser;
 import j10d207.tripeer.exception.CustomException;
 import j10d207.tripeer.exception.ErrorCode;
 import j10d207.tripeer.kakao.service.KakaoService;
-import j10d207.tripeer.plan.db.dto.PublicRootDTO;
-import j10d207.tripeer.plan.db.dto.RootOptimizeDTO;
 import j10d207.tripeer.tmap.db.dto.CoordinateDTO;
 import j10d207.tripeer.tmap.db.dto.RootInfoDTO;
-import j10d207.tripeer.tmap.db.dto.RouteReqDTO;
-import j10d207.tripeer.tmap.db.entity.PublicRootDetailEntity;
 import j10d207.tripeer.tmap.db.entity.PublicRootEntity;
-import j10d207.tripeer.tmap.db.repository.PublicRootDetailRepository;
 import j10d207.tripeer.tmap.db.repository.PublicRootRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,32 +32,11 @@ public class TMapServiceImpl implements TMapService {
 
     @Override
     public FindRoot getOptimizingTime(List<CoordinateDTO> coordinates) {
-
         RootInfoDTO[][] timeTable = getTimeTable(coordinates);
-
-        //확인용 출력
-        for (int i = 0; i < timeTable.length; i++) {
-            for (int j = 0; j < timeTable.length; j++) {
-                System.out.print(timeTable[i][j].getTime() + " ");
-            }
-            System.out.println();
-        }
-
         ArrayList<Integer> startLocation  = new ArrayList<>();
         startLocation.add(0);
         FindRoot root = new FindRoot(timeTable);
         root.solve(0, 0, 0, new ArrayList<>(), startLocation);
-
-        for (int s : root.getResultNumbers()) {
-            System.out.print(s + " -> ");
-        }
-        System.out.println();
-        for (int value : root.getRootTime()) {
-            System.out.print(value + " -> ");
-        }
-
-        System.out.println();
-        System.out.println("최종 : " + root.getMinTime());
 
         return root;
     }
@@ -159,5 +127,4 @@ public class TMapServiceImpl implements TMapService {
 
         }
     }
-
 }

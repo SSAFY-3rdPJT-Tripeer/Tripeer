@@ -1,11 +1,8 @@
 package j10d207.tripeer.weather.db.entity;
 
 
-import j10d207.tripeer.plan.db.entity.PlanEntity;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDate;
 
 @Entity(name = "weather_data")
 @Getter

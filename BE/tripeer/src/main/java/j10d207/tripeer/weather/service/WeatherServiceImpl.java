@@ -14,7 +14,7 @@ import j10d207.tripeer.weather.db.entity.WeatherDataEntity;
 import j10d207.tripeer.weather.db.entity.WeatherEntity;
 import j10d207.tripeer.weather.repository.WeatherRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -31,10 +31,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class WeatherServiceImpl implements WeatherService{
+
+    @Value("${weather.apikey}")
+    private String weatherApiKey;
 
     private final TownRepository townRepository;
     private final WeatherRepository weatherRepository;
@@ -207,22 +209,20 @@ public class WeatherServiceImpl implements WeatherService{
         LocalDate yesterday = currentDate.minusDays(1);
         // 어제 날짜를 포매팅
         String formattedYesterday = yesterday.format(formatter);
+//        System.out.println("weatherApiKey = " + weatherApiKey);
+        String urlBuilder = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst" + "?" + URLEncoder.encode("serviceKey", StandardCharsets.UTF_8) + weatherApiKey +
+                "&" + URLEncoder.encode("pageNo", StandardCharsets.UTF_8) + "=" + URLEncoder.encode("1", StandardCharsets.UTF_8) +
+                "&" + URLEncoder.encode("numOfRows", StandardCharsets.UTF_8) + "=" + URLEncoder.encode("350", StandardCharsets.UTF_8) +
+                "&" + URLEncoder.encode("dataType", StandardCharsets.UTF_8) + "=" + URLEncoder.encode("JSON", StandardCharsets.UTF_8) +
+                "&" + URLEncoder.encode("base_date", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(formattedYesterday, StandardCharsets.UTF_8) +
+                "&" + URLEncoder.encode("base_time", StandardCharsets.UTF_8) + "=" + URLEncoder.encode("2300", StandardCharsets.UTF_8) +
+                "&" + URLEncoder.encode("nx", StandardCharsets.UTF_8) + "=" + latitude +
+                "&" + URLEncoder.encode("ny", StandardCharsets.UTF_8) + "=" + longitude;
 
-        StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst");
-        urlBuilder.append("?").append(URLEncoder.encode("serviceKey", StandardCharsets.UTF_8)).append("=xLnKfSmbSDLEQJZh5V24D8QWHc7bThu631O7rGX8o1WnCWramGZMFR%2FeKgwYW2SjMiMMJSNu2sTKLcqHHLT8%2FQ%3D%3D"); /*Service Key*/
-        urlBuilder.append("&").append(URLEncoder.encode("pageNo", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode("1", StandardCharsets.UTF_8));
-        urlBuilder.append("&").append(URLEncoder.encode("numOfRows", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode("350", StandardCharsets.UTF_8));
-        urlBuilder.append("&").append(URLEncoder.encode("dataType", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode("JSON", StandardCharsets.UTF_8));
-        urlBuilder.append("&").append(URLEncoder.encode("base_date", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode(formattedYesterday, StandardCharsets.UTF_8));
-        urlBuilder.append("&").append(URLEncoder.encode("base_time", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode("2300", StandardCharsets.UTF_8));
-        urlBuilder.append("&").append(URLEncoder.encode("nx", StandardCharsets.UTF_8)).append("=").append(latitude);
-        urlBuilder.append("&").append(URLEncoder.encode("ny", StandardCharsets.UTF_8)).append("=").append(longitude);
-
-        URL url = new URL(urlBuilder.toString());
+        URL url = new URL(urlBuilder);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("Content-type", "application/json");
-        System.out.println("Response code: " + conn.getResponseCode());
         BufferedReader rd;
         if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
             rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
