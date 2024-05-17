@@ -24,7 +24,7 @@ export default function BottomSection() {
     const cId = store.townData.cityId;
     const tId = store.townData.townId;
 
-    await store.setCategory("stay");
+    await store.setCategory("mecca");
 
     const stayList = await getStayList(cId, tId, 0);
     store.setStayList(stayList);
