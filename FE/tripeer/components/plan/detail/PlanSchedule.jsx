@@ -60,8 +60,23 @@ const PlanSchedule = (props) => {
     "#F96976",
   ];
 
-  const onClickDelete = () => {
-    console.log("hi");
+  const onClickDelete = (spot) => {
+    const firstY = totalY.get(0);
+    const totalArr = firstY.toJSON();
+    const totalIdx = totalArr.findIndex(
+      (item) => item.spotInfoId === spot.spotInfoId,
+    );
+    if (totalIdx !== -1) {
+      firstY.delete(totalIdx);
+    }
+    const saveSpot = provider.doc.getArray("saveSpot");
+    const saveArr = saveSpot.toJSON();
+    const saveIdx = saveArr.findIndex(
+      (item) => item.spotInfoId === spot.spotInfoId,
+    );
+    if (saveIdx !== -1) {
+      saveSpot.delete(saveIdx);
+    }
   };
 
   const onClickTime = (arrIdx, idx, opt, setLoaded) => {

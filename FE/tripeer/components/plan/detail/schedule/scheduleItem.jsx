@@ -46,7 +46,9 @@ export default function ScheduleItem({ data, onClickDelete }) {
           className={styles.exit}
           src={exitSrc}
           alt={""}
-          onClick={onClickDelete}
+          onClick={() => {
+            onClickDelete(data);
+          }}
         />
         <div></div>
         {/*<div className={styles.profileBox}>*/}
