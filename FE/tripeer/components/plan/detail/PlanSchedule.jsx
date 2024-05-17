@@ -1027,7 +1027,7 @@ const PlanSchedule = (props) => {
         <div
           className={`${styles.warnBox} ${exitWarn ? styles.warnShow : styles.warnNo}`}>
           <div className={styles.warnIcon}></div>
-          <p>이미 일정에 추가된 여행지입니다.</p>
+          <p>계산중인 일정이 있어 종료할 수 없습니다.</p>
         </div>
       ) : null}
     </div>
