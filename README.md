@@ -249,6 +249,14 @@
         <td><img src='readmeImage/gif/memberInvitation.gif'></td>
     </tr>
 </table>
+<table>
+    <tr>
+        <th>멤버 초대 이메일</th>
+    </tr>
+    <tr>
+        <td><img src='readmeImage/gif/email.PNG'></td>
+    </tr>
+</table>
 <br>
 
 <table>
