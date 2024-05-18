@@ -19,6 +19,7 @@ const RecommendSlider = (props) => {
     setAlert,
     setInit,
     setTimer,
+    moveMap,
   } = props;
 
   const [transMax, setTransMax] = useState(0);
@@ -233,17 +234,31 @@ const RecommendSlider = (props) => {
                       }
                       width={150}
                       height={150}
-                      style={{ borderRadius: "10px" }}
+                      style={{ borderRadius: "10px", cursor: "pointer" }}
                       alt="trip-image"
                       quality={30}
+                      onClick={() => {
+                        moveMap(spot);
+                      }}
                     />
-                    <p className={styles.realTitle}>{spot.title}</p>
+                    <p
+                      className={styles.realTitle}
+                      onClick={() => {
+                        moveMap(spot);
+                      }}
+                      style={{ cursor: "pointer" }}>
+                      {spot.title}
+                    </p>
                     <div
                       style={{
                         display: "flex",
                         alignItems: "flex-end",
                         marginLeft: "4px",
                         marginTop: "8px",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        moveMap(spot);
                       }}>
                       <div className={styles.positionIcon} />
                       <p className={styles.realPosition}>{spot.addr}</p>

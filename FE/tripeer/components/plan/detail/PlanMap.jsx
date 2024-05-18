@@ -700,6 +700,7 @@ const PlanMap = (props) => {
                         setAlert={setAlert}
                         setInit={setInit}
                         setTimer={setTimer}
+                        moveMap={moveMap}
                       />
                     );
                   })
