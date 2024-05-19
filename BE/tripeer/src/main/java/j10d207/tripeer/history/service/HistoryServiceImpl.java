@@ -132,6 +132,8 @@ public class HistoryServiceImpl implements HistoryService{
         if (planEntity.getVehicle().equals("history")) {
             throw new CustomException(ErrorCode.HISTORY_ALREADY_EXISTS);
         }
+        planEntity.setVehicle("history");
+        planRepository.save(planEntity);
         List<PlanDetailEntity> revokePlanDetailList = new ArrayList<>();
         for (int day = 1; day < totalYList.size(); day++) {
             for (int step = 0; step < totalYList.get(day).size(); step++) {
@@ -146,6 +148,8 @@ public class HistoryServiceImpl implements HistoryService{
                     List<Object> timeList = tmp;
                     if (timeList.get(1).equals("2")){
                         planDetailRepository.deleteAll(revokePlanDetailList);
+                        planEntity.setVehicle("private");
+                        planRepository.save(planEntity);
                         throw new CustomException(ErrorCode.UNSUPPORTED_JSON_TYPE);
                     }
                     if (timeList.get(1).equals("1")){
@@ -193,8 +197,6 @@ public class HistoryServiceImpl implements HistoryService{
                 }
             }
         }
-        planEntity.setVehicle("history");
-        planRepository.save(planEntity);
         return "ok";
     }
 
