@@ -208,6 +208,7 @@ const PlanSchedule = (props) => {
         }
       });
     } catch (e) {
+      console.log(e);
       const tmp2 = [["요청이 너무 빠릅니다. 다시 시도해주세요.", "2", null]];
       arr.insert(index - 1, [...tmp2]);
       // if (arr.length === index) {
@@ -775,7 +776,17 @@ const PlanSchedule = (props) => {
 
   const saveData = async () => {
     const arr = blockList.filter((item) => item === true);
-    if (arr.length > 0) {
+    let check = false;
+    for (let i = 1; i < timeList.length; i++) {
+      if (check === true) break;
+      for (let j = 0; j < timeList[i].length; j++) {
+        if (timeList[i][j][1] == "2") {
+          check = true;
+          break;
+        }
+      }
+    }
+    if (arr.length > 0 || check === true) {
       setExitWarn(true);
       setExitInit(true);
       let time = setTimeout(() => {
@@ -1058,7 +1069,7 @@ const PlanSchedule = (props) => {
         <div
           className={`${styles.warnBox} ${exitWarn ? styles.warnShow : styles.warnNo}`}>
           <div className={styles.warnIcon}></div>
-          <p>계산중인 일정이 있어 종료할 수 없습니다.</p>
+          <p>일정이 완성되지 않아 종료할 수 없습니다.</p>
         </div>
       ) : null}
     </div>
