@@ -115,6 +115,12 @@ public class TMapServiceImpl implements TMapService {
                 //경로 정보중 제일 좋은 경로를 가져옴
                 JsonElement bestRoot = apiRequestService.getBestTime(routeInfo.getAsJsonObject("plan").getAsJsonArray("itineraries"));
 
+                //모든 경로가 백트래킹 됨
+                if(bestRoot == null) {
+                    rootInfoDTO.setStatus(414);
+                    rootInfoDTO.setTime(99999);
+                    return rootInfoDTO;
+                }
                 //반환 정보 생성
                 int totalTime = bestRoot.getAsJsonObject().get("totalTime").getAsInt();
                 rootInfoDTO.setTime(totalTime / 60);
