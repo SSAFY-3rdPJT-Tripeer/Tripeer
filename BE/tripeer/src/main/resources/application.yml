@@ -62,7 +62,7 @@ spring:
             authorization-grant-type: authorization_code
             scope: profile,email
 
-    #JWT Time 30min, 60min
+    #JWT Time 300min, 600min
   jwt:
     access: 18000000
     refresh: 36000000

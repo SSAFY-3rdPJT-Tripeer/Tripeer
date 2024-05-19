@@ -30,8 +30,4 @@ public interface UserService {
     //access 토큰 재발급
     public void tokenRefresh(String token, Cookie[] cookies, HttpServletResponse response);
 
-    //테스트용 JWT 발급
-    public String getSuper(HttpServletResponse response, long userId);
-    //테스트용 JWT 발급2
-    public String getSuper2(HttpServletResponse response, long userId);
 }
