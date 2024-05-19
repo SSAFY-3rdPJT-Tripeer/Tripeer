@@ -43,6 +43,17 @@
 
 <div align="center">
       <img src='readmeImage/position.PNG'>
+      <table>
+      <tr>
+        <td align="center" width="5%">GitHub</td>
+        <td align="center" width="15%"><a href="https://github.com/suehwanBoo">부수환</a></td>
+        <td align="center" width="15%"><a href="https://github.com/hyunjiihye">현지혜</td>
+        <td align="center" width="15%"><a href="https://github.com/lhgeer7485">이해건</td>
+        <td align="center" width="15%"><a href="https://github.com/YangGeoun">양건우</td>
+        <td align="center" width="15%"><a href="https://github.com/sondongcheon">손동천</td>
+        <td align="center" width="15%"><a href="https://github.com/hyyoom">유형민</td>
+        </tr>
+      </table>
 </div>
 
 ## 기술 스택
