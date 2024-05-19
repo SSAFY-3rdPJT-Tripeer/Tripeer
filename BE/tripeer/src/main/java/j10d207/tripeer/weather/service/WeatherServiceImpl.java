@@ -49,7 +49,7 @@ public class WeatherServiceImpl implements WeatherService{
     public List<WeatherDataDTO> createWeather(int cityId, int townId, List<WeatherDataDTO> weatherDataDTOS, String formattedDate) {
         String maxTemp = weatherDataDTOS.getFirst().getMax_temp();
         String minTemp = weatherDataDTOS.getFirst().getMin_temp();
-
+        System.out.println("weather");
         WeatherEntity weather = new WeatherEntity();
         weather.setCityId(cityId);
         weather.setTownId(townId);
