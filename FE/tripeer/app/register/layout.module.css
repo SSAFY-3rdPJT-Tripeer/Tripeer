@@ -1,0 +1,26 @@
+.imgBox {
+    width: 47%;
+    height: auto;
+}
+
+.center {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo {
+    height: 9%;
+    width: auto;
+}
+
+.main {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+}
+
+.box {
+    width: 53%;
+}

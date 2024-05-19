@@ -1,0 +1,33 @@
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: #D9D9D9 1px solid;
+    border-radius: 20px;
+    padding: 5px 10px;
+    width: fit-content;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.mainCheck {
+    background-color: #4FBDB7;
+    border-color: #4FBDB7;
+    color: white;
+}
+
+.image {
+    display: inline;
+    margin-right: 5px;
+}
+
+.p{
+    display: inline;
+    white-space: nowrap;
+}
+
+.main:hover {
+    background-color: #4FBDB7;
+    border-color: #4FBDB7;
+    color: white;
+}

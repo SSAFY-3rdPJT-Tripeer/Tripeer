@@ -1,0 +1,232 @@
+.back {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.title {
+  font-size: 2.3rem;
+  font-weight: bold;
+  color: #262626;
+}
+
+.btn {
+  font-weight: bold;
+  font-size: 1.3rem;
+  align-self: flex-start;
+  pointer-events: fill;
+}
+
+.disable {
+  animation: turnOff 0.5s ease forwards;
+  cursor: not-allowed;
+}
+
+@keyframes turnOff {
+  0% {
+    color: #4fbdb7;
+  }
+  100% {
+    color: #858585;
+  }
+}
+
+.able {
+  cursor: pointer;
+  animation: turnOn 0.5s ease forwards;
+}
+
+@keyframes turnOn {
+  0% {
+    color: #858585;
+  }
+  100% {
+    color: #4fbdb7;
+  }
+}
+
+.searchBar {
+  position: relative;
+  margin-top: 25px;
+  width: 60%;
+  background-color: white;
+  z-index: 10;
+}
+
+.searchInput {
+  width: 100%;
+  border-radius: 50px;
+  border: 1px solid #989595;
+  height: 45px;
+  font-size: 1.3rem;
+  background-image: url(../../public/search.svg);
+  background-repeat: no-repeat;
+  background-size: 5%;
+  background-position: 15px 50%;
+  padding-left: 50px;
+  padding-right: 15px;
+  outline: none;
+}
+
+.searchInput::placeholder {
+  color: #858585;
+  font-size: 1.1rem;
+}
+.focusInput::placeholder {
+  color: #858585;
+  font-size: 1.1rem;
+}
+
+.focusInput {
+  width: 100%;
+  height: 45px;
+  font-size: 1.3rem;
+  background-image: url(../../public/search.svg);
+  background-repeat: no-repeat;
+  background-color: transparent;
+  background-size: 5%;
+  background-position: 15px 50%;
+  padding-left: 50px;
+  padding-right: 15px;
+  outline: none;
+  border-radius: 15px 15px 0px 0px;
+  border: none;
+}
+
+.focusSearch {
+  border-radius: 15px;
+  box-shadow: 3px 3px 10px 0 rgba(0, 0, 0, 0.2);
+  padding-bottom: 5px;
+}
+
+.resultLine {
+  width: 90%;
+  margin: 0px auto 0px auto;
+}
+
+.result {
+  height: 30px;
+  padding-left: 12%;
+  background-image: url(../../public/searchResult.svg);
+  background-repeat: no-repeat;
+  background-size: 5%;
+  background-position: 5% 51%;
+  font-size: 1rem;
+  margin: 1% 1% 1%;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.result:hover {
+  background-color: #e5e2e2;
+  text-decoration: underline;
+}
+
+.scroll {
+  position: absolute;
+  top: 180px;
+  left: 10%;
+  width: 400px;
+  height: 280px;
+  background-color: white;
+  z-index: 1;
+  max-height: 300px;
+  overflow-y: scroll;
+}
+
+.scroll::-webkit-scrollbar {
+  width: 2.5px; /* 스크롤바의 너비 */
+}
+
+.scroll::-webkit-scrollbar-thumb {
+  height: 5%; /* 스크롤바의 길이 */
+  background: transparent; /* 스크롤바의 색상 */
+  border-radius: 10px;
+}
+
+.scroll::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0); /*스크롤바 뒷 배경 색상*/
+}
+
+.searchList {
+  overflow-y: scroll;
+  max-height: 280px;
+}
+
+.searchList::-webkit-scrollbar {
+  width: 2.5px; /* 스크롤바의 너비 */
+}
+
+.searchList::-webkit-scrollbar-thumb {
+  height: 5%; /* 스크롤바의 길이 */
+  background: #989595; /* 스크롤바의 색상 */
+  border-radius: 10px;
+}
+
+.searchList::-webkit-scrollbar-track {
+  background: transparent; /*스크롤바 뒷 배경 색상*/
+}
+
+.select {
+  color: #858585;
+  padding: 8px 10px 8px 10px;
+  border: 1px solid #989595;
+  border-radius: 50px;
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.cancel {
+  display: inline-block;
+  background-image: url(./asset/cancel.svg);
+  width: 15px;
+  height: 15px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  margin-left: 6px;
+  cursor: pointer;
+}
+
+.sliderContainer {
+  position: absolute;
+  z-index: 3;
+  bottom: 0;
+  right: 0;
+  pointer-events: none;
+}
+
+.searchResult {
+  position: absolute;
+  top: 180px;
+  max-height: 300px;
+  overflow-y: scroll;
+}
+
+.searchResult::-webkit-scrollbar {
+  width: 2.5px; /* 스크롤바의 너비 */
+}
+
+.searchResult::-webkit-scrollbar-thumb {
+  height: 5%; /* 스크롤바의 길이 */
+  background: transparent; /* 스크롤바의 색상 */
+  border-radius: 10px;
+}
+
+.searchResult::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0); /*스크롤바 뒷 배경 색상*/
+}

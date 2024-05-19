@@ -1,0 +1,327 @@
+.container {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 50px 100px 70px;
+}
+.topSection {
+  display: flex;
+  width: 100%;
+  height: 60px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: #4fbdb7 solid 2px;
+  margin-bottom: 20px;
+}
+.qrBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #545454;
+  margin-left: 10px;
+  cursor: pointer;
+  background: #4fbdb7;
+  color: #fff;
+  border-radius: 5px;
+  height: 40px;
+  width: 100px;
+}
+
+.qrImg {
+  background: url(../../../../components/diary/assets/qrCode.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 20px;
+  width: 20px;
+  margin-right: 5px;
+}
+
+.qrBox:hover {
+  background: #fff;
+  border: #4fbdb7 solid 2px;
+  color: #4fbdb7;
+}
+
+.qrBox:hover .qrImg {
+  background: url(../../../../components/diary/assets/qrCodeHover.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 20px;
+  width: 20px;
+  margin-right: 5px;
+}
+
+.backBox {
+  width: 150px;
+  height: 40px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.backIcon {
+  background: url("../../../../components/diary/assets/backIcon.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+.backText {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #545454;
+  margin-left: 10px;
+  cursor: pointer;
+}
+.header {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 400px;
+  margin-bottom: 50px;
+}
+.imageBox {
+  height: 100%;
+  width: 50%;
+}
+.headerImg {
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 20%);
+}
+
+.headerContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  width: 45%;
+  margin-left: 5%;
+}
+.headerTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 30px;
+}
+.placeBox {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 30px;
+}
+.scheduleBox {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 30px;
+}
+.memberBox {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 30px;
+}
+.iconBox {
+  height: auto;
+  width: 20px;
+}
+.mapIcon {
+  background: url("../../../../components/diary/assets/map_pointColor.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 20px;
+  height: 20px;
+}
+.scheduleIcon {
+  background: url("../../../../components/diary/assets/schedule_pointColor.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 20px;
+  height: 20px;
+}
+.membereIcon {
+  background: url("../../../../components/diary/assets/member_pointColor.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 20px;
+  height: 20px;
+}
+.contentBox {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #4fbdb7;
+}
+
+.subTitle {
+  margin-top: 8px;
+  color: #545454;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+.memberList {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+}
+
+.nameBox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border: 1px solid #4fbdb7;
+  border-radius: 60px;
+  height: 60px;
+  margin-right: 10px;
+  overflow: hidden;
+  transition: width 0.5s ease;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 20%);
+  padding: 4px;
+  width: 60px;
+}
+
+.nickname {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 10px;
+  margin-right: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  height: 50px;
+  width: auto;
+  overflow: hidden;
+  visibility: hidden;
+}
+.nameBox:hover {
+  width: 150px;
+}
+.nameBox:hover .nickname {
+  visibility: visible;
+}
+
+.articleBox {
+  width: 100%;
+}
+
+.editCostModalBack {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 30%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.editCostModalBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+  width: 300px;
+  background: #fff;
+  border-radius: 5px;
+}
+.editCostModalText {
+  margin-bottom: 20px;
+}
+
+.editCostModalBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #4fbdb7;
+  border-radius: 5px;
+  width: 100px;
+  height: 30px;
+  color: white;
+  cursor: pointer;
+}
+
+.back {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modalBox {
+  width: 400px;
+  height: 350px;
+  background-color: white;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 1.5s ease-in-out forwards;
+  position: relative;
+}
+
+.exitBtn {
+  width: 200px;
+  height: 50px;
+  color: #fff;
+  background-color: #04acb5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.backToBtn {
+  width: 100px;
+  height: 50px;
+  font-weight: bold;
+  color: black;
+  background-color: #d9d9d9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.btnFlex {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}

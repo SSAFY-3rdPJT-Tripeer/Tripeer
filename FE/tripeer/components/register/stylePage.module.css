@@ -1,0 +1,88 @@
+.center {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sectionBtn {
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.main {
+    flex-direction: column;
+}
+
+.next {
+    width: 140px;
+    height: 40px;
+    font-size: 16px;
+    color: #FFFFFF;
+    background-color: #04ACB5;
+    border-radius: 5px;
+    margin-left: 30px;
+}
+
+.main_p {
+    font-size: 30px;
+    font-weight: bold;
+    color: #212529;
+}
+
+.inputBox {
+    margin-top: 20px;
+}
+
+.input {
+    width: 100px;
+    font-size: 20px;
+    font-weight: normal;
+    color: #858687;
+    justify-items: left;
+    border: 0;
+    outline: none;
+    margin-top: 20px;
+    margin-bottom: 50px;
+}
+
+.section{
+    /*display: grid;*/
+    /*grid-template-columns: repeat(4, 1fr);*/
+    /*gap: 20px 10px;*/
+    /*justify-content: center;*/
+    /*padding-top: 50px;*/
+    /*margin: 0 auto;*/
+    margin-top: 40px;
+    display: flex;
+    width: 400px;
+    flex-wrap: wrap;
+}
+
+.div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.err {
+    color: red;
+    margin-top: 20px;
+}
+
+.mainContent {
+    animation: fadeIn 1s ease-in forwards;
+    opacity: 0;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

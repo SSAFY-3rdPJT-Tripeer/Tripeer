@@ -1,0 +1,138 @@
+.container {
+  width: 100vw;
+  height: 84.8px;
+  display: flex;
+  padding: 15px;
+  padding-left: 30px;
+  border-bottom: 1px solid #e3e3e3;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.linkBox {
+  display: flex;
+  align-items: center;
+}
+
+.link {
+  text-decoration: none;
+  color: black;
+  font-size: 20px;
+  font-weight: bold;
+  margin: 15px;
+}
+.linkClicked {
+  color: #04acb5;
+}
+
+.profileBox {
+  /* margin-left: 50px; */
+  width: auto;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border: 1px #4fbdb7 solid;
+  border-radius: 50px;
+  padding-left: 5px;
+  padding-right: 5px;
+  /* box-shadow: 0px 0px 10px rgba(0, 0, 0, 10%); */
+  margin-left: 30px;
+  margin-right: 20px;
+}
+
+.loginBox {
+  margin-left: 50px;
+  width: 200px;
+  height: 50px;
+  background-color: #04acb5;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.userImg {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.userName {
+  margin-left: 12px;
+  color: #262626;
+  font-weight: 550;
+}
+
+.toggleIcon {
+  margin-left: 8px;
+  cursor: pointer;
+}
+
+.options {
+  position: absolute;
+  top: 55px;
+  left: 0px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+  z-index: 20;
+}
+
+.option {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 500;
+  padding: 10px;
+  width: 150px;
+  height: 50px;
+}
+.option:hover {
+  background: #f7f7f7;
+}
+
+.option span {
+  font-size: 0.9rem;
+}
+
+.logout {
+  background-image: url(./assets/logout.svg);
+}
+.mypage {
+  background-image: url(./assets/mypage.svg);
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  background-size: cover;
+  margin-right: 10px;
+}
+
+.back {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 10;
+}
+
+.onToggle {
+  transition: 1s ease;
+  transform: rotate(180deg);
+  cursor: pointer;
+}
+
+.offToggle {
+  transition: 1s ease;
+  transform: rotate(0deg);
+  cursor: pointer;
+}

@@ -1,0 +1,22 @@
+.container {
+  width: 100vw;
+  /* height: 100vh; */
+  height: calc(100vh - 84.8px);
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+.container::-webkit-scrollbar {
+  width: 4px;
+}
+.container::-webkit-scrollbar-thumb {
+  height: 10%;
+  background: #04acb56c;
+  border-radius: 10px;
+}
+
+.container::-webkit-scrollbar-track {
+  background: #fff;
+}

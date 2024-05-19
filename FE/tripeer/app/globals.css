@@ -1,0 +1,70 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
+
+* {
+  font-family:
+    Pretendard,
+    -apple-system,
+    BlinkMacSystemFont,
+    system-ui,
+    Roboto,
+    "Helvetica Neue",
+    "Segoe UI",
+    "Apple SD Gothic Neo",
+    "Noto Sans KR",
+    "Malgun Gothic",
+    sans-serif;
+}
+
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+body::-webkit-scrollbar {
+  width: 2.5px;
+}
+body::-webkit-scrollbar-thumb {
+  height: 10%;
+  background: #04acb56c;
+  border-radius: 10px;
+}
+
+body::-webkit-scrollbar-track {
+  background: #fff;
+}
+
+video {
+  width: 0px;
+  height: 0px;
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+audio::-webkit-media-controls-timeline,
+video::-webkit-media-controls-timeline {
+  display: none;
+}
+
+.ql-container {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.ql-editor {
+  min-height: 150px;
+}
+
+.ql-editor:focus {
+  outline: none;
+}
+
+input[data-formula][data-link][data-video] {
+  display: none;
+}

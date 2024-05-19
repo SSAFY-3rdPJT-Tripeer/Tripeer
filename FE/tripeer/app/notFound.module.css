@@ -1,0 +1,86 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow-x: hidden;
+}
+.backImgBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* background: url("../public/notFound/notFoundImg.png"); */
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 500px;
+}
+
+.backImgBox p {
+  color: #fff;
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+.homeBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 150px;
+  height: 50px;
+  border: 3px solid #fff;
+  color: #fff;
+  margin-top: 30px;
+  text-decoration: none;
+}
+
+.notfoundText {
+  background: url("../public/notFound/notFoundText.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 60%;
+  height: 60px;
+  margin-bottom: 60px;
+}
+.backImg {
+  opacity: 0;
+  transform: translateY(50px);
+  transition:
+    opacity 0.5s ease-out,
+    transform 0.5s ease-out;
+}
+.notfoundText {
+  opacity: 0;
+  transform: translateY(50px);
+  transition:
+    opacity 1s ease-out,
+    transform 1s ease-out;
+}
+.notfoundSubText {
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity 1s ease-out,
+    transform 1s ease-out;
+}
+.homeBtn {
+  opacity: 0;
+  transform: translateY(50px);
+  transition:
+    opacity 1s ease-out,
+    transform 1s ease-out;
+}
+
+.homeBtn:hover {
+  transform: scale(1.02);
+}
+
+.visible {
+  opacity: 1;
+  transform: translateX(0);
+  transform: translateY(0);
+}
