@@ -132,7 +132,7 @@ public class HistoryServiceImpl implements HistoryService{
         if (planEntity.getVehicle().equals("history")) {
             throw new CustomException(ErrorCode.HISTORY_ALREADY_EXISTS);
         }
-        planEntity.setVehicle("history");
+        List<PlanDetailEntity> revokePlanDetailList = new ArrayList<>();
         for (int day = 1; day < totalYList.size(); day++) {
             for (int step = 0; step < totalYList.get(day).size(); step++) {
                 SpotInfoEntity spotInfo = spotInfoRepository.findBySpotInfoId(Integer.parseInt(totalYList.get(day).get(step).get("spotInfoId")));
@@ -144,6 +144,10 @@ public class HistoryServiceImpl implements HistoryService{
                     List<Object> tmp = objectMapper.convertValue(timeYList.get(day).get(step), List.class);
                     String time;
                     List<Object> timeList = tmp;
+                    if (timeList.get(1).equals("2")){
+                        planDetailRepository.deleteAll(revokePlanDetailList);
+                        throw new CustomException(ErrorCode.UNSUPPORTED_JSON_TYPE);
+                    }
                     if (timeList.get(1).equals("1")){
                         howTo = "대중교통";
                     }
@@ -173,6 +177,7 @@ public class HistoryServiceImpl implements HistoryService{
                             .cost(0)
                             .build();
                     planDetailRepository.save(planDetail);
+                    revokePlanDetailList.add(planDetail);
                 } else {
                     PlanDetailEntity planDetail = PlanDetailEntity.builder()
                             .planDay(planDayEntityList.get(day-1))
@@ -184,10 +189,11 @@ public class HistoryServiceImpl implements HistoryService{
                             .cost(0)
                             .build();
                     planDetailRepository.save(planDetail);
+                    revokePlanDetailList.add(planDetail);
                 }
             }
         }
-
+        planEntity.setVehicle("history");
         planRepository.save(planEntity);
         return "ok";
     }
