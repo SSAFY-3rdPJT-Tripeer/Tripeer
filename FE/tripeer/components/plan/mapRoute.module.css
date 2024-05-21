@@ -12,8 +12,8 @@
 }
 
 .routeMapBox {
-  width: 360px;
-  height: 400px;
+  width: 500px;
+  height: 550px;
   display: flex;
   padding-top: 20px;
   flex-direction: column;

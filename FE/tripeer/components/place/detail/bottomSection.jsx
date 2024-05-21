@@ -28,13 +28,13 @@ export default function BottomSection() {
 
     const stayList = await getStayList(cId, tId, 0);
     store.setStayList(stayList);
-    setList(stayList);
 
     const restaurantList = await getRestaurantList(cId, tId, 0);
     store.setRestaurantList(restaurantList);
 
     const meccaList = await getMeccaList(cId, tId, 0);
     store.setMeccaList(meccaList);
+    setList(meccaList);
   };
 
   // 숙박 정보 GET

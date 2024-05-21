@@ -184,7 +184,7 @@ const MapRoute = (props) => {
             <div
               ref={mapRef}
               id="map"
-              style={{ width: "300px", height: "300px" }}
+              style={{ width: "430px", height: "430px" }}
             />
             <div
               className={styles.rightDirection}
