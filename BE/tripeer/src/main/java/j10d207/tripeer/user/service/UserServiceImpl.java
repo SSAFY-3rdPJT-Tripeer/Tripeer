@@ -249,8 +249,6 @@ public class UserServiceImpl implements UserService{
 
     }
 
-    //
-
     @Override
     public String getSuper(HttpServletResponse response, long userId) {
         UserEntity user = userRepository.findByUserId(userId);
@@ -274,6 +272,7 @@ public class UserServiceImpl implements UserService{
 
         return "Bearer " + result;
     }
+
 
     private Cookie createCookie(String key, String value) {
 

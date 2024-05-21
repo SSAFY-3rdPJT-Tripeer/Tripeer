@@ -81,16 +81,6 @@ public class UserController {
         return Response.of(HttpStatus.OK, "토큰 재발급 완료", null);
     }
 
-    @GetMapping("/test")
-    public String test() {
-        return "ok";
-    }
-
-    @GetMapping("/error")
-    public String testError() {
-        throw new CustomException(ErrorCode.REQUEST_AUTHORIZATION);
-    }
-
     @GetMapping("/test/getsuper/{userId}")
     public Response<String> getSuper(HttpServletResponse response, @PathVariable("userId") long userId) {
         String result = userService.getSuper(response, userId);
@@ -101,6 +91,17 @@ public class UserController {
     public Response<String> getSuper2(HttpServletResponse response, @PathVariable("userId") long userId) {
         String result = userService.getSuper2(response, userId);
         return Response.of(HttpStatus.OK, "getSuper", result);
+    }
+
+
+    @GetMapping("/test")
+    public String test() {
+        return "ok";
+    }
+
+    @GetMapping("/error")
+    public String testError() {
+        throw new CustomException(ErrorCode.REQUEST_AUTHORIZATION);
     }
 
 }
