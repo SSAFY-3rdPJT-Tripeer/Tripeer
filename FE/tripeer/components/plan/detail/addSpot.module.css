@@ -1,0 +1,187 @@
+.back {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 999;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.3);
+  width: 100vw;
+  height: 100vh;
+}
+
+.backContainer {
+  width: 500px;
+  border-radius: 10px;
+  height: 550px;
+  background-color: white;
+  padding: 24px 24px 0px 24px;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  font-size: 1.4rem;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.searchInput {
+  width: 100%;
+  border-radius: 50px;
+  border: 1px solid #4fbdb7;
+  height: 36px;
+  font-size: 0.8rem;
+  background-image: url(../asset/IconButton.svg);
+  background-repeat: no-repeat;
+  background-size: 7%;
+  background-position: 99% 80%;
+  padding-left: 20px;
+  padding-right: 15px;
+  outline: none;
+  margin-bottom: 16px;
+}
+
+.searchHeader {
+  position: absolute;
+  top: 10px;
+  right: 5px;
+  z-index: 999;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px 8px 12px;
+  border-radius: 15px;
+  background-color: rgba(255, 255, 255, 0.7);
+  box-shadow: 0px 0px 30px 0px rgba(48, 54, 77, 0.1);
+}
+
+.townList {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.townTitle {
+  font-size: 1rem;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.toggle {
+  width: 12px;
+  height: 12px;
+  background-image: url(../asset/listToggle.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+.townCateogry {
+  width: 150px;
+  flex: none;
+  position: absolute;
+  background-color: white;
+  top: 30px;
+  left: -50px;
+  border-radius: 5px;
+  padding: 8px 4px 8px 4px;
+  box-shadow: 0px 0px 30px 0px rgba(48, 54, 77, 0.1);
+}
+
+.townExample {
+  flex: none;
+  padding: 4px 4px 4px 4px;
+  margin-left: 4px;
+  margin-right: 4px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.townExample:hover {
+  background-color: aliceblue;
+}
+
+.resultBox {
+  overflow-y: scroll;
+  margin-top: 12px;
+  height: 180px;
+}
+
+.resultBox::-webkit-scrollbar {
+  width: 4px;
+}
+.resultBox::-webkit-scrollbar-thumb {
+  height: 10%;
+  background: #cecdcd;
+  border-radius: 10px;
+}
+
+.resultBox::-webkit-scrollbar-track {
+  background: #fff;
+}
+
+.emptySearch {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 200;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cardInfo {
+  display: flex;
+  align-items: center;
+}
+
+.pointIcon {
+  width: 30px;
+  height: 30px;
+  background-image: url(../asset/newPoint.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-right: 12px;
+  cursor: pointer;
+}
+
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.cardTitle {
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.sectionLine {
+  margin: 12px 0px;
+  border: #f3f3f3 1px solid;
+}
+
+.cardPlace {
+  font-size: 0.7rem;
+  color: #545454;
+  margin-top: 8px;
+}
+
+.plusBtn {
+  width: 24px;
+  height: 24px;
+  background-image: url(../asset/plusSpot.svg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  margin-right: 24px;
+  cursor: pointer;
+}

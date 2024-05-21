@@ -1,0 +1,217 @@
+.container {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  width: 100vw;
+  height: 100vh;
+}
+
+.contentBox {
+  padding: 100px;
+  padding-top: 40px;
+  padding-bottom: 0px;
+}
+
+.testBox {
+  width: 100%;
+  height: 100%;
+  border: 1px solid black;
+}
+
+.banner {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #04acb5;
+}
+
+.siteInfo {
+  margin-top: 12px;
+  color: #0c404d;
+  font-weight: 500;
+}
+
+.header {
+  margin-bottom: 24px;
+}
+
+.profileImage {
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  margin-bottom: 36px;
+}
+
+.settingBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: white;
+  box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
+  transition: 0.5s ease forwards;
+  cursor: pointer;
+}
+
+.settingIcon {
+  width: 20px;
+  height: 20px;
+  background: url(../../public/setting.svg) no-repeat;
+  background-size: cover;
+}
+
+.settingBox:hover {
+  transform: scale(1.05);
+}
+
+.inputBox {
+  display: flex;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.nickTitle {
+  margin-right: 16px;
+  color: #606060;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.inputBox > input {
+  outline: none;
+  border: 1px solid #d9d9d9;
+  padding: 3px;
+  padding-left: 8px;
+  color: #606060;
+}
+
+.inputBox > input:focus {
+  border: 1px solid #04acb5;
+}
+
+.nickWarn {
+  font-size: 0.8rem;
+  margin-left: 8px;
+  font-weight: normal;
+  color: #bbbbbb;
+}
+
+.birthInfo {
+  margin-left: 4px;
+  margin-right: 12px;
+  color: #606060;
+  font-size: 0.8rem;
+}
+
+.styleTitle {
+  margin-right: 8px;
+  color: #606060;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.styleTrueWarn {
+  font-size: 0.9rem;
+  color: rgb(239, 5, 5);
+}
+
+.styleFalseWarn {
+  font-size: 0.9rem;
+  color: #bbbbbb;
+}
+
+.emailTrueWarn {
+  margin-left: 8px;
+  font-size: 0.7rem;
+  color: rgb(239, 5, 5);
+}
+
+.emailFalseWarn {
+  margin-left: 8px;
+
+  font-size: 0.7rem;
+  color: #bbbbbb;
+}
+
+.styleBox {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.styleContent {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  width: 360px;
+}
+
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #d9d9d9;
+  padding: 4px 10px;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  border: 1px solid #04acb5;
+}
+
+.btn > p {
+  color: #606060;
+  font-size: 0.85rem;
+  font-weight: 400;
+  margin-left: 4px;
+}
+
+.clickBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #04acb5;
+  padding: 4px 10px;
+  border-radius: 50px;
+  cursor: pointer;
+}
+.clickBtn > p {
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 300;
+  margin-left: 4px;
+}
+
+.confirmBox {
+  display: flex;
+  gap: 20px;
+  margin-top: 40px;
+}
+
+.cancelBtn {
+  width: 150px;
+  display: flex;
+  background-color: #f7f7f7;
+  color: #606060;
+  height: 44px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.confirmBtn {
+  width: 150px;
+  display: flex;
+  background-color: #04acb5;
+  color: #fff;
+  height: 44px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  cursor: pointer;
+}

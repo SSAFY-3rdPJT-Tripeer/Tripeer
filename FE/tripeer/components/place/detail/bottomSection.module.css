@@ -1,0 +1,56 @@
+.main {
+    margin-top: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    position: relative;
+}
+
+.section {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.center {
+    margin-top: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: calc(80% + 40px);
+}
+
+.loading {
+    animation: fade-in 1s ease;
+}
+
+.toTop {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    right: 40px;
+    bottom: 30px;
+    width: 70px;
+    height: 70px;
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #04acb5;
+    gap: 6px;
+    transition: 0.1s ease;
+    background-color: white;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 100%;
+    }
+}

@@ -1,0 +1,158 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.title {
+  font-size: 2.3rem;
+  font-weight: bold;
+  color: #262626;
+}
+
+.btn {
+  font-weight: bold;
+  font-size: 1.3rem;
+  align-self: flex-start;
+  pointer-events: fill;
+}
+
+.disable {
+  animation: turnOff 0.5s ease forwards;
+  cursor: not-allowed;
+}
+
+@keyframes turnOff {
+  0% {
+    color: #4fbdb7;
+  }
+  100% {
+    color: #858585;
+  }
+}
+
+.able {
+  cursor: pointer;
+  animation: turnOn 0.5s ease forwards;
+}
+
+@keyframes turnOn {
+  0% {
+    color: #858585;
+  }
+  100% {
+    color: #4fbdb7;
+  }
+}
+
+.titleInput {
+  outline: none;
+  border: none;
+  font-size: 1.8rem;
+  /* font-weight: ; */
+  margin-top: 50px;
+}
+
+.titleInput::placeholder {
+  color: #858687;
+}
+
+.busIcon {
+  position: absolute;
+  bottom: 10px;
+  right: 50px;
+}
+
+.back {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.checkContainer {
+  padding: 40px;
+  width: 400px;
+  height: 400px;
+  background-color: white;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.checkTitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.cancelBtn {
+  background-color: #d9d9d9;
+}
+.checkContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 15px;
+}
+.checkQuesetion {
+  font-size: 1rem;
+  color: #4fbdb7;
+  margin-top: 12px;
+}
+.checkAnswer {
+  font-size: 1.2rem;
+  margin-top: 8px;
+  font-weight: 600;
+}
+
+.footBtn {
+  width: 150px;
+  height: 40px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+.confirmBtn {
+  background-color: #4fbdb7;
+  color: white;
+}
+
+.destinyResult {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 80px;
+  min-width: 80px;
+  overflow-y: scroll;
+  padding-right: 10px;
+}
+
+.destinyResult::-webkit-scrollbar {
+  width: 2.5px; /* 스크롤바의 너비 */
+}
+
+.destinyResult::-webkit-scrollbar-thumb {
+  height: 5%; /* 스크롤바의 길이 */
+  background: #4fbdb7; /* 스크롤바의 색상 */
+  border-radius: 10px;
+}
+
+.destinyResult::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0); /*스크롤바 뒷 배경 색상*/
+}

@@ -1,0 +1,173 @@
+.container {
+  width: 85%;
+  height: 470px;
+  margin-bottom: 50px;
+  background: #fff;
+  animation: fade-in 1s ease;
+}
+
+.headerBox {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+  margin-bottom: 10px;
+}
+.headerIcon {
+  background: url("./asset/speaker.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  height: 30px;
+  width: 30px;
+  margin-right: 10px;
+}
+.header {
+  font-size: 1.3rem;
+  color: #545454;
+  font-weight: 600;
+  width: 100%;
+}
+.header span {
+  font-size: 1.5rem;
+  color: #4fbdb7;
+  text-shadow: 0px 0px 3px rgba(0, 0, 0, 10%);
+}
+
+.article {
+  height: 400px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 50px;
+}
+.cardBox {
+  width: 100%;
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 400px;
+  width: 400px;
+  border-radius: 5px;
+  background: #fff;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 10%);
+}
+
+.card:hover {
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 20%);
+}
+
+.recoIcon {
+  width: 60px;
+  height: 30px;
+  background-color: #4fbdb7;
+  color: white;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  font-size: 1rem;
+  top: 10px;
+  left: 10px;
+  border-radius: 5px;
+}
+
+.cardImg {
+  height: 400px;
+  width: 400px;
+  /* background: #cecece; */
+}
+
+.titleBox {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 100%;
+  height: 80px;
+  background: #fff;
+  bottom: 0;
+  left: 0;
+  padding: 10px;
+  border-radius: 0 0 5px 5px;
+}
+
+.title {
+  color: #545454;
+  font-weight: 600;
+  font-size: 1.1rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.addrBox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.addrIcon {
+  background: url("./asset/mapIcon.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}
+
+.addrText {
+  color: #979797;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.iconEmpty {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  height: 35px;
+  width: 35px;
+  background: url("./asset/heart_empty.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+}
+
+.iconFull {
+  position: absolute;
+  right: 0;
+  top: 0;
+  right: 10px;
+  top: 10px;
+  height: 35px;
+  width: 35px;
+  background: url("./asset/heart_full.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

@@ -1,0 +1,283 @@
+.logoHeader {
+  display: flex;
+  width: 100vw;
+  height: 58px;
+  border-bottom: 1px solid #e3e3e3;
+  justify-content: center;
+  align-items: center;
+}
+
+.planContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: calc(100vh - 58px);
+  animation: fadeIn 1.5s ease forwards;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 100%;
+  }
+}
+
+.img {
+  width: 500px;
+  height: 450px;
+  border-radius: 10px 0px 0px 10px;
+}
+
+.detailBox {
+  width: 500px;
+  height: 450px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.planCard {
+  display: flex;
+  border: 1px solid #e3e3e3;
+  border-radius: 10px;
+}
+
+.planTitle {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #262626;
+}
+
+.type {
+  margin-top: 24px;
+  display: flex;
+  gap: 7px;
+  color: #4fbdb7;
+  font-size: 1rem;
+  font-weight: bold;
+  align-items: center;
+}
+
+.placePointer {
+  width: 16px;
+  height: 16px;
+  background-image: url(../../../public/trip/tripPointer.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.font {
+  margin-left: 24px;
+  font-size: 1rem;
+  margin-top: 4px;
+  color: #545454;
+  font-weight: bold;
+}
+
+.dayIcon {
+  width: 15px;
+  height: 16px;
+  background-image: url(../../../public/trip/tripDay.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.personIcon {
+  width: 15px;
+  height: 15px;
+  background-image: url(../../../public/trip/tripPerson.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.personBox {
+  margin-left: 22px;
+  margin-top: 4px;
+  display: flex;
+  gap: 4px;
+}
+
+.circle {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #4fbdb7;
+  border-radius: 36px;
+  transition: 0.3s ease-in-out;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.circle:hover {
+  width: 90px;
+}
+
+.profile {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  margin-left: 3px;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.profileName {
+  flex: none;
+  margin-left: 4px;
+  width: 3.5rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.btnBox {
+  margin-top: 24px;
+  display: flex;
+  width: 100%;
+  gap: 24px;
+}
+
+.weatherBtn {
+  flex: none;
+  width: 60px;
+  height: 60px;
+  border: 1px solid #4fbdb7;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.planBtn {
+  width: 100%;
+  height: 60px;
+  background-color: #4fbdb7;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.16rem;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.directIcon {
+  width: 30px;
+  height: 15px;
+  background-image: url(../../../public/trip/arrow.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+}
+
+.weatherIcon {
+  width: 38px;
+  height: 38px;
+  background-image: url(../../../public/trip/weather.svg);
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.weatherBtn:hover {
+  transform: scale(1.05);
+}
+
+.planBtn:hover {
+  transform: scale(1.05);
+}
+.realImg {
+  border-radius: 10px 0px 0px 10px;
+}
+
+@media screen and (max-width: 900px) {
+  .planCard {
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    align-items: center;
+    height: calc(100vh - 100px);
+    border: none;
+  }
+  .img {
+    width: 90vw;
+    height: 50%;
+    border-radius: 10px 0px 0px 10px;
+  }
+  .realImg {
+    border-radius: 10px;
+  }
+  .detailBox {
+    width: 90vw;
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10px;
+    padding-top: 30px;
+  }
+  .planTitle {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #262626;
+  }
+  .type {
+    margin-top: 14px;
+    display: flex;
+    gap: 7px;
+    color: #4fbdb7;
+    font-size: 0.9rem;
+    font-weight: bold;
+    align-items: center;
+  }
+  .btnBox {
+    margin-top: 18px;
+    display: flex;
+    gap: 24px;
+  }
+  .font {
+    margin-left: 22px;
+    font-size: 0.8rem;
+    margin-top: 4px;
+    color: #545454;
+    font-weight: bold;
+  }
+  .personBox {
+    margin-left: 10px;
+    margin-top: 8px;
+    display: flex;
+    gap: 4px;
+  }
+  .circle {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border: 1px solid #4fbdb7;
+    border-radius: 30px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+  }
+  .circle:hover {
+    width: 34px;
+  }
+  .profile {
+    flex: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    margin-left: 4px;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+}

@@ -1,0 +1,39 @@
+.slider {
+  position: relative;
+  width: 450px;
+  height: 320px;
+  overflow: hidden;
+}
+
+.slider::before,
+.slider::after {
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  content: "";
+  height: 100%;
+  position: absolute;
+  width: 100px;
+  z-index: 2;
+}
+
+.slideTrack {
+  animation: scroll 20s linear infinite;
+  display: flex;
+  width: calc(180px * 12);
+}
+
+.slide {
+  margin-left: 30px;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-230px * 6));
+  }
+}

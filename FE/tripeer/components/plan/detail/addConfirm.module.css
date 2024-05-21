@@ -1,0 +1,158 @@
+.container {
+  width: 500px;
+  height: 300px;
+  background-color: white;
+  border-radius: 10px;
+  padding: 24px 24px 0px 24px;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  font-size: 1.4rem;
+  font-weight: 500;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.backIcon {
+  width: 12px;
+  height: 12px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url(../asset/goBack.svg);
+}
+
+.backTo {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 0.9rem;
+  color: #979797;
+  cursor: pointer;
+}
+
+.placeInfo {
+  display: flex;
+  margin-top: 24px;
+}
+
+.placeContent {
+  margin-left: 20px;
+  border-left: 2px solid #4fbdb7;
+  padding-left: 16px;
+}
+
+.cateogryContent {
+  display: flex;
+  margin-left: 20px;
+  border-left: 2px solid #4fbdb7;
+}
+
+.placeHeader {
+  font-weight: 500;
+  margin-left: 8px;
+}
+
+.placeTitle {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  padding-left: 16px;
+}
+
+.category {
+  font-weight: 500;
+  margin-left: 6px;
+}
+
+.placeWhere {
+  font-size: 0.7rem;
+  color: #545454;
+  font-weight: light;
+}
+
+.checkDiv {
+  margin-top: 36px;
+  padding-left: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.checkBox {
+  display: none;
+}
+
+.checkBox {
+  display: none;
+}
+
+.checkLabel {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  border: 1px solid #4fbdb7;
+  position: relative;
+  margin-right: 8px;
+}
+.checkBox:checked + .checkLabel::after {
+  content: "";
+  width: 12px;
+  height: 12px;
+  background-image: url(../asset/Check.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 24%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.checkInfo {
+  font-weight: 500;
+}
+
+.footer {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding-top: 12px;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.nobtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 45%;
+  height: 40px;
+  background-color: #f7f7f7;
+  border-radius: 30px;
+}
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 45%;
+  height: 40px;
+  background-color: #04acb5;
+  border-radius: 30px;
+  color: white;
+}
+
+.warn {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+  font-size: 0.7rem;
+  color: red;
+}

@@ -1,0 +1,43 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    animation: fade-in 1s ease;
+    width: auto;
+}
+
+.line {
+    height: 15px;
+    border: #858585 2px solid;
+}
+
+.box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px 0;
+    height: 20px;
+}
+
+.image {
+    animation: fade-in 1s ease;
+}
+
+.time {
+    margin-left: 5px;
+    color: #757575;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    animation: fade-in 1s ease;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}

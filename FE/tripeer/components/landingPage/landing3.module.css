@@ -1,0 +1,111 @@
+.container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  margin-top: 100px;
+  margin-bottom: 150px;
+}
+.leftSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 50%;
+  height: 100%;
+  padding-left: 100px;
+}
+.contentBox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 30%;
+  width: 100%;
+}
+.titleIcon1 {
+  height: 80px;
+  width: 80px;
+}
+.titleIcon2 {
+  height: 80px;
+  width: 80px;
+}
+.titleIcon3 {
+  height: 80px;
+  width: 80px;
+}
+.titleBox {
+  margin-left: 50px;
+}
+.title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #5c5e64;
+  margin-bottom: 10px;
+}
+.subTitle p {
+  color: #5c5e64;
+  font-size: 1.3rem;
+  margin-bottom: 5px;
+}
+.rightSection {
+  display: flex;
+  justify-content: flex-end;
+  width: 50%;
+  height: 100%;
+  padding-right: 210px;
+}
+.sampleCard {
+  position: relative;
+  height: 535px;
+  width: 400px;
+  border-radius: 30px;
+  box-shadow:
+    40px -30px 100px 0 rgba(79, 189, 183, 30%),
+    0px 4px 30px 0 rgba(0, 0, 0, 5%),
+    5px 5px 30px 0 rgba(0, 0, 0, 5%),
+    20px 20px 50px 0 rgba(0, 0, 0, 10%);
+}
+
+.sampleSubCard {
+  position: absolute;
+  background: url(./assets/sampleCard2.png);
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  bottom: -80px;
+  right: -100px;
+  height: 150px;
+  width: 220px;
+  border-radius: 15px;
+  box-shadow:
+    0px 4px 30px 0 rgba(0, 0, 0, 5%),
+    5px 5px 30px 0 rgba(0, 0, 0, 5%),
+    20px 20px 50px 0 rgba(0, 0, 0, 10%);
+}
+
+.contentBox {
+  opacity: 0;
+  transform: translateY(50px);
+  transition:
+    opacity 1s ease-out,
+    transform 1s ease-out;
+}
+.sampleCard {
+  opacity: 0;
+  transform: translateX(50px);
+  transition:
+    opacity 1s ease-out,
+    transform 1s ease-out;
+}
+.sampleSubCard {
+  opacity: 0;
+  transform: translateX(70px);
+  transition:
+    opacity 1.2s ease-out,
+    transform 1.2s ease-out;
+}
+
+.visible {
+  opacity: 1;
+  transform: translateX(0);
+  transform: translateY(0);
+}
